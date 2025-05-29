@@ -1,0 +1,48 @@
+.toolbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.toolbar-spacer {
+    flex: 1;
+}
+
+.toolbar-cont {
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; pointer-events: auto; }
+    100% { opacity: 0; pointer-events: none; }
+}
+
+.loading-indicator-cont {
+    height: 0;
+}
+
+.loading-indicator {
+    height: fit-content;
+    padding: 4px 8px;
+    color: white;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    z-index: 1000;
+    position: relative;
+}
+
+.loading-indicator.loading {
+    background-color: rgb(151, 105, 19);
+    opacity: 1;
+}
+
+.loading-indicator.ready {
+    background-color: rgb(85, 204, 85);
+    opacity: 1;
+    animation: fadeOut 1s ease-in-out 2s forwards; /* Start fading out after 2 seconds */
+}

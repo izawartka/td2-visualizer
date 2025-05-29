@@ -1,0 +1,36 @@
+.map {
+	flex: 1;
+	background-color: black;
+}
+
+.map svg path.track {
+    stroke-width: 1.44px;
+    stroke: #aaa;
+}
+
+.map svg text {
+    font-size: 2px;
+    text-shadow: 0 0 16px #000;
+    fill: #eee;
+}
+
+.map svg text.switch-name {
+    fill: #eee;
+}
+
+.map svg text.isolation-id {
+    fill: #ffa;
+}
+
+.map svg g.track-object circle {
+    fill: #eee;
+}
+
+.map svg g.track-object text {
+    fill: #eee;
+    display: none;
+}
+
+.map svg g.track-object:hover text {
+    display: block;
+}

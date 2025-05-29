@@ -1,0 +1,11 @@
+.zoom-pan-wrapper {
+    overflow: hidden;
+}
+
+.zoom-pan-wrapper svg {
+    cursor: grab;
+}
+
+.zoom-pan-wrapper svg:active {
+    cursor: grabbing;
+}
