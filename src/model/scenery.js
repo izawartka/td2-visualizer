@@ -2,6 +2,7 @@ import Switch from './switch';
 import StandardTrack from './standard-track';
 import BezierTrack from './bezier-track';
 import TrackObject from './track-object';
+import Signal from './signal';
 
 export default class Scenery
 {
@@ -94,6 +95,10 @@ export default class Scenery
         switch(prefabName) {
             default:
                 return TrackObject.fromText(text);
+        if(Signal.isSignal(text)) {
+            return Signal.fromText(text);
+        } else {
+            return TrackObject.fromText(text);
         }
     }
 

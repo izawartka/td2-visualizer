@@ -2,6 +2,7 @@ import TrackRenderer from './object-renderers/TrackRenderer';
 import SwitchNameRenderer from './object-renderers/SwitchNameRenderer';
 import IsolationIdRenderer from './object-renderers/IsolationIdRenderer';
 import TrackObjectRenderer from './object-renderers/TrackObjectRenderer';
+import SignalRenderer from './object-renderers/SignalRenderer';
 
 const ObjectRendererQueue = [
     {
@@ -28,6 +29,13 @@ const ObjectRendererQueue = [
         'category': 'track-objects',
         'renderer': TrackObjectRenderer,
         'cond': (settings) => settings.layers['track-objects']
+    },
+    {
+        'name': 'signals',
+        'category': 'track-objects',
+        'type': 'Signal',
+        'renderer': SignalRenderer,
+        'cond': (settings) => settings.layers['signals']
     }
 ]
 

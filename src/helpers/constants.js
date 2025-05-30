@@ -17,12 +17,17 @@ const Constants = {
         {
             id: 'isolations-ids',
             name: 'Isolations IDs',
-            default: true,
+            default: false,
         },
         {
             id: 'track-objects',
             name: 'Track objects',
             default: false,
+        },
+        {
+            id: 'signals',
+            name: 'Signals',
+            default: true,
         }
     ]
 };

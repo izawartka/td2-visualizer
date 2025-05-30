@@ -16,6 +16,7 @@
 
 .map svg text.switch-name {
     fill: #eee;
+    fill: #bbf;
 }
 
 .map svg text.isolation-id {
@@ -33,4 +34,8 @@
 
 .map svg g.track-object:hover text {
     display: block;
+}
+
+.map svg g.signal g {
+    stroke: #eee;
 }
