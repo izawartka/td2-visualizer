@@ -28,6 +28,11 @@ const Constants = {
             id: 'signals',
             name: 'Signals',
             default: true,
+        },
+        {
+            id: 'routes',
+            name: 'Routes',
+            default: true,
         }
     ]
 };

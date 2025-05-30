@@ -15,7 +15,6 @@
 }
 
 .map svg text.switch-name {
-    fill: #eee;
     fill: #bbf;
 }
 
@@ -38,4 +37,13 @@
 
 .map svg g.signal g {
     stroke: #eee;
+}
+
+.map svg g.route g {
+    fill: #eee;
+}
+
+.map svg g.route text {
+    fill: #eee;
+    font-size: 72mm;
 }

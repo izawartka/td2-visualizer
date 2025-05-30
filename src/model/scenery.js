@@ -3,6 +3,7 @@ import StandardTrack from './standard-track';
 import BezierTrack from './bezier-track';
 import TrackObject from './track-object';
 import Signal from './signal';
+import Route from './route';
 
 export default class Scenery
 {
@@ -67,6 +68,11 @@ export default class Scenery
                 return Switch.fromText(text);
             case 'TrackObject':
                 return Scenery._parseTrackObject(text);
+            case 'Route':
+                return Route.fromText(text);
+            case 'Empty':
+            case 'EndRoute':
+                return null;
             default:
                 console.warn(`Unknown object type: ${type}`);
                 return null;
@@ -91,10 +97,6 @@ export default class Scenery
     }
 
     static _parseTrackObject(text) {
-        const prefabName = text.split(";", 4)[2];
-        switch(prefabName) {
-            default:
-                return TrackObject.fromText(text);
         if(Signal.isSignal(text)) {
             return Signal.fromText(text);
         } else {

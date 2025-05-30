@@ -18,12 +18,16 @@ export default function SceneryRoot(props) {
             const objects = scenery.objects[category] ?? null;
             if(!objects) return [null];
 
-            return Object.values(objects).map((object) => {
-                if((type !== undefined && type !== object.type) || (types !== undefined && !types.includes(object.type))) return null;
+            return ( 
+            <g className={`scenery-layer-${name}`} key={name}>
+                {Object.values(objects).map((object) => {
+                    if((type !== undefined && type !== object.type) || (types !== undefined && !types.includes(object.type))) return null;
 
-                return <RendererComponent key={`${name}-${object.id}`} object={object} />;
-            });
-        }).flat();
+                    return <RendererComponent key={`${name}-${object.id}`} object={object} />;
+                })}
+            </g>
+            );
+        });
     }, [scenery, settings]);
 
     return (

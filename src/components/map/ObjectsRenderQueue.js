@@ -3,6 +3,7 @@ import SwitchNameRenderer from './object-renderers/SwitchNameRenderer';
 import IsolationIdRenderer from './object-renderers/IsolationIdRenderer';
 import TrackObjectRenderer from './object-renderers/TrackObjectRenderer';
 import SignalRenderer from './object-renderers/SignalRenderer';
+import RouteRenderer from './object-renderers/RouteRenderer';
 
 const ObjectRendererQueue = [
     {
@@ -36,6 +37,12 @@ const ObjectRendererQueue = [
         'type': 'Signal',
         'renderer': SignalRenderer,
         'cond': (settings) => settings.layers['signals']
+    },
+    {
+        'name': 'routes',
+        'category': 'routes',
+        'renderer': RouteRenderer,
+        'cond': (settings) => settings.layers['routes']
     }
 ]
 
