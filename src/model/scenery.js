@@ -23,7 +23,7 @@ export default class Scenery
             scenery.addObject(object);
         });
 
-        scenery.applySwitches();
+        scenery.applyObjects();
         console.log(scenery);
 
         return scenery;
@@ -42,9 +42,13 @@ export default class Scenery
         }
     }
     
-    applySwitches() {
-        Object.values(this.objects.switches ?? []).forEach(sw => {
-            sw.applySwitch(this);
+    applyObjects() {
+        Object.keys(this.objects).forEach(category => {
+            Object.values(this.objects[category]).forEach(object => {
+                if(object.applyObject) {
+                    object.applyObject(this);
+                }
+            });
         });
     }
 

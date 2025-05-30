@@ -1,9 +1,7 @@
-export default class TrackObject {
-    id;
+import SceneryObject from './scenery-object';
+
+export default class TrackObject extends SceneryObject {
     prefab_name;
-    x;
-    y;
-    z;
     rot;
     track_id;
     name;
@@ -12,10 +10,12 @@ export default class TrackObject {
     track;
 
     constructor(id, prefab_name, x, y, z, rot, track_id, name) {
+        super(id, x, y, z);
         Object.assign(this, {
-            id, prefab_name,
-            x, y, z,
-            rot, track_id, name
+            prefab_name,
+            rot, 
+            track_id, 
+            name
         });
     }
 
@@ -36,12 +36,12 @@ export default class TrackObject {
     }
 
     applyObject(scenery) {
-        /* TODO */
-    }
+        const track = scenery.getObject('tracks', this.track_id);
+        if (!track) {
+            console.warn(`TrackObject ${this.id} cannot be applied: track ${this.track_id} not found.`);
+            return;
+        }
 
-    getRenderBounds() {
-        return [
-            { x: this.x, z: this.z }
-        ];
+        this.track = track;
     }
 }

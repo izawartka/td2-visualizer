@@ -1,11 +1,8 @@
 import PointTrack from "./point-track.js";
+import SceneryObject from "./scenery-object.js";
 
-export default class Switch {
-    id;
+export default class Switch extends SceneryObject {
     model;
-    x;
-    y;
-    z;
     rot;
     data;
     id_isolation;
@@ -20,9 +17,9 @@ export default class Switch {
     trackB;
 
     constructor(id, model, x, y, z, rot, data, id_isolation, id_switch, maxspeed, derailspeed) {
+        super(id, x, y, z);
         Object.assign(this, {
-            id, model,
-            x, y, z, 
+            model,
             rot, data,
             id_switch, id_isolation,
             maxspeed, derailspeed
@@ -49,7 +46,7 @@ export default class Switch {
         return sw;
     }
 
-    applySwitch(scenery) {
+    applyObject(scenery) {
         if(this.applied) return; // already applied
 
         this.outs = Switch.getOutsFromData(this.data);

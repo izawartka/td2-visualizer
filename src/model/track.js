@@ -1,8 +1,6 @@
-export default class Track {
-    id;
-    x;
-    y;
-    z;
+import SceneryObject from "./scenery-object";
+
+export default class Track extends SceneryObject {
     rot;
     len;
     r;
@@ -15,9 +13,8 @@ export default class Track {
     outs = [];
 
     constructor(id, x, y, z, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
+        super(id, x, y, z);
         Object.assign(this, {
-            id,
-            x, y, z,
             rot, len, r,
             id_station, id_isolation,
             maxspeed, derailspeed
@@ -34,11 +31,5 @@ export default class Track {
         const dist1 = pow2(x-this.points.x1)+pow2(z-this.points.z1);
         const dist2 = pow2(x-this.points.x2)+pow2(z-this.points.z2);
         return (dist1 < dist2) ? [this.points.x1, y, this.points.z1] : [this.points.x2, y, this.points.z2];
-    }
-
-    getRenderBounds() {
-        return [
-            { x: this.x, z: this.z }
-        ];
     }
 }
