@@ -19,7 +19,7 @@ export default function RouteRenderer(props) {
     }, [object.rot]);
 
     const upsideDownRot = upsideDown ? 90 : -90;
-    const offY = object.track_count === 2 ? -22 : 20;
+    const offY = object.track_count === 2 ? -22 : -20;
     const anchor = upsideDown ? "start" : "end";
 
     return (

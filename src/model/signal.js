@@ -18,6 +18,10 @@ export default class Signal extends TrackObject {
     }
 
     getPrintableSignalName() {
+        if (!this.signal_name) {
+            return this.name
+        }
+
         // remove everything after the first '[' or '<' character (inclusive)
         const match = this.signal_name.match(/^[^[<]*/);
         if (match) {
@@ -34,7 +38,7 @@ export default class Signal extends TrackObject {
     */
     static isSignal(text) {
         const values = text.split(";");
-        if(values.length < 32) return false;
+        if(values.length < 29) return false;
         
         const prefabInfo = values[2].split(",");
         if(prefabInfo.length < 2) return false;
