@@ -21,10 +21,11 @@ export default function RouteRenderer(props) {
     const upsideDownRot = upsideDown ? 90 : -90;
     const offY = object.track_count === 2 ? -22 : -20;
     const anchor = upsideDown ? "start" : "end";
+    const arrowOffset = - object.track_offset - 37.8;
 
     return (
         <g className="route" transform={`translate(${x}, ${z}) rotate(${object.rot})`}>
-            <g transform={`rotate(90) translate(-80, -40)`}>
+            <g transform={`rotate(90) translate(-80, ${arrowOffset})`}>
                 <ReactSVG
                     src="/assets/route.svg"
                     wrapper='svg'
