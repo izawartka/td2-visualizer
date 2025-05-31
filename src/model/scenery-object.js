@@ -1,17 +1,13 @@
 export default class SceneryObject {
     id;
-    x;
-    y;
-    z;
-    rx;
-    ry;
-    rz;
+    pos;
+    rot;
 
-    constructor(id, x, y, z, rx, ry, rz) {
+    constructor(id, pos, rot) {
         Object.assign(this, {
             id, 
-            x, y, z,
-            rx, ry, rz
+            pos,
+            rot
         });
     }
 
@@ -25,8 +21,6 @@ export default class SceneryObject {
     }
 
     getRenderBounds() {
-        return [
-            { x: this.x, z: this.z }
-        ];
+        return this.pos;
     }
 }

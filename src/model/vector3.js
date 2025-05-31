@@ -1,0 +1,95 @@
+export default class Vector3 {
+    x;
+    y;
+    z;
+
+    constructor(x = 0, y = 0, z = 0) {
+        Object.assign(this, { x, y, z });
+    }
+
+    static fromText(text) {
+        const values = text.split(";");
+        return new Vector3(
+            parseFloat(values[0]), // x
+            parseFloat(values[1]), // y
+            parseFloat(values[2])  // z
+        );
+    }
+
+    static fromValuesArray(values, startIndex = 0) {
+        return new Vector3(
+            parseFloat(values[startIndex]),     // x
+            parseFloat(values[startIndex + 1]), // y
+            parseFloat(values[startIndex + 2])  // z
+        );
+    }
+
+    static zero() {
+        return new Vector3(0, 0, 0);
+    }
+
+    static fromAngleY(angleRad, length = 1) {
+        return new Vector3(
+            Math.sin(angleRad) * length,
+            0,
+            Math.cos(angleRad) * length
+        );
+    }
+
+    lerp(other, t) {
+        return new Vector3(
+            this.x + (other.x - this.x) * t,
+            this.y + (other.y - this.y) * t,
+            this.z + (other.z - this.z) * t
+        );
+    }
+
+    atanY(other) {
+        const dx = other.x - this.x;
+        const dz = other.z - this.z;
+        return Math.atan2(dz, dx);
+    }
+
+    add(other) {
+        return new Vector3(
+            this.x + other.x,
+            this.y + other.y,
+            this.z + other.z
+        );
+    }
+
+    sub(other) {
+        return new Vector3(
+            this.x - other.x,
+            this.y - other.y,
+            this.z - other.z
+        );
+    }
+
+    distanceSq(other) {
+        const dx = this.x - other.x;
+        const dy = this.y - other.y;
+        const dz = this.z - other.z;
+        return dx * dx + dy * dy + dz * dz;
+    }
+
+    distance(other) {
+        return Math.sqrt(this.distanceSq(other));
+    }
+
+    clone() {
+        return new Vector3(this.x, this.y, this.z);
+    }
+
+    toText() {
+        return `${this.x};${this.y};${this.z}`;
+    }
+
+    toArray() {
+        return [this.x, this.y, this.z];
+    }
+
+    toSVGCoords() {
+        return [this.x, -this.z];
+    }
+}

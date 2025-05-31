@@ -1,16 +1,17 @@
 import Track from "./track";
+import Vector3 from "./vector3";
 
 export default class StandardTrack extends Track
 {
     type = "StandardTrack";
     points = {
-        x1: 0, z1: 0, // start
-        x2: 0, z2: 0, // end
-        cx: 0, cz: 0 // circle center
+        start: Vector3.zero(),
+        end: Vector3.zero(),
+        circleCenter: Vector3.zero()
     };
 
-    constructor(id, x, y, z, rx, ry, rz, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
-        super(id, x, y, z, rx, ry, rz, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
+    constructor(id, start, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
+        super(id, start, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
         this._calcPoints();
     }
 
@@ -18,12 +19,8 @@ export default class StandardTrack extends Track
         const values = text.split(";");
         const track = new StandardTrack(
             values[1], // id
-            parseFloat(values[3]), // x
-            parseFloat(values[4]), // y
-            parseFloat(values[5]), // z
-            parseFloat(values[6]), // rx
-            parseFloat(values[7]), // ry
-            parseFloat(values[8]), // rz
+            Vector3.fromValuesArray(values, 3), // start
+            Vector3.fromValuesArray(values, 6), // rot
             parseFloat(values[9]), // len
             parseFloat(values[10]), // r
             values[11], // previd
@@ -38,30 +35,17 @@ export default class StandardTrack extends Track
     }
 
     _calcPoints() {
-        const rotRad = this.ry * Math.PI / 180;
+        const rotRad = this.rot.y * Math.PI / 180;
 
-        this.points = {
-            x1: this.x, // start
-            z1: this.z,
-            x2: this.x + this.len * Math.sin(rotRad), // end
-            z2: this.z + this.len * Math.cos(rotRad),
-            cx: this.x, // circle center (default)
-            cz: this.z // circle center (default)
-        };
+        this.points.start = this.pos.clone();
+        this.points.end = this.pos.add(Vector3.fromAngleY(rotRad, this.len));
+        this.points.circleCenter = this.pos.clone(); // default circle center
 
         if (this.r !== 0) {
-            let trp2 = rotRad + Math.PI / 2;
-            this.points.cx = this.x - this.r * Math.sin(trp2); // circle center
-            this.points.cz = this.z - this.r * Math.cos(trp2);
-            this.points.x2 = this.points.cx + this.r * Math.sin(trp2 - this.len / this.r); // end (modify)
-            this.points.z2 = this.points.cz + this.r * Math.cos(trp2 - this.len / this.r);
+            const centerAngle = rotRad + Math.PI / 2;
+            this.points.circleCenter = this.pos.sub(Vector3.fromAngleY(centerAngle, this.r));
+            const endAngle = centerAngle - this.len / this.r;
+            this.points.end = this.points.circleCenter.add(Vector3.fromAngleY(endAngle, this.r));
         }
-    }
-
-    gerRenderBounds() {
-        return [
-            { x: this.points.x1, z: this.points.z1 }, // start
-            { x: this.points.x2, z: this.points.z2 }, // end
-        ];
     }
 }

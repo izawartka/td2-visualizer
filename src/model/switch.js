@@ -1,7 +1,7 @@
-import Constants from "../helpers/constants.js";
 import PointTrack from "./point-track.js";
 import SceneryObject from "./scenery-object.js";
 import SceneryParserLog from "./scenery-parser-log.js";
+import Vector3 from "./vector3.js";
 
 export default class Switch extends SceneryObject {
     model;
@@ -17,8 +17,8 @@ export default class Switch extends SceneryObject {
     trackA;
     trackB;
 
-    constructor(id, model, x, y, z, rx, ry, rz, data, id_isolation, id_switch, maxspeed, derailspeed) {
-        super(id, x, y, z, rx, ry, rz);
+    constructor(id, model, pos, rot, data, id_isolation, id_switch, maxspeed, derailspeed) {
+        super(id, pos, rot);
         Object.assign(this, {
             model,
             data,
@@ -33,12 +33,8 @@ export default class Switch extends SceneryObject {
         const sw = new Switch(
             values[1], // id
             values[2], // model
-            parseFloat(values[3]), // x
-            parseFloat(values[4]), // y
-            parseFloat(values[5]), // z
-            parseFloat(values[6]), // rx
-            parseFloat(values[7]), // ry
-            parseFloat(values[8]), // rz
+            Vector3.fromValuesArray(values, 3), // pos
+            Vector3.fromValuesArray(values, 6), // rot
             values[9], // data
             values[10], // id_isolation
             values[11], // id_switch
@@ -115,13 +111,13 @@ export default class Switch extends SceneryObject {
             return null;
         }
 
-        const startTrackEnd = startTrack.getCloserEnd(this.x, this.y, this.z);
-        const endTrackEnd = endTrack.getCloserEnd(this.x, this.y, this.z);
+        const startTrackEnd = startTrack.getCloserEndPos(this.pos);
+        const endTrackEnd = endTrack.getCloserEndPos(this.pos);
 
         let trackObj = new PointTrack(
             name,
-            ...startTrackEnd,
-            ...endTrackEnd, 
+            startTrackEnd,
+            endTrackEnd, 
             r,
             from, 
             to, 

@@ -2,13 +2,11 @@ import { ReactSVG } from 'react-svg'
 
 export default function SignalRenderer(props) {
     const { object } = props;
-
-    const x = object.x;
-    const z = -object.z;
+    const [x, y] = object.pos.toSVGCoords();
 
     return (
-        <g className="signal" transform={`translate(${x}, ${z})`}>
-            <g transform={`rotate(${object.ry}) translate(-2, -2)`}>
+        <g className="signal" transform={`translate(${x}, ${y})`}>
+            <g transform={`rotate(${object.rot.y}) translate(-2, -2)`}>
                 <ReactSVG
                     src="/assets/signal.svg"
                     wrapper='svg'

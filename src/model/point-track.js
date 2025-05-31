@@ -1,31 +1,23 @@
 import Track from './track';
+import Vector3 from './vector3';
 
 export default class PointTrack extends Track
 {
     type = "PointTrack";
     points = {
-        x1: 0, y1: 0, z1: 0, // start
-        x2: 0, y2: 0, z2: 0 // end
+        start: Vector3.zero(),
+        end: Vector3.zero()
     };
 
-    constructor(id, x1, y1, z1, x2, y2, z2, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
-        const ry = Math.atan2(x2-x1, z2-z1);
-        // TODO: calculate length
+    constructor(id, start, end, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
+        const ry = start.atanY(end);
+        const rot = new Vector3(0, ry, 0);
         // TODO: fix rx and rz = 0
-        super(id, x1, y1, z1, 0, ry, 0, null, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
+        // TODO: calculate length
+        super(id, start, rot, null, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
 
         Object.assign(this.points, {
-            x1, y1, z1,
-            x2, y2, z2
+            start, end
         });
-
-        this.type="PointTrack";
-    }
-
-    getRenderBounds() {
-        return [
-            { x: this.points.x1, z: this.points.z1 }, // start
-            { x: this.points.x2, z: this.points.z2 }  // end
-        ];
     }
 }

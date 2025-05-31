@@ -1,6 +1,6 @@
-import Constants from '../helpers/constants';
 import SceneryObject from './scenery-object';
 import SceneryParserLog from './scenery-parser-log';
+import Vector3 from './vector3';
 
 export default class TrackObject extends SceneryObject {
     prefab_name;
@@ -10,8 +10,8 @@ export default class TrackObject extends SceneryObject {
     type = "TrackObject";
     track;
 
-    constructor(id, prefab_name, x, y, z, rx, ry, rz, track_id, name) {
-        super(id, x, y, z, rx, ry, rz);
+    constructor(id, prefab_name, pos, rot, track_id, name) {
+        super(id, pos, rot);
         Object.assign(this, {
             prefab_name,
             track_id, 
@@ -24,12 +24,8 @@ export default class TrackObject extends SceneryObject {
         const obj = new TrackObject(
             values[1], // id
             values[2], // prefab_name
-            parseFloat(values[3]), // x
-            parseFloat(values[4]), // y
-            parseFloat(values[5]), // z
-            parseFloat(values[6]), // rx
-            parseFloat(values[7]), // ry
-            parseFloat(values[8]), // rz
+            Vector3.fromValuesArray(values, 3), // pos
+            Vector3.fromValuesArray(values, 6), // rot
             values[9], // track_id
             values[11] // name
         );

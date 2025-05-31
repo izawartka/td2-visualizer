@@ -18,25 +18,22 @@ export default function TrackRenderer(props) {
 
 function StandardTrackR(props) {
     const { object } = props;
-
-    const x1 = object.points.x1;
-    const z1 = -object.points.z1;
-    const x2 = object.points.x2;
-    const z2 = -object.points.z2;
+    const [x1, y1] = object.points.start.toSVGCoords();
+    const [x2, y2] = object.points.end.toSVGCoords();
     const ra = Math.abs(object.r);
 
     let d;
     if (object.r < 0) {
-        d = `M${x1},${z1} A${ra} ${ra} 0 0 1 ${x2},${z2}`;
+        d = `M${x1},${y1} A${ra} ${ra} 0 0 1 ${x2},${y2}`;
     } else if (object.r > 0) {
-        d = `M${x2},${z2} A${ra} ${ra} 0 0 1 ${x1},${z1}`;
+        d = `M${x2},${y2} A${ra} ${ra} 0 0 1 ${x1},${y1}`;
     } else {
-        d = `M${x1},${z1} L${x2},${z2}`;
+        d = `M${x1},${y1} L${x2},${y2}`;
     }
 
     const color = Constants.map.useTrackColors ? (
-        object.r === 0 ? "rgb(255, 255, 255)" : "rgb(255, 0, 255)" 
-    ): undefined;
+        object.r === 0 ? "rgb(0, 255, 255)" : "rgb(0, 0, 255)" 
+    ) : undefined;
 
     return (
         <path
@@ -51,16 +48,12 @@ function StandardTrackR(props) {
 function BezierTrackR(props) {
     const { object } = props;
 
-    const x1 = object.points.x1;
-    const z1 = -object.points.z1;
-    const cx1 = object.points.cx1+object.points.x1;
-    const cz1 = -object.points.cz1-object.points.z1;
-    const cx2 = object.points.cx2+object.points.x2;
-    const cz2 = -object.points.cz2-object.points.z2;
-    const x2 = object.points.x2;
-    const z2 = -object.points.z2;
+    const [x1, y1] = object.points.start.toSVGCoords();
+    const [cx1, cy1] = object.points.control1.toSVGCoords();
+    const [x2, y2] = object.points.end.toSVGCoords();
+    const [cx2, cy2] = object.points.control2.toSVGCoords();
 
-    const d = `M${x1},${z1} C${cx1},${cz1} ${cx2},${cz2} ${x2},${z2}`;
+    const d = `M${x1},${y1} C${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`;
     const color = Constants.map.useTrackColors ? "rgb(0, 255, 0)" : undefined;
 
     return (
