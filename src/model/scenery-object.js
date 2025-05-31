@@ -3,10 +3,15 @@ export default class SceneryObject {
     x;
     y;
     z;
+    rx;
+    ry;
+    rz;
 
-    constructor(id, x, y, z) {
+    constructor(id, x, y, z, rx, ry, rz) {
         Object.assign(this, {
-            id, x, y, z
+            id, 
+            x, y, z,
+            rx, ry, rz
         });
     }
 

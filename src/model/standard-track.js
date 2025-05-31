@@ -9,8 +9,8 @@ export default class StandardTrack extends Track
         cx: 0, cz: 0 // circle center
     };
 
-    constructor(id, x, y, z, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
-        super(id, x, y, z, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
+    constructor(id, x, y, z, rx, ry, rz, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
+        super(id, x, y, z, rx, ry, rz, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
         this._calcPoints();
     }
 
@@ -21,7 +21,9 @@ export default class StandardTrack extends Track
             parseFloat(values[3]), // x
             parseFloat(values[4]), // y
             parseFloat(values[5]), // z
-            parseFloat(values[7]), // rot
+            parseFloat(values[6]), // rx
+            parseFloat(values[7]), // ry
+            parseFloat(values[8]), // rz
             parseFloat(values[9]), // len
             parseFloat(values[10]), // r
             values[11], // previd
@@ -36,7 +38,7 @@ export default class StandardTrack extends Track
     }
 
     _calcPoints() {
-        const rotRad = this.rot * Math.PI / 180;
+        const rotRad = this.ry * Math.PI / 180;
 
         this.points = {
             x1: this.x, // start

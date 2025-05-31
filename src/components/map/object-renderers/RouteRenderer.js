@@ -8,7 +8,7 @@ export default function RouteRenderer(props) {
     const z = -object.z;
 
     const upsideDown = useMemo(() => {
-        let rot = object.rot;
+        let rot = object.ry;
         if (rot < 0) {
             rot += 360 * Math.ceil(Math.abs(rot) / 360);
         } else if (rot >= 360) {
@@ -16,7 +16,7 @@ export default function RouteRenderer(props) {
         }
 
         return rot > 180;
-    }, [object.rot]);
+    }, [object.ry]);
 
     const upsideDownRot = upsideDown ? 90 : -90;
     const offY = object.track_count === 2 ? -22 : -20;
@@ -24,7 +24,7 @@ export default function RouteRenderer(props) {
     const arrowOffset = - object.track_offset - 37.8;
 
     return (
-        <g className="route" transform={`translate(${x}, ${z}) rotate(${object.rot})`}>
+        <g className="route" transform={`translate(${x}, ${z}) rotate(${object.ry})`}>
             <g transform={`rotate(90) translate(-80, ${arrowOffset})`}>
                 <ReactSVG
                     src="/assets/route.svg"

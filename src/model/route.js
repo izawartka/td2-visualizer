@@ -8,12 +8,12 @@ export default class Route extends SceneryObject {
     category = "routes";
     type = "Route";
 
-    constructor(prefab_name, x, y, z, rot, track_count, route_name, track_offset, electrified) {
-        super(route_name, x, y, z);
+    constructor(prefab_name, x, y, z, rx, ry, rz, track_count, route_name, track_offset, electrified) {
+        super(route_name, x, y, z, rx, ry, rz);
 
         Object.assign(this, {
             prefab_name,
-            rot,
+            rx, ry, rz,
             track_count,
             route_name,
             track_offset,
@@ -30,7 +30,9 @@ export default class Route extends SceneryObject {
             parseFloat(values[3]), // x
             parseFloat(values[4]), // y
             parseFloat(values[5]), // z
-            parseFloat(values[7]), // rot
+            parseFloat(values[6]), // rx
+            parseFloat(values[7]), // ry
+            parseFloat(values[8]), // rz
             parseInt(values[9]), // track_count
             values[10], // route_name
             parseFloat(values[11]), // track_offset

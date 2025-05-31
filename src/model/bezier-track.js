@@ -10,8 +10,8 @@ export default class BezierTrack extends Track
         x2: 0, y2: 0, z2: 0 // end
     };
 
-    constructor(id, x1, y1, z1, cx1, cy1, cz1, x2, y2, z2, cx2, cy2, cz2, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
-        super(id, x1, y1, z1, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
+    constructor(id, x1, y1, z1, cx1, cy1, cz1, x2, y2, z2, cx2, cy2, cz2, rx, ry, rz, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
+        super(id, x1, y1, z1, rx, ry, rz, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
 
         Object.assign(this.points, {
             x1, y1, z1, // start
@@ -37,7 +37,10 @@ export default class BezierTrack extends Track
             parseFloat(values[12]), // cx2
             parseFloat(values[13]), // cy2
             parseFloat(values[14]), // cz2
-            0, // rot ??
+            // TODO: values below
+            0, // rx ??
+            0, // ry ??
+            0, // rz ??
             0, // len ??
             0, // r ??
             values[15], // previd

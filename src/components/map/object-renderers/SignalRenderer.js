@@ -8,7 +8,7 @@ export default function SignalRenderer(props) {
 
     return (
         <g className="signal" transform={`translate(${x}, ${z})`}>
-            <g transform={`rotate(${object.rot}) translate(-2, -2)`}>
+            <g transform={`rotate(${object.ry}) translate(-2, -2)`}>
                 <ReactSVG
                     src="/assets/signal.svg"
                     wrapper='svg'

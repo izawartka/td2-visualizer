@@ -7,8 +7,8 @@ export default class Signal extends TrackObject {
     signal_name;
     type = "Signal";
 
-    constructor(id, prefab_name, x, y, z, rot, track_id, name, is_spawn, spawn_info, signal_name) {
-        super(id, prefab_name, x, y, z, rot, track_id, name);
+    constructor(id, prefab_name, x, y, z, rx, ry, rz, track_id, name, is_spawn, spawn_info, signal_name) {
+        super(id, prefab_name, x, y, z, rx, ry, rz, track_id, name);
 
         Object.assign(this, {
             is_spawn,
@@ -54,7 +54,9 @@ export default class Signal extends TrackObject {
             parseFloat(values[3]), // x
             parseFloat(values[4]), // y
             parseFloat(values[5]), // z
-            parseFloat(values[7]), // rot
+            parseFloat(values[6]), // rx
+            parseFloat(values[7]), // ry
+            parseFloat(values[8]), // rz
             values[9], // track_id
             values[11], // name,
             values[12] === "Spawn Signal", // is_spawn

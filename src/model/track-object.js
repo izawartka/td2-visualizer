@@ -2,18 +2,16 @@ import SceneryObject from './scenery-object';
 
 export default class TrackObject extends SceneryObject {
     prefab_name;
-    rot;
     track_id;
     name;
     category = "track-objects";
     type = "TrackObject";
     track;
 
-    constructor(id, prefab_name, x, y, z, rot, track_id, name) {
-        super(id, x, y, z);
+    constructor(id, prefab_name, x, y, z, rx, ry, rz, track_id, name) {
+        super(id, x, y, z, rx, ry, rz);
         Object.assign(this, {
             prefab_name,
-            rot, 
             track_id, 
             name
         });
@@ -27,7 +25,9 @@ export default class TrackObject extends SceneryObject {
             parseFloat(values[3]), // x
             parseFloat(values[4]), // y
             parseFloat(values[5]), // z
-            parseFloat(values[7]), // rot
+            parseFloat(values[6]), // rx
+            parseFloat(values[7]), // ry
+            parseFloat(values[8]), // rz
             values[9], // track_id
             values[11] // name
         );

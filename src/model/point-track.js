@@ -9,9 +9,10 @@ export default class PointTrack extends Track
     };
 
     constructor(id, x1, y1, z1, x2, y2, z2, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
-        const rot = Math.atan2(x2-x1, z2-z1);
-        // length is unknown
-        super(id, x1, y1, z1, rot, null, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
+        const ry = Math.atan2(x2-x1, z2-z1);
+        // TODO: calculate length
+        // TODO: fix rx and rz = 0
+        super(id, x1, y1, z1, 0, ry, 0, null, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
 
         Object.assign(this.points, {
             x1, y1, z1,

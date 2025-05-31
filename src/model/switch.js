@@ -3,7 +3,6 @@ import SceneryObject from "./scenery-object.js";
 
 export default class Switch extends SceneryObject {
     model;
-    rot;
     data;
     id_isolation;
     id_switch;
@@ -16,11 +15,11 @@ export default class Switch extends SceneryObject {
     trackA;
     trackB;
 
-    constructor(id, model, x, y, z, rot, data, id_isolation, id_switch, maxspeed, derailspeed) {
-        super(id, x, y, z);
+    constructor(id, model, x, y, z, rx, ry, rz, data, id_isolation, id_switch, maxspeed, derailspeed) {
+        super(id, x, y, z, rx, ry, rz);
         Object.assign(this, {
             model,
-            rot, data,
+            data,
             id_switch, id_isolation,
             maxspeed, derailspeed
         });
@@ -35,7 +34,9 @@ export default class Switch extends SceneryObject {
             parseFloat(values[3]), // x
             parseFloat(values[4]), // y
             parseFloat(values[5]), // z
-            parseFloat(values[7]), // rot
+            parseFloat(values[6]), // rx
+            parseFloat(values[7]), // ry
+            parseFloat(values[8]), // rz
             values[9], // data
             values[10], // id_isolation
             values[11], // id_switch
@@ -52,16 +53,15 @@ export default class Switch extends SceneryObject {
         this.outs = Switch.getOutsFromData(this.data);
         const r = Switch.getRadiusFromModel(this.model);
 
-        this.trackA = this._createSwitchTrack(scenery, this.id+"A", this.outs[0], this.outs[2], 0);
-        this.trackB = this._createSwitchTrack(scenery, this.id+"B", this.outs[1], this.outs[3], r);
-
-        if(!this.trackA || !this.trackB) {
-            console.error("Couldn't create switch tracks for switch #"+this.id);
-            return;
+        this.trackA = this._createGetSwitchTrack(scenery, this.id+"A", this.outs[0], this.outs[2], 0);
+        if(this.trackA) {
+            scenery.addObject(this.trackA);
         }
-
-        scenery.addObject(this.trackA);
-        scenery.addObject(this.trackB);
+ 
+        this.trackB = this._createGetSwitchTrack(scenery, this.id+"B", this.outs[1], this.outs[3], r);
+        if(this.trackB) {
+            scenery.addObject(this.trackB);
+        }
     }
 
     static getOutsFromData(data) {
@@ -93,13 +93,24 @@ export default class Switch extends SceneryObject {
         return isRight ? -radius : radius;
     }
 
-    _createSwitchTrack(scenery, name, from, to, r) {
+    _createGetSwitchTrack(scenery, name, from, to, r) {
+        if(!from) {
+            console.error(`Switch #${this.id}, track ${name} has no 'from' track set!`);
+            return null;
+        } else if(!to) {
+            console.error(`Switch #${this.id}, track ${name} has no 'to' track set!`);
+            return null;
+        }
+
         const startTrack = scenery.getObject("tracks", from);
         const endTrack = scenery.getObject("tracks", to);
 
-        if(!startTrack || !endTrack) {
-            console.error("Couldn't create track from #"+from+" to #"+to+". One of them doesn't exist!");
-            return;
+        if(!startTrack) {
+            console.error(`Switch #${this.id}, track ${name}, 'from' track ${from} not found!`);
+            return null;
+        } else if(!endTrack) {
+            console.error(`Switch #${this.id}, track ${name}, 'to' track ${to} not found!`);
+            return null;
         }
 
         const startTrackEnd = startTrack.getCloserEnd(this.x, this.y, this.z);
