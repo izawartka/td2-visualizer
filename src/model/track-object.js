@@ -1,4 +1,6 @@
+import Constants from '../helpers/constants';
 import SceneryObject from './scenery-object';
+import SceneryParserLog from './scenery-parser-log';
 
 export default class TrackObject extends SceneryObject {
     prefab_name;
@@ -38,7 +40,7 @@ export default class TrackObject extends SceneryObject {
     applyObject(scenery) {
         const track = scenery.getObject('tracks', this.track_id);
         if (!track) {
-            console.warn(`TrackObject ${this.id} cannot be applied: track ${this.track_id} not found.`);
+            SceneryParserLog.warn('trackObjectCannotBeApplied', `TrackObject ${this.id} cannot be applied: track ${this.track_id} not found`)
             return;
         }
 

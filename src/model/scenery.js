@@ -4,6 +4,7 @@ import BezierTrack from './bezier-track';
 import TrackObject from './track-object';
 import Signal from './signal';
 import Route from './route';
+import SceneryParserLog from './scenery-parser-log';
 
 export default class Scenery
 {
@@ -74,7 +75,7 @@ export default class Scenery
             case 'EndRoute':
                 return null;
             default:
-                console.warn(`Unknown object type: ${type}`);
+                SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);
                 return null;
         };
     }
@@ -91,7 +92,7 @@ export default class Scenery
             case 'BTrack':
                 return BezierTrack.fromText(text);
             default:
-                console.warn(`Unknown track type: ${trackType}`);
+                SceneryParserLog.warn('unknownTrackType', `Unknown track type: ${trackType}`);
                 return null;
         }
     }

@@ -1,5 +1,7 @@
+import Constants from "../helpers/constants.js";
 import PointTrack from "./point-track.js";
 import SceneryObject from "./scenery-object.js";
+import SceneryParserLog from "./scenery-parser-log.js";
 
 export default class Switch extends SceneryObject {
     model;
@@ -95,10 +97,10 @@ export default class Switch extends SceneryObject {
 
     _createGetSwitchTrack(scenery, name, from, to, r) {
         if(!from) {
-            console.error(`Switch #${this.id}, track ${name} has no 'from' track set!`);
+            SceneryParserLog.warn('switchInvalidTrackConnection', `Switch track ${name} has no 'from' track set`);
             return null;
         } else if(!to) {
-            console.error(`Switch #${this.id}, track ${name} has no 'to' track set!`);
+            SceneryParserLog.warn('switchInvalidTrackConnection', `Switch track ${name} has no 'to' track set`);
             return null;
         }
 
@@ -106,10 +108,10 @@ export default class Switch extends SceneryObject {
         const endTrack = scenery.getObject("tracks", to);
 
         if(!startTrack) {
-            console.error(`Switch #${this.id}, track ${name}, 'from' track ${from} not found!`);
+            SceneryParserLog.warn('switchInvalidTrackConnection', `Switch track ${name}, 'from' track ${from} not found`);
             return null;
         } else if(!endTrack) {
-            console.error(`Switch #${this.id}, track ${name}, 'to' track ${to} not found!`);
+            SceneryParserLog.warn('switchInvalidTrackConnection', `Switch track ${name}, 'to' track ${to} not found`);
             return null;
         }
 

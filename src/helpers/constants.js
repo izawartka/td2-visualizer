@@ -3,6 +3,13 @@ const Constants = {
         useTrackColors: false,
         zoomSensitivity: 0.002,
     },
+    warnings: {
+        all: false, // enable all warnings
+        trackObjectCannotBeApplied: false,
+        switchInvalidTrackConnection: true,
+        unknownObjectType: true,
+        unknownTrackType: true,
+    },
     layers: [
         {
             id: 'tracks',
