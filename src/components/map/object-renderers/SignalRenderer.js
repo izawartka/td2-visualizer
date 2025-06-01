@@ -1,12 +1,18 @@
 import { ReactSVG } from 'react-svg'
+import AngleHelper from '../../../helpers/angleHelper';
 
 export default function SignalRenderer(props) {
     const { object } = props;
     const [x, y] = object.pos.toSVGCoords();
 
+    const rot = AngleHelper.normalizeDegAngle(object.rot.y);
+    const upsideDown = rot >= 180;
+    const upsideDownRot = upsideDown ? 90 : -90;
+    const anchor = upsideDown ? "end" : "start";
+
     return (
-        <g className="signal" transform={`translate(${x}, ${y})`}>
-            <g transform={`rotate(${object.rot.y}) translate(-2, -2)`}>
+        <g className="signal" transform={`translate(${x}, ${y}) rotate(${object.rot.y}) `}>
+            <g className="signal-icon" transform={`translate(-1.89, -1.89)`}>
                 <ReactSVG
                     src="/assets/signal.svg"
                     wrapper='svg'
@@ -17,9 +23,11 @@ export default function SignalRenderer(props) {
                     }}
                 />
             </g>
-            <text x="2.5" y="0" textAnchor="start" dominantBaseline="middle">
-                {object.getPrintableSignalName()}
-            </text>
+            <g transform={`translate(0, -2) rotate(${upsideDownRot})`}>
+                <text x="0" y="0" textAnchor={anchor} dominantBaseline="middle">
+                    {object.getPrintableSignalName()}
+                </text>
+            </g>
         </g>
     );
 }

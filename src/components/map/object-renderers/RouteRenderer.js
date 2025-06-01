@@ -1,21 +1,12 @@
-import { useMemo } from "react";
 import { ReactSVG } from "react-svg";
+import AngleHelper from "../../../helpers/angleHelper";
 
 export default function RouteRenderer(props) {
     const { object } = props;
     const [x, y] = object.pos.toSVGCoords();
 
-    const upsideDown = useMemo(() => {
-        let rot = object.rot.y;
-        if (rot < 0) {
-            rot += 360 * Math.ceil(Math.abs(rot) / 360);
-        } else if (rot >= 360) {
-            rot -= 360 * Math.floor(rot / 360);
-        }
-
-        return rot > 180;
-    }, [object.rot.y]);
-
+    const rot = AngleHelper.normalizeDegAngle(object.rot.y);
+    const upsideDown = rot >= 180;
     const upsideDownRot = upsideDown ? 90 : -90;
     const offY = object.track_count === 2 ? -22 : -20;
     const anchor = upsideDown ? "start" : "end";

@@ -1,3 +1,4 @@
+import AngleHelper from "../helpers/angleHelper";
 import Track from "./track";
 import Vector3 from "./vector3";
 
@@ -35,7 +36,7 @@ export default class StandardTrack extends Track
     }
 
     _calcPoints() {
-        const rotRad = this.rot.y * Math.PI / 180;
+        const rotRad = AngleHelper.degToRad(this.rot.y);
 
         this.points.start = this.pos.clone();
         this.points.end = this.pos.add(Vector3.fromAngleY(rotRad, this.len));
