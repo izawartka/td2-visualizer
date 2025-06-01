@@ -4,17 +4,27 @@ import sys
 #
 #    [ TD2 SCENERY PROCESSOR ]
 #    by masuo
-#    v1.2
+#    v1.3
 #
 
-BAD_WORDS = ['Misc', 'Fence', 'TerrainPoint', 'Wires']
+BAD_WORDS = ['Empty,Empty', 'Forest Start,Forest Start', 'EndMiscGroup', 'Fence', 'TerrainPoint', 'Wires']
 
 def should_exclude(line: str) -> bool:
-    return any(bad_word in line for bad_word in BAD_WORDS)
+    for word in BAD_WORDS:
+        if line.startswith(word):
+            return True
+    
+    if line.startswith("Misc"):
+        values = line.split(';')
+        return len(values[9].strip()) == 0 or not values[2].startswith("SignalBox")
 
 def process_file(file_path: str):
     if not file_path.endswith(".sc"):
         print(f"Skipping non-.sc file: {file_path}")
+        return
+    
+    if file_path.endswith(".lite.sc"):
+        print(f"Skipping already processed file: {file_path}")
         return
 
     output_path = file_path[:-3] + ".lite.sc"

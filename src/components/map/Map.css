@@ -46,3 +46,12 @@
     fill: #eee;
     font-size: 72mm;
 }
+
+.map svg g.signalbox {
+    fill: #eee;
+}
+
+.map svg g.signalbox text {
+    fill: #eee;
+    font-size: 4px;
+}

@@ -37,6 +37,11 @@ const Constants = {
             default: true,
         },
         {
+            id: 'signalboxes',
+            name: 'Signal boxes',
+            default: true,
+        },
+        {
             id: 'routes',
             name: 'Routes',
             default: true,

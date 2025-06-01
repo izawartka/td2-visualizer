@@ -4,12 +4,14 @@ import BezierTrack from './bezier-track';
 import TrackObject from './track-object';
 import Signal from './signal';
 import Route from './route';
+import Misc from './misc';
 import SceneryParserLog from './scenery-parser-log';
 
 export default class Scenery
 {
     objects = {};
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
+    static nextMiscId = 1;
 
     getBounds () {
         return { ...this.bounds };
@@ -71,6 +73,8 @@ export default class Scenery
                 return Scenery._parseTrackObject(text);
             case 'Route':
                 return Route.fromText(text);
+            case 'Misc':
+                return Misc.fromText(Scenery.nextMiscId++, text);
             case 'Empty':
             case 'EndRoute':
                 return null;

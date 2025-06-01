@@ -1,3 +1,4 @@
+import SceneryParserLog from "./scenery-parser-log";
 import SpawnInfo from "./spawn-info";
 import TrackObject from "./track-object";
 import Vector3 from "./vector3";
@@ -16,6 +17,10 @@ export default class Signal extends TrackObject {
             spawn_info: is_spawn ? spawn_info : null,
             signal_name
         });
+
+        if (this.is_spawn && !this.spawn_info) {
+            SceneryParserLog.warn('signalWithoutSpawnInfo', `Signal ${this.id} is marked as spawn but has no spawn info`);
+        }
     }
 
     getPrintableSignalName() {

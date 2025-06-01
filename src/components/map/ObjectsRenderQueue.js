@@ -4,6 +4,7 @@ import IsolationIdRenderer from './object-renderers/IsolationIdRenderer';
 import TrackObjectRenderer from './object-renderers/TrackObjectRenderer';
 import SignalRenderer from './object-renderers/SignalRenderer';
 import RouteRenderer from './object-renderers/RouteRenderer';
+import SignalBoxRenderer from './object-renderers/SignalBoxRenderer';
 
 const ObjectRendererQueue = [
     {
@@ -37,6 +38,12 @@ const ObjectRendererQueue = [
         'type': 'Signal',
         'renderer': SignalRenderer,
         'cond': (settings) => settings.layers['signals']
+    },
+    {
+        'name': 'signalboxes',
+        'category': 'misc',
+        'renderer': SignalBoxRenderer,
+        'cond': (settings) => settings.layers['signalboxes']
     },
     {
         'name': 'routes',

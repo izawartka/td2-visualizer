@@ -47,6 +47,7 @@ export default class Switch extends SceneryObject {
 
     applyObject(scenery) {
         if(this.applied) return; // already applied
+        this.applied = true;
 
         this.outs = Switch.getOutsFromData(this.data);
         const r = Switch.getRadiusFromModel(this.model);

@@ -9,6 +9,7 @@ export default class TrackObject extends SceneryObject {
     category = "track-objects";
     type = "TrackObject";
     track;
+    applied = false;
 
     constructor(id, prefab_name, pos, rot, track_id, name) {
         super(id, pos, rot);
@@ -34,6 +35,9 @@ export default class TrackObject extends SceneryObject {
     }
 
     applyObject(scenery) {
+        if(this.applied) return; // already applied
+        this.applied = true;
+
         const track = scenery.getObject('tracks', this.track_id);
         if (!track) {
             SceneryParserLog.warn('trackObjectCannotBeApplied', `TrackObject ${this.id} cannot be applied: track ${this.track_id} not found`)
