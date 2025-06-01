@@ -1,67 +1,101 @@
-
+import { useContext } from "react";
+import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 
 export default function TrackRenderer(props) {
-    const { object } = props;
+  const { object } = props;
+  const { trackColorMode } = useContext(SettingsContext);
 
+  const path = getTrackPath(object);
+  const color = getTrackColor(object, trackColorMode);
+  const defs = getTrackDefs(object, trackColorMode);
+
+  return (
+    <g>
+        {defs}
+        <path
+        d={path}
+        id={`track-${object.id}`}
+        stroke={color}
+        className="track"
+        />
+    </g>
+  );
+}
+
+function getTrackPath(object) {
     switch (object.type) {
         case "StandardTrack":
-        case "PointTrack":
-            return <StandardTrackR {...props} />;
+        case "PointTrack": 
+            const [x1, y1] = object.points.start.toSVGCoords();
+            const [x2, y2] = object.points.end.toSVGCoords();
+            const ra = Math.abs(object.r);
+            if (object.r < 0) {
+                return `M${x1},${y1} A${ra} ${ra} 0 0 1 ${x2},${y2}`;
+            } else if (object.r > 0) {
+                return `M${x2},${y2} A${ra} ${ra} 0 0 1 ${x1},${y1}`;
+            } else {
+                return `M${x1},${y1} L${x2},${y2}`;
+            }
         case "BezierTrack":
-            return <BezierTrackR {...props} />;
+            const [bx1, by1] = object.points.start.toSVGCoords();
+            const [bcx1, bcy1] = object.points.control1.toSVGCoords();
+            const [bx2, by2] = object.points.end.toSVGCoords();
+            const [bcx2, bcy2] = object.points.control2.toSVGCoords();
+            return `M${bx1},${by1} C${bcx1},${bcy1} ${bcx2},${bcy2} ${bx2},${by2}`;
         default:
-            console.warn(`No renderer component for track type: ${object.type}`);
-            return null;
+            console.warn(`TrackRenderer: Unsupported track type: ${object.type}`);
     }
 }
 
-function StandardTrackR(props) {
-    const { object } = props;
+function getTrackColor(object, trackColorMode) {
+  switch (trackColorMode) {
+    case "none":
+    default:
+      return "#aaa";
+
+    case "type":
+      switch (object.type) {
+        case "StandardTrack":
+        default:
+          return "#00a";
+        case "PointTrack":
+          return "#0a0";
+        case "BezierTrack":
+          return "#aa8";
+      }
+    case "slope":
+        return `url(#track-slope-${object.id})`;
+  }
+}
+
+function getTrackDefs(object, trackColorMode) {
+    if (trackColorMode !== "slope") return null;
+    
     const [x1, y1] = object.points.start.toSVGCoords();
     const [x2, y2] = object.points.end.toSVGCoords();
-    const ra = Math.abs(object.r);
-
-    let d;
-    if (object.r < 0) {
-        d = `M${x1},${y1} A${ra} ${ra} 0 0 1 ${x2},${y2}`;
-    } else if (object.r > 0) {
-        d = `M${x2},${y2} A${ra} ${ra} 0 0 1 ${x1},${y1}`;
-    } else {
-        d = `M${x1},${y1} L${x2},${y2}`;
-    }
-
-    const color = Constants.map.useTrackColors ? (
-        object.r === 0 ? "rgb(0, 255, 255)" : "rgb(0, 0, 255)" 
-    ) : undefined;
-
+    const gradId = `track-slope-${object.id}`;
+    const startColor = getSlopeColor(object.start_slope);
+    const endColor = getSlopeColor(object.end_slope);
+    
     return (
-        <path
-            d={d}
-            id={`track-${object.id}`}
-            stroke={color}
-            className="track"
-        />
+        <defs>
+        <linearGradient
+            id={gradId}
+            gradientUnits="userSpaceOnUse"
+            x1={x1}
+            y1={y1}
+            x2={x2}
+            y2={y2}
+        >
+            <stop offset="0%" stopColor={startColor} />
+            <stop offset="100%" stopColor={endColor} />
+        </linearGradient>
+        </defs>
     );
 }
 
-function BezierTrackR(props) {
-    const { object } = props;
-
-    const [x1, y1] = object.points.start.toSVGCoords();
-    const [cx1, cy1] = object.points.control1.toSVGCoords();
-    const [x2, y2] = object.points.end.toSVGCoords();
-    const [cx2, cy2] = object.points.control2.toSVGCoords();
-
-    const d = `M${x1},${y1} C${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`;
-    const color = Constants.map.useTrackColors ? "rgb(0, 255, 0)" : undefined;
-
-    return (
-        <path
-            d={d}
-            id={`btrack-${object.id}`}
-            stroke={color}
-            className="track"
-        />
-    );
+function getSlopeColor(slope) {
+  const blue = Math.min(255, Math.max(0, 128 + Math.abs(slope * Constants.map.trackSlopeScale)));
+  return `rgb(128, 128, ${blue})`;
 }

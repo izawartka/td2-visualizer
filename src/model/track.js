@@ -9,17 +9,27 @@ export default class Track extends SceneryObject {
     derailspeed;
     category = "tracks";
     type = "Track";
-    outs = [];
+    previd;
+    nextid;
+    prevTrack = null;
+    nextTrack = null;
+    start_slope;
+    end_slope;
 
-    constructor(id, pos, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
+    constructor(id, pos, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
         super(id, pos, rot);
         Object.assign(this, {
             len, r,
-            id_station, id_isolation,
+            previd, nextid,
+            id_station, 
+            start_slope, end_slope,
+            id_isolation,
             maxspeed, derailspeed
         });
+    }
 
-        this.outs = [previd, nextid];
+    static slopesFromText(text) {
+        return text.split(",", 2);
     }
 
     getCloserEndPos(pos) {

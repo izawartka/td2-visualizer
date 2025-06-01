@@ -122,6 +122,8 @@ export default class Switch extends SceneryObject {
             from, 
             to, 
             this.id_switch, 
+            0, // start_slope
+            0, // end_slope
             this.id_isolation, 
             this.maxspeed, 
             this.derailspeed

@@ -2,6 +2,7 @@ import {useContext} from 'react';
 import MainContext from '../../contexts/MainContext';
 import './SideMenu.css';
 import LayersMenu from './LayersMenu';
+import SelTrackColorMode from './SelTrackColorMode';
 
 export default function SideMenu() {
     const { sideMenuOpen } = useContext(MainContext);
@@ -14,6 +15,7 @@ export default function SideMenu() {
         <div className='side-menu-wrapper'>
             <div className='side-menu'>
                 <LayersMenu />
+                <SelTrackColorMode />
             </div>
         </div>
     );

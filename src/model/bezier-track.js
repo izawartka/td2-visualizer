@@ -11,8 +11,8 @@ export default class BezierTrack extends Track
         control2: Vector3.zero()
     };
 
-    constructor(id, start, control1, end, control2, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
+    constructor(id, start, control1, end, control2, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
+        super(id, start, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed);
 
         Object.assign(this.points, {
             start,
@@ -37,6 +37,7 @@ export default class BezierTrack extends Track
             values[15], // previd
             values[16], // nextid
             values[17], // id_station
+            ...Track.slopesFromText(values[18]), // start_slope, end_slope
             values[21], // id_isolation
             parseFloat(values[24]), // maxspeed
             parseFloat(values[25]) // derailspeed

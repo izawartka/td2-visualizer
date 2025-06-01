@@ -11,8 +11,8 @@ export default class StandardTrack extends Track
         circleCenter: Vector3.zero()
     };
 
-    constructor(id, start, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, previd, nextid, id_station, id_isolation, maxspeed, derailspeed);
+    constructor(id, start, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
+        super(id, start, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed);
         this._calcPoints();
     }
 
@@ -27,6 +27,7 @@ export default class StandardTrack extends Track
             values[11], // previd
             values[12], // nextid
             values[13], // id_station
+            ...Track.slopesFromText(values[14]), // start_slope, end_slope
             values[17], // id_isolation
             parseFloat(values[20]), // maxspeed
             parseFloat(values[21]) // derailspeed
@@ -47,6 +48,14 @@ export default class StandardTrack extends Track
             this.points.circleCenter = this.pos.sub(Vector3.fromAngleY(centerAngle, this.r));
             const endAngle = centerAngle - this.len / this.r;
             this.points.end = this.points.circleCenter.add(Vector3.fromAngleY(endAngle, this.r));
+        }
+        
+        // adjust end point by the slope
+        if (this.end_slope !== 0) {
+            const startHeightDiff = this.start_slope * this.len / 1000;
+            const endHeightDiff = this.end_slope * this.len / 1000;
+
+            this.points.end.y += startHeightDiff + (endHeightDiff - startHeightDiff) / 2;
         }
     }
 }

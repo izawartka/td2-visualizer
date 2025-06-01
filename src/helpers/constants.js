@@ -1,7 +1,7 @@
 const Constants = {
     map: {
-        useTrackColors: false,
         zoomSensitivity: 0.002,
+        trackSlopeScale: 10,
     },
     warnings: {
         all: false, // enable all warnings
@@ -40,6 +40,20 @@ const Constants = {
             id: 'routes',
             name: 'Routes',
             default: true,
+        }
+    ],
+    trackColorModes: [
+        {
+            id: 'none',
+            name: 'None',
+        },
+        {
+            id: 'type',
+            name: 'Type',
+        },
+        {
+            id: 'slope',
+            name: 'Slope'
         }
     ]
 };
