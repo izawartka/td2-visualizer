@@ -5,6 +5,7 @@ import MainContext from '../contexts/MainContext';
 import './App.css';
 import SideMenu from './sidemenu/SideMenu';
 import SettingsManager from './SettingsManager';
+import LocList from './loclist/LocList';
 
 function App() {
     const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +25,7 @@ function App() {
                         <Map />
                         <SideMenu />
                     </div>
+                    <LocList />
                 </div>
             </MainContext.Provider>
         </SettingsManager>

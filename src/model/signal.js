@@ -8,6 +8,7 @@ export default class Signal extends TrackObject {
     spawn_info;
     signal_name;
     type = "Signal";
+    applied = false;
 
     constructor(id, prefab_name, pos, rot, track_id, name, is_spawn, spawn_info, signal_name) {
         super(id, prefab_name, pos, rot, track_id, name);
@@ -73,6 +74,15 @@ export default class Signal extends TrackObject {
         );
 
         return signal;
+    }
+
+    applyObject(scenery) {
+        if(this.applied) return; // already applied
+        this.applied = true;
+
+        if (this.is_spawn) {
+            scenery.addSpawnSignal(this);
+        }
     }
 
 }

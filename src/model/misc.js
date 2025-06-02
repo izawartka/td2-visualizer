@@ -7,6 +7,7 @@ export default class Misc extends SceneryObject {
     category = "misc";
     type = "Misc";
     isSignalBox;
+    applied = false;
 
     constructor(id, misc_id, prefab_name, pos, rot, name) {
         super(id, pos, rot);
@@ -31,5 +32,14 @@ export default class Misc extends SceneryObject {
         );
 
         return object;
+    }
+
+    applyObject(scenery) {
+        if(this.applied) return; // already applied
+        this.applied = true;
+
+        if (this.isSignalBox) {
+            scenery.addSignalBox(this);
+        }
     }
 }

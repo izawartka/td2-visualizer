@@ -10,6 +10,8 @@ import SceneryParserLog from './scenery-parser-log';
 export default class Scenery
 {
     objects = {};
+    signalBoxes = [];
+    spawnSignals = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
     static nextMiscId = 1;
 
@@ -32,6 +34,14 @@ export default class Scenery
         console.log(scenery);
 
         return scenery;
+    }
+
+    addSignalBox(signalBox) {
+        this.signalBoxes.push(signalBox);
+    }
+
+    addSpawnSignal(signal) {
+        this.spawnSignals.push(signal);
     }
 
     addObject(object) {
