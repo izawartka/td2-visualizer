@@ -9,6 +9,7 @@ const Constants = {
         switchInvalidTrackConnection: true,
         unknownObjectType: true,
         unknownTrackType: true,
+        signalWithoutSpawnInfo: true,
     },
     layers: [
         {
