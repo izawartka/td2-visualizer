@@ -17,6 +17,7 @@
 }
 
 .map svg text.switch-name {
+    font-size: 3px;
     fill: #bbf;
 }
 
