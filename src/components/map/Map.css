@@ -1,6 +1,9 @@
 .map {
-	flex: 1;
-	background-color: black;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: black;
 }
 
 .map svg path.track {

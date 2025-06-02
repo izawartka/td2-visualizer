@@ -1,8 +1,12 @@
 .zoom-pan-wrapper {
-    overflow: hidden;
+    flex: 1;
+    position: relative;
 }
 
 .zoom-pan-wrapper svg {
+    position: absolute;
+    top: 0;
+    left: 0;
     cursor: grab;
 }
 
