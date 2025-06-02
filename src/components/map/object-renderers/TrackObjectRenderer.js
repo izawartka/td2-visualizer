@@ -5,6 +5,14 @@ export default function TrackObjectRenderer(props) {
 
     return (
         <g className="track-object">
+            <rect
+                x={x - 2}
+                y={y - 2}
+                width='4px'
+                height='4px'
+                fill='transparent'
+                stroke='none'
+            ></rect>
             <circle
                 cx={x}
                 cy={y}
@@ -16,6 +24,8 @@ export default function TrackObjectRenderer(props) {
                 id={`track-object-${object.id}`}
                 style={{ userSelect: "none" }}
                 enableBackground="new 0 0 100 100"
+                textAnchor="middle"
+                dominantBaseline="middle"
             >
                 {text}
             </text>

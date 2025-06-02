@@ -27,12 +27,6 @@ const ObjectRendererQueue = [
         'cond': (settings) => settings.layers['switches-names']
     },
     {
-        'name': 'track-objects',
-        'category': 'track-objects',
-        'renderer': TrackObjectRenderer,
-        'cond': (settings) => settings.layers['track-objects']
-    },
-    {
         'name': 'signals',
         'category': 'track-objects',
         'type': 'Signal',
@@ -50,7 +44,13 @@ const ObjectRendererQueue = [
         'category': 'routes',
         'renderer': RouteRenderer,
         'cond': (settings) => settings.layers['routes']
-    }
+    },
+    {
+        'name': 'track-objects',
+        'category': 'track-objects',
+        'renderer': TrackObjectRenderer,
+        'cond': (settings) => settings.layers['track-objects']
+    },
 ]
 
 export default ObjectRendererQueue;

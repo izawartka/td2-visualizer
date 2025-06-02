@@ -34,7 +34,7 @@ export default class Signal extends TrackObject {
         }
 
         // remove everything after the first '[' or '<' character (inclusive)
-        const match = name.match(/^[^<\[]*/);
+        const match = name.match(/^[^<[]*/);
         if (match) {
             name = match[0].trim();
         }
