@@ -4,6 +4,10 @@ export default function IsolationIdRenderer(props) {
     const [x, y] = pos.toSVGCoords();
     const text = object.id_isolation ?? '';
 
+    if (object.hide_isolation || !text) {
+        return null;
+    }
+
     return (
         <text
             x={x}

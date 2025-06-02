@@ -59,6 +59,7 @@ export default class Switch extends SceneryObject {
  
         this.trackB = this._createGetSwitchTrack(scenery, this.id+"B", this.outs[1], this.outs[3], r);
         if(this.trackB) {
+            this.trackB.hide_isolation = true; // hide isolation for the second track
             scenery.addObject(this.trackB);
         }
     }

@@ -15,6 +15,7 @@ export default class Track extends SceneryObject {
     nextTrack = null;
     start_slope;
     end_slope;
+    hide_isolation = false;
 
     constructor(id, pos, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
         super(id, pos, rot);
