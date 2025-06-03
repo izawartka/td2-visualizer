@@ -36,6 +36,47 @@ export default class Vector3 {
         );
     }
 
+    rotate(rot) {
+        const [ax, ay, az] = rot.toArray();
+
+        const cosX = Math.cos(ax);
+        const sinX = Math.sin(ax);
+        const cosY = Math.cos(ay);
+        const sinY = Math.sin(ay);
+        const cosZ = Math.cos(az);
+        const sinZ = Math.sin(az);
+
+        // Rotate around Y
+        let x = this.x * cosY + this.z * sinY;
+        let z = -this.x * sinY + this.z * cosY;
+
+        // Rotate around X
+        let y = this.y * cosX - z * sinX;
+        z = this.y * sinX + z * cosX;
+
+        // Rotate around Z
+        x = x * cosZ - y * sinZ;
+        y = x * sinZ + y * cosZ;
+
+        return new Vector3(x, y, z);
+    }
+
+    toPrecision(precision = 3) {
+        return new Vector3(
+            parseFloat(this.x.toFixed(precision)),
+            parseFloat(this.y.toFixed(precision)),
+            parseFloat(this.z.toFixed(precision))
+        );
+    }
+
+    multiply(scalar) {
+        return new Vector3(
+            this.x * scalar,
+            this.y * scalar,
+            this.z * scalar
+        );
+    }
+
     lerp(other, t) {
         return new Vector3(
             this.x + (other.x - this.x) * t,

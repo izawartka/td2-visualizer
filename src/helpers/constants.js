@@ -3,6 +3,9 @@ const Constants = {
         zoomSensitivity: 0.002,
         trackSlopeScale: 10,
     },
+    parser: {
+        forceAutoSwitches: false
+    },
     warnings: {
         all: false, // enable all warnings
         trackObjectCannotBeApplied: false,
@@ -10,6 +13,11 @@ const Constants = {
         unknownObjectType: true,
         unknownTrackType: true,
         signalWithoutSpawnInfo: true,
+        trackAliasAlreadyExists: true,
+        switchUndefinedModel: true,
+        switchAutoDefFailed: true,
+        switchInvalidDataFormat: true,
+        switchNoModel: true,
     },
     layers: [
         {

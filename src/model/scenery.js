@@ -13,6 +13,7 @@ export default class Scenery
     signalBoxes = [];
     spawnSignals = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
+    trackAliases = {};
     static nextMiscId = 1;
 
     getBounds () {
@@ -70,6 +71,19 @@ export default class Scenery
     getObject(category, id) {
         if(!this.objects[category]) return null;
         return this.objects[category][id] ?? null;
+    }
+
+    addTrackAlias(id, alias) {
+        if(this.trackAliases[alias]) {
+            SceneryParserLog.warn('trackAliasAlreadyExists', `Track alias "${alias}" already exists for track "${this.trackAliases[alias]}". Cannot add alias for "${id}".`);
+            return;
+        }
+
+        this.trackAliases[alias] = id;
+    }
+
+    getTrackIdByAlias(idOrAlias) {
+        return this.trackAliases[idOrAlias] || idOrAlias;
     }
 
     static _parseObject(text) {
