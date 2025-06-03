@@ -25,21 +25,21 @@ export default class Signal extends TrackObject {
     }
 
     getPrintableSignalName() {
-        let name = this.signal_name.trim();
+        let name = this.signal_name?.trim();
         if (!name) return this.name;
 
         // remove any leading '<' or '[' tags and their content
         while(name?.match(/^[<[]/)) {
-            name = name.replace(/^[<[][^>\]]*[\]>]/, '').trim();
+            name = name.replace(/^[<[][^>\]]*[\]>]/, '')?.trim();
         }
 
         // remove everything after the first '[' or '<' character (inclusive)
         const match = name.match(/^[^<[]*/);
         if (match) {
-            name = match[0].trim();
+            name = match[0]?.trim();
         }
 
-        return name?.trim() || this.name || "Signal";
+        return name || this.name || "Signal";
     }
 
     /*
