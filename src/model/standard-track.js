@@ -11,8 +11,8 @@ export default class StandardTrack extends Track
         circleCenter: Vector3.zero()
     };
 
-    constructor(id, start, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed);
+    constructor(id, start, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
+        super(id, start, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed);
         this._calcPoints();
     }
 
@@ -24,8 +24,8 @@ export default class StandardTrack extends Track
             Vector3.fromValuesArray(values, 6), // rot
             parseFloat(values[9]), // len
             parseFloat(values[10]), // r
-            values[11], // previd
-            values[12], // nextid
+            values[11], // nextid
+            values[12], // previd
             values[13], // id_station
             ...Track.slopesFromText(values[14]), // start_slope, end_slope
             values[17], // id_isolation

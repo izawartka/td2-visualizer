@@ -115,8 +115,8 @@ export default class Switch extends SceneryObject {
             this.pos.add(startPos.rotate(rotRad)),
             this.pos.add(endPos.rotate(rotRad)),
             r,
-            previd, 
             nextid, 
+            previd, 
             this.id_switch, 
             0, // start_slope
             0, // end_slope

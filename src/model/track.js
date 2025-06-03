@@ -9,19 +9,17 @@ export default class Track extends SceneryObject {
     derailspeed;
     category = "tracks";
     type = "Track";
-    previd;
     nextid;
-    prevTrack = null;
-    nextTrack = null;
+    previd;
     start_slope;
     end_slope;
     hide_isolation = false;
 
-    constructor(id, pos, rot, len, r, previd, nextid, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
+    constructor(id, pos, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
         super(id, pos, rot);
         Object.assign(this, {
             len, r,
-            previd, nextid,
+            nextid, previd,
             id_station, 
             start_slope, end_slope,
             id_isolation,
