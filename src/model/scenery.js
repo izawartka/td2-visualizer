@@ -109,10 +109,6 @@ export default class Scenery
     }
 
     static _parseTrack(text) {
-        /// TODO: remove
-        const values = text.split(";");
-        if(values.includes("none-slp,trans-mat,trans-mat")) return null; // skip invisible tracks
-
         const trackType = text.split(';', 4)[2];
         switch(trackType) {
             case 'Track':

@@ -13,9 +13,10 @@ export default class Track extends SceneryObject {
     previd;
     start_slope;
     end_slope;
+    prefab_name;
     hide_isolation = false;
 
-    constructor(id, pos, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, maxspeed, derailspeed) {
+    constructor(id, pos, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
         super(id, pos, rot);
         Object.assign(this, {
             len, r,
@@ -23,6 +24,7 @@ export default class Track extends SceneryObject {
             id_station, 
             start_slope, end_slope,
             id_isolation,
+            prefab_name, 
             maxspeed, derailspeed
         });
     }

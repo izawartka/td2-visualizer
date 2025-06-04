@@ -52,7 +52,7 @@ function getTrackColor(object, trackColorMode) {
   switch (trackColorMode) {
     case "none":
     default:
-      return "#aaa";
+      return object.prefab_name.includes('trans-mat') ? "#444" : "#aaa";
 
     case "type":
       switch (object.type) {

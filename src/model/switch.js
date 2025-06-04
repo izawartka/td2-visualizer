@@ -15,16 +15,18 @@ export default class Switch extends SceneryObject {
     category = "switches";
     type = "Switch";
     applied = false;
+    track_prefab_name;
     trackA;
     trackB;
 
-    constructor(id, model, pos, rot, data, id_isolation, id_switch, maxspeed, derailspeed) {
+    constructor(id, model, pos, rot, data, id_isolation, id_switch, maxspeed, derailspeed, track_prefab_name) {
         super(id, pos, rot);
         Object.assign(this, {
             model,
             data,
             id_switch, id_isolation,
-            maxspeed, derailspeed
+            maxspeed, derailspeed,
+            track_prefab_name
         });
 
         this.bare_model = model.split(',')[0]?.trim() || model.trim();
@@ -42,7 +44,8 @@ export default class Switch extends SceneryObject {
             values[10], // id_isolation
             values[11], // id_switch
             parseFloat(values[13]), // maxspeed
-            parseFloat(values[14]) // derailspeed
+            parseFloat(values[14]), // derailspeed
+            values[15] // track_prefab_name
         );
 
         return sw;
@@ -121,6 +124,7 @@ export default class Switch extends SceneryObject {
             0, // start_slope
             0, // end_slope
             this.id_isolation, 
+            this.track_prefab_name,
             this.maxspeed, 
             this.derailspeed
         );
