@@ -28,6 +28,9 @@ export default class Signal extends TrackObject {
         let name = this.signal_name?.trim();
         if (!name) return this.name;
 
+        // remove any <size=...>, [size=...], </size> or [/size] tags
+        name = name.replace(/[<[]size=[^>\]]*[\]>]/g, '')?.trim();
+
         // remove any leading '<' or '[' tags and their content
         while(name?.match(/^[<[]/)) {
             name = name.replace(/^[<[][^>\]]*[\]>]/, '')?.trim();
