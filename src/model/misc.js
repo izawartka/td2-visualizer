@@ -6,7 +6,6 @@ export default class Misc extends SceneryObject {
     name;
     category = "misc";
     type = "Misc";
-    isSignalBox;
     applied = false;
 
     constructor(id, misc_id, prefab_name, pos, rot, name) {
@@ -16,8 +15,6 @@ export default class Misc extends SceneryObject {
             prefab_name,
             name,
         });
-
-        this.isSignalBox = prefab_name.startsWith("SignalBox");
     }
 
     static fromText(id, text) {        
@@ -32,14 +29,5 @@ export default class Misc extends SceneryObject {
         );
 
         return object;
-    }
-
-    applyObject(scenery) {
-        if(this.applied) return; // already applied
-        this.applied = true;
-
-        if (this.isSignalBox) {
-            scenery.addSignalBox(this);
-        }
     }
 }

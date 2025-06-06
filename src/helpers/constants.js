@@ -18,6 +18,7 @@ const Constants = {
         switchAutoDefFailed: true,
         switchInvalidDataFormat: true,
         switchNoModel: true,
+        signalBoxUndefinedPrefabName: true,
     },
     layers: [
         {

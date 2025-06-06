@@ -36,6 +36,7 @@ const ObjectRendererQueue = [
     {
         'name': 'signalboxes',
         'category': 'misc',
+        'type': 'SignalBox',
         'renderer': SignalBoxRenderer,
         'cond': (settings) => settings.layers['signalboxes']
     },

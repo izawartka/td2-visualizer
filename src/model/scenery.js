@@ -6,6 +6,7 @@ import Signal from './signal';
 import Route from './route';
 import Misc from './misc';
 import SceneryParserLog from './scenery-parser-log';
+import SignalBox from './signalbox';
 
 export default class Scenery
 {
@@ -98,7 +99,7 @@ export default class Scenery
             case 'Route':
                 return Route.fromText(text);
             case 'Misc':
-                return Misc.fromText(Scenery.nextMiscId++, text);
+                return Scenery._parseMisc(text);
             case 'Empty':
             case 'EndRoute':
                 return null;
@@ -126,6 +127,16 @@ export default class Scenery
             return Signal.fromText(text);
         } else {
             return TrackObject.fromText(text);
+        }
+    }
+
+    static _parseMisc(text) {
+        const prefabName = text.split(';', 4)[2];
+
+        if(prefabName.startsWith("SignalBox")) {
+            return SignalBox.fromText(Scenery.nextMiscId++, text);
+        } else {
+            return Misc.fromText(Scenery.nextMiscId++, text);
         }
     }
 
