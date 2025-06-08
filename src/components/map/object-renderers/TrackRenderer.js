@@ -24,11 +24,15 @@ function StatelessTrackRenderer(props) {
   const defs = getTrackDefs(object, trackColorMode);
 
   return (
-    <g>
+    <g id={`track-${object.id}`}>
       {defs}
       <path
         d={path}
-        id={`track-${object.id}`}
+        stroke={color}
+        className="track-unscaled"
+      />
+      <path
+        d={path}
         stroke={color}
         className="track"
       />

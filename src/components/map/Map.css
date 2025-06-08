@@ -10,6 +10,11 @@
     stroke-width: 1.44px;
 }
 
+.map svg path.track-unscaled {
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+}
+
 .map svg text {
     font-size: 2px;
     text-shadow: 0 0 16px #000;
