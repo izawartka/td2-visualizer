@@ -18,21 +18,19 @@ const DefinedSignalBoxes = {
     "SignalBoxToporkow_m": {
         rot: 2
     },
-    "SignalBox_nastawnia_lublinek_lb_v1": {
-        rot: 0
-    },
+    "SignalBox_nastawnia_lublinek_lb_v1": {},
     "SignalBoxAleksandrowKujawski_e": {
         rot: 1
     },
-    "SignalBox_lka_nastawnia_zk": {
-        rot: 0
-    },
+    "SignalBox_lka_nastawnia_zk": {},
     "SignalBoxOlawa_e": {
         rot: 2
     },
-    "SignalBoxSiechnice": {
-        rot: 0
-    }
+    "SignalBoxSiechnice": {},
+    "SignalBox_lka_nastawnia_zgierz": {
+        rot: 1
+    },
+    "SignalBox_lka_nastawnia_zgierz_Zg1": {}
 }
 
 export default DefinedSignalBoxes;
