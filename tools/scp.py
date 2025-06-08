@@ -4,7 +4,7 @@ import sys
 #
 #    [ TD2 SCENERY PROCESSOR ]
 #    by masuo
-#    v1.3
+#    v1.4
 #
 
 BAD_WORDS = ['Empty,Empty', 'Forest Start,Forest Start', 'EndMiscGroup', 'Fence', 'TerrainPoint', 'Wires']
@@ -16,7 +16,7 @@ def should_exclude(line: str) -> bool:
     
     if line.startswith("Misc"):
         values = line.split(';')
-        return len(values[9].strip()) == 0 or not values[2].startswith("SignalBox")
+        return not values[2].startswith("SignalBox")
 
 def process_file(file_path: str):
     if not file_path.endswith(".sc"):

@@ -57,6 +57,7 @@ export default class Signal extends TrackObject {
         if(values.length < 29) return false;
         
         const prefabInfo = values[2].split(",");
+        if(/^sk\d+_[a-zA-Z]+$/.test(prefabInfo[0])) return true; // mechanical signals
         if(prefabInfo.length < 2) return false;
 
         return true;

@@ -102,6 +102,11 @@ export default class Scenery
                 return Scenery._parseMisc(text);
             case 'Empty':
             case 'EndRoute':
+            case 'MiscGroup':
+            case 'EndMiscGroup':
+            case 'Wires':
+            case 'Fence':
+            case 'TerrainPoint':
                 return null;
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);
