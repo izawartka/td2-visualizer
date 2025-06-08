@@ -11,46 +11,46 @@ const ObjectRendererQueue = [
         'name': 'tracks',
         'category': 'tracks',
         'renderer': TrackRenderer,
-        'cond': (settings) => settings.layers['tracks']
+        'cond': (layers) => layers['tracks']
     },
     {
         'name': 'isolations-ids',
         'category': 'tracks',
         'renderer': IsolationIdRenderer,
-        'cond': (settings) => settings.layers['isolations-ids']
+        'cond': (layers) => layers['isolations-ids']
     },
     {
         'name': 'switches-names',
         'category': 'switches',
         'type': 'Switch',
         'renderer': SwitchNameRenderer,
-        'cond': (settings) => settings.layers['switches-names']
+        'cond': (layers) => layers['switches-names']
     },
     {
         'name': 'signals',
         'category': 'track-objects',
         'type': 'Signal',
         'renderer': SignalRenderer,
-        'cond': (settings) => settings.layers['signals']
+        'cond': (layers) => layers['signals']
     },
     {
         'name': 'signalboxes',
         'category': 'misc',
         'type': 'SignalBox',
         'renderer': SignalBoxRenderer,
-        'cond': (settings) => settings.layers['signalboxes']
+        'cond': (layers) => layers['signalboxes']
     },
     {
         'name': 'routes',
         'category': 'routes',
         'renderer': RouteRenderer,
-        'cond': (settings) => settings.layers['routes']
+        'cond': (layers) => layers['routes']
     },
     {
         'name': 'track-objects',
         'category': 'track-objects',
         'renderer': TrackObjectRenderer,
-        'cond': (settings) => settings.layers['track-objects']
+        'cond': (layers) => layers['track-objects']
     },
 ]
 

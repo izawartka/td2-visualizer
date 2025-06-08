@@ -1,28 +1,45 @@
-import { useContext } from "react";
+import React, { useContext, useMemo, memo } from "react";
 import MainContext from "../../contexts/MainContext";
 import SettingsContext from "../../contexts/SettingsContext";
 
 export default function SceneryLayer(props) {
     const { queueItem } = props;
-    const { name, category, type, types, cond} = queueItem;
-    const RendererComponent = queueItem.renderer;
-
-    const settings = useContext(SettingsContext);
+    const { name, category, type, types, cond, renderer: Renderer } = queueItem;
     const { scenery } = useContext(MainContext);
+    const { layers } = useContext(SettingsContext);
+    
+    const isVisible = (cond ? cond(layers) : true);
+    
+    const objects = useMemo(() => {
+        if (!scenery || !isVisible) return [];
+        const categoryObjs = scenery.objects[category];
+        return categoryObjs ? Object.values(categoryObjs) : [];
+    }, [scenery, category, isVisible]);
+    
+    if (!scenery || !isVisible) return null;
+    
+    return (
+        <MemoizedSceneryLayer
+            name={name}
+            Renderer={Renderer}
+            objects={objects}
+            type={type}
+            types={types}
+        />
+    );
+}
+    
+const MemoizedSceneryLayer = memo(StatelessSceneryLayer);
 
-    if(!scenery) return;
-    if(cond && !cond(settings)) return [null];
-    const objects = scenery.objects[category] ?? null;
-    if(!objects) return [null];
 
-    return ( 
-    <g className={`scenery-layer-${name}`} key={name}>
-        {Object.values(objects).map((object) => {
-            if(type !== undefined && type !== object.type) return null;
-            if(types !== undefined && !types.includes(object.type)) return null;
-
-            return <RendererComponent key={`${name}-${object.id}`} object={object} />;
-        })}
-    </g>
+function StatelessSceneryLayer({ name, Renderer, objects, type, types }) {
+    return (
+        <g className={`scenery-layer-${name}`}>  
+            {objects.map((obj) => {
+                if (type !== undefined && type !== obj.type) return null;
+                if (types !== undefined && !types.includes(obj.type)) return null;
+                return <Renderer key={`${name}-${obj.id}`} object={obj} />;
+            })}
+        </g>
     );
 }

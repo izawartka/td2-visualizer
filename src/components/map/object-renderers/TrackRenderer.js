@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 
@@ -6,19 +6,32 @@ export default function TrackRenderer(props) {
   const { object } = props;
   const { trackColorMode } = useContext(SettingsContext);
 
+  return (
+    <MemoizedTrackRenderer
+      object={object}
+      trackColorMode={trackColorMode}
+    />
+  );
+}
+
+const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
+
+function StatelessTrackRenderer(props) {
+  const { object, trackColorMode } = props;
+
   const path = getTrackPath(object);
   const color = getTrackColor(object, trackColorMode);
   const defs = getTrackDefs(object, trackColorMode);
 
   return (
     <g>
-        {defs}
-        <path
+      {defs}
+      <path
         d={path}
         id={`track-${object.id}`}
         stroke={color}
         className="track"
-        />
+      />
     </g>
   );
 }
