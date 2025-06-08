@@ -39,23 +39,32 @@ export default class SignalBox extends Misc {
     }
 
     static getDef(name, prefabName) {
-        const def = DefinedSignalBoxes[prefabName];
+        let def = DefinedSignalBoxes[prefabName];
         if (!def) {
             SceneryParserLog.warn('signalBoxUndefinedPrefabName', `SignalBox ${name} has an undefined prefab name ${prefabName}`);
 
-            return {
+            def = {
+                rot: 0,
                 undef: true,
-                icon: 'signalbox-undef.svg',
-                rot: 0
-            }
+            };
         }
 
-        const isSkp = name.toLowerCase().indexOf('skp') >= 0 || !isNaN(parseFloat(name));
+        if (def.rot === undefined) def.rot = 0;
+        def.skp = name.toLowerCase().indexOf('skp') >= 0 || !isNaN(parseFloat(name));
+        def.icon = SignalBox.getIcon(def);
 
-        return {
-            icon: isSkp ? 'signalbox-skp.svg' : 'signalbox.svg',
-            rot: 0,
-            ...def
+        return def;
+    }
+
+    static getIcon(def) {
+        if (def.undef) {
+            return 'signalbox-undef.svg';
+        } else if (def.empty) {
+            return 'signalbox-empty.svg';
+        } else if (def.skp) {
+            return 'signalbox-skp.svg';
+        } else {
+            return 'signalbox.svg';
         }
     }
 }

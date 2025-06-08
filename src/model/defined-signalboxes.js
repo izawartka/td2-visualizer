@@ -5,7 +5,7 @@ const DefinedSignalBoxes = {
     "SignalBoxPawlowice": {},
     "SignalBoxSwKatarzyna_e": {},
     "SignalBoxEmpty": {
-        icon: "signalbox-empty.svg",
+        empty: true,
     },
     "SignalBoxTomaszowMazowiecki": {},
     "SignalBoxToporkow": {
