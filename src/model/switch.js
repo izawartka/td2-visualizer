@@ -164,7 +164,7 @@ export default class Switch extends SceneryObject {
         ];
 
         if(!DefinedSwitches[this.bare_model]) DefinedSwitches[this.bare_model] = newDef;
-        // console.log(newDef);
+        if(Constants.parser.logNewAutoSwitches) console.log(this.bare_model, newDef);
         return newDef;
     }
 

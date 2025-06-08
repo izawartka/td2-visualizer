@@ -4,7 +4,8 @@ const Constants = {
         trackSlopeScale: 10,
     },
     parser: {
-        forceAutoSwitches: false
+        forceAutoSwitches: false,
+        logNewAutoSwitches: true
     },
     warnings: {
         all: false, // enable all warnings
