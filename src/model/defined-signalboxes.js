@@ -45,7 +45,11 @@ const DefinedSignalBoxes = {
     "SignalBoxPrzyworyOpolskie2": {},
     "SignalBox_lka_nastawnia_leczyca": {
         rot: 1
-    }
+    },
+    "SignalBoxZdroje": {
+        rot: 3
+    },
+    "SignalBoxRegalica": {}
 }
 
 export default DefinedSignalBoxes;
