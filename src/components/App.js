@@ -6,6 +6,7 @@ import './App.css';
 import SideMenu from './sidemenu/SideMenu';
 import SettingsManager from './SettingsManager';
 import LocList from './loclist/LocList';
+import DialogManager from './dialog/DialogManager';
 
 function App() {
     const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +27,7 @@ function App() {
                         <SideMenu />
                     </div>
                     <LocList />
+                    <DialogManager />
                 </div>
             </MainContext.Provider>
         </SettingsManager>
