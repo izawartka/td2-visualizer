@@ -136,6 +136,13 @@ export default class Scenery
             case 'Wires':
             case 'Fence':
             case 'TerrainPoint':
+            case 'shv001':
+            case 'WorldRotation':
+            case 'WorldTranslation':
+            case 'CameraHome':
+            case 'MainCamera':
+            case 'SSPRepeater':
+            case 'SSPController':
                 return null;
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);
