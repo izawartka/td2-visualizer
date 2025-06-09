@@ -39,10 +39,24 @@ select {
     cursor: pointer;
 }
 
+input[type="file"].non-transparent::file-selector-button,
+input[type="text"].non-transparent,
+button.non-transparent,
+select.non-transparent {
+    background: #222;
+    border: 2px solid #444;
+}
+
 input[type="file"]::file-selector-button:hover,
 button:hover,
 select:hover {
     background: #fff3;
+}
+
+input[type="file"].non-transparent::file-selector-button:hover,
+button.non-transparent:hover,
+select.non-transparent:hover {
+    background: #444;
 }
 
 input[type="file"]::file-selector-button,
@@ -65,6 +79,20 @@ input[type="text"]:focus {
     border: 2px solid #fff3;
 }
 
+.invis-button {
+    display: block;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    appearance: none;
+}
+
+.invis-button:hover {
+    background-color: transparent;
+}
+
 ::-webkit-scrollbar-track {
     background-color: #141414;
     border-radius: 5px;
@@ -85,18 +113,4 @@ input[type="text"]:focus {
 
 ::-webkit-scrollbar:horizontal {
     height: 10px;
-}
-
-.invis-button {
-    display: block;
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    padding-block: 0;
-    padding-inline: 0;
-    appearance: none;
-}
-
-.invis-button:hover {
-    background-color: transparent;
 }

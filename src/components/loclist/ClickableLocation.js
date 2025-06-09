@@ -9,7 +9,7 @@ export default function ClickableLocation(props) {
     };
 
     return (
-        <button className="clickable-location" onClick={handleClick}>
+        <button className="clickable-location non-transparent" onClick={handleClick}>
             <span className="location-name">{name}</span>
         </button>
     );
