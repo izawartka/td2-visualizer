@@ -11,7 +11,7 @@ export default function SelTrackColorMode(props) {
 
     return (
         <div className="track-color-mode-select">
-            <label htmlFor="track-color-mode">Track Color Mode:</label><br />
+            <label htmlFor="track-color-mode">Track Color Mode:</label>
             <select
                 id="track-color-mode"
                 value={trackColorMode}

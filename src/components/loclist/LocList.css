@@ -2,5 +2,15 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    margin: 8px;
+    padding: 8px;
+    display: flex;
+    border-top-right-radius: 8px;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #222;
+}
+
+.loclist-section {
+    display: flex;
+    gap: 4px;
 }

@@ -1,3 +1,9 @@
+body {
+    background-color: #141414;
+    color: #eee;
+    font-family: monospace;
+}
+
 .App {
     display: flex;
     width: 100vw;
@@ -13,6 +19,74 @@
     flex: 1;
 }
 
+.capitalize {
+    text-transform: capitalize;
+}
+
+input[type="file"]::file-selector-button,
+input[type="text"],
+button,
+select {
+    font-size: inherit;
+    font-family: inherit;
+    background: #fff2;
+    border-radius: 8px;
+    border: none;
+    color: #eee;
+    padding-inline: 8px;
+    padding-block: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover,
+button:hover,
+select:hover {
+    background: #fff3;
+}
+
+input[type="file"]::file-selector-button,
+button {
+    padding-inline: 10px;
+    padding-block: 5px;
+}
+
+select > option {
+    background: #141414;
+    color: #eee;
+}
+
+input[type="text"] {
+    background-color: unset;
+    border: 2px solid #fff2;
+}
+
+input[type="text"]:focus {
+    border: 2px solid #fff3;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #141414;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #fff2;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #fff3;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
 .invis-button {
     display: block;
     background-color: transparent;
@@ -21,4 +95,8 @@
     padding-block: 0;
     padding-inline: 0;
     appearance: none;
+}
+
+.invis-button:hover {
+    background-color: transparent;
 }

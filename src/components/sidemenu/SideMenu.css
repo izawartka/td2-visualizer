@@ -3,14 +3,14 @@
 }
 
 .side-menu {
-    border-left: 1px solid #333;
-    padding: 10px;
+    border-left: 2px solid #444;
+    padding: 1em;
     position: fixed;
     right: 0;
     height: 100%;
-    background-color: #111;
+    background-color: #141414;
     z-index: 2000;
-    width: 15em;
+    width: 16em;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -21,4 +21,15 @@
 .layers-menu ul {
     list-style-type: none;
     padding-inline-start: 0;
+}
+
+.layers-menu input {
+    margin-right: 0.5em;
+}
+
+.track-color-mode-select {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1em;
 }
