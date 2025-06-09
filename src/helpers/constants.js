@@ -5,7 +5,8 @@ const Constants = {
     },
     parser: {
         forceAutoSwitches: false,
-        logNewAutoSwitches: true
+        logNewAutoSwitches: true,
+        sceneryInfoVersion: 29
     },
     warnings: {
         all: false, // enable all warnings
@@ -20,6 +21,10 @@ const Constants = {
         switchInvalidDataFormat: true,
         switchNoModel: true,
         signalBoxUndefinedPrefabName: true,
+        invalidSceneryInfoVersion: true,
+    },
+    errors: {
+        invalidSceneryInfo: true
     },
     layers: [
         {

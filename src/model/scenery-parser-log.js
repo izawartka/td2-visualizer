@@ -6,4 +6,8 @@ export default class SceneryParserLog {
 
         console.warn(`[SceneryParserLog] ${message}`);
     }
+
+    static error(type, message) {
+        throw new Error(`[SceneryParserLog] ${message}`);
+    }
 }

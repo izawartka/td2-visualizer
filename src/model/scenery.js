@@ -7,9 +7,19 @@ import Route from './route';
 import Misc from './misc';
 import SceneryParserLog from './scenery-parser-log';
 import SignalBox from './signalbox';
+import Constants from '../helpers/constants';
+import SceneryInfo from './scenery-info';
+
+/*
+TODO: move parsers to another static class
+TODO: add support for scenery info entries
+TODO: add support for WorldRotation and WorldTranslation
+TODO: check CameraHome and MainCamera
+*/
 
 export default class Scenery
 {
+    sceneryInfo = null; // SceneryInfo object
     objects = {};
     signalBoxes = [];
     spawnSignals = [];
@@ -25,8 +35,13 @@ export default class Scenery
         const lines = scText.split("\n").map(line => line.trim());
         const scenery = new Scenery();
 
-        lines.forEach(line => {
+        lines.forEach((line, index) => {
             if(!line?.length) return; 
+            if(index === 0) {
+                this.sceneryInfo = Scenery._parseSceneryInfo(line);
+                return;
+            }
+
             const object = Scenery._parseObject(line);
             if(!object) return; // skip null objects
             scenery.addObject(object);
@@ -86,6 +101,20 @@ export default class Scenery
     getTrackIdByAlias(idOrAlias) {
         return this.trackAliases[idOrAlias] || idOrAlias;
     }
+
+    static _parseSceneryInfo(text) {
+        const infoHeader = text.split(";", 2)[0];
+        if(!infoHeader.startsWith("scv")) {
+            SceneryParserLog.error('invalidSceneryInfo', `Invalid scenery info header: ${infoHeader}`);
+        }
+
+        const version = parseInt(infoHeader.split("v")[1]);
+        if(version !== Constants.parser.sceneryInfoVersion) {
+            SceneryParserLog.warn('invalidSceneryInfoVersion', `Invalid scenery info version: ${version}. Expected: ${Constants.parser.sceneryInfoVersion}`);
+        }
+
+        return SceneryInfo.fromText(text);
+    }        
 
     static _parseObject(text) {
         const type = text.split(";", 2)[0];
