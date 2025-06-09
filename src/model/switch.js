@@ -63,7 +63,7 @@ export default class Switch extends SceneryObject {
         let def = DefinedSwitches[this.bare_model] || null;
 
         if(!def && !Constants.parser.forceAutoSwitches) {
-            SceneryParserLog.warn('switchUndefinedModel', `Switch ${this.id} has undefined model "${this.bare_model}", trying to generate auto model definition`);
+            SceneryParserLog.warn('switchUndefinedModel', `Switch ${this.id} has an undefined model "${this.bare_model}", trying to generate auto model definition`);
         }
 
         if(!def || Constants.parser.forceAutoSwitches) {

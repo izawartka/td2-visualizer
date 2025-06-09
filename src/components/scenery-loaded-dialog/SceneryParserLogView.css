@@ -1,0 +1,22 @@
+.scenery-parser-log-view {
+    padding: 1em;
+    border-radius: 8px;
+    border: 2px solid #444;
+    background-color: #0004;
+}
+
+.scenery-parser-log-view ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-indent: -1em;
+    padding-left: 1em;
+}
+
+.scenery-parser-log-view .log-entry.warn {
+    color: #aa4;
+}
+
+.scenery-parser-log-view .log-entry.error {
+    color: #f44;
+}

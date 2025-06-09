@@ -6,7 +6,8 @@ const Constants = {
     parser: {
         forceAutoSwitches: false,
         logNewAutoSwitches: true,
-        sceneryInfoVersion: 29
+        sceneryInfoVersion: 29,
+        alwaysShowLogDialog: false
     },
     warnings: {
         all: false, // enable all warnings

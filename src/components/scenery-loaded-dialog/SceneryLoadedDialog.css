@@ -1,0 +1,14 @@
+.scenery-loaded-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.scenery-loaded-dialog-content .main-message {
+    padding: 0.5em;
+}
+
+.scenery-loaded-dialog-content .scenery-parser-log-view {
+    max-height: 30vh;
+    overflow-y: auto;
+}
