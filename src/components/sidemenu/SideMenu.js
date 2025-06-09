@@ -7,13 +7,11 @@ import SelTrackColorMode from './SelTrackColorMode';
 export default function SideMenu() {
     const { sideMenuOpen } = useContext(MainContext);
 
-    if (!sideMenuOpen) {
-        return null;
-    }
+    const sideMenuClass = sideMenuOpen ? 'side-menu' : 'side-menu closed';
 
     return (
         <div className='side-menu-wrapper'>
-            <div className='side-menu'>
+            <div className={sideMenuClass}>
                 <LayersMenu />
                 <SelTrackColorMode />
             </div>

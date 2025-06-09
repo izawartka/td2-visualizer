@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import MainContext from '../../contexts/MainContext';
+import { ReactSVG } from "react-svg";
 
 export default function SideMenuToggle() {
-    const { sideMenuOpen, setSideMenuOpen } = useContext(MainContext);
+    const { setSideMenuOpen } = useContext(MainContext);
 
     const toggleSideMenu = () => {
         setSideMenuOpen((prev) => !prev);
@@ -10,8 +11,10 @@ export default function SideMenuToggle() {
 
     return (
         <div className='side-menu-toggle'>
-            <button onClick={toggleSideMenu}>
-                {sideMenuOpen ? 'Hide Menu' : 'Show Menu'}
+            <button onClick={toggleSideMenu} className='invis-button'>
+                <ReactSVG
+                    src="/assets/side-menu.svg"
+                />
             </button>
         </div>
     );

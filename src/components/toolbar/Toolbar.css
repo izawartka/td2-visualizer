@@ -46,3 +46,18 @@
     opacity: 1;
     animation: fadeOut 1s ease-in-out 2s forwards; /* Start fading out after 2 seconds */
 }
+
+.side-menu-toggle svg {
+    display: block;
+    height: 2rem;
+    width: 2rem;
+}
+
+.side-menu-toggle g {
+    stroke: #aaa;
+}
+
+.side-menu-toggle:hover g {
+    stroke: #fff;
+}
+

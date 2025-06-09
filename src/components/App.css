@@ -12,3 +12,13 @@
     flex-wrap: wrap;
     flex: 1;
 }
+
+.invis-button {
+    display: block;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    appearance: none;
+}
