@@ -22,6 +22,8 @@ export default function SceneryInfoView({ scenery }) {
 }
 
 function SceneryInfoViewItem({ label, value, isLink = false }) {
+    if(!value) value = 'No data';
+
     return (
         <tr>
             <td className="label">{label}</td>

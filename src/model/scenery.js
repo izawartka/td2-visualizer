@@ -9,6 +9,7 @@ import SceneryParserLog from './scenery-parser-log';
 import SignalBox from './signalbox';
 import Constants from '../helpers/constants';
 import SceneryInfo from './scenery-info';
+import Sign from './sign';
 
 /*
 TODO: move parsers to another static class
@@ -164,7 +165,9 @@ export default class Scenery
     }
 
     static _parseTrackObject(text) {
-        if(Signal.isSignal(text)) {
+        if(Sign.isSign(text)) {
+            return Sign.fromText(text);
+        } else if(Signal.isSignal(text)) {
             return Signal.fromText(text);
         } else {
             return TrackObject.fromText(text);

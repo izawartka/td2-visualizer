@@ -23,6 +23,7 @@ const Constants = {
         switchNoModel: true,
         signalBoxUndefinedPrefabName: true,
         invalidSceneryInfoVersion: true,
+        signUndefinedPrefabName: true,
     },
     errors: {
         invalidSceneryInfo: true
@@ -51,6 +52,11 @@ const Constants = {
         {
             id: 'signals',
             name: 'Signals',
+            default: true,
+        },
+        {
+            id: 'signs',
+            name: 'Signs',
             default: true,
         },
         {

@@ -64,3 +64,7 @@
     fill: #eee;
     font-size: 4px;
 }
+
+.map svg g.sign path {
+    fill: #eee;
+}

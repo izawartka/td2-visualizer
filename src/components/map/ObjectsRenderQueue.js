@@ -5,6 +5,7 @@ import TrackObjectRenderer from './object-renderers/TrackObjectRenderer';
 import SignalRenderer from './object-renderers/SignalRenderer';
 import RouteRenderer from './object-renderers/RouteRenderer';
 import SignalBoxRenderer from './object-renderers/SignalBoxRenderer';
+import SignRenderer from './object-renderers/SignRenderer';
 
 const ObjectRendererQueue = [
     {
@@ -25,6 +26,13 @@ const ObjectRendererQueue = [
         'type': 'Switch',
         'renderer': SwitchNameRenderer,
         'cond': (layers) => layers['switches-names']
+    },
+    {
+        'name': 'signs',
+        'category': 'track-objects',
+        'type': 'Sign',
+        'renderer': SignRenderer,
+        'cond': (layers) => layers['signs']
     },
     {
         'name': 'signals',
