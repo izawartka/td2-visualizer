@@ -49,7 +49,8 @@ export default class Scenery
         });
 
         scenery.applyObjects();
-        console.log(scenery);
+
+        if(Constants.parser.logSceneryAfterFinished) console.log(scenery);
 
         return scenery;
     }

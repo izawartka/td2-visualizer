@@ -18,6 +18,7 @@ export default class Switch extends SceneryObject {
     track_prefab_name;
     trackA;
     trackB;
+    def = null;
 
     constructor(id, model, pos, rot, data, id_isolation, id_switch, maxspeed, derailspeed, track_prefab_name) {
         super(id, pos, rot);
@@ -57,7 +58,7 @@ export default class Switch extends SceneryObject {
 
         if(!this.bare_model) {
             SceneryParserLog.warn('switchNoModel', `Switch ${this.id} has no model defined, apply`);
-            return null;
+            return;
         }
 
         let def = DefinedSwitches[this.bare_model] || null;
@@ -80,6 +81,8 @@ export default class Switch extends SceneryObject {
     _applySwitchFromDef(scenery, def) {
         const ids = this._getTrackIds(def[2]);
         if(!ids) return;
+        
+        this.def = def;
 
         const trackAAliases = [ids[0][0], ids[2][0]];
         this.trackA = this._createSwitchTrackFromDef(scenery, this.id+"A", def[0], ids[0][1], ids[2][1], def[3], def[5], trackAAliases);

@@ -6,6 +6,7 @@ const Constants = {
     parser: {
         forceAutoSwitches: false,
         logNewAutoSwitches: true,
+        logSceneryAfterFinished: true,
         sceneryInfoVersion: 29,
         alwaysShowLogDialog: false
     },

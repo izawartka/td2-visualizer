@@ -6,6 +6,7 @@ import DefinedSignalBoxes from "./defined-signalboxes.js";
 export default class SignalBox extends Misc {
     type = "SignalBox";
     applied = false;
+    def = null;
 
     constructor(id, misc_id, prefab_name, pos, rot, name) {
         super(id, misc_id, prefab_name, pos, rot, name);
