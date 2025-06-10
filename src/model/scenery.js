@@ -38,7 +38,7 @@ export default class Scenery
         lines.forEach((line, index) => {
             if(!line?.length) return; 
             if(index === 0) {
-                this.sceneryInfo = Scenery._parseSceneryInfo(line);
+                scenery.sceneryInfo = Scenery._parseSceneryInfo(line);
                 return;
             }
 

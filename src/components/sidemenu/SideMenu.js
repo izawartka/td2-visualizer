@@ -3,6 +3,7 @@ import MainContext from '../../contexts/MainContext';
 import './SideMenu.css';
 import LayersMenu from './LayersMenu';
 import SelTrackColorMode from './SelTrackColorMode';
+import SceneryInfoButton from './SceneryInfoButton';
 
 export default function SideMenu() {
     const { sideMenuOpen } = useContext(MainContext);
@@ -12,6 +13,7 @@ export default function SideMenu() {
     return (
         <div className='side-menu-wrapper'>
             <div className={sideMenuClass}>
+                <SceneryInfoButton />
                 <LayersMenu />
                 <SelTrackColorMode />
             </div>

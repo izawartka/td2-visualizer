@@ -1,0 +1,15 @@
+.scenery-info-view td.label {
+    font-weight: bold;
+    color: #aaa;
+    vertical-align: baseline;
+    padding-right: 1em;
+}
+
+.scenery-info-view td.value a {
+    color: #eee;
+    text-decoration: none;
+}
+
+.scenery-info-view td.value a:hover {
+    text-decoration: underline;
+}

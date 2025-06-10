@@ -59,6 +59,23 @@ select.non-transparent:hover {
     background: #444;
 }
 
+input[type="file"]:disabled::file-selector-button,
+button:disabled,
+select:disabled {
+    background: #fff1;
+    color: #666;
+    cursor: not-allowed;
+}
+
+
+input[type="file"].non-transparent:disabled::file-selector-button,
+button.non-transparent:disabled,
+select.non-transparent:disabled {
+    background: #222;
+    color: #666;
+    cursor: not-allowed;
+}
+
 input[type="file"]::file-selector-button,
 button {
     padding-inline: 10px;

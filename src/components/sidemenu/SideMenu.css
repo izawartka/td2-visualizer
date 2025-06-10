@@ -12,6 +12,8 @@
     z-index: 2000;
     width: 16em;
     transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
 }
 
 .side-menu.closed {
@@ -32,4 +34,8 @@
     display: flex;
     align-items: center;
     gap: 1em;
+}
+
+.scenery-info-button button {
+    width: 100%;
 }
