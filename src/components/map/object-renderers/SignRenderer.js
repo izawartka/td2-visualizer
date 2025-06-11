@@ -8,6 +8,8 @@ export default function SignRenderer(props) {
 
     const offX = -1.89 + (object.def.offsetX || 0);
     const offY = -1.89 + (object.def.offsetY || 0);
+    const width = object.def.width || 1;
+    const height = object.def.height || 1;
 
     return (
         <g className="sign" transform={`translate(${x}, ${y}) rotate(${object.rot.y}) translate(${offX}, ${offY})`}>
@@ -16,8 +18,8 @@ export default function SignRenderer(props) {
                 wrapper='svg'
 
                 beforeInjection={(svg) => {
-                    svg.setAttribute('width', '1mm');
-                    svg.setAttribute('height', '1mm');
+                    svg.setAttribute('width', `${width}mm`);
+                    svg.setAttribute('height', `${height}mm`);
                 }}
             />
         </g>
