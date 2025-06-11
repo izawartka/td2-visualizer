@@ -48,7 +48,7 @@ const DefinedSwitches = {
     ],
     "Rz 60E1-500-1_12 R": [
         0,
-        500,
+        -500,
         [0, 0, 3, 4],
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 0),
