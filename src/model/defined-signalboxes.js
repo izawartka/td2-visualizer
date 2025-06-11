@@ -49,7 +49,10 @@ const DefinedSignalBoxes = {
     "SignalBoxZdroje": {
         rot: 3
     },
-    "SignalBoxRegalica": {}
+    "SignalBoxRegalica": {},
+    "SignalBoxOzorkow": {
+        rot: 1
+    }
 }
 
 export default DefinedSignalBoxes;
