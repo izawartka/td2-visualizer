@@ -5,11 +5,13 @@ import Vector3 from "./vector3";
 
 export default class Sign extends TrackObject {
     type = "Sign";
+    data;
     def;
 
-    constructor(id, prefab_name, pos, rot, track_id, name) {
+    constructor(id, prefab_name, pos, rot, track_id, name, data) {
         super(id, prefab_name, pos, rot, track_id, name);
 
+        this.data = data || null;
         this.def = Sign.getDef(name, prefab_name);
     }
 
@@ -36,6 +38,7 @@ export default class Sign extends TrackObject {
             Vector3.fromValuesArray(values, 6), // rot
             values[9], // track_id
             values[11], // name
+            values[12] // data
         );
 
         return sign;

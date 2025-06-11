@@ -22,6 +22,39 @@ export default function SignRenderer(props) {
                     svg.setAttribute('height', `${height}mm`);
                 }}
             />
+            <SignTextRenderer object={object} />
         </g>
+    );
+}
+
+function SignTextRenderer(props) {
+    const { object } = props;
+
+    let text;
+    switch (object.def.text) {
+        case "data":
+            text = object.data || "";
+            break;
+        case "static":
+            text = object.def.staticText || "";
+            break;
+        default: break;
+    }
+
+    if (!text) return null;
+
+    const x = object.def.textOffsetX || 0;
+    const y = object.def.textOffsetY || 0;
+
+    return (
+        <text
+            className="sign-data-text"
+            transform={`translate(${x}, ${y})`}
+            style={{ fontSize: `${object.def.textSize}mm` }}
+            textAnchor="middle"
+            dominantBaseline="central"
+        >
+            {text}
+        </text>
     );
 }
