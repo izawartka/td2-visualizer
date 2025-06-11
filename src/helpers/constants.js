@@ -2,6 +2,7 @@ const Constants = {
     map: {
         zoomSensitivity: 0.002,
         trackSlopeScale: 10,
+        trackMaxSpeedScale: 1.5
     },
     parser: {
         forceAutoSwitches: false,
@@ -83,6 +84,10 @@ const Constants = {
         {
             id: 'slope',
             name: 'Slope'
+        },
+        {
+            id: 'max-speed',
+            name: 'Max speed'
         }
     ]
 };
