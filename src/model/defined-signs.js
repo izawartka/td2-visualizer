@@ -6,172 +6,176 @@ const DefinedSigns = {
         "icon": "w27.svg",
         "offsetY": -1.4364,
         "text": ["fun", "data"],
-        "textFun": (object) => object.prefab_name?.match(/^sign_w27_(\d+)/)?.[1] || null,
+        "textFun": (object) => object.prefab_name?.match(/^(?:sign_)?w27_(\d+)/)?.[1] || null,
         "textSize": 0.22,
         "textOffsetX": 1.89,
         "textOffsetY": 1.2
     },
-    "sign_w28_": {
+    "sign_w28": {
         "name": "W28",
         "icon": "w28.svg",
         "offsetY": -1.4364,
         "text": ["fun"],
         "textFun": (object) => {
-            const channel = object.prefab_name?.match(/^sign_w28_(\d+)/)?.[1];
+            const channel = object.prefab_name?.match(/^(?:sign_)?w28_(\d+)/)?.[1];
             return channel ? `R${channel}` : null;
         },
         "textSize": 0.22,
         "textOffsetX": 1.89,
         "textOffsetY": 1.25
     },
-    "sign_w11p_400m": {
+    "w11p_400m": {
         "name": "W11p 400m",
         "icon": "w11p_2.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11p_200m": {
+    "w11p_200m": {
         "name": "W11p 200m",
         "icon": "w11p_1.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
     // TODO: separate icons for W11a signs
-    "sign_w11a_400m": {
+    "w11a_400m": {
         "name": "W11a 400m",
         "icon": "w11_4.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11a_300m": {
+    "w11a_300m": {
         "name": "W11a 300m",
         "icon": "w11_3.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11a_200m": {
+    "w11a_200m": {
         "name": "W11a 200m",
         "icon": "w11_2.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11a_100m": {
+    "w11a_100m": {
         "name": "W11a 100m",
         "icon": "w11_1.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11_4": {
+    "w11_4": {
         "name": "W11 400m",
         "icon": "w11_4.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11_3": {
+    "w11_3": {
         "name": "W11 300m",
         "icon": "w11_3.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11_2": {
+    "w11_2": {
         "name": "W11 200m",
         "icon": "w11_2.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w11_1": {
+    "w11_1": {
         "name": "W11 100m",
         "icon": "w11_1.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w13a": {
+    "w13a": {
         "name": "W13a",
         "icon": "w13a.svg",
         "offsetY": -2.01096,
         "height": 1.4
     },
-    "sign_w13": {
+    "w13": {
         "name": "W13",
         "icon": "w13.svg",
         "offsetY": -2.01096,
         "height": 1.4
     },
-    "sign_w15_p": {
+    "w15_p": {
         "name": "W15 Right",
         "icon": "w15_r.svg",
+        "offsetY": -1.4364,
     },
-    "sign_w15_l": {
+    "w15_l": {
         "name": "W15 Left",
-        "icon": "w15_l.svg"
+        "icon": "w15_l.svg",
+        "offsetY": -1.4364
     },
     "sign_w17": {
+    "w17": {
         "name": "W17",
         "icon": "w17.svg"
     },
-    "w1_": {
+    // TODO: make it somehow not conflict with unknown W1X signs
+    "w1": {
         "name": "W1",
         "icon": "w1.svg",
         "offsetY": 3.89
     },
-    "sign_w4": {
+    "w4": {
         "name": "W4",
         "icon": "w4.svg",
         "offsetY": -1.4364
     },
-    "sign_w5": {
+    "w5": {
         "name": "W5",
         "icon": "w5.svg",
         "offsetY": -1.4364
     },
-    "sign_w6b": {
+    "w6b": {
         "name": "W6b",
         "icon": "w6b.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "sign_w6a": {
+    "w6a": {
         "name": "W6a",
         "icon": "w6a.svg",
         "offsetY": -1.4364
     },
-    "sign_w6": {
+    "w6": {
         "name": "W6",
         "icon": "w6.svg",
         "offsetY": -1.4364
     },
-    "sign_w7": {
+    "w7": {
         "name": "W7",
         "icon": "w7.svg",
         "offsetY": -1.4364
     },
-    "sign_w8_0": {
-        "name": "W8 (Next scenery)",
+    "w8_0": {
+        "name": "W8",
         "icon": "w8.svg",
         "offsetY": -1.4364,
         "text": "static",
-        "staticText": "?",
+        "staticText": "X",
         "textSize": 0.14,
         "textOffsetX": 1.89,
         "textOffsetY": 0.9
     },
-    "sign_w8": {
+    "w8": {
         "name": "W8",
         "icon": "w8.svg",
         "offsetY": -1.4364,
         "text": ["fun", "data"],
-        "textFun": (object) => object.prefab_name?.match(/^sign_w8_(\d+)/)?.[1] || null,
+        "textFun": (object) => object.prefab_name?.match(/^(?:sign_)?w8_(\d+)/)?.[1] || null,
         "textSize": 0.14,
         "textOffsetX": 1.89,
         "textOffsetY": 0.9
     },
-    "sign_w9": {
+    "w9": {
         "name": "W9",
         "icon": "w9.svg",
         "offsetY": -2.528064,
         "height": 1.76
     },
-    "sign_z1": {
+    "z1": {
         "name": "Z1",
         "icon": "z1.svg",
         "offsetY": -1.4364

@@ -26,8 +26,8 @@ export default class Sign extends TrackObject {
         const values = text.split(";");
         
         const prefabName = values[2]?.trim() || "";
-        if(prefabName.startsWith("sign_")) return true;
-        if(prefabName.startsWith("w1_")) return true;
+        const regex = /^(sign_.+|w\d+(_.+)?)$/;
+        return regex.test(prefabName);
     }
 
     static fromText(text) {        
@@ -46,7 +46,7 @@ export default class Sign extends TrackObject {
     }
 
     static getDef(name, prefabName) {
-        const key = Object.keys(DefinedSigns).find(k => prefabName.startsWith(k));
+        const key = Object.keys(DefinedSigns).find(k => prefabName.startsWith(k) || prefabName.startsWith(`sign_${k}`));
         if (!key) {
             SceneryParserLog.warn('signUndefinedPrefabName', `Sign ${name} has an undefined prefab name ${prefabName}`);
             return null;
