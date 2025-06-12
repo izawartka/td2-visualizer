@@ -30,18 +30,12 @@ export default function SignRenderer(props) {
 function SignTextRenderer(props) {
     const { object } = props;
 
-    let text;
-    switch (object.def.text) {
-        case "data":
-            text = object.data || "";
-            break;
-        case "static":
-            text = object.def.staticText || "";
-            break;
-        default: break;
+    const textSources = !!object.def.text ? Array.isArray(object.def.text) ? object.def.text : [object.def.text] : [];
+    let text = null;
+    for(const source of textSources) {
+        text = getSignText(object, source);
+        if(text) break;
     }
-
-    if (!text) return null;
 
     const x = object.def.textOffsetX || 0;
     const y = object.def.textOffsetY || 0;
@@ -57,4 +51,18 @@ function SignTextRenderer(props) {
             {text}
         </text>
     );
+}
+
+function getSignText(object, source) {
+    switch(source) {
+        case "fun":
+            return object.def.textFun ? object.def.textFun(object) : null;
+        case "data":
+            return object.data ?? null;
+        case "static":
+            return object.def.staticText ?? null;
+        default:
+            console.warn(`Unknown sign ${object.id} text source: ${source}`);
+            return null;
+    }
 }
