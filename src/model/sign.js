@@ -25,8 +25,9 @@ export default class Sign extends TrackObject {
     static isSign(text) {
         const values = text.split(";");
         
-        const prefabInfo = values[2]?.trim() || "";
-        return prefabInfo.startsWith("sign_");
+        const prefabName = values[2]?.trim() || "";
+        if(prefabName.startsWith("sign_")) return true;
+        if(prefabName.startsWith("w1_")) return true;
     }
 
     static fromText(text) {        

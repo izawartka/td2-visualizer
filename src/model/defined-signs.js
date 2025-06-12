@@ -5,10 +5,24 @@ const DefinedSigns = {
         "name": "W27",
         "icon": "w27.svg",
         "offsetY": -1.4364,
-        "text": "data",
+        "text": ["fun", "data"],
+        "textFun": (object) => object.prefab_name?.match(/^sign_w27_(\d+)/)?.[1] || null,
         "textSize": 0.22,
         "textOffsetX": 1.89,
         "textOffsetY": 1.2
+    },
+    "sign_w28_": {
+        "name": "W28",
+        "icon": "w28.svg",
+        "offsetY": -1.4364,
+        "text": ["fun"],
+        "textFun": (object) => {
+            const channel = object.prefab_name?.match(/^sign_w28_(\d+)/)?.[1];
+            return channel ? `R${channel}` : null;
+        },
+        "textSize": 0.22,
+        "textOffsetX": 1.89,
+        "textOffsetY": 1.25
     },
     "sign_w11p_400m": {
         "name": "W11p 400m",
@@ -71,6 +85,35 @@ const DefinedSigns = {
         "offsetY": -3.3264,
         "height": 1.5
     },
+    "sign_w13a": {
+        "name": "W13a",
+        "icon": "w13a.svg",
+        "offsetY": -2.01096,
+        "height": 1.4
+    },
+    "sign_w13": {
+        "name": "W13",
+        "icon": "w13.svg",
+        "offsetY": -2.01096,
+        "height": 1.4
+    },
+    "sign_w15_p": {
+        "name": "W15 Right",
+        "icon": "w15_r.svg",
+    },
+    "sign_w15_l": {
+        "name": "W15 Left",
+        "icon": "w15_l.svg"
+    },
+    "sign_w17": {
+        "name": "W17",
+        "icon": "w17.svg"
+    },
+    "w1_": {
+        "name": "W1",
+        "icon": "w1.svg",
+        "offsetY": 3.89
+    },
     "sign_w4": {
         "name": "W4",
         "icon": "w4.svg",
@@ -116,7 +159,8 @@ const DefinedSigns = {
         "name": "W8",
         "icon": "w8.svg",
         "offsetY": -1.4364,
-        "text": "data",
+        "text": ["fun", "data"],
+        "textFun": (object) => object.prefab_name?.match(/^sign_w8_(\d+)/)?.[1] || null,
         "textSize": 0.14,
         "textOffsetX": 1.89,
         "textOffsetY": 0.9
