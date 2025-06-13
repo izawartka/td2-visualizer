@@ -16,10 +16,20 @@ export default class Sign extends TrackObject {
     }
 
     getPrintableSignData() {
-        if (!this.data) return null;
+        let data = this.data?.trim();
+        if (!data) return null;
+        
+        // remove any <size=...>, [size=...], </size> or [/size] tags
+        data = this.data.replace(/[<[]size=[^>\]]*[\]>]/g, '')?.trim();
 
-        const parts = this.data.split("_");
-        return parts[parts.length - 1]?.trim() || null;
+        // remove any leading '<' or '[' tags and their content
+        while(data?.match(/^[<[]/)) {
+            data = data.replace(/^[<[][^>\]]*[\]>]/, '')?.trim();
+        }
+
+        // remove everything before the last underscore (inclusive)
+        const parts = data?.split("_");
+        return parts?.[parts?.length - 1]?.trim() || null;
     }
 
     /*

@@ -120,6 +120,11 @@ export default class Scenery
 
     static _parseObject(text) {
         const type = text.split(";", 2)[0];
+
+        if(type.indexOf("Forest") !== -1) {
+            return null;
+        }
+
         switch(type) {
             case 'Track':
                 return Scenery._parseTrack(text);
@@ -145,6 +150,8 @@ export default class Scenery
             case 'MainCamera':
             case 'SSPRepeater':
             case 'SSPController':
+            case 'TerrainGroup':
+            case 'EndTerrainGroup':
                 return null;
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);
