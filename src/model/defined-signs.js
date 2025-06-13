@@ -1,7 +1,14 @@
-// remember to place sign_w1X before sign_w1 etc.
- 
 const DefinedSigns = {
-    "sign_w27": {
+    "w32": {
+        "name": "W32",
+        "icon": "w32.svg",
+        "offsetY": -1.4364,
+        "text": "data",
+        "textSize": 0.22,
+        "textOffsetX": 1.89,
+        "textOffsetY": 2.75
+    },
+    "w27": {
         "name": "W27",
         "icon": "w27.svg",
         "offsetY": -1.4364,
@@ -11,7 +18,7 @@ const DefinedSigns = {
         "textOffsetX": 1.89,
         "textOffsetY": 1.2
     },
-    "sign_w28": {
+    "w28": {
         "name": "W28",
         "icon": "w28.svg",
         "offsetY": -1.4364,
@@ -107,7 +114,13 @@ const DefinedSigns = {
         "icon": "w15_l.svg",
         "offsetY": -1.4364
     },
-    "sign_w17": {
+    "w16": {
+        "name": "W16",
+        "icon": "w16.svg",
+        "width": 1.2,
+        "offsetX": -0.378,
+        "offsetY": -1.4364
+    },
     "w17": {
         "name": "W17",
         "icon": "w17.svg"
@@ -118,6 +131,7 @@ const DefinedSigns = {
         "icon": "w1.svg",
         "offsetY": 3.89
     },
+    "latarnia_w4": {alias: "w4"},
     "w4": {
         "name": "W4",
         "icon": "w4.svg",
@@ -159,6 +173,7 @@ const DefinedSigns = {
         "textOffsetX": 1.89,
         "textOffsetY": 0.9
     },
+    "d6": { alias: "w8" },
     "w8": {
         "name": "W8",
         "icon": "w8.svg",
@@ -169,16 +184,23 @@ const DefinedSigns = {
         "textOffsetX": 1.89,
         "textOffsetY": 0.9
     },
+    "w14": { alias: "w9" },
     "w9": {
         "name": "W9",
         "icon": "w9.svg",
         "offsetY": -2.528064,
         "height": 1.76
     },
+    "latarnia_z1": {alias: "z1"},
     "z1": {
         "name": "Z1",
         "icon": "z1.svg",
         "offsetY": -1.4364
+    },
+    "d1": {
+        "name": "D1",
+        "icon": "d1.svg",
+        "offsetY": -1.4364,
     }
 };
 
