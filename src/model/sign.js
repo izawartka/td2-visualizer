@@ -15,6 +15,13 @@ export default class Sign extends TrackObject {
         this.def = Sign.getDef(name, prefab_name);
     }
 
+    getPrintableSignData() {
+        if (!this.data) return null;
+
+        const parts = this.data.split("_");
+        return parts[parts.length - 1]?.trim() || null;
+    }
+
     /*
     Check if a TrackObject text is a Sign.
     @param {string} text - The text representation of the TrackObject.
@@ -46,11 +53,22 @@ export default class Sign extends TrackObject {
     }
 
     static getDef(name, prefabName) {
-        const key = Object.keys(DefinedSigns).find(k => prefabName.startsWith(k) || prefabName.startsWith(`sign_${k}`));
+        const key = Object.entries(DefinedSigns).find(([key, value]) => {
+            if (!value.pattern) {
+                const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                value.pattern = new RegExp(`^(sign_)?${escapedKey}([_v].*)?$`, 'i');
+            }
+
+            return value.pattern.test(prefabName);
+        })?.[0] || null;
+        
         if (!key) {
             SceneryParserLog.warn('signUndefinedPrefabName', `Sign ${name} has an undefined prefab name ${prefabName}`);
             return null;
         }
+
+        const alias = DefinedSigns[key].alias;
+        if(alias) return DefinedSigns[alias];
 
         return DefinedSigns[key];
     }

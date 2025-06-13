@@ -58,7 +58,7 @@ function getSignText(object, source) {
         case "fun":
             return object.def.textFun ? object.def.textFun(object) : null;
         case "data":
-            return object.data ?? null;
+            return object.getPrintableSignData();
         case "static":
             return object.def.staticText ?? null;
         default:
