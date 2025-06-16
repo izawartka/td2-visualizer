@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import MainContext from "../../contexts/MainContext";
-import Scenery from "../../model/scenery";
+import SceneryParser from "../../model/scenery-parser";
 import { showCustomDialog } from "../../services/dialogService";
 import SceneryLoadedDialog from "../scenery-loaded-dialog/SceneryLoadedDialog";
 import SceneryParserLog from "../../model/scenery-parser-log";
@@ -19,7 +19,7 @@ export default function FileSelect() {
         reader.onload = (e) => {
             let loadingError = null;
             try {
-                const scenery = Scenery.fromText(e.target?.result);
+                const scenery = SceneryParser.fromText(e.target?.result);
                 setScenery(scenery);
             } catch (error) {
                 loadingError = error;
