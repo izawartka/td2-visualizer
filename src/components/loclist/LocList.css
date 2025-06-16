@@ -6,6 +6,7 @@
     display: flex;
     gap: 0.5em 1em;
     flex-wrap: wrap;
+    max-width: 100em;
 }
 
 .loclist-section {
