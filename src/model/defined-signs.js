@@ -1,4 +1,14 @@
 const DefinedSigns = {
+    "w32_L": {
+        "name": "W32",
+        "icon": "w32.svg",
+        "offsetY": -1.4364,
+        "text": "data",
+        "textSize": 0.22,
+        "textOffsetX": 1.89,
+        "textOffsetY": 2.75,
+        "rot": 2
+    },
     "w32": {
         "name": "W32",
         "icon": "w32.svg",
@@ -6,7 +16,8 @@ const DefinedSigns = {
         "text": "data",
         "textSize": 0.22,
         "textOffsetX": 1.89,
-        "textOffsetY": 2.75
+        "textOffsetY": 2.75,
+        "rot": 2
     },
     "w27": {
         "name": "W27",
@@ -22,7 +33,7 @@ const DefinedSigns = {
         "name": "W28",
         "icon": "w28.svg",
         "offsetY": -1.4364,
-        "text": ["fun"],
+        "text": "fun",
         "textFun": (object) => {
             const channel = object.prefab_name?.match(/^(?:sign_)?w28_(\d+)/)?.[1];
             return channel ? `R${channel}` : null;

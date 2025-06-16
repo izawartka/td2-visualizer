@@ -58,7 +58,7 @@ export default class SceneryParser {
     static _parseObject(text) {
         const type = text.split(";", 2)[0];
 
-        if(type.indexOf("Forest") !== -1) {
+        if(type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
             return null;
         }
 
@@ -73,7 +73,6 @@ export default class SceneryParser {
                 return Route.fromText(text);
             case 'Misc':
                 return SceneryParser._parseMisc(text);
-            case 'Empty':
             case 'EndRoute':
             case 'MiscGroup':
             case 'EndMiscGroup':

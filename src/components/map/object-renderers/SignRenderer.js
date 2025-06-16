@@ -8,11 +8,12 @@ export default function SignRenderer(props) {
 
     const offX = -1.89 + (object.def.offsetX || 0);
     const offY = -1.89 + (object.def.offsetY || 0);
+    const rot = object.rot.y + (object.def.rot || 0) * 90;
     const width = object.def.width || 1;
     const height = object.def.height || 1;
 
     return (
-        <g className="sign" transform={`translate(${x}, ${y}) rotate(${object.rot.y}) translate(${offX}, ${offY})`}>
+        <g className="sign" transform={`translate(${x}, ${y}) rotate(${rot}) translate(${offX}, ${offY})`}>
             <ReactSVG
                 src={`/assets/signs/${object.def.icon}`}
                 wrapper='svg'
