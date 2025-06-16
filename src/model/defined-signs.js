@@ -92,6 +92,11 @@ const DefinedSigns = {
         "offsetY": -3.3264,
         "height": 1.5
     },
+    "w12": {
+        "name": "W12",
+        "icon": "w12.svg",
+        "offsetY": -1.4364
+    },
     "w13a": {
         "name": "W13a",
         "icon": "w13a.svg",
@@ -190,6 +195,16 @@ const DefinedSigns = {
         "icon": "w9.svg",
         "offsetY": -2.528064,
         "height": 1.76
+    },
+    "w9a_oneside": {
+        "name": "W9",
+        "icon": "w9a.svg",
+        "offsetY": -1.4364
+    },
+    "w9b_oneside": {
+        "name": "W9",
+        "icon": "w9b.svg",
+        "offsetY": -1.4364
     },
     "latarnia_z1": {alias: "z1"},
     "z1": {
