@@ -8,10 +8,12 @@
 
 .map svg path.track {
     stroke-width: 1.44px;
+    fill: transparent;
 }
 
 .map svg path.track-unscaled {
     stroke-width: 1px;
+    fill: transparent;
     vector-effect: non-scaling-stroke;
 }
 
