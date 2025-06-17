@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './ZoomPanWrapper.css';
 import Constants from '../../helpers/constants';
 import { useZoomPanSubscriber, viewBox$, clientRect$ } from '../../hooks/useZoomPubSub';
@@ -11,43 +11,54 @@ export default function ZoomPanWrapper({children}) {
     const panStart = useRef({ x: 0, y: 0 });
     const vbStart = useRef(viewBox);
     const clientRect = useRef(null);
-
-    const handleResize = () => {
-        const rect = wrapperRef?.current?.getBoundingClientRect();
+    const pendingViewBoxRef = useRef(viewBox);
+    const rafScheduledRef = useRef(false);
+    
+    const scheduleViewBoxUpdate = useCallback((newVB) => {
+        pendingViewBoxRef.current = newVB;
+        if (!rafScheduledRef.current) {
+            rafScheduledRef.current = true;
+            requestAnimationFrame(() => {
+                setViewBox(pendingViewBoxRef.current);
+                rafScheduledRef.current = false;
+            });
+        }
+    }, []);
+    
+    const handleResize = useCallback(() => {
+        const rect = wrapperRef.current?.getBoundingClientRect();
         if (!rect) return;
 
         clientRect$.next(rect); // Update clientRect BehaviorSubject
-
-        if(!clientRect?.current) {
-            setViewBox({
+        
+        if (!clientRect.current) {
+            // First-time: initialize viewBox so SVG fits wrapper
+            const initialVB = {
                 x: -rect.width / 2,
                 y: -rect.height / 2,
                 w: rect.width,
                 h: rect.height
-            });
+            };
 
             clientRect.current = rect;
+            scheduleViewBoxUpdate(initialVB);
             return;
         }
         
-        setViewBox(prevViewBox => {
-            const scaleX = rect.width / clientRect.current.width;
-            const scaleY = rect.height / clientRect.current.height;
-
-            const newX = prevViewBox.x + (prevViewBox.w / 2) * (1 - scaleX);
-            const newY = prevViewBox.y + (prevViewBox.h / 2) * (1 - scaleY);
-
-            clientRect.current = rect;
-
-            return {
-                x: newX,
-                y: newY,
-                w: prevViewBox.w * scaleX,
-                h: prevViewBox.h * scaleY
-            };
+        const prev = pendingViewBoxRef.current;
+        const scaleX = rect.width / clientRect.current.width;
+        const scaleY = rect.height / clientRect.current.height;
+        const newX = prev.x + (prev.w / 2) * (1 - scaleX);
+        const newY = prev.y + (prev.h / 2) * (1 - scaleY);
+        clientRect.current = rect;
+        scheduleViewBoxUpdate({
+            x: newX,
+            y: newY,
+            w: prev.w * scaleX,
+            h: prev.h * scaleY,
         });
-    };
-
+    }, [scheduleViewBoxUpdate]);
+    
     // change viewbox when the window resizes
     useEffect(() => {
         window.addEventListener('resize', handleResize);
@@ -55,7 +66,7 @@ export default function ZoomPanWrapper({children}) {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, []);
+    }, [handleResize]);
     
     // Whenever viewBox state changes, publish to viewBox$
     useEffect(() => {
@@ -63,21 +74,18 @@ export default function ZoomPanWrapper({children}) {
         viewBox$.next(viewBox);
     }, [viewBox]);
     
-    // Called when someone emits a center request via the hook emitter
-    const centerOn = (cx, cy) => {
-        const { w, h } = viewBox;
-
-        // Center (cx, cy) in the middle of the current viewBox
+    const centerOn = useCallback((cx, cy) => {
+        const { w, h } = pendingViewBoxRef.current;
         const newX = cx - w / 2;
         const newY = cy - h / 2;
-        setViewBox({ x: newX, y: newY, w, h });
-    };
+        scheduleViewBoxUpdate({ x: newX, y: newY, w, h });
+    }, [scheduleViewBoxUpdate]);
     
     // Subscribe to any external "center" calls
     useZoomPanSubscriber(centerOn);
 
     const onWheel = (e) => {
-        const { x, y, w, h } = viewBox;
+        const { x, y, w, h } = pendingViewBoxRef.current;
         const svgRect = svgRef.current.getBoundingClientRect();
         const offsetX = e.clientX - svgRect.left;
         const offsetY = e.clientY - svgRect.top;
@@ -94,15 +102,14 @@ export default function ZoomPanWrapper({children}) {
         // adjust x,y so zoom centers at mouse
         const newX = mx - (offsetX / svgRect.width) * newW;
         const newY = my - (offsetY / svgRect.height) * newH;
-        
-        setViewBox({ x: newX, y: newY, w: newW, h: newH });
+        scheduleViewBoxUpdate({ x: newX, y: newY, w: newW, h: newH });
     };
     
     const onMouseDown = (e) => {
         e.preventDefault();
         isPanning.current = true;
         panStart.current = { x: e.clientX, y: e.clientY };
-        vbStart.current = viewBox;
+        vbStart.current = pendingViewBoxRef.current;
     };
 
     const onMouseMove = (e) => {
@@ -110,7 +117,8 @@ export default function ZoomPanWrapper({children}) {
         e.preventDefault();
         const dx = ((e.clientX - panStart.current.x) / svgRef.current.clientWidth) * vbStart.current.w;
         const dy = ((e.clientY - panStart.current.y) / svgRef.current.clientHeight) * vbStart.current.h;
-        setViewBox({
+
+        scheduleViewBoxUpdate({
             x: vbStart.current.x - dx,
             y: vbStart.current.y - dy,
             w: vbStart.current.w,
