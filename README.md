@@ -1,12 +1,17 @@
 # td2-visualizer
 
-Narzędzie do przeglądania scenerii Train Driver 2 w przeglądarce.
-Przed załadowaniem pliku scenerii, najpierw przekonwertuj go do lżejszego formatu używając skryptu `tools/scp.py`.
+Narzędzie do przeglądania plików scenerii symulatora Train Driver 2 (.SC) w przeglądarce. Umożliwia szybkie podejrzenie układu torowego dowolnej scenerii, jej szlaków zewnętrzych, semaforów, wskaźników, spawnów, numerów rozjazdów i wiele więcej
 
-A tool for viewing Train Driver 2 scenery files in the browser.
-Before loading a scenery file, make sure to first convert it to lightweight format using `tools/scp.py` script.
+A tool for viewing Train Driver 2 simulator scenery files (.SC) in the browser. It allows for quick lookup of the track layout of any scenery, its external routes, signals, signs, spawns, switch numbers, and much more
 
-WIP
+#
+
+## Online demo
+
+Wersja online może nie zawsze być aktualna<br>
+The online version may not always be up to date
+
+https://maseuko.pl/soft/td2-visualizer-2/
 
 ## Author
 

@@ -13,7 +13,7 @@ export default function SideMenuToggle() {
         <div className='side-menu-toggle'>
             <button onClick={toggleSideMenu} className='invis-button'>
                 <ReactSVG
-                    src="/assets/side-menu.svg"
+                    src={`${process.env.PUBLIC_URL}/assets/side-menu.svg`}
                 />
             </button>
         </div>

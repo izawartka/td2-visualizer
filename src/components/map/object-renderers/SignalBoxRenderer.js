@@ -15,7 +15,7 @@ export default function SignalBoxRenderer(props) {
     <g className="signalbox" transform={`translate(${x}, ${y}) rotate(${rot}) `}>
       <g className="signalbox-icon" transform={`translate(-4.725, -4.725)`}>
           <ReactSVG
-              src={`/assets/signalboxes/${object.def.icon}`}
+              src={`${process.env.PUBLIC_URL}/assets/signalboxes/${object.def.icon}`}
               wrapper='svg'
 
               beforeInjection={(svg) => {
