@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ZoomPanWrapper.css';
 import Constants from '../../helpers/constants';
-import { useZoomPanSubscriber } from '../../hooks/useZoomPubSub';
+import { useZoomPanSubscriber, viewBox$, clientRect$ } from '../../hooks/useZoomPubSub';
 
 export default function ZoomPanWrapper({children}) {
     const [viewBox, setViewBox] = useState({x: 0, y: 0, w: 100, h: 100}); // Initial viewBox
@@ -10,13 +10,15 @@ export default function ZoomPanWrapper({children}) {
     const isPanning = useRef(false);
     const panStart = useRef({ x: 0, y: 0 });
     const vbStart = useRef(viewBox);
-    const prevClientRect = useRef(null);
+    const clientRect = useRef(null);
 
     const handleResize = () => {
         const rect = wrapperRef?.current?.getBoundingClientRect();
         if (!rect) return;
 
-        if(!prevClientRect?.current) {
+        clientRect$.next(rect); // Update clientRect BehaviorSubject
+
+        if(!clientRect?.current) {
             setViewBox({
                 x: -rect.width / 2,
                 y: -rect.height / 2,
@@ -24,18 +26,18 @@ export default function ZoomPanWrapper({children}) {
                 h: rect.height
             });
 
-            prevClientRect.current = rect;
+            clientRect.current = rect;
             return;
         }
         
         setViewBox(prevViewBox => {
-            const scaleX = rect.width / prevClientRect.current.width;
-            const scaleY = rect.height / prevClientRect.current.height;
+            const scaleX = rect.width / clientRect.current.width;
+            const scaleY = rect.height / clientRect.current.height;
 
             const newX = prevViewBox.x + (prevViewBox.w / 2) * (1 - scaleX);
             const newY = prevViewBox.y + (prevViewBox.h / 2) * (1 - scaleY);
 
-            prevClientRect.current = rect;
+            clientRect.current = rect;
 
             return {
                 x: newX,
@@ -44,7 +46,6 @@ export default function ZoomPanWrapper({children}) {
                 h: prevViewBox.h * scaleY
             };
         });
-
     };
 
     // change viewbox when the window resizes
@@ -55,6 +56,12 @@ export default function ZoomPanWrapper({children}) {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+    
+    // Whenever viewBox state changes, publish to viewBox$
+    useEffect(() => {
+        // Push new value to BehaviorSubject
+        viewBox$.next(viewBox);
+    }, [viewBox]);
     
     // Called when someone emits a center request via the hook emitter
     const centerOn = (cx, cy) => {

@@ -1,7 +1,27 @@
 import { useEffect } from 'react';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 const zoomCenter$ = new Subject();
+
+// BehaviorSubject to store current viewBox
+export const viewBox$ = new BehaviorSubject(null);
+
+// BehaviorSubject to store the clientRect
+export const clientRect$ = new BehaviorSubject(null);
+
+/**
+ * Returns the current viewBox value synchronously.
+ */
+export function getCurrentViewBox() {
+    return viewBox$.getValue();
+}
+
+/**
+ * Returns the current clientRect value synchronously.
+ */
+export function getCurrentClientRect() {
+    return clientRect$.getValue();
+}
 
 /**
 * useZoomPanSubscriber
