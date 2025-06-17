@@ -7,14 +7,17 @@ import SideMenu from './sidemenu/SideMenu';
 import SettingsManager from './SettingsManager';
 import LocList from './loclist/LocList';
 import DialogManager from './dialog/DialogManager';
+import DistanceMeterContext from '../contexts/DistanceMeterContext';
 
 function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [scenery, setScenery] = useState(null);
     const [sideMenuOpen, setSideMenuOpen] = useState(false);
+    const [distancePoints, setDistancePoints] = useState(null);
     
     return (
         <SettingsManager>
+            <DistanceMeterContext.Provider value={{distancePoints, setDistancePoints}}>
             <MainContext.Provider value={{ 
                 scenery, setScenery,
                 isLoading, setIsLoading,
@@ -30,9 +33,10 @@ function App() {
                     <DialogManager />
                 </div>
             </MainContext.Provider>
+            </DistanceMeterContext.Provider>
         </SettingsManager>
-        );
-    }
+    );
+}
     
-    export default App;
+export default App;
     

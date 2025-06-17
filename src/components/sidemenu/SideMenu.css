@@ -14,6 +14,11 @@
     transition: transform 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
+    gap: 1em;
+}
+
+.side-menu h3 {
+    margin: 0;
 }
 
 .side-menu.closed {
@@ -36,6 +41,7 @@
     gap: 1em;
 }
 
+.distance-meter-button button,
 .scenery-info-button button {
     width: 100%;
 }

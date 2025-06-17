@@ -4,6 +4,7 @@ import './SideMenu.css';
 import LayersMenu from './LayersMenu';
 import SelTrackColorMode from './SelTrackColorMode';
 import SceneryInfoButton from './SceneryInfoButton';
+import DistanceMeterButton from './DistanceMeterButton';
 
 export default function SideMenu() {
     const { sideMenuOpen } = useContext(MainContext);
@@ -14,6 +15,7 @@ export default function SideMenu() {
         <div className='side-menu-wrapper'>
             <div className={sideMenuClass}>
                 <SceneryInfoButton />
+                <DistanceMeterButton />
                 <LayersMenu />
                 <SelTrackColorMode />
             </div>
