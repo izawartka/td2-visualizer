@@ -19,6 +19,7 @@ const DefinedSigns = {
         "textOffsetY": 2.75,
         "rot": 2
     },
+    "w27a": {alias: "w27"},
     "w27": {
         "name": "W27",
         "icon": "w27.svg",
@@ -54,31 +55,37 @@ const DefinedSigns = {
         "offsetY": -3.3264,
         "height": 1.5
     },
+    "w11p_1": {alias: "w11p_200m"},
+    "w11p_2": {alias: "w11p_400m"},
     // TODO: separate icons for W11a signs
-    "w11a_400m": {
+    "w11a_4": {
         "name": "W11a 400m",
         "icon": "w11_4.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "w11a_300m": {
+    "w11a_3": {
         "name": "W11a 300m",
         "icon": "w11_3.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "w11a_200m": {
+    "w11a_2": {
         "name": "W11a 200m",
         "icon": "w11_2.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
-    "w11a_100m": {
+    "w11a_1": {
         "name": "W11a 100m",
         "icon": "w11_1.svg",
         "offsetY": -3.3264,
         "height": 1.5
     },
+    "w11a_400m": {alias: "w11a_4"},
+    "w11a_300m": {alias: "w11a_3"},
+    "w11a_200m": {alias: "w11a_2"},
+    "w11a_100m": {alias: "w11a_1"},
     "w11_4": {
         "name": "W11 400m",
         "icon": "w11_4.svg",
@@ -103,6 +110,10 @@ const DefinedSigns = {
         "offsetY": -3.3264,
         "height": 1.5
     },
+    "w11_400m": {alias: "w11_4"},
+    "w11_300m": {alias: "w11_3"},
+    "w11_200m": {alias: "w11_2"},
+    "w11_100m": {alias: "w11_1"},
     "w12": {
         "name": "W12",
         "icon": "w12.svg",
