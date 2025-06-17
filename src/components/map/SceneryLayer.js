@@ -25,6 +25,7 @@ export default function SceneryLayer(props) {
             objects={objects}
             type={type}
             types={types}
+            pointerEvents={queueItem.pointerEvents || false}
         />
     );
 }
@@ -32,9 +33,12 @@ export default function SceneryLayer(props) {
 const MemoizedSceneryLayer = memo(StatelessSceneryLayer);
 
 
-function StatelessSceneryLayer({ name, Renderer, objects, type, types }) {
+function StatelessSceneryLayer({ name, Renderer, objects, type, types, pointerEvents = false }) {
     return (
-        <g className={`scenery-layer-${name}`}>  
+        <g 
+            className={`scenery-layer-${name}`}
+            pointerEvents={pointerEvents ? "all" : "none"}
+        >
             {objects.map((obj) => {
                 if (type !== undefined && type !== obj.type) return null;
                 if (types !== undefined && !types.includes(obj.type)) return null;

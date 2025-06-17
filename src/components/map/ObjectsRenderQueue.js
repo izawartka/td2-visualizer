@@ -58,7 +58,8 @@ const ObjectRendererQueue = [
         'name': 'track-objects',
         'category': 'track-objects',
         'renderer': TrackObjectRenderer,
-        'cond': (layers) => layers['track-objects']
+        'cond': (layers) => layers['track-objects'],
+        'pointerEvents': true
     },
 ]
 
