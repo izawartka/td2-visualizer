@@ -1,6 +1,7 @@
 import React, { useContext, useMemo, memo } from "react";
 import MainContext from "../../contexts/MainContext";
 import SettingsContext from "../../contexts/SettingsContext";
+import Constants from "../../helpers/constants";
 
 export default function SceneryLayer(props) {
     const { queueItem } = props;
@@ -17,6 +18,8 @@ export default function SceneryLayer(props) {
     }, [scenery, category, isVisible]);
     
     if (!scenery || !isVisible) return null;
+
+    const pointerEvents = Constants.map.forcePointerEvents || queueItem.pointerEvents || false;
     
     return (
         <MemoizedSceneryLayer
@@ -25,7 +28,7 @@ export default function SceneryLayer(props) {
             objects={objects}
             type={type}
             types={types}
-            pointerEvents={queueItem.pointerEvents || false}
+            pointerEvents={pointerEvents}
         />
     );
 }

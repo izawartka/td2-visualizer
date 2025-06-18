@@ -2,7 +2,8 @@ const Constants = {
     map: {
         zoomSensitivity: 0.002,
         trackSlopeScale: 10,
-        trackMaxSpeedScale: 1.5
+        trackMaxSpeedScale: 1.5,
+        pointerEvents: false
     },
     parser: {
         forceAutoSwitches: false,

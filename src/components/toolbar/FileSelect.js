@@ -4,9 +4,11 @@ import SceneryParser from "../../model/scenery-parser";
 import { showCustomDialog } from "../../services/dialogService";
 import SceneryLoadedDialog from "../scenery-loaded-dialog/SceneryLoadedDialog";
 import SceneryParserLog from "../../model/scenery-parser-log";
+import { useZoomPanEmitter } from "../../hooks/useZoomPubSub";
 
 export default function FileSelect() {
     const {setScenery, setIsLoading} = useContext(MainContext);
+    const { center } = useZoomPanEmitter();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -21,6 +23,9 @@ export default function FileSelect() {
             try {
                 const scenery = SceneryParser.fromText(e.target?.result);
                 setScenery(scenery);
+
+                const mainSignalBoxPos = scenery.signalBoxes?.[0]?.pos || null;
+                if (mainSignalBoxPos) center(...mainSignalBoxPos.toSVGCoords());
             } catch (error) {
                 loadingError = error;
                 setScenery(null);
