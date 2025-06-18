@@ -159,6 +159,7 @@ const DefinedSigns = {
         "offsetY": -2.01096,
         "height": 1.4
     },
+    "w14": { alias: "w9" },
     "w15_p": {
         "name": "W15 Right",
         "icon": "w15_r.svg",
@@ -180,7 +181,11 @@ const DefinedSigns = {
         "name": "W17",
         "icon": "w17.svg"
     },
-    // TODO: make it somehow not conflict with unknown W1X signs
+    "w18": {
+        "name": "W18",
+        "icon": "w18.svg",
+        "offsetY": 3.89
+    },
     "w1": {
         "name": "W1",
         "icon": "w1.svg",
@@ -239,7 +244,6 @@ const DefinedSigns = {
         "textOffsetX": 1.89,
         "textOffsetY": 0.9
     },
-    "w14": { alias: "w9" },
     "w9": {
         "name": "W9",
         "icon": "w9.svg",
