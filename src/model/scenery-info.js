@@ -1,12 +1,16 @@
-export default class SceneryInfo {
+import SpecialObject from "./special-object";
+
+export default class SceneryInfo extends SpecialObject {
     name;
     version;
     description;
     link;
     author;
     main_signalbox;
+    type = "SceneryInfo";
 
     constructor(name, version, description, link, author, main_signalbox) {
+        super();
         Object.assign(this, {
             name,
             version,

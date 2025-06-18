@@ -1,5 +1,5 @@
 export default function SceneryInfoView({ scenery }) {
-    const sceneryInfo = scenery?.sceneryInfo;
+    const sceneryInfo = scenery?.getObject('special', 'SceneryInfo') || null;
 
     if(!sceneryInfo) {
         return <div className="scenery-info-view">No scenery information available.</div>;

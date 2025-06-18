@@ -11,6 +11,8 @@ import SignalBox from './signalbox';
 import Constants from '../helpers/constants';
 import SceneryInfo from './scenery-info';
 import Sign from './sign';
+import CameraHome from './camera-home';
+import MainCamera from './main-camera';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -25,7 +27,8 @@ export default class SceneryParser {
         lines.forEach((line, index) => {
             if(!line?.length) return; 
             if(index === 0) {
-                scenery.sceneryInfo = SceneryParser._parseSceneryInfo(line);
+                const sceneryInfo = SceneryParser._parseSceneryInfo(line);
+                if(sceneryInfo) scenery.addObject(sceneryInfo);
                 return;
             }
 
@@ -73,6 +76,10 @@ export default class SceneryParser {
                 return Route.fromText(text);
             case 'Misc':
                 return SceneryParser._parseMisc(text);
+            case 'CameraHome':
+                return CameraHome.fromText(text);
+            case 'MainCamera':
+                return MainCamera.fromText(text);
             case 'EndRoute':
             case 'MiscGroup':
             case 'EndMiscGroup':
@@ -82,8 +89,6 @@ export default class SceneryParser {
             case 'shv001':
             case 'WorldRotation':
             case 'WorldTranslation':
-            case 'CameraHome':
-            case 'MainCamera':
             case 'SSPRepeater':
             case 'SSPController':
             case 'TerrainGroup':

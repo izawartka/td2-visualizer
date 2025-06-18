@@ -2,7 +2,6 @@ import SceneryParserLog from './scenery-parser-log.js';
 
 export default class Scenery
 {
-    sceneryInfo = null; // SceneryInfo object
     objects = {};
     signalBoxes = [];
     spawnSignals = [];
@@ -23,12 +22,13 @@ export default class Scenery
     }
 
     addObject(object) {
-        const category = object.category || 'misc';
+        const category = object.category || 'unk';
         if(!this.objects[category]) {
             this.objects[category] = {};
         }
 
-        this.objects[category][object.id] = object;
+        const id = object.category === 'special' ? object.type : object.id;
+        this.objects[category][id] = object;
 
         if(object.getRenderBounds) {
             this._updateBounds(object.getRenderBounds());
