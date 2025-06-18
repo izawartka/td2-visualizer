@@ -86,6 +86,34 @@ const DefinedSigns = {
     "w11a_300m": {alias: "w11a_3"},
     "w11a_200m": {alias: "w11a_2"},
     "w11a_100m": {alias: "w11a_1"},
+    "w11b_4": {
+        "name": "W11b 400m",
+        "icon": "w11b_4.svg",
+        "offsetY": -3.3264,
+        "height": 1.5
+    },
+    "w11b_3": {
+        "name": "W11b 300m",
+        "icon": "w11b_3.svg",
+        "offsetY": -3.3264,
+        "height": 1.5
+    },
+    "w11b_2": {
+        "name": "W11b 200m",
+        "icon": "w11b_2.svg",
+        "offsetY": -3.3264,
+        "height": 1.5
+    },
+    "w11b_1": {
+        "name": "W11b 100m",
+        "icon": "w11b_1.svg",
+        "offsetY": -3.3264,
+        "height": 1.5
+    },
+    "w11b_400m": {alias: "w11b_4"},
+    "w11b_300m": {alias: "w11b_3"},
+    "w11b_200m": {alias: "w11b_2"},
+    "w11b_100m": {alias: "w11b_1"},
     "w11_4": {
         "name": "W11 400m",
         "icon": "w11_4.svg",
@@ -237,6 +265,11 @@ const DefinedSigns = {
     "d1": {
         "name": "D1",
         "icon": "d1.svg",
+        "offsetY": -1.4364,
+    },
+    "d0": {
+        "name": "D0",
+        "icon": "d0.svg",
         "offsetY": -1.4364,
     }
 };
