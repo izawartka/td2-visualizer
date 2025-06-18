@@ -3,7 +3,7 @@ const Constants = {
         zoomSensitivity: 0.002,
         trackSlopeScale: 10,
         trackMaxSpeedScale: 1.5,
-        pointerEvents: false
+        forcePointerEvents: false
     },
     parser: {
         forceAutoSwitches: false,
