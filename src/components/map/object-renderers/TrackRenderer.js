@@ -84,6 +84,9 @@ function getTrackColor(object, trackColorMode) {
     case "slope":
       return `url(#track-slope-${object.id})`;
     case "max-speed":
+      if(!object.maxspeed || !object.derailspeed) {
+        return "#f22";
+      }
       return `rgb(128, ${Math.min(255, Math.max(0, object.maxspeed * Constants.map.trackMaxSpeedScale))}, 128)`;
   }
 }

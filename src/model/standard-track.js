@@ -30,8 +30,8 @@ export default class StandardTrack extends Track
             ...Track.slopesFromText(values[14]), // start_slope, end_slope
             values[17], // id_isolation
             values[19], // prefab_name
-            parseFloat(values[20]), // maxspeed
-            parseFloat(values[21]) // derailspeed
+            parseFloat(values[20]) || 0, // maxspeed
+            parseFloat(values[21]) || 0 // derailspeed
         );
 
         return track;

@@ -44,8 +44,8 @@ export default class Switch extends SceneryObject {
             values[9], // data
             values[10], // id_isolation
             values[11], // id_switch
-            parseFloat(values[13]), // maxspeed
-            parseFloat(values[14]), // derailspeed
+            parseFloat(values[13]) || 0, // maxspeed
+            parseFloat(values[14]) || 0, // derailspeed
             values[15] // track_prefab_name
         );
 

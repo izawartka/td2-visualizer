@@ -40,8 +40,8 @@ export default class BezierTrack extends Track
             ...Track.slopesFromText(values[18]), // start_slope, end_slope
             values[21], // id_isolation
             values[23], // prefab_name
-            parseFloat(values[24]), // maxspeed
-            parseFloat(values[25]) // derailspeed
+            parseFloat(values[24]) || 0, // maxspeed
+            parseFloat(values[25]) || 0 // derailspeed
         );
 
         return track;

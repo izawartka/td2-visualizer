@@ -60,7 +60,7 @@ const ObjectRendererQueue = [
         'renderer': TrackObjectRenderer,
         'cond': (layers) => layers['track-objects'],
         'pointerEvents': true
-    },
+    }
 ]
 
 export default ObjectRendererQueue;
