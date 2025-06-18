@@ -55,7 +55,14 @@ export default class Scenery
             SceneryParserLog.warn('trackAliasAlreadyExists', `Track alias "${alias}" already exists for track "${this.trackAliases[alias]}". Cannot add alias for "${id}"`);
             return;
         }
+
+        const track = this.getObject('tracks', id);
+        if(!track) {
+            SceneryParserLog.warn('trackAliasNoTrack', `Cannot add alias "${alias}" for non-existing track "${id}"`);
+            return;
+        }
         
+        track.aliases.push(alias);
         this.trackAliases[alias] = id;
     }
 

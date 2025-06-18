@@ -1,4 +1,5 @@
 import Scenery from './scenery';
+import { tracksConnectionTest } from './tracks-connection-test';
 import Switch from './switch';
 import StandardTrack from './standard-track';
 import BezierTrack from './bezier-track';
@@ -39,6 +40,7 @@ export default class SceneryParser {
 
         scenery.applyObjects();
 
+        if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
         if(Constants.parser.logSceneryAfterFinished) console.log(scenery);
 
         return scenery;

@@ -10,7 +10,8 @@ const Constants = {
         logNewAutoSwitches: true,
         logSceneryAfterFinished: true,
         sceneryInfoVersion: 29,
-        alwaysShowLogDialog: false
+        alwaysShowLogDialog: false,
+        runTracksConnectionTest: false,
     },
     warnings: {
         all: false, // enable all warnings
@@ -20,6 +21,7 @@ const Constants = {
         unknownTrackType: true,
         signalWithoutSpawnInfo: true,
         trackAliasAlreadyExists: true,
+        trackAliasNoTrack: true,
         switchUndefinedModel: true,
         switchAutoDefFailed: true,
         switchInvalidDataFormat: true,
@@ -27,6 +29,7 @@ const Constants = {
         signalBoxUndefinedPrefabName: true,
         invalidSceneryInfoVersion: true,
         signUndefinedPrefabName: true,
+        tracksConnectionTest: true
     },
     errors: {
         invalidSceneryInfo: true

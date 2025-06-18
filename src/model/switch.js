@@ -86,12 +86,10 @@ export default class Switch extends SceneryObject {
 
         const trackAAliases = [ids[0][0], ids[2][0]];
         this.trackA = this._createSwitchTrackFromDef(scenery, this.id+"A", def[0], ids[0][1], ids[2][1], def[3], def[5], trackAAliases);
-        scenery.addObject(this.trackA);
 
-        const trackBAliases = [ids[0][0], ids[2][0]].filter(alias => trackAAliases.includes(alias) === false);
+        const trackBAliases = [ids[1][0], ids[3][0]].filter(alias => trackAAliases.includes(alias) === false);
         this.trackB = this._createSwitchTrackFromDef(scenery, this.id+"B", def[1], ids[1][1], ids[3][1], def[4], def[6], trackBAliases);
         this.trackB.hide_isolation = true; // hide isolation for the second track
-        scenery.addObject(this.trackB);
     }
 
     _getTrackIds(outs) {
@@ -132,6 +130,8 @@ export default class Switch extends SceneryObject {
             this.derailspeed
         );
 
+        trackObj.switch = this;
+        scenery.addObject(trackObj);
         aliases.forEach(alias => {
             scenery.addTrackAlias(id, alias);
         });

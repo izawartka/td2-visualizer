@@ -126,6 +126,10 @@ export default class Vector3 {
         return `${this.x};${this.y};${this.z}`;
     }
 
+    toString() {
+        return `(${this.x.toFixed(3)}, ${this.y.toFixed(3)}, ${this.z.toFixed(3)})`;
+    }
+
     toArray() {
         return [this.x, this.y, this.z];
     }
