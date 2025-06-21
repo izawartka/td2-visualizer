@@ -3,7 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    background-color: black;
+    background-color: #111;
 }
 
 .map svg path.track {

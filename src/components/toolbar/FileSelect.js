@@ -29,6 +29,7 @@ export default function FileSelect() {
             } catch (error) {
                 loadingError = error;
                 setScenery(null);
+                console.error(error);
             } 
 
             setIsLoading(false);

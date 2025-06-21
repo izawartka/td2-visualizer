@@ -33,6 +33,7 @@ export default class SceneryParser {
                 if(sceneryInfo) scenery.addObject(sceneryInfo);
                 return;
             }
+            if(!line?.length) return; 
 
             const object = SceneryParser._parseObject(line);
             if(!object) return; // skip null objects

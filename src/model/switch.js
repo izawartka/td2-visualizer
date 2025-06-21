@@ -83,11 +83,11 @@ export default class Switch extends SceneryObject {
         if(!ids) return;
         
         this.def = def;
-
-        const trackAAliases = [ids[0][0], ids[2][0]];
+        
+        const trackAAliases = Array.from(new Set([ids[0][0], ids[2][0]]));
         this.trackA = this._createSwitchTrackFromDef(scenery, this.id+"A", def[0], ids[0][1], ids[2][1], def[3], def[5], trackAAliases);
 
-        const trackBAliases = [ids[1][0], ids[3][0]].filter(alias => trackAAliases.includes(alias) === false);
+        const trackBAliases = Array.from(new Set([ids[1][0], ids[3][0]])).filter(alias => trackAAliases.includes(alias) === false);
         this.trackB = this._createSwitchTrackFromDef(scenery, this.id+"B", def[1], ids[1][1], ids[3][1], def[4], def[6], trackBAliases);
         this.trackB.hide_isolation = true; // hide isolation for the second track
     }
@@ -95,7 +95,7 @@ export default class Switch extends SceneryObject {
     _getTrackIds(outs) {
         const dataValues = this.data.split(",");
         const isCrossing = outs.length === 2;
-        if(isCrossing) outs = [outs[0], outs[0], outs[1], outs[1]];
+        if(isCrossing) outs = [outs[0], outs[1], outs[0], outs[1]];
 
         return outs.map((out, index) => {
             const parts = dataValues[out]?.split(":");
@@ -105,7 +105,7 @@ export default class Switch extends SceneryObject {
             }
             const trackId = parts[0].trim();
             let connectedId = parts[1].trim() || parts[2].trim() || null;
-            if(isCrossing) connectedId = parts[index % 2 + 1].trim();
+            if(isCrossing) connectedId = parts[~~(index / 2) + 1].trim();
 
             return [trackId, connectedId];
         });
