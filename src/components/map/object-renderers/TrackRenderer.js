@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
+import ElectrificationStatus from "../../../model/electrification-status";
 
 export default function TrackRenderer(props) {
   const { object } = props;
@@ -70,7 +71,18 @@ function getTrackColor(object, trackColorMode) {
     case "none":
     default:
       return object.prefab_name.includes('trans-mat') ? "#444" : "#aaa";
-
+    case "electrification":
+      switch(object.electrificationStatus) {
+        case ElectrificationStatus.NOT_CHECKED:
+          return "#aa4";
+        case ElectrificationStatus.NON_ELECTRIFIED:
+          return "#aaa";
+        case ElectrificationStatus.ELECTRIFIED:
+          return "#aaf";
+        case ElectrificationStatus.ERROR:
+        default:
+          return "#f44";
+      }
     case "type":
       switch (object.type) {
         case "StandardTrack":

@@ -12,6 +12,7 @@ const Constants = {
         sceneryInfoVersion: 29,
         alwaysShowLogDialog: false,
         runTracksConnectionTest: false,
+        maxRouteConnectionDistance: 0.2,
     },
     warnings: {
         all: false, // enable all warnings
@@ -29,7 +30,9 @@ const Constants = {
         signalBoxUndefinedPrefabName: true,
         invalidSceneryInfoVersion: true,
         signUndefinedPrefabName: true,
-        tracksConnectionTest: true
+        tracksConnectionTest: true,
+        nevpNotApplied: true,
+        electrificationConflict: true,
     },
     errors: {
         invalidSceneryInfo: true
@@ -85,6 +88,10 @@ const Constants = {
         {
             id: 'none',
             name: 'None',
+        },
+        {
+            id: 'electrification',
+            name: 'Electrification'
         },
         {
             id: 'type',

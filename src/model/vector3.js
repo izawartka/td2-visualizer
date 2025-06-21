@@ -118,6 +118,10 @@ export default class Vector3 {
         return Math.sqrt(this.distanceSq(other));
     }
 
+    mannhattanDistance(other) {
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
+    }
+
     clone() {
         return new Vector3(this.x, this.y, this.z);
     }

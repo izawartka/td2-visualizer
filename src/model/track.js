@@ -1,4 +1,5 @@
 import SceneryObject from "./scenery-object";
+import ElectrificationStatus from "./electrification-status";
 
 export default class Track extends SceneryObject {
     len;
@@ -17,6 +18,8 @@ export default class Track extends SceneryObject {
     hide_isolation = false;
     aliases = [];
     switch = null;
+    electrificationStatus = ElectrificationStatus.NOT_CHECKED;
+    hasNEVP = false;
 
     constructor(id, pos, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
         super(id, pos, rot);

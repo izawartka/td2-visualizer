@@ -14,6 +14,7 @@ import SceneryInfo from './scenery-info';
 import Sign from './sign';
 import CameraHome from './camera-home';
 import MainCamera from './main-camera';
+import ElectrificationResolver from './electrification-resolver';
 import NEVP from './nevp';
 
 /*
@@ -27,7 +28,6 @@ export default class SceneryParser {
         const scenery = new Scenery();
 
         lines.forEach((line, index) => {
-            if(!line?.length) return; 
             if(index === 0) {
                 const sceneryInfo = SceneryParser._parseSceneryInfo(line);
                 if(sceneryInfo) scenery.addObject(sceneryInfo);
@@ -41,6 +41,8 @@ export default class SceneryParser {
         });
 
         scenery.applyObjects();
+
+        ElectrificationResolver.resolveScenery(scenery);
 
         if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
         if(Constants.parser.logSceneryAfterFinished) console.log(scenery);
