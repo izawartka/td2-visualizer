@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
-import ElectrificationStatus from "../../../model/electrification-status";
+import { ElectrificationStatus } from "../../../model/electrification-status";
 
 export default function TrackRenderer(props) {
   const { object } = props;
@@ -79,7 +79,7 @@ function getTrackColor(object, trackColorMode) {
           return "#aaa";
         case ElectrificationStatus.ELECTRIFIED:
           return "#aaf";
-        case ElectrificationStatus.ERROR:
+        case ElectrificationStatus.CONFLICT:
         default:
           return "#f44";
       }

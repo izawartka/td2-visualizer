@@ -1,5 +1,5 @@
 import SceneryObject from "./scenery-object";
-import ElectrificationStatus from "./electrification-status";
+import { ElectrificationStatus } from "./electrification-status";
 
 export default class Track extends SceneryObject {
     len;

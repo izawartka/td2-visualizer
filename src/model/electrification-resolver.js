@@ -1,6 +1,6 @@
 import Constants from "../helpers/constants";
 import SceneryParserLog from "./scenery-parser-log";
-import ElectrificationStatus from "./electrification-status";
+import {ElectrificationStatus, ElectrificationResolutionStatus} from "./electrification-status";
 
 class RouteTrack {
     route;
@@ -13,18 +13,41 @@ class RouteTrack {
 }
 
 export default class ElectrificationResolver {
-    static resolveScenery(scenery) {
-        const routeTracks = this._findRouteTracks(scenery);
-        this._markNEVPTracks(scenery);
+    static hasWarnings = false;
 
-        routeTracks.forEach(routeTrack => {
-            this._propagate(
-                scenery, 
-                routeTrack.track, 
-                [], 
-                routeTrack.electrified ? ElectrificationStatus.ELECTRIFIED : ElectrificationStatus.NON_ELECTRIFIED
-            );
-        });
+    static resolveScenery(scenery) {
+        ElectrificationResolver.hasWarnings = false;
+
+        try {
+            const routeTracks = this._findRouteTracks(scenery);
+            this._markNEVPTracks(scenery);
+
+            routeTracks.forEach(routeTrack => {
+                this._propagate(
+                    scenery, 
+                    routeTrack.track, 
+                    [], 
+                    routeTrack.electrified ? ElectrificationStatus.ELECTRIFIED : ElectrificationStatus.NON_ELECTRIFIED
+                );
+            });
+        } catch (error) {
+            scenery.electrificationResolved = ElectrificationResolutionStatus.ERROR;
+            SceneryParserLog.warn('electrificationResolverError', `Error resolving electrification: ${error.message}`);
+            return;
+        }
+
+        if(ElectrificationResolver.hasWarnings) {
+            scenery.electrificationResolved = ElectrificationResolutionStatus.RESOLVED_WITH_WARNINGS;
+            SceneryParserLog.warn('electrificationResolverWarnings', 'Electrification resolution completed with warnings');
+            return;
+        }
+
+        scenery.electrificationResolved = ElectrificationResolutionStatus.RESOLVED;
+    }
+
+    static _passWarn(type, message) {
+        ElectrificationResolver.hasWarnings = true;
+        SceneryParserLog.warn(type, message);
     }
 
     static _checkTrackConnectedToRoute(track, routePoint) {
@@ -61,6 +84,13 @@ export default class ElectrificationResolver {
             });
         });
 
+        if(results.length < routePoints.length) {
+            ElectrificationResolver._passWarn(
+                'electrificationMissingRouteTracks', 
+                `While resolving electrification, found ${results.length} tracks connected to routes, but expected ${routePoints.length}`
+            );
+        }
+
         return results;
     }
 
@@ -69,7 +99,10 @@ export default class ElectrificationResolver {
             if(trackObject.type !== 'NEVP') return;
 
             if(!trackObject.track) {
-                SceneryParserLog.warn('nevpNotApplied', `NEVP object ${trackObject.id} at track ${trackObject.track_id} has not beed applied. Electrification resolution may fail`);
+                ElectrificationResolver._passWarn(
+                    'electrificationNevpNotApplied', 
+                    `NEVP object ${trackObject.id} at track ${trackObject.track_id} has not beed applied. Electrification resolution may fail`
+                );
                 return;
             }
 
@@ -91,8 +124,11 @@ export default class ElectrificationResolver {
             track.electrificationStatus = ElectrificationStatus.NON_ELECTRIFIED;
             if(!fse) return;
         } else if ((tse && fsne) || (tsne && fse)) {
-            track.electrificationStatus = ElectrificationStatus.ERROR;
-            SceneryParserLog.warn('electrificationConflict', `Track ${track.id} has conflicting electrification status`);
+            track.electrificationStatus = ElectrificationStatus.CONFLICT;
+            ElectrificationResolver._passWarn(
+                'electrificationConflict', 
+                `Track ${track.id} has conflicting electrification status`
+            );
             return;
         }
 

@@ -1,3 +1,4 @@
+import { ElectrificationResolutionStatus } from './electrification-status.js';
 import SceneryParserLog from './scenery-parser-log.js';
 
 export default class Scenery
@@ -7,6 +8,7 @@ export default class Scenery
     spawnSignals = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
     trackAliases = {};
+    electrificationResolved = ElectrificationResolutionStatus.NOT_RESOLVED;
     static nextMiscId = 1;
 
     getBounds () {

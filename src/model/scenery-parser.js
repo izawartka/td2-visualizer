@@ -42,8 +42,7 @@ export default class SceneryParser {
 
         scenery.applyObjects();
 
-        ElectrificationResolver.resolveScenery(scenery);
-
+        if(Constants.parser.resolveElectrification) ElectrificationResolver.resolveScenery(scenery);
         if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
         if(Constants.parser.logSceneryAfterFinished) console.log(scenery);
 
