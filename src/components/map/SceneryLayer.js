@@ -5,7 +5,7 @@ import Constants from "../../helpers/constants";
 
 export default function SceneryLayer(props) {
     const { queueItem } = props;
-    const { name, category, type, types, cond, renderer: Renderer } = queueItem;
+    const { name, category, type, types, cond, renderer: Renderer, additionalComponents: AdditionalComponents } = queueItem;
     const { scenery } = useContext(MainContext);
     const { layers } = useContext(SettingsContext);
     
@@ -29,6 +29,7 @@ export default function SceneryLayer(props) {
             type={type}
             types={types}
             pointerEvents={pointerEvents}
+            AdditionalComponents={AdditionalComponents}
         />
     );
 }
@@ -36,7 +37,7 @@ export default function SceneryLayer(props) {
 const MemoizedSceneryLayer = memo(StatelessSceneryLayer);
 
 
-function StatelessSceneryLayer({ name, Renderer, objects, type, types, pointerEvents = false }) {
+function StatelessSceneryLayer({ name, Renderer, objects, type, types, pointerEvents = false, AdditionalComponents = [] }) {
     return (
         <g 
             className={`scenery-layer-${name}`}
@@ -47,6 +48,9 @@ function StatelessSceneryLayer({ name, Renderer, objects, type, types, pointerEv
                 if (types !== undefined && !types.includes(obj.type)) return null;
                 return <Renderer key={`${name}-${obj.id}`} object={obj} />;
             })}
+            { AdditionalComponents.map((Component, index) => (
+                <Component key={`${name}-additional-${index}`} />
+            ))}
         </g>
     );
 }
