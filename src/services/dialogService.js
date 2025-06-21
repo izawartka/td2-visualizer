@@ -6,7 +6,9 @@ export const dialogsObservable = dialogs$;
 
 function addDialog(dialog) {
   const current = dialogs$.getValue();
-  dialogs$.next([...current, dialog]);
+
+  if(dialog.options?.atBack === true) dialogs$.next([dialog, ...current]);
+  else dialogs$.next([...current, dialog]);
 }
 
 export function removeDialog() {
@@ -16,15 +18,16 @@ export function removeDialog() {
   }
 }
 
-export function showDialog(message, buttons = [{ text: 'Ok', onClick: () => {}, autoFocus: true, bgClick: true }]) {
+export function showDialog(message, buttons = null, options = null) {
   if (!message) return;
+  if (!buttons) buttons = [{ text: 'Ok', onClick: () => {}, autoFocus: true, bgClick: true }];
   buttons = buttons.map(btn => ({
     onClick: btn.onClick || (() => {}),
     text: btn.text,
     autoFocus: btn.autoFocus,
     bgClick: btn.bgClick
   }));
-  addDialog({ message, buttons });
+  addDialog({ message, buttons, options });
 }
 
 export function showCustomDialog(component) {
