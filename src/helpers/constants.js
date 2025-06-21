@@ -66,6 +66,11 @@ const Constants = {
             default: true,
         },
         {
+            id: 'nevps',
+            name: 'No Electric Vehicles Points',
+            default: true,
+        },
+        {
             id: 'signalboxes',
             name: 'Signal boxes',
             default: true,

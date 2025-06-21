@@ -6,6 +6,7 @@ import SignalRenderer from './object-renderers/SignalRenderer';
 import RouteRenderer from './object-renderers/RouteRenderer';
 import SignalBoxRenderer from './object-renderers/SignalBoxRenderer';
 import SignRenderer from './object-renderers/SignRenderer';
+import NEVPRenderer from './object-renderers/NEVPRenderer';
 
 const ObjectRendererQueue = [
     {
@@ -33,6 +34,13 @@ const ObjectRendererQueue = [
         'type': 'Sign',
         'renderer': SignRenderer,
         'cond': (layers) => layers['signs']
+    },
+    {
+        'name': 'nevps',
+        'category': 'track-objects',
+        'type': 'NEVP',
+        'renderer': NEVPRenderer,
+        'cond': (layers) => layers['nevps']
     },
     {
         'name': 'signals',

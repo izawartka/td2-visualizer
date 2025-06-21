@@ -70,3 +70,11 @@
 .map svg g.sign path {
     fill: #eee;
 }
+
+.map svg g.nevp path {
+    fill: #eee;
+}
+
+.map svg g.nevp path.background {
+    fill: #111;
+}

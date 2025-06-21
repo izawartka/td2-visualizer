@@ -14,6 +14,7 @@ import SceneryInfo from './scenery-info';
 import Sign from './sign';
 import CameraHome from './camera-home';
 import MainCamera from './main-camera';
+import NEVP from './nevp';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -120,6 +121,8 @@ export default class SceneryParser {
             return Sign.fromText(text);
         } else if(Signal.isSignal(text)) {
             return Signal.fromText(text);
+        } else if(NEVP.isNEVP(text)) {
+            return NEVP.fromText(text);
         } else {
             return TrackObject.fromText(text);
         }
