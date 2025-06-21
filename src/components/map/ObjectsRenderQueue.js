@@ -7,12 +7,16 @@ import RouteRenderer from './object-renderers/RouteRenderer';
 import SignalBoxRenderer from './object-renderers/SignalBoxRenderer';
 import SignRenderer from './object-renderers/SignRenderer';
 import NEVPRenderer from './object-renderers/NEVPRenderer';
+import ElectrificationStatusPopup from './additional-layer-components/ElectrificationStatusPopup';
 
 const ObjectRendererQueue = [
     {
         'name': 'tracks',
         'category': 'tracks',
         'renderer': TrackRenderer,
+        'additionalComponents': [
+            ElectrificationStatusPopup
+        ],
         'cond': (layers) => layers['tracks']
     },
     {
