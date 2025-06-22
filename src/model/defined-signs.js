@@ -186,6 +186,16 @@ const DefinedSigns = {
         "icon": "w18.svg",
         "offsetY": 3.89
     },
+    "w19": {
+        "name": "W19",
+        "icon": "w19.svg",
+        "offsetY": 3.89
+    },
+    "w20": {
+        "name": "W20",
+        "icon": "w20.svg",
+        "offsetY": 3.89
+    },
     "w1": {
         "name": "W1",
         "icon": "w1.svg",
