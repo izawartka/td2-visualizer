@@ -44,7 +44,7 @@ const DefinedSignalBoxes = {
     "SignalBoxSwKatarzyna": {},
     "SignalBoxPrzyworyOpolskie2": {},
     "SignalBox_lka_nastawnia_leczyca": {
-        rot: 1
+        rot: 1 // 2?
     },
     "SignalBoxZdroje": {
         rot: 3
@@ -52,7 +52,34 @@ const DefinedSignalBoxes = {
     "SignalBoxRegalica": {},
     "SignalBoxOzorkow": {
         rot: 1
-    }
+    },
+    "SignalBox_dworzec_Uhrusk": {},
+    "SignalBox_nastawnia_lublinek_lb_v2": {},
+    "SignalBox_nastawnia_lublinek_lb_v3": {},
+    "SignalBox_nastawnia_grodzisk": {
+        rot: 1
+    },
+    "SignalBox_nastawnia_zyrardow": {
+        rot: 3
+    },
+    "SignalBox_nastawnia_pruszkow": {},
+    "SignalBox_nastawnia_psz": {
+        rot: 1
+    },
+    "SignalBoxJarocin": {
+        rot: 1
+    },
+    "SignalBoxJaworzno_e": {
+        rot: 1
+    },
+    "SignalBoxOlawa": {
+        rot: 2
+    },
+    "SignalBoxPawlowice_e": {},
+    "SignalBoxPrzyworyOpolskie": {},
+    "SignalBoxSiechnice_m": {},
+    "SignalBoxTurzyn": {},
+
 }
 
 export default DefinedSignalBoxes;

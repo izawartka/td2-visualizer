@@ -1,6 +1,15 @@
 import Vector3 from "./vector3";
 
 const DefinedSwitches = {
+    "Crossing": [
+        0,
+        0,
+        [0,1],
+        new Vector3(-0.919, 0, -16.59),
+        new Vector3(0.919, 0, -16.59),
+        new Vector3(0.919, 0, 16.59),
+        new Vector3(-0.919, 0, 16.59)
+    ],
     "Crossing4.444": [
         0,
         0,
