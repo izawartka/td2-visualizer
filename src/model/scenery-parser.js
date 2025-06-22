@@ -16,6 +16,7 @@ import CameraHome from './camera-home';
 import MainCamera from './main-camera';
 import ElectrificationResolver from './electrification-resolver';
 import NEVP from './nevp';
+import Derailer from './derailer';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -123,6 +124,8 @@ export default class SceneryParser {
             return Sign.fromText(text);
         } else if(Signal.isSignal(text)) {
             return Signal.fromText(text);
+        } else if(Derailer.isDerailer(text)) {
+            return Derailer.fromText(text);
         } else if(NEVP.isNEVP(text)) {
             return NEVP.fromText(text);
         } else {

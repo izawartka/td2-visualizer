@@ -7,6 +7,7 @@ import RouteRenderer from './object-renderers/RouteRenderer';
 import SignalBoxRenderer from './object-renderers/SignalBoxRenderer';
 import SignRenderer from './object-renderers/SignRenderer';
 import NEVPRenderer from './object-renderers/NEVPRenderer';
+import DerailerRenderer from './object-renderers/DerailerRenderer';
 import ElectrificationStatusPopup from './additional-layer-components/ElectrificationStatusPopup';
 
 const ObjectRendererQueue = [
@@ -31,6 +32,13 @@ const ObjectRendererQueue = [
         'type': 'Switch',
         'renderer': SwitchNameRenderer,
         'cond': (layers) => layers['switches-names']
+    },
+    {
+        'name': 'derailers',
+        'category': 'track-objects',
+        'type': 'Derailer',
+        'renderer': DerailerRenderer,
+        'cond': (layers) => layers['derailers']
     },
     {
         'name': 'signs',

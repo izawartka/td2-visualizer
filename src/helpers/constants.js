@@ -68,6 +68,11 @@ const Constants = {
             default: true,
         },
         {
+            id: 'derailers',
+            name: 'Derailers',
+            default: true,
+        },
+        {
             id: 'signs',
             name: 'Signs',
             default: true,

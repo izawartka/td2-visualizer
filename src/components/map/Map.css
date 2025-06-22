@@ -78,3 +78,7 @@
 .map svg g.nevp path.background {
     fill: #111;
 }
+
+.map svg g.derailer path {
+    fill: #eee;
+}
