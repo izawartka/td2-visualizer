@@ -23,7 +23,7 @@ export default function DerailerRenderer(props) {
                     }}
                 />
             </g>
-            <g transform={`translate(0, -2) rotate(${upsideDownRot})`}>
+            <g transform={`translate(0, -3) rotate(${upsideDownRot})`}>
                 <text x="0" y="0" textAnchor={anchor} dominantBaseline="middle">
                     {object.getPrintableDerailerName()}
                 </text>
