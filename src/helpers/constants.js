@@ -21,7 +21,7 @@ const Constants = {
         switchInvalidTrackConnection: true,
         unknownObjectType: true,
         unknownTrackType: true,
-        signalWithoutSpawnInfo: true,
+        spawnWithoutSpawnInfo: true,
         trackAliasAlreadyExists: true,
         trackAliasNoTrack: true,
         switchUndefinedModel: true,
@@ -50,7 +50,7 @@ const Constants = {
         {
             id: 'switches-names',
             name: 'Switches names',
-            default: true,
+            default: false,
         },
         {
             id: 'isolations-ids',
@@ -65,6 +65,11 @@ const Constants = {
         {
             id: 'signals',
             name: 'Signals',
+            default: true,
+        },
+        {
+            id: 'spawn-points',
+            name: 'SpawnPoints',
             default: true,
         },
         {

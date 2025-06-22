@@ -5,7 +5,7 @@ export default class Scenery
 {
     objects = {};
     signalBoxes = [];
-    spawnSignals = [];
+    spawnPoints = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
     trackAliases = {};
     electrificationResolved = ElectrificationResolutionStatus.NOT_RESOLVED;
@@ -19,8 +19,8 @@ export default class Scenery
         this.signalBoxes.push(signalBox);
     }
 
-    addSpawnSignal(signal) {
-        this.spawnSignals.push(signal);
+    addSpawnPoint(trackObject) {
+        this.spawnPoints.push(trackObject);
     }
 
     addObject(object) {

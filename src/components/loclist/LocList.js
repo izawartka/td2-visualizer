@@ -17,16 +17,17 @@ export default function LocList(props) {
         });
     }, [scenery?.signalBoxes]);
 
-    const spawnSignals = useMemo(() => {
-        if (!scenery?.spawnSignals) return null;
-        return scenery.spawnSignals.map(signal => {
-            const pos = signal.pos.toSVGCoords();
-            const name = signal.spawn_info.name || signal.getPrintableSignalName();
+    const spawnPoints = useMemo(() => {
+        if (!scenery?.spawnPoints) return null;
+        return scenery.spawnPoints.map(trackObject => {
+            const pos = trackObject.pos.toSVGCoords();
+            const isSignal = trackObject.type === 'Signal';
+            const name = trackObject.spawn_info.name || (isSignal ? trackObject.getPrintableSignalName() : trackObject.getPrintableSpawnPointName());
             return (
-                <ClickableLocation name={name} pos={pos} key={signal.id} />
+                <ClickableLocation name={name} pos={pos} key={trackObject.id} />
             )
         });
-    }, [scenery?.spawnSignals]);
+    }, [scenery?.spawnPoints]);
 
     return (
         <div className="loclist">
@@ -34,7 +35,7 @@ export default function LocList(props) {
                 { signalBoxes }
             </div>
             <div className="loclist-section">
-                { spawnSignals }
+                { spawnPoints }
             </div>
         </div>
     );

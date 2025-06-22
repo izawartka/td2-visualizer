@@ -3,11 +3,11 @@ import SpawnInfo from "./spawn-info";
 import TrackObject from "./track-object";
 import Vector3 from "./vector3";
 
-export default class Signal extends TrackObject {
+export default class SpawnPoint extends TrackObject {
     is_spawn;
     spawn_info;
-    signal_name;
-    type = "Signal";
+    spawn_point_name;
+    type = "SpawnPoint";
     applied = false;
 
     constructor(id, prefab_name, pos, rot, track_id, name, is_spawn, spawn_info, signal_name) {
@@ -15,58 +15,37 @@ export default class Signal extends TrackObject {
 
         Object.assign(this, {
             is_spawn,
-            spawn_info: is_spawn ? spawn_info : null,
+            spawn_info,
             signal_name
         });
 
         if (this.is_spawn && !this.spawn_info) {
-            SceneryParserLog.warn('spawnWithoutSpawnInfo', `Signal ${this.id} is marked as spawn but has no spawn info`);
+            SceneryParserLog.warn('spawnWithoutSpawnInfo', `SpawnPoint ${this.id} is marked as spawn but has no spawn info`);
         }
     }
 
-    getPrintableSignalName() {
-        let name = this.signal_name?.trim();
-        if (!name) return this.name;
-
-        // remove any <size=...>, [size=...], </size> or [/size] tags
-        name = name.replace(/[<[]size=[^>\]]*[\]>]/g, '')?.trim();
-
-        // remove any leading '<' or '[' tags and their content
-        while(name?.match(/^[<[]/)) {
-            name = name.replace(/^[<[][^>\]]*[\]>]/, '')?.trim();
-        }
-
-        // remove everything after the first '[' or '<' character (inclusive)
-        const match = name.match(/^[^<[]*/);
-        if (match) {
-            name = match[0]?.trim();
-        }
-
-        return name || this.name || "Signal";
+    getPrintableSpawnPointName() {
+        return this.spawn_point_name?.trim() || this.name?.trim() || "Spawn Point";
     }
 
     /*
-    Check if a TrackObject text is a Signal.
+    Check if a TrackObject text is a SpawnPoint.
     @param {string} text - The text representation of the TrackObject.
-    @returns {boolean} - Returns true if the text represents a Signal, false otherwise.
+    @returns {boolean} - Returns true if the text represents a SpawnPoint, false otherwise.
     @static
     @memberof Signal
     */
-    static isSignal(text) {
+    static isSpawnPoint(text) {
         const values = text.split(";");
         if(values.length < 29) return false;
         
-        const prefabInfo = values[2].split(",");
-        const regex = /^(?:sk\d+.*|tmk|tok.*|tzk.*)$/;
-        if(regex.test(prefabInfo[0])) return true; // mechanical signals
-        if(prefabInfo.length < 2) return false;
-
-        return true;
+        const prefabName = values[2];
+        return prefabName === "Spawn Point";
     }
 
     static fromText(text) {        
         const values = text.split(";");
-        const signal = new Signal(
+        const signal = new SpawnPoint(
             values[1], // id
             values[2], // prefab_name
             Vector3.fromValuesArray(values, 3), // pos

@@ -82,3 +82,11 @@
 .map svg g.derailer path {
     fill: #eee;
 }
+
+.map svg g.spawn-point path {
+    fill: #eee;
+}
+
+.map svg g.spawn-point path.background {
+    fill: #111;
+}

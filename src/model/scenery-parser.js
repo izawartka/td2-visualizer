@@ -17,6 +17,7 @@ import MainCamera from './main-camera';
 import ElectrificationResolver from './electrification-resolver';
 import NEVP from './nevp';
 import Derailer from './derailer';
+import SpawnPoint from './spawn-point';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -129,6 +130,8 @@ export default class SceneryParser {
             return Derailer.fromText(text);
         } else if(NEVP.isNEVP(text)) {
             return NEVP.fromText(text);
+        } else if(SpawnPoint.isSpawnPoint(text)) {
+            return SpawnPoint.fromText(text);
         } else {
             return TrackObject.fromText(text);
         }

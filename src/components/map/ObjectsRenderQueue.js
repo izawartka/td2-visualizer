@@ -9,6 +9,7 @@ import SignRenderer from './object-renderers/SignRenderer';
 import NEVPRenderer from './object-renderers/NEVPRenderer';
 import DerailerRenderer from './object-renderers/DerailerRenderer';
 import ElectrificationStatusPopup from './additional-layer-components/ElectrificationStatusPopup';
+import SpawnPointRenderer from './object-renderers/SpawnPointRenderer';
 
 const ObjectRendererQueue = [
     {
@@ -60,6 +61,13 @@ const ObjectRendererQueue = [
         'type': 'Signal',
         'renderer': SignalRenderer,
         'cond': (layers) => layers['signals']
+    },
+    {
+        'name': 'spawn-points',
+        'category': 'track-objects',
+        'type': 'SpawnPoint',
+        'renderer': SpawnPointRenderer,
+        'cond': (layers) => layers['spawn-points'],
     },
     {
         'name': 'signalboxes',
