@@ -99,6 +99,7 @@ export default class SceneryParser {
             case 'SSPController':
             case 'TerrainGroup':
             case 'EndTerrainGroup':
+            case '':
                 return null;
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);

@@ -12,7 +12,7 @@ export default function SignalBoxRenderer(props) {
   const upsideDownRot = upsideDown ? 180 : 0;
 
   return (
-    <g className="signalbox" transform={`translate(${x}, ${y}) rotate(${rot}) `}>
+    <g className="signalbox" transform={`translate(${x}, ${y}) rotate(${rot})`}>
       <g className="signalbox-icon" transform={`translate(-4.725, -4.725)`}>
           <ReactSVG
               src={`${process.env.PUBLIC_URL}/assets/signalboxes/${object.def.icon}`}

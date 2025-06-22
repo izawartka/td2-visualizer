@@ -43,7 +43,7 @@ export default class Sign extends TrackObject {
         const values = text.split(";");
         
         const prefabName = values[2]?.trim() || "";
-        const regex = /^(?!.*,)(?:.*_)?(?:sign_.*|w\d+.*)$/;
+        const regex = /^(?!.*,)(?:.*_)?(?:sign_.*|[wdz]\d+.*)$/;
         return regex.test(prefabName);
     }
 

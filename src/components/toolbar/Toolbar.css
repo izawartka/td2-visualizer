@@ -29,7 +29,7 @@
 .loading-indicator {
     height: fit-content;
     padding: 4px 8px;
-    color: white;
+    color: #141414;
     text-align: center;
     opacity: 0;
     transition: opacity 1s ease-in-out;

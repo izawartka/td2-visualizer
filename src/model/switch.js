@@ -83,7 +83,7 @@ export default class Switch extends SceneryObject {
         if(!ids) return;
         
         this.def = def;
-        
+
         const trackAAliases = Array.from(new Set([ids[0][0], ids[2][0]]));
         this.trackA = this._createSwitchTrackFromDef(scenery, this.id+"A", def[0], ids[0][1], ids[2][1], def[3], def[5], trackAAliases);
 
@@ -199,9 +199,9 @@ export default class Switch extends SceneryObject {
         const bareModel = (model.split(',')[0] || model).trim();
         if(/Rkp|Crossing/.test(bareModel)) return [0, 0];
         const right = bareModel.at(-1) === "R";
-        const [prefix, rText] = bareModel.split("-");
+        const [prefix, rText, rldsR2Text] = bareModel.split("-");
         const r = parseFloat(rText) || 0;
-        const [r1, r2] = rText.split('_').map(value => parseFloat(value || 0));
+        const [r1, r2] = rText.split('_').map(value => parseFloat(value) || 0);
 
         switch(prefix) {
             case 'Rz 60E1':
@@ -209,7 +209,8 @@ export default class Switch extends SceneryObject {
             case 'Rld 60E1':
                 return right ? [r1, -r2] : [-r1, r2];
             case 'Rlds 60E1':
-                return [-r1, r2];
+                const rldsR2 = parseFloat(rldsR2Text) || 0;
+                return [-r1, rldsR2];
             case 'Rlj 60E1':
                 return right ? [-r1, -r2] : [r1, r2];
             default:

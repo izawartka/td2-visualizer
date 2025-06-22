@@ -34,7 +34,7 @@ const DefinedSigns = {
         "name": "W28",
         "icon": "w28.svg",
         "offsetY": -1.4364,
-        "text": "fun",
+        "text": ["fun", "data"],
         "textFun": (object) => {
             const channel = object.prefab_name?.match(/^(?:sign_)?w28_(\d+)/)?.[1];
             return channel ? `R${channel}` : null;

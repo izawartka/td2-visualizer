@@ -11,7 +11,7 @@ export default function SignalRenderer(props) {
     const anchor = upsideDown ? "end" : "start";
 
     return (
-        <g className="signal" transform={`translate(${x}, ${y}) rotate(${object.rot.y}) `}>
+        <g className="signal" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
             <g className="signal-icon" transform={`translate(-1.89, -1.89)`}>
                 <ReactSVG
                     src={`${process.env.PUBLIC_URL}/assets/signal.svg`}
