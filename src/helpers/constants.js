@@ -41,6 +41,11 @@ const Constants = {
     errors: {
         invalidSceneryInfo: true
     },
+    sceneryFiles: {
+        fetchDisable: false,
+        fetchBaseUrl: `${process.env.PUBLIC_URL}/sceneries/`,
+        fetchListUrl: `${process.env.PUBLIC_URL}/sceneries/sceneries.json`,
+    },
     layers: [
         {
             id: 'tracks',

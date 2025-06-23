@@ -3,7 +3,7 @@ import MainContext from "../../contexts/MainContext";
 import { useZoomPanEmitter } from "../../hooks/useZoomPubSub";
 import SceneryFilesHelper from "../../helpers/sceneryFilesHelper";
 
-export default function FileSelect() {
+export default function CustomFileSelect() {
     const {setScenery, setIsLoading} = useContext(MainContext);
     const { center } = useZoomPanEmitter();
 
@@ -18,8 +18,8 @@ export default function FileSelect() {
     };
 
     return (
-        <div className='file-select'>
-            <input type='file' id='file-input' onChange={handleFileChange} />
+        <div className='custom-file-select'>
+            <input type='file' id='custom-file-input' onChange={handleFileChange} />
         </div>
     );
 }
