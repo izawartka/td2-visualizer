@@ -118,7 +118,7 @@ function getTrackColor(object, trackColorMode) {
       return `url(#track-slope-${object.id})`;
 
     case "max-speed":
-      if(!object.maxspeed || !object.derailspeed) {
+      if(!object.maxspeed) {
         return modeDef.options['derail'][0];
       }
       return MiscHelper.getTrackGradient(modeDef.gradient, object.maxspeed);
