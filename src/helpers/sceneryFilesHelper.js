@@ -1,22 +1,18 @@
 import Constants from "./constants";
 import SceneryParser from "../model/scenery-parser";
 import SceneryParserLog from "../model/scenery-parser-log";
-import { showCustomDialog } from "../services/dialogService";
+import { showCustomDialog, showDialog } from "../services/dialogService";
 import SceneryLoadedDialog from "../components/scenery-loaded-dialog/SceneryLoadedDialog";
 
 export default class SceneryFilesHelper {
     static async fetch(url, toJson) {
-        try {
-            const response = await fetch(url);
+        const response = await fetch(url);
             
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return toJson ? await response.json() : await response.blob();
-        } catch (error) {
-            console.error(`Failed to fetch from ${url}:`, error);
-            throw error;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        return toJson ? await response.json() : await response.blob();
     }
 
     static async getList() {
@@ -24,7 +20,7 @@ export default class SceneryFilesHelper {
             const url = Constants.sceneryFiles.fetchListUrl;
             return await this.fetch(url, true);
         } catch(error) {
-            console.error(`Failed to fetch sceneries list`);
+            console.error(`Failed to fetch sceneries list`, error);
             return null;
         }
     }
@@ -35,7 +31,18 @@ export default class SceneryFilesHelper {
     }
 
     static async load(name, centerFn = null) {
-        const file = await this.getScenery(name);
+        let file;
+        try {
+            file = await this.getScenery(name);
+        } catch (error) {
+            console.error(`Failed to load scenery file ${name}`, error);
+            showDialog(<>
+                Failed to download scenery file<br />
+                {error.message}
+            </>);
+            return null;
+        }
+
         return await this.loadCustom(file, centerFn);
     }
 
