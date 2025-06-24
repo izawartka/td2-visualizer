@@ -2,10 +2,11 @@ import { useContext, useState, useEffect } from 'react';
 import MainContext from '../../contexts/MainContext';
 import { useZoomPanEmitter } from '../../hooks/useZoomPubSub';
 import SceneryFilesHelper from '../../helpers/sceneryFilesHelper';
+import { setSceneriesListVersionDate } from '../../services/sceneriesListService';
 
 export default function SceneriesList(props) {
     const {setScenery, setIsLoading} = useContext(MainContext);
-    const [ sceneryNames, setSceneryNames ] = useState(null);
+    const [ sceneriesListData, setSceneriesListData ] = useState(null);
     const { center } = useZoomPanEmitter();
 
     const handleSelectChange = async (event) => {
@@ -19,7 +20,8 @@ export default function SceneriesList(props) {
 
     const updateSceneryList = async () => {
         const sceneries = await SceneryFilesHelper.getList();
-        setSceneryNames(sceneries);
+        setSceneriesListData(sceneries);
+        setSceneriesListVersionDate(sceneries?.info?.versionDate || null);
     };
 
     useEffect(() => {
@@ -30,7 +32,7 @@ export default function SceneriesList(props) {
         <div className='sceneries-list'>
             <select onChange={handleSelectChange} defaultValue="">
                 <option value="" disabled>Select a scenery</option>
-                {Array.isArray(sceneryNames) && sceneryNames.map((name) => (
+                {Array.isArray(sceneriesListData?.list) && sceneriesListData.list.map((name) => (
                     <SceneriesListOption key={name} name={name} />
                 ))}
             </select>
