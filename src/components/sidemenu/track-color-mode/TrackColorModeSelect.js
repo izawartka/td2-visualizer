@@ -1,9 +1,7 @@
-import { useContext } from "react";
-import SettingsContext from "../../contexts/SettingsContext";
-import Constants from "../../helpers/constants";
+import Constants from "../../../helpers/constants";
 
-export default function SelTrackColorMode(props) {
-    const { trackColorMode, setTrackColorMode } = useContext(SettingsContext);
+export default function TrackColorModeSelect(props) {
+    const { trackColorMode, setTrackColorMode } = props;
 
     const handleColorModeChange = (event) => {
         setTrackColorMode(event.target.value);
@@ -17,9 +15,9 @@ export default function SelTrackColorMode(props) {
                 value={trackColorMode}
                 onChange={handleColorModeChange}
             >
-                {Constants.trackColorModes.map((mode) => (
-                    <option key={mode.id} value={mode.id}>
-                        {mode.name}
+                { Object.entries(Constants.trackColorModes).map(([id, modeDef]) => (
+                    <option key={id} value={id}>
+                        {modeDef.name}
                     </option>
                 ))}
             </select>

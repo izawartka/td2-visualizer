@@ -4,7 +4,7 @@ import Constants from "../helpers/constants";
 
 export default function SettingsManager(props) {
     const [ layers, setLayers ] = useState([]);
-    const [ trackColorMode, setTrackColorMode ] = useState(Constants.trackColorModes[0].id);
+    const [ trackColorMode, setTrackColorMode ] = useState(Constants.trackColorModeDefault);
     const [ settingsLoaded, setSettingsLoaded ] = useState(false);
 
     const loadLayersSettings = useCallback(() => {

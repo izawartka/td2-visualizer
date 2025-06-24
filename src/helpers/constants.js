@@ -2,8 +2,6 @@ const Constants = {
     buildVersion: '1.1.0',
     map: {
         zoomSensitivity: 0.002,
-        trackSlopeScale: 10,
-        trackMaxSpeedScale: 1.5,
         forcePointerEvents: false
     },
     parser: {
@@ -43,7 +41,6 @@ const Constants = {
         invalidSceneryInfo: true
     },
     sceneryFiles: {
-        fetchDisable: false,
         fetchDisable: true,
         fetchBaseUrl: `${process.env.PUBLIC_URL}/sceneries/`,
         fetchListUrl: `${process.env.PUBLIC_URL}/sceneries/sceneries.json`,
@@ -105,28 +102,60 @@ const Constants = {
             default: true,
         }
     ],
-    trackColorModes: [
-        {
-            id: 'none',
-            name: 'None',
+    trackColorModeDefault: 'standard',
+    trackColorModes: {
+        'standard': {
+            name: 'Standard',
+            optionDefault: 'default',
+            options: {
+                'default': ['#aaa', 'Standard track'],
+                'invisible': ['#444', 'Invisible track'],
+            }
         },
-        {
-            id: 'electrification',
-            name: 'Electrification'
+        'electrification': {
+            name: 'Electrification',
+            optionDefault: 'conflict',
+            options: {
+                'electrified': ['#aaf', 'Electrified'],
+                'non-electrified': ['#aaa', 'Non electrified'],
+                'not-checked': ['#aa4', 'Not checked'],
+                'conflict': ['#f44', 'Error / Conflict'],
+            }
         },
-        {
-            id: 'type',
+        'type': {
             name: 'Type',
+            optionDefault: 'standard-track',
+            options: {
+                'standard-track': ['#00a', 'Standard track'],
+                'point-track': ['#0a0', 'Switch track'],
+                'bezier-track': ['#aa8', 'Bezier track'],
+            }
         },
-        {
-            id: 'slope',
-            name: 'Slope'
+        'slope': {
+            name: 'Slope',
+            gradient: {
+                base: [128, 0, 128],
+                diff: [0, 25.6, 0],
+                legendMin: 0,
+                legendMax: 10,
+                unit: '‰',
+            }
         },
-        {
-            id: 'max-speed',
-            name: 'Max speed'
+        'max-speed': {
+            name: 'Max speed',
+            type: 'gradient',
+            gradient: {
+                base: [128, 0, 128],
+                diff: [0, 1.5, 0],
+                legendMin: 0,
+                legendMax: 170,
+                unit: 'km/h',
+            },
+            options: {
+                'derail': ['#f22', 'Derail track'],
+            }
         }
-    ]
+    }
 };
 
 export default Constants;

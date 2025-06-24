@@ -2,7 +2,7 @@ import {useContext} from 'react';
 import MainContext from '../../contexts/MainContext';
 import './SideMenu.css';
 import LayersMenu from './LayersMenu';
-import SelTrackColorMode from './SelTrackColorMode';
+import TrackColorMode from './track-color-mode/TrackColorMode';
 import SceneryInfoButton from './SceneryInfoButton';
 import DistanceMeterButton from './DistanceMeterButton';
 import InfoFooter from './InfoFooter';
@@ -18,7 +18,7 @@ export default function SideMenu() {
                 <SceneryInfoButton />
                 <DistanceMeterButton />
                 <LayersMenu />
-                <SelTrackColorMode />
+                <TrackColorMode />
                 <InfoFooter />
             </div>
         </div>

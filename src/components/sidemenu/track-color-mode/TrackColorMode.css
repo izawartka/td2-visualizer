@@ -1,0 +1,48 @@
+.track-color-mode-legend .color-box {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    margin-right: 0.5em;
+    border-radius: 4px;
+}
+
+.track-color-mode-legend .gradient-bar {
+    width: 100%;
+    height: 1em;
+    border-radius: 4px;
+}
+
+.track-color-mode-legend .gradient-labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+.track-color-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.track-color-mode-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    background-color: #fff1;
+    border-radius: 8px;
+}
+
+.track-color-mode-legend ul {
+    padding-inline: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.track-color-mode-legend li {
+    display: flex;
+    align-items: center;
+}

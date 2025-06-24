@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 import { ElectrificationStatus } from "../../../model/electrification-status";
+import MiscHelper from "../../../helpers/miscHelper";
 
 export default function TrackRenderer(props) {
   const { object } = props;
@@ -67,39 +68,49 @@ function getTrackPath(object) {
 }
 
 function getTrackColor(object, trackColorMode) {
+  const modeDef = Constants.trackColorModes[trackColorMode];
+
   switch (trackColorMode) {
-    case "none":
+    case "standard":
     default:
-      return object.prefab_name.includes('trans-mat') ? "#444" : "#aaa";
+      if(object.prefab_name.includes('trans-mat'))
+        return modeDef.options['invisible'][0];
+
+      return modeDef.options[modeDef.optionDefault][0];
+
     case "electrification":
       switch(object.electrificationStatus) {
         case ElectrificationStatus.NOT_CHECKED:
-          return "#aa4";
+          return modeDef.options['not-checked'][0];
         case ElectrificationStatus.NON_ELECTRIFIED:
-          return "#aaa";
+          return modeDef.options['non-electrified'][0];
         case ElectrificationStatus.ELECTRIFIED:
-          return "#aaf";
+          return modeDef.options['electrified'][0];
         case ElectrificationStatus.CONFLICT:
+          return modeDef.options['conflict'][0];
         default:
-          return "#f44";
+          return modeDef.options[modeDef.optionDefault][0];
       }
+    
     case "type":
       switch (object.type) {
         case "StandardTrack":
-        default:
-          return "#00a";
+          return modeDef.options['standard-track'][0];
         case "PointTrack":
-          return "#0a0";
+          return modeDef.options['point-track'][0];
         case "BezierTrack":
-          return "#aa8";
+          return modeDef.options['bezier-track'][0];
+        default:
+          return modeDef.options[modeDef.optionDefault][0];
       }
     case "slope":
       return `url(#track-slope-${object.id})`;
+
     case "max-speed":
       if(!object.maxspeed || !object.derailspeed) {
-        return "#f22";
+        return modeDef.options['derail'][0];
       }
-      return `rgb(128, ${Math.min(255, Math.max(0, object.maxspeed * Constants.map.trackMaxSpeedScale))}, 128)`;
+      return MiscHelper.getTrackGradient(modeDef.gradient, object.maxspeed);
   }
 }
 
@@ -109,8 +120,8 @@ function getTrackDefs(object, trackColorMode) {
     const [x1, y1] = object.points.start.toSVGCoords();
     const [x2, y2] = object.points.end.toSVGCoords();
     const gradId = `track-slope-${object.id}`;
-    const startColor = getSlopeColor(object.start_slope);
-    const endColor = getSlopeColor(object.end_slope);
+    const startColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.start_slope));
+    const endColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.end_slope));
     
     return (
         <defs>
@@ -127,9 +138,4 @@ function getTrackDefs(object, trackColorMode) {
         </linearGradient>
         </defs>
     );
-}
-
-function getSlopeColor(slope) {
-  const blue = Math.min(255, Math.max(0, 128 + Math.abs(slope * Constants.map.trackSlopeScale)));
-  return `rgb(128, 128, ${blue})`;
 }
