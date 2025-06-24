@@ -5,6 +5,16 @@ import SettingsContext from "../../../contexts/SettingsContext";
 import './TrackHoverInfo.css';
 
 export default function TrackHoverInfo() {
+    const { showTrackHoverInfo } = useContext(SettingsContext);
+
+    if (!showTrackHoverInfo) return null;
+    
+    return (
+        <InnerTrackHoverInfo />
+    );
+}
+
+function InnerTrackHoverInfo() {
     const [ hoveredTrack, setHoveredTrack ] = useState(null);
     const mousePos = useRef({ x: 0, y: 0 });
     const divRef = useRef(null);

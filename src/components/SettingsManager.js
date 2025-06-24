@@ -5,6 +5,7 @@ import Constants from "../helpers/constants";
 export default function SettingsManager(props) {
     const [ layers, setLayers ] = useState([]);
     const [ trackColorMode, setTrackColorMode ] = useState(Constants.trackColorModeDefault);
+    const [ showTrackHoverInfo, setShowTrackHoverInfo ] = useState(false);
     const [ settingsLoaded, setSettingsLoaded ] = useState(false);
 
     const loadLayersSettings = useCallback(() => {
@@ -24,6 +25,7 @@ export default function SettingsManager(props) {
     return (
         <SettingsContext.Provider value={{
             layers, setLayers,
+            showTrackHoverInfo, setShowTrackHoverInfo,
             trackColorMode, setTrackColorMode
         }}>
             { props.children }
