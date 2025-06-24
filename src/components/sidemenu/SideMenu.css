@@ -5,14 +5,14 @@
 .side-menu {
     border-left: 2px solid #444;
     padding: 1em;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 0;
     bottom: 0;
     background-color: #141414;
     z-index: 2000;
     width: max-content;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.2s ease-in-out;
     display: flex;
     flex-direction: column;
     gap: 1em;
