@@ -2,6 +2,7 @@ import { useContext } from "react";
 import MainContext from "../../contexts/MainContext";
 import { useZoomPanEmitter } from "../../hooks/useZoomPubSub";
 import SceneryFilesHelper from "../../helpers/sceneryFilesHelper";
+import { resetHoveredTracksStack } from "../../services/trackHoverInfoService";
 
 export default function CustomFileSelect() {
     const {setScenery, setIsLoading} = useContext(MainContext);
@@ -14,6 +15,7 @@ export default function CustomFileSelect() {
         setIsLoading(true);
         const scenery = await SceneryFilesHelper.loadCustom(file, center);
         setScenery(scenery);
+        resetHoveredTracksStack();
         setIsLoading(false);
     };
 

@@ -19,7 +19,8 @@ const ObjectRendererQueue = [
         'additionalComponents': [
             ElectrificationStatusPopup
         ],
-        'cond': (layers) => layers['tracks']
+        'cond': (layers) => layers['tracks'],
+        'pointerEvents': true
     },
     {
         'name': 'isolations-ids',

@@ -3,6 +3,7 @@ import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 import { ElectrificationStatus } from "../../../model/electrification-status";
 import MiscHelper from "../../../helpers/miscHelper";
+import { setHoveredTrack, unsetHoveredTrack } from "../../../services/trackHoverInfoService";
 
 export default function TrackRenderer(props) {
   const { object } = props;
@@ -21,6 +22,14 @@ const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 function StatelessTrackRenderer(props) {
   const { object, trackColorMode } = props;
 
+  const onMouseEnter = () => {
+    setHoveredTrack(object);
+  };
+
+  const onMouseLeave = () => {
+    unsetHoveredTrack(null);
+  };
+
   const path = getTrackPath(object);
   const color = getTrackColor(object, trackColorMode);
   const defs = getTrackDefs(object, trackColorMode);
@@ -37,6 +46,8 @@ function StatelessTrackRenderer(props) {
         d={path}
         stroke={color}
         className="track"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       />
     </g>
   );

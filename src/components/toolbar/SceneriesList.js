@@ -4,6 +4,7 @@ import { useZoomPanEmitter } from '../../hooks/useZoomPubSub';
 import SceneryFilesHelper from '../../helpers/sceneryFilesHelper';
 import { setSceneriesListVersionDate } from '../../services/sceneriesListService';
 import Constants from '../../helpers/constants';
+import { resetHoveredTracksStack } from '../../services/trackHoverInfoService';
 
 export default function SceneriesList(props) {
     const {setScenery, setIsLoading} = useContext(MainContext);
@@ -16,6 +17,7 @@ export default function SceneriesList(props) {
         setIsLoading(true);
         const scenery = await SceneryFilesHelper.load(name, center);
         setScenery(scenery);
+        resetHoveredTracksStack();
         setIsLoading(false);
     };
 

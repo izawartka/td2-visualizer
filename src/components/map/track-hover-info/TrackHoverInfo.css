@@ -1,0 +1,19 @@
+.track-hover-info {
+    position: absolute;
+    z-index: 10000;
+    margin: 0.5em;
+    pointer-events: none;
+}
+
+.track-hover-info-popup {
+    background-color: #222;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 1em;
+}
+
+.track-hover-info-popup th {
+    text-align: start;
+    padding-right: 2em;
+    color: #888;
+}
