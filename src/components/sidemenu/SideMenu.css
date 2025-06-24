@@ -7,7 +7,8 @@
     padding: 1em;
     position: fixed;
     right: 0;
-    height: 100%;
+    top: 0;
+    bottom: 0;
     background-color: #141414;
     z-index: 2000;
     width: max-content;
@@ -45,4 +46,13 @@
 .distance-meter-button button,
 .scenery-info-button button {
     width: 100%;
+}
+
+.info-footer {
+    color: #888;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-top: auto;
+    align-items: flex-end;
 }

@@ -1,4 +1,5 @@
 const Constants = {
+    buildVersion: '1.1.0',
     map: {
         zoomSensitivity: 0.002,
         trackSlopeScale: 10,
