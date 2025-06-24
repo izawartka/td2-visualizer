@@ -117,8 +117,8 @@ const Constants = {
             optionDefault: 'conflict',
             options: {
                 'electrified': ['#aaf', 'Electrified'],
-                'non-electrified': ['#aaa', 'Non electrified'],
-                'not-checked': ['#aa4', 'Not checked'],
+                'non-electrified': ['#aaa', 'Non-electrified'],
+                'not-checked': ['#aa4', 'Unknown'],
                 'conflict': ['#f44', 'Error / Conflict'],
             }
         },

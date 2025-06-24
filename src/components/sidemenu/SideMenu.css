@@ -18,6 +18,10 @@
     gap: 1em;
 }
 
+.side-menu .hidden {
+    visibility: hidden;
+}
+
 .side-menu h3 {
     margin: 0;
 }
@@ -34,13 +38,19 @@
 
 .layers-menu input {
     margin-right: 0.5em;
+    vertical-align: middle;
 }
 
-.track-color-mode-select {
+.side-menu-select {
     width: 100%;
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 1em;
+}
+
+.side-menu-select select {
+    flex: 1;
 }
 
 .distance-meter-button button,

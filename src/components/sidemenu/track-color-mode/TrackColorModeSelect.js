@@ -8,7 +8,7 @@ export default function TrackColorModeSelect(props) {
     };
 
     return (
-        <div className="track-color-mode-select">
+        <div className="track-color-mode-select  side-menu-select">
             <label htmlFor="track-color-mode">Track Color Mode:</label>
             <select
                 id="track-color-mode"
