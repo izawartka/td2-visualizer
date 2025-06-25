@@ -2,11 +2,10 @@ import {useContext} from 'react';
 import MainContext from '../../contexts/MainContext';
 import './SideMenu.css';
 import LayersMenu from './LayersMenu';
-import ShowTrackHoverInfoCheckbox from './ShowTrackHoverInfoCheckbox';
-import TrackColorMode from './track-color-mode/TrackColorMode';
 import SceneryInfoButton from './SceneryInfoButton';
 import DistanceMeterButton from './DistanceMeterButton';
 import InfoFooter from './InfoFooter';
+import LayerOptionsMenu from './LayerOptionsMenu';
 
 export default function SideMenu() {
     const { sideMenuOpen } = useContext(MainContext);
@@ -19,8 +18,7 @@ export default function SideMenu() {
                 <SceneryInfoButton />
                 <DistanceMeterButton />
                 <LayersMenu />
-                <ShowTrackHoverInfoCheckbox />
-                <TrackColorMode />
+                <LayerOptionsMenu />
                 <InfoFooter />
             </div>
         </div>

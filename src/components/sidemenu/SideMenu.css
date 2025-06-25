@@ -18,6 +18,12 @@
     gap: 1em;
 }
 
+.layer-options-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
 .side-menu .hidden {
     visibility: hidden;
 }
