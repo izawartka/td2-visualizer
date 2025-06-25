@@ -43,13 +43,6 @@ const ObjectRendererQueue = [
         'cond': (layers) => layers['derailers']
     },
     {
-        'name': 'signs',
-        'category': 'track-objects',
-        'type': 'Sign',
-        'renderer': SignRenderer,
-        'cond': (layers) => layers['signs']
-    },
-    {
         'name': 'nevps',
         'category': 'track-objects',
         'type': 'NEVP',
@@ -62,6 +55,13 @@ const ObjectRendererQueue = [
         'type': 'Signal',
         'renderer': SignalRenderer,
         'cond': (layers) => layers['signals']
+    },
+    {
+        'name': 'signs',
+        'category': 'track-objects',
+        'type': 'Sign',
+        'renderer': SignRenderer,
+        'cond': (layers) => layers['signs']
     },
     {
         'name': 'spawn-points',

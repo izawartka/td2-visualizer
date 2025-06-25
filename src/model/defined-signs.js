@@ -1,4 +1,10 @@
 const DefinedSigns = {
+    "w31": {
+        "name": "W31",
+        "icon": "w31.svg",
+        "offsetX": 0.45,
+        "offsetY": -0.2
+    },
     "w32_L": {
         "name": "W32",
         "icon": "w32.svg",
