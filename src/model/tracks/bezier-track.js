@@ -1,5 +1,5 @@
 import Track from "./track";
-import Vector3 from "./vector3";
+import Vector3 from "../vector3";
 
 export default class BezierTrack extends Track
 {

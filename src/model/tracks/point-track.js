@@ -1,6 +1,6 @@
-import AngleHelper from '../helpers/angleHelper';
+import AngleHelper from '../../helpers/angleHelper';
 import Track from './track';
-import Vector3 from './vector3';
+import Vector3 from '../vector3';
 
 export default class PointTrack extends Track
 {

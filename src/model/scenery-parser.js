@@ -1,23 +1,23 @@
 import Scenery from './scenery';
 import { tracksConnectionTest } from './tracks-connection-test';
 import Switch from './switch';
-import StandardTrack from './standard-track';
-import BezierTrack from './bezier-track';
-import TrackObject from './track-object';
-import Signal from './signal';
+import StandardTrack from './tracks/standard-track';
+import BezierTrack from './tracks/bezier-track';
+import TrackObject from './track-objects/track-object';
+import Signal from './track-objects/signal';
 import Route from './route';
 import Misc from './misc';
 import SceneryParserLog from './scenery-parser-log';
 import SignalBox from './signalbox';
 import Constants from '../helpers/constants';
-import SceneryInfo from './scenery-info';
-import Sign from './sign';
-import CameraHome from './camera-home';
-import MainCamera from './main-camera';
+import SceneryInfo from './special-objects/scenery-info';
+import Sign from './track-objects/sign';
+import CameraHome from './special-objects/camera-home';
+import MainCamera from './special-objects/main-camera';
 import ElectrificationResolver from './electrification-resolver';
-import NEVP from './nevp';
-import Derailer from './derailer';
-import SpawnPoint from './spawn-point';
+import NEVP from './track-objects/nevp';
+import Derailer from './track-objects/derailer';
+import SpawnPoint from './track-objects/spawn-point';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation

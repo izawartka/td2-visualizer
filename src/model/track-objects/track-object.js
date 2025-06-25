@@ -1,6 +1,6 @@
-import SceneryObject from './scenery-object';
-import SceneryParserLog from './scenery-parser-log';
-import Vector3 from './vector3';
+import SceneryObject from '../scenery-object';
+import SceneryParserLog from '../scenery-parser-log';
+import Vector3 from '../vector3';
 
 export default class TrackObject extends SceneryObject {
     prefab_name;

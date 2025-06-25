@@ -1,7 +1,7 @@
 import Misc from "./misc.js";
 import SceneryParserLog from "./scenery-parser-log.js";
 import Vector3 from "./vector3.js";
-import DefinedSignalBoxes from "./defined-signalboxes.js";
+import DefinedSignalBoxes from "./defs/defined-signalboxes.js";
 
 export default class SignalBox extends Misc {
     type = "SignalBox";

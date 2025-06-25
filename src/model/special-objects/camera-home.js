@@ -1,5 +1,5 @@
 import SpecialObject from "./special-object.js";
-import Vector3 from "./vector3.js";
+import Vector3 from "../vector3.js";
 
 export default class CameraHome extends SpecialObject {
     pos;

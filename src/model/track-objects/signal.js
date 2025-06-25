@@ -1,7 +1,7 @@
-import SceneryParserLog from "./scenery-parser-log";
-import SpawnInfo from "./spawn-info";
+import SceneryParserLog from "../scenery-parser-log";
+import SpawnInfo from "../spawn-info";
 import TrackObject from "./track-object";
-import Vector3 from "./vector3";
+import Vector3 from "../vector3";
 
 export default class Signal extends TrackObject {
     is_spawn;

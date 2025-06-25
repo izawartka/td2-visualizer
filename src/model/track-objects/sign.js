@@ -1,7 +1,7 @@
-import DefinedSigns from "./defined-signs";
-import SceneryParserLog from "./scenery-parser-log";
+import DefinedSigns from "../defs/defined-signs";
+import SceneryParserLog from "../scenery-parser-log";
 import TrackObject from "./track-object";
-import Vector3 from "./vector3";
+import Vector3 from "../vector3";
 
 export default class Sign extends TrackObject {
     type = "Sign";

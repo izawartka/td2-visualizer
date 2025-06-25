@@ -1,5 +1,5 @@
 import TrackObject from './track-object';
-import Vector3 from './vector3';
+import Vector3 from '../vector3';
 
 export default class Derailer extends TrackObject {
     type = "Derailer";

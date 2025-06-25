@@ -1,8 +1,8 @@
-import PointTrack from "./point-track.js";
+import PointTrack from "./tracks/point-track.js";
 import SceneryObject from "./scenery-object.js";
 import SceneryParserLog from "./scenery-parser-log.js";
 import Vector3 from "./vector3.js";
-import DefinedSwitches from "./defined-switches.js";
+import DefinedSwitches from "./defs/defined-switches.js";
 import Constants from "../helpers/constants.js";
 
 export default class Switch extends SceneryObject {
