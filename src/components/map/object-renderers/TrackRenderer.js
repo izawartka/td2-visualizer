@@ -115,6 +115,11 @@ function getTrackColor(object, trackColorMode) {
           return modeDef.options[modeDef.optionDefault][0];
       }
     case "slope":
+      // do not use track gradient unless the slope is different on both ends
+      if (object.start_slope === object.end_slope) {
+        return MiscHelper.getTrackGradient(modeDef.gradient, Math.abs(object.start_slope));
+      }
+
       return `url(#track-slope-${object.id})`;
 
     case "max-speed":
@@ -127,6 +132,7 @@ function getTrackColor(object, trackColorMode) {
 
 function getTrackDefs(object, trackColorMode) {
     if (trackColorMode !== "slope") return null;
+    if (object.start_slope === object.end_slope) return null;
     
     const [x1, y1] = object.points.start.toSVGCoords();
     const [x2, y2] = object.points.end.toSVGCoords();
