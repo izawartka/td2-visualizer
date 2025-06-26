@@ -21,7 +21,6 @@ import SpawnPoint from './track-objects/spawn-point';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
-TODO: check CameraHome and MainCamera
 */
 
 export default class SceneryParser {
