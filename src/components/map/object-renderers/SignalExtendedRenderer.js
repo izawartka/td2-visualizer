@@ -58,6 +58,9 @@ function getBase(halfBaseWidth) {
 }
 
 function getHeadOffset(object) {
+    const isTOP = object.signal_elements.type === SignalElementsEnums.Type.TOP;
+    if(isTOP) return 0;
+
     const headPos = object.signal_elements.headPosition;
 
     switch (headPos) {
@@ -139,11 +142,14 @@ function getUnit(key, unitType, x, y) {
 }
 
 function getHead(object, poleLength, headOff) {
+    if(object.signal_elements.type === SignalElementsEnums.Type.TOP) {
+        return getHeadTOP(object, poleLength);
+    }
+
     // TODO: overhead signals
     const isDoubleDwarf = object.signal_elements.type === SignalElementsEnums.Type.DWARF_DOUBLE;
     const unitsCount = object.signal_elements.units.length;
     const units = [];
-
     const r = 0.6;
 
     for(let i = 0; i < unitsCount; i++) {
@@ -154,4 +160,18 @@ function getHead(object, poleLength, headOff) {
     }
 
     return units;
+}
+
+function getHeadTOP(object, poleLength) {
+    const isLeft = object.signal_elements.headPosition === SignalElementsEnums.HeadPosition.LEFT;
+    const r = 0.6;
+    const whiteCX = isLeft ? r*2 : -r*2;
+
+    return <>
+        <path d={`M ${whiteCX} -${poleLength} L 0 -${poleLength}`} />
+        { getUnit(0, SignalElementsEnums.UnitType.YELLOW_LOWER, 0, -poleLength-r) }
+        { getUnit(1, SignalElementsEnums.UnitType.WHITE, 0, -poleLength-3*r) }
+        { getUnit(2, SignalElementsEnums.UnitType.WHITE, 0, -poleLength-5*r) }
+        { getUnit(3, SignalElementsEnums.UnitType.YELLOW_LOWER, whiteCX, -poleLength-r) }
+    </>
 }
