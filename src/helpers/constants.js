@@ -36,6 +36,8 @@ const Constants = {
         electrificationMissingRouteTracks: true,
         electrificationResolverError: true,
         electrificationResolverWarnings: true,
+        signalElemsUnknownPrefab: true,
+        signalElemsRecognizedUnknownPrefab: true,
     },
     errors: {
         invalidSceneryInfo: true
