@@ -1,4 +1,5 @@
 import SignalElementsParserEhaEriDwarf from "./parsers/eha-eri-dwarf";
+import SignalElementsParserEhaEriDwarfPs from "./parsers/eha-eri-dwarf-ps";
 import SignalElementsParserEhaEriStandard from "./parsers/eha-eri-standard";
 
 const SignalElementsParsersList = {
@@ -7,7 +8,8 @@ const SignalElementsParsersList = {
         regex: /^(eha_|eri_)/,
         subtypes: [
             SignalElementsParserEhaEriStandard,
-            SignalElementsParserEhaEriDwarf
+            SignalElementsParserEhaEriDwarf,
+            SignalElementsParserEhaEriDwarfPs
         ]
     }
 };

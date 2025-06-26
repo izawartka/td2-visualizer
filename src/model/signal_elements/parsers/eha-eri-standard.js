@@ -18,7 +18,7 @@ export default class SignalElementsParserEhaEriStandard {
             SignalElementsParserCommon.getHeadPosition(entries[1]),
             SignalElementsParserCommon.getUnits(entries, 6, 6, 1),
             SignalElementsParserCommon.getBarType(entries[12]),
-            []
+            SignalElementsParserCommon.getSigns(entries, 13, 5, 1)
         );
     }
 }

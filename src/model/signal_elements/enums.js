@@ -3,6 +3,7 @@ const SignalElementsEnums = {
         UNKNOWN: 0,
         STANDARD: 1,
         DWARF: 2,
+        DWARF_DOUBLE: 3,
         TOP: 4,
     },
     HeadPosition: {

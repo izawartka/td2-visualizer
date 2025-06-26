@@ -58,7 +58,7 @@ export default class SignalElementsParserCommon {
         }
     }
 
-    static getUnits(entries, start, count, step) {
+    static getUnits(entries, start, count, step, cutOff = true) {
         const units = [];
 
         for (let i = 0; i < count; i++) {
@@ -70,7 +70,7 @@ export default class SignalElementsParserCommon {
             units[i] = type;
         }
 
-        while (units.length > 0 && units[units.length - 1] === SignalElementsEnums.UnitType.NONE) {
+        while (cutOff && units.length > 0 && units[units.length - 1] === SignalElementsEnums.UnitType.NONE) {
             units.pop();
         }
 
@@ -90,5 +90,18 @@ export default class SignalElementsParserCommon {
             default:
                 return SignalElementsEnums.BarType.UNKNOWN;
         }
+    }
+
+    static getSigns(entries, start, count, step) {
+        const signs = [];
+
+        for (let i = 0; i < count; i++) {
+            const index = start + i * step;
+            if (index >= entries.length) break;
+
+            signs[i] = entries[index]?.trim();
+        }
+
+        return signs;
     }
 }
