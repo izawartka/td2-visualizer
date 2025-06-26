@@ -118,6 +118,24 @@ const DefinedSwitches = {
         new Vector3(0, 0, 31.181),
         new Vector3(-1.789, 0, 31.094)
     ],
+    "Rz 60E1-760-1_14 R": [
+        0,
+        -760,
+        [0, 0, 3, 4],
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 54.217),
+        new Vector3(1.931, 0, 54.148)
+    ],
+    "Rz 60E1-760-1_14 L": [
+        0,
+        760,
+        [0, 0, 3, 4],
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 54.217),
+        new Vector3(-1.931, 0, 54.148)
+    ],
     "Rz 60E1-1200-1_18.5 R": [
         0,
         -1200,
@@ -288,6 +306,24 @@ const DefinedSwitches = {
         new Vector3(0, 0, 0),
         new Vector3(-0.811, 0, 32.466),
         new Vector3(-2.77, 0, 32.332)
+    ],
+    "Rlj 60E1-1200_300-1_7 R": [
+        -1200,
+        -300,
+        [0, 0, 3, 4],
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(0.758, 0, 42.632),
+        new Vector3(3.025, 0, 42.498)
+    ],
+    "Rlj 60E1-1200_300-1_7 L": [
+        1200,
+        300,
+        [0, 0, 3, 4],
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(-0.758, 0, 42.632),
+        new Vector3(-3.025, 0, 42.498)
     ],
     "Rlj 60E1-750_190-1_6 R": [
         -750,
