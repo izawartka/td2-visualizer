@@ -21,7 +21,12 @@
 .layer-options-menu {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.5em;
+}
+
+.layer-options-menu-checkboxes {
+    display: flex;
+    flex-direction: column;
 }
 
 .side-menu .hidden {
@@ -73,6 +78,7 @@
     align-items: flex-end;
 }
 
+.extended-signals-checkbox input,
 .show-track-hover-info-checkbox input {
     margin-right: 0.5em;
     vertical-align: middle;
