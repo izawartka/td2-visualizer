@@ -99,7 +99,7 @@ export default class SignalElementsParserCommon {
             const index = start + i * step;
             if (index >= entries.length) break;
 
-            signs[i] = entries[index]?.trim();
+            signs.push(entries[index]?.trim());
         }
 
         return signs;

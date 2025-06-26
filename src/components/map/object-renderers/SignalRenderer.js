@@ -7,7 +7,7 @@ export default function SignalRenderer(props) {
     const { object } = props;
     const { extendedSignals } = useContext(SettingsContext);
     
-    if (extendedSignals) {
+    if (extendedSignals && object.signal_elements) {
         return <MemoizedSignalExtendedRenderer object={object} />;
     } else {
         return <MemoizedSignalStandardRenderer object={object} />;
