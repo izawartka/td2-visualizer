@@ -21,6 +21,6 @@ export default class SceneryObject {
     }
 
     getRenderBounds() {
-        return this.pos;
+        return [this.pos];
     }
 }

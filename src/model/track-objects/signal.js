@@ -11,6 +11,7 @@ export default class Signal extends TrackObject {
     signal_elements;
     type = "Signal";
     applied = false;
+    attached_signs = [];
 
     constructor(id, prefab_name, pos, rot, track_id, name, is_spawn, spawn_info, signal_name, signal_elements) {
         super(id, prefab_name, pos, rot, track_id, name);
