@@ -9,7 +9,7 @@ export default class SignalElementsParserCommon {
     }
 
     static getHeadPosition(poleString) {
-        const headPosition = this.getAfterLastUnderscoreNoVersion(poleString);
+        const headPosition = this.getAfterLastUnderscoreNoVersion(poleString)?.[0];
         if (!headPosition) return SignalElementsEnums.HeadPosition.UNKNOWN;
 
         switch (headPosition) {
