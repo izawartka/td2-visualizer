@@ -53,6 +53,10 @@
     stroke: #eee;
 }
 
+.map svg g.extended-signal-icon g path.background {
+    fill: #111;
+}
+
 .map svg g.route g {
     fill: #eee;
 }

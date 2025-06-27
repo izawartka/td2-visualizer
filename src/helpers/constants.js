@@ -13,6 +13,12 @@ const Constants = {
         runTracksConnectionTest: false,
         resolveElectrification: true,
         maxRouteConnectionDistance: 0.2,
+        attachSigns: true,
+        attachSignsNeedsSameTrack: false,
+        attachSignsMaxDistanceZ: 1.0,
+        attachSignsMaxDistanceX: 0.2,
+        attachSignsGridSize: 10,
+        logAttachedSigns: true,
     },
     warnings: {
         all: false, // enable all warnings
@@ -38,6 +44,7 @@ const Constants = {
         electrificationResolverWarnings: true,
         signalElemsUnknownPrefab: true,
         signalElemsRecognizedUnknownPrefab: true,
+        attachSignsOutOfBounds: true,
     },
     errors: {
         invalidSceneryInfo: true

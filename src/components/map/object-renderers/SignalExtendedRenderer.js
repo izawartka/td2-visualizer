@@ -29,12 +29,13 @@ function SignalIcon(props) {
 
     const halfBaseWidth = getHalfBaseWidth(object);
     const headOff = getHeadOffset(object);
-    const poleLength = getPoleLength(object);
+    const poleLength = getPoleLength(object, headOff);
 
     return (
         <g strokeWidth={0.2} strokeLinecap="round" strokeLinejoin="round">
             { getBase(halfBaseWidth) }
             { getPole(poleLength, headOff) }
+            { getBars(object, poleLength, headOff) }
             { getHead(object, poleLength, headOff) }
         </g>
     );
@@ -76,17 +77,36 @@ function getHeadOffset(object) {
     }
 }
 
-function getPoleLength(object) {
+function getPoleLength(object, headOff) {
     const headPos = object.signal_elements.headPosition;
     if(headPos === SignalElementsEnums.HeadPosition.NO_POLE) return 0;
-    return 2;
+
+    let length = 0.8;
+
+    if(headOff !== 0) {
+        length += 0.4;
+    }
+
+    switch(object.signal_elements.bar) {
+        case SignalElementsEnums.BarType.YELLOW:
+        case SignalElementsEnums.BarType.GREEN:
+            length += 1.0;
+            break;
+        case SignalElementsEnums.BarType.YELLOW_GREEN:
+            length += 1.8;
+            break;
+        default:
+            break;
+    }
+
+    return Math.max(length, 2);
 }
 
 function getPole(poleLength, headOff) {
     if(!poleLength) return null;
 
     if(headOff) {
-        return <path d={`M 0 0 L 0 -${poleLength - .5} L ${headOff} -${poleLength -.5} L ${headOff} -${poleLength}`} />;
+        return <path d={`M 0 0 L 0 -${poleLength - .4} L ${headOff} -${poleLength -.4} L ${headOff} -${poleLength}`} />;
     }
 
     return <path d={`M 0 0 L 0 -${poleLength}`} />;
@@ -96,7 +116,7 @@ function getUnit(key, unitType, x, y) {
     const r = 0.6;
     const c = 0.4;
 
-    const baseCircle = <circle cx={x} cy={y} r={r} />;
+    const baseCircle = <circle cx={x} cy={y} r={r} className='background' />;
 
     switch(unitType) {
         case SignalElementsEnums.UnitType.RED:
@@ -174,4 +194,36 @@ function getHeadTOP(object, poleLength) {
         { getUnit(2, SignalElementsEnums.UnitType.WHITE, 0, -poleLength-5*r) }
         { getUnit(3, SignalElementsEnums.UnitType.YELLOW_LOWER, whiteCX, -poleLength-r) }
     </>
+}
+
+function getBar(object, headOff, y, isYellow, key = 0) {
+    const yellowOff = isYellow ? 0.2 : 0;
+
+    return <g key={key}>
+        <rect x={headOff-0.6} y={y-0.2} width={1.2} height={0.4} className='background' />;
+        <line x1={headOff - yellowOff} y1={y-0.2} x2={headOff + yellowOff} y2={y+0.2} />;
+    </g>
+}
+
+function getBars(object, poleLength, headOff) {
+    const barType = object.signal_elements.bar;
+    const headOffOffset = headOff !== 0 ? 0.4 : 0;
+    const y = -poleLength + headOffOffset + 0.6;
+
+    if(barType === SignalElementsEnums.BarType.NONE) return null;
+
+    switch(barType) {
+        case SignalElementsEnums.BarType.NONE:
+        default:
+            return null;
+        case SignalElementsEnums.BarType.YELLOW:
+            return getBar(object, 0, y, true);
+        case SignalElementsEnums.BarType.GREEN:
+            return getBar(object, 0, y, false);
+        case SignalElementsEnums.BarType.YELLOW_GREEN:
+            return <>
+                { getBar(object, 0, y, false, 0) }
+                { getBar(object, 0, y + 0.8, true, 1) }
+            </>
+    }
 }
