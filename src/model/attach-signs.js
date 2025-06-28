@@ -11,7 +11,7 @@ function getGridSize(scenery) {
     return { x: gridSizeX, z: gridSizeZ };
 }
 
-function getGridCellPositions(pos, scenery, gridSize) {
+function getGridCellPositions(pos, scenery, gridSize, maxDist) {
     const sceneryBounds = scenery.getBounds();
     const gx = Math.floor((pos.x - sceneryBounds.minX) / Constants.parser.attachSignsGridSize);
     const gz = Math.floor((pos.z - sceneryBounds.minZ) / Constants.parser.attachSignsGridSize);
@@ -26,10 +26,10 @@ function getGridCellPositions(pos, scenery, gridSize) {
     const inCellX = pos.x - (sceneryBounds.minX + gx * Constants.parser.attachSignsGridSize);
     const inCellZ = pos.z - (sceneryBounds.minZ + gz * Constants.parser.attachSignsGridSize);
 
-    const isLeftEdge = inCellX <= Constants.parser.attachSignsMaxDistanceZ && gx > 0;
-    const isRightEdge = inCellX >= Constants.parser.attachSignsGridSize - Constants.parser.attachSignsMaxDistanceZ && gx < gridSize.x - 1;
-    const isTopEdge = inCellZ <= Constants.parser.attachSignsMaxDistanceZ && gz > 0;
-    const isBottomEdge = inCellZ >= Constants.parser.attachSignsGridSize - Constants.parser.attachSignsMaxDistanceZ && gz < gridSize.z - 1;
+    const isLeftEdge = inCellX <= maxDist && gx > 0;
+    const isRightEdge = inCellX >= Constants.parser.attachSignsGridSize - maxDist && gx < gridSize.x - 1;
+    const isTopEdge = inCellZ <= maxDist && gz > 0;
+    const isBottomEdge = inCellZ >= Constants.parser.attachSignsGridSize - maxDist && gz < gridSize.z - 1;
 
     if(isLeftEdge) positions.push({ x: gx - 1, z: gz });
     if(isRightEdge) positions.push({ x: gx + 1, z: gz });
@@ -45,6 +45,7 @@ function getGridCellPositions(pos, scenery, gridSize) {
 
 export function attachSigns(scenery) {
     const maxDistSq = Constants.parser.attachSignsMaxDistanceZ ** 2 + Constants.parser.attachSignsMaxDistanceX ** 2;
+    const maxDist = Math.sqrt(maxDistSq);
     const trackObjectsArr = Object.values(scenery.objects['track-objects'] || {});
     const gridSize = getGridSize(scenery);
     const posGrid = new Array(gridSize.x)
@@ -54,7 +55,7 @@ export function attachSigns(scenery) {
     for(const trackObject of trackObjectsArr) {
         if(trackObject.type !== 'Signal') continue;
 
-        const positions = getGridCellPositions(trackObject.pos, scenery, gridSize);
+        const positions = getGridCellPositions(trackObject.pos, scenery, gridSize, maxDist);
         for(const pos of positions) {
             posGrid[pos.x][pos.z].push(trackObject);
         }
@@ -63,7 +64,7 @@ export function attachSigns(scenery) {
     for(const trackObject of trackObjectsArr) {
         if(trackObject.type !== 'Sign') continue;
 
-        const positions = getGridCellPositions(trackObject.pos, scenery, gridSize);
+        const positions = getGridCellPositions(trackObject.pos, scenery, gridSize, maxDist);
         const signals = positions.flatMap(pos => posGrid[pos.x][pos.z]);
 
         let closestSignal = null;
