@@ -95,6 +95,9 @@ function getHeadOffsetX(object) {
 }
 
 function getPoleLength(object, headOffsetX) {
+    const isDwarf = object.signal_elements.isDwarf();
+    if(isDwarf) return 0;
+    
     const isOverhead = object.signal_elements.isOverhead();
 
     let length = isOverhead ? 0 : 0.6;

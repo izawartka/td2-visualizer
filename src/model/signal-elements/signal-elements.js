@@ -23,6 +23,10 @@ export default class SignalElements {
         return this.headPosition === SignalElementsEnums.HeadPosition.UNKNOWN;
     }
 
+    isDwarf() {
+        return this.type === SignalElementsEnums.Type.DWARF || this.type === SignalElementsEnums.Type.DWARF_DOUBLE;
+    }
+
     static fromPrefabText(id, text) {
         const prefabName = text.split(",", 2)[0].trim();
 
