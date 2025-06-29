@@ -18,7 +18,7 @@ export default class SignalElementsParserEhaEriDwarfPs {
 
         return new SignalElements(
             isDouble ? SignalElementsEnums.Type.DWARF_DOUBLE : SignalElementsEnums.Type.DWARF,
-            SignalElementsEnums.HeadPosition.NO_POLE,
+            SignalElementsEnums.HeadPosition.DWARF,
             [mainUnits, secondaryUnits].flat(),
             SignalElementsEnums.BarType.NONE,
             SignalElementsParserCommon.getSigns(entries, 15, 1, 1)

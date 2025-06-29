@@ -11,8 +11,7 @@ const SignalElementsEnums = {
         STANDARD: 1,
         RIGHT: 2,
         LEFT: 3,
-        NO_POLE: 4,
-        OVERHEAD: 5,
+        DWARF: 4,
     },
     UnitType: {
         UNKNOWN: 0,

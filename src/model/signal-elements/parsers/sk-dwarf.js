@@ -14,7 +14,7 @@ export default class SignalElementsParserSkDwarf {
 
         return new SignalElements(
             SignalElementsEnums.Type.DWARF,
-            SignalElementsEnums.HeadPosition.NO_POLE,
+            SignalElementsEnums.HeadPosition.DWARF,
             SignalElementsParserCommon.getUnits(entries, 2, 2, 1),
             SignalElementsEnums.BarType.NONE,
             []

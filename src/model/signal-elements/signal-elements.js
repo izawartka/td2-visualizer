@@ -19,6 +19,10 @@ export default class SignalElements {
         });
     }
 
+    isOverhead() {
+        return this.headPosition === SignalElementsEnums.HeadPosition.UNKNOWN;
+    }
+
     static fromPrefabText(id, text) {
         const prefabName = text.split(",", 2)[0].trim();
 

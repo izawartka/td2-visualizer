@@ -280,6 +280,33 @@ const DefinedSwitches = {
         new Vector3(0, 0, 25.221),
         new Vector3(-1.667, 0, 25.111)
     ],
+    "Rz 60E1-2500-1_26.5 R": [
+        0,
+        -2500,
+        [0, 0, 3, 4],
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 94.306),
+        new Vector3(1.778, 0, 94.273)
+    ],
+    "Rz 60E1-2500-1_26.5 L": [
+        0,
+        2500,
+        [0, 0, 3, 4],
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 94.306),
+        new Vector3(-1.778, 0, 94.273)
+    ],
+    "Rlds 60E1-600-600-1_18.5": [
+        -600,
+        600,
+        [0, 0, 3, 4],
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0),
+        new Vector3(0.92, 0, 33.206),
+        new Vector3(-0.92, 0, 33.206)
+    ],
     "Rlds 60E1-190-190-1_9": [
         -190,
         190,
