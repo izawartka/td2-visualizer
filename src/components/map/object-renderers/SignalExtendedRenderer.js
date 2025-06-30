@@ -119,8 +119,8 @@ function getPolePoints(object, headOffsetX) {
             break;
     }
 
-    const signsCount = Object.keys(object.signal_elements.signs).length;
-    polePoints.signs = polePoints.bars + signsCount * 1.2;
+    const signsHeight = Object.keys(object.signal_elements.signs).map(key => (DefinedSignalSigns[key]?.height || 1.0) + 0.2).reduce((a, b) => a + b, 0) || 0;
+    polePoints.signs = polePoints.bars + signsHeight;
     polePoints.end = isOverhead ? polePoints.signs : Math.max(polePoints.signs + 0.8, 2.2);
 
     return polePoints;
@@ -271,13 +271,14 @@ function getSign(id, y) {
 function getSigns(object, polePoints, headOffsetY) {
     if(!polePoints) return null;
     const signs = [];
-    let y = headOffsetY + polePoints.signs - 0.4;
+    let y = headOffsetY + polePoints.signs;
 
-    for(const [key, value] of Object.entries(object.signal_elements.signs)) {
-        if(!value) continue;
+    for(const [key, def] of Object.entries(DefinedSignalSigns)) {
+        if(!object.signal_elements.signs.hasOwnProperty(key) || !DefinedSignalSigns[key]) continue;
+        const height = (def.height || 1.0);
 
-        signs.push(getSign(key, y));
-        y -= 1.2;
+        signs.push(getSign(key, y - height / 2 + 0.1));
+        y -= height + 0.2;
     }
 
     return signs;

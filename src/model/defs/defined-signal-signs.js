@@ -1,8 +1,13 @@
+/*
+NOTE: Order of signs defined in this dictionary dictates the order of signs rendered on the signal pole
+*/
+
 const DefinedSignalSigns = {
     "w1": {
         "regex": /^(?:wsk_)?w1(?:\D)?.*$/,
         "name": "W1",
         "icon": "w1.svg",
+        "height": 1.28504,
     },
     "w18": {
         "regex": /^(?:wsk_)?w18(?:\D)?.*$/,
