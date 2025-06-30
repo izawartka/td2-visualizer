@@ -1,3 +1,5 @@
+import DefinedSignalSigns from '../../defs/defined-signal-signs';
+import SceneryParserLog from '../../scenery-parser-log';
 import SignalElementsEnums from '../enums';
 
 export default class SignalElementsParserCommon {
@@ -92,13 +94,23 @@ export default class SignalElementsParserCommon {
     }
 
     static getSigns(entries, start, count, step) {
-        const signs = [];
+        const signs = {};
 
         for (let i = 0; i < count; i++) {
             const index = start + i * step;
             if (index >= entries.length) break;
 
-            signs.push(entries[index]?.trim());
+            const entry = entries[index]?.trim();
+            if(!entry) continue;
+
+            const key = Object.entries(DefinedSignalSigns).find(([_, value]) => value.regex.test(entry))?.[0];
+
+            if(!key) {
+                SceneryParserLog.warn('signalElemsUnknownSign', `Unknown signal sign: ${entry}`);
+                continue;
+            }
+
+            signs[key] = true;
         }
 
         return signs;

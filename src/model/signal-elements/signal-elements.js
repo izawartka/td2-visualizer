@@ -7,7 +7,7 @@ export default class SignalElements {
     headPosition = SignalElementsEnums.HeadPosition.UNKNOWN;
     units = [];
     bar;
-    signs = [];
+    signs = {};
 
     constructor(type, headPosition, units = [], bar = null, signs = []) {
         Object.assign(this, {

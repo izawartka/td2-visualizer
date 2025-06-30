@@ -1,4 +1,6 @@
+import { ReactSVG } from 'react-svg';
 import AngleHelper from '../../../helpers/angleHelper';
+import DefinedSignalSigns from '../../../model/defs/defined-signal-signs';
 import SignalElementsEnums from '../../../model/signal-elements/enums';
 
 export default function SignalExtendedRenderer(props) {
@@ -31,26 +33,27 @@ function SignalIcon(props) {
 
     const halfBaseWidth = getHalfBaseWidth(object);
     const headOffsetX = getHeadOffsetX(object);
-    const poleLength = getPoleLength(object, headOffsetX);
-    const headOffsetY = getHeadOffsetY(object, poleLength);
+    const polePoints = getPolePoints(object, headOffsetX);
+    const headOffsetY = getHeadOffsetY(object, polePoints);
 
     return (
         <g strokeWidth={0.2} strokeLinecap="round" strokeLinejoin="round">
             { getBase(halfBaseWidth) }
             { getOverheadFrame(object) }
-            { getPole(poleLength, headOffsetY, headOffsetX) }
-            { getBars(object, headOffsetY, headOffsetX) }
+            { getPole(polePoints, headOffsetY, headOffsetX) }
+            { getBars(object, polePoints, headOffsetY) }
+            { getSigns(object, polePoints, headOffsetY) }
             { getHead(object, headOffsetY, headOffsetX) }
         </g>
     );
 }
 
-function getHeadOffsetY(object, poleLength) {
+function getHeadOffsetY(object, polePoints) {
     if(object.signal_elements.isOverhead()) {
         return object.signal_elements.units.length * 1.2 + 0.1;
     }
 
-    return -poleLength;
+    return -polePoints?.end || 0;
 }
 
 function getHalfBaseWidth(object) {
@@ -94,42 +97,43 @@ function getHeadOffsetX(object) {
     }
 }
 
-function getPoleLength(object, headOffsetX) {
+function getPolePoints(object, headOffsetX) {
     const isDwarf = object.signal_elements.isDwarf();
-    if(isDwarf) return 0;
-    
+    if(isDwarf) return null;
+
     const isOverhead = object.signal_elements.isOverhead();
 
-    let length = isOverhead ? 0 : 0.6;
-
-    if(headOffsetX !== 0) {
-        length += 0.4; // zigzag offset
-    }
+    const polePoints = {};
+    polePoints.zigzag = headOffsetX !== 0 ? 0.4 : 0;
+    polePoints.bars = polePoints.zigzag;
 
     switch(object.signal_elements.bar) {
         case SignalElementsEnums.BarType.YELLOW:
         case SignalElementsEnums.BarType.GREEN:
-            length += 0.7;
+            polePoints.bars += 0.8;
             break;
         case SignalElementsEnums.BarType.YELLOW_GREEN:
-            length += 1.5;
+            polePoints.bars += 1.6;
             break;
         default:
             break;
     }
 
-    if(isOverhead) return length;
-    return Math.max(length + 0.2, 2);
+    const signsCount = Object.keys(object.signal_elements.signs).length;
+    polePoints.signs = polePoints.bars + signsCount * 1.2;
+    polePoints.end = isOverhead ? polePoints.signs : Math.max(polePoints.signs + 0.8, 2.2);
+
+    return polePoints;
 }
 
-function getPole(poleLength, headOffsetY, headOffsetX) {
-    if(!poleLength) return null;
+function getPole(polePoints, headOffsetY, headOffsetX) {
+    if(!polePoints) return null;
 
     if(headOffsetX) {
-        return <path d={`M 0 ${headOffsetY+poleLength} L 0 ${headOffsetY + .4} L ${headOffsetX} ${headOffsetY + .4} L ${headOffsetX} ${headOffsetY}`} />;
+        return <path d={`M 0 ${headOffsetY+polePoints.end} L 0 ${headOffsetY+polePoints.zigzag} L ${headOffsetX} ${headOffsetY+polePoints.zigzag} L ${headOffsetX} ${headOffsetY}`} />;
     }
 
-    return <path d={`M 0 ${headOffsetY+poleLength} L 0 ${headOffsetY}`} />;
+    return <path d={`M 0 ${headOffsetY+polePoints.end} L 0 ${headOffsetY}`} />;
 }
 
 function getUnit(key, unitType, x, y) {
@@ -224,10 +228,11 @@ function getBar(object, headOffsetX, y, isYellow, key = 0) {
     </g>
 }
 
-function getBars(object, headOffsetY, headOffsetX) {
+function getBars(object, polePoints, headOffsetY) {
+    if(!polePoints) return null;
+
     const barType = object.signal_elements.bar;
-    const zigzagOffset = headOffsetX !== 0 ? 0.4 : 0;
-    const y = headOffsetY + zigzagOffset + 0.6;
+    const y = headOffsetY + polePoints.bars - 0.2;
 
     if(barType === SignalElementsEnums.BarType.NONE) return null;
 
@@ -241,8 +246,39 @@ function getBars(object, headOffsetY, headOffsetX) {
             return getBar(object, 0, y, false);
         case SignalElementsEnums.BarType.YELLOW_GREEN:
             return <>
-                { getBar(object, 0, y, false, 0) }
-                { getBar(object, 0, y + 0.8, true, 1) }
+                { getBar(object, 0, y, true, 0) }
+                { getBar(object, 0, y - 0.8, false, 1) }
             </>
     }
+}
+
+function getSign(id, y) {
+    const def = DefinedSignalSigns[id];
+    if(!def) return null;
+
+    return <g key={id} className="signal-sign" transform={`translate(-1.89, ${y - 1.89})`}>
+        <ReactSVG
+            src={`${process.env.PUBLIC_URL}/assets/signal_signs/${def.icon}`}
+            wrapper='svg'
+            beforeInjection={(svg) => {
+                svg.setAttribute('width', '1mm');
+                svg.setAttribute('height', '1mm');
+            }}
+        />;
+    </g>
+}
+
+function getSigns(object, polePoints, headOffsetY) {
+    if(!polePoints) return null;
+    const signs = [];
+    let y = headOffsetY + polePoints.signs - 0.4;
+
+    for(const [key, value] of Object.entries(object.signal_elements.signs)) {
+        if(!value) continue;
+
+        signs.push(getSign(key, y));
+        y -= 1.2;
+    }
+
+    return signs;
 }
