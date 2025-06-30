@@ -124,6 +124,10 @@ export default class Vector3 {
         return Math.sqrt(this.distanceSq(other));
     }
 
+    distanceExcludeY(other) {
+        return Math.sqrt(this.distanceSqExcludeY(other));
+    }
+
     mannhattanDistance(other) {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
     }

@@ -43,6 +43,22 @@ function getGridCellPositions(pos, scenery, gridSize, maxDist) {
     return positions;
 }
 
+function attach(sign, signal) {
+    if(Constants.parser.logAttachedSigns) {
+        const distance = sign.pos.distanceExcludeY(signal.pos);
+        console.log(`Attaching sign ${sign.name} (${sign.id}) to signal ${signal.name} (${signal.id}) at distance ${distance.toFixed(2)} m`);
+    }
+
+    sign.attached_to = signal;
+    signal.attached_signs.push(sign);
+
+    const attachAs = sign.def?.attachAs || null;
+    if(!attachAs || !signal.signal_elements) return;
+
+    sign.attached_skip_rendering = true;
+    signal.signal_elements.signs[attachAs] = true;
+}
+
 export function attachSigns(scenery) {
     const maxDistSq = Constants.parser.attachSignsMaxDistanceZ ** 2 + Constants.parser.attachSignsMaxDistanceX ** 2;
     const maxDist = Math.sqrt(maxDistSq);
@@ -89,11 +105,6 @@ export function attachSigns(scenery) {
 
         if(!closestSignal) continue;
 
-        if(Constants.parser.logAttachedSigns) {
-            console.log(`Attaching sign ${trackObject.name} (${trackObject.id}) to signal ${closestSignal.name} (${closestSignal.id}) at distance ${Math.sqrt(closestDistanceSq).toFixed(2)} m`);
-        }
-
-        trackObject.attached_to = closestSignal;
-        closestSignal.attached_signs.push(trackObject);
+        attach(trackObject, closestSignal);
     }
 }

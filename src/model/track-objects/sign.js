@@ -8,6 +8,7 @@ export default class Sign extends TrackObject {
     data;
     def;
     attached_to = null;
+    attached_skip_rendering = false;
 
     constructor(id, prefab_name, pos, rot, track_id, name, data) {
         super(id, prefab_name, pos, rot, track_id, name);

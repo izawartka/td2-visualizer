@@ -3,6 +3,7 @@ import { ReactSVG } from 'react-svg'
 export default function SignRenderer(props) {
     const { object } = props;
     if(!object.def) return null;
+    if(object.attached_skip_rendering) return null;
 
     const [x, y] = object.pos.toSVGCoords();
 
