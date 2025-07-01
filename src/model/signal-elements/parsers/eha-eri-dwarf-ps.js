@@ -14,7 +14,7 @@ export default class SignalElementsParserEhaEriDwarfPs {
         const entries = text.split(",");
         const isDouble = entries[8]?.trim().length > 0;
         const mainUnits = SignalElementsParserCommon.getUnits(entries, 2, 3, 2, false);
-        const secondaryUnits = isDouble ? SignalElementsParserCommon.getUnits(entries, 5, 3, 2) : [];
+        const secondaryUnits = isDouble ? SignalElementsParserCommon.getUnits(entries, 9, 3, 2) : [];
 
         return new SignalElements(
             isDouble ? SignalElementsEnums.Type.DWARF_DOUBLE : SignalElementsEnums.Type.DWARF,

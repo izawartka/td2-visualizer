@@ -183,8 +183,8 @@ function getUnit(key, unitType, x, y) {
         default:
             return <g key={key}>
                 {baseCircle}
-                <line x1={x - 0.2} y1={y - 0.5} x2={x + 0.5} y2={y + 0.2} />
-                <line x1={x - 0.5} y1={y - 0.2} x2={x + 0.2} y2={y + 0.5} />
+                <line x1={x - 0.2} y1={y + 0.5} x2={x + 0.5} y2={y - 0.2} />
+                <line x1={x - 0.5} y1={y + 0.2} x2={x + 0.2} y2={y - 0.5} />
             </g>
     }
 }
