@@ -5,6 +5,7 @@ const SignalElementsEnums = {
         DWARF: 2,
         DWARF_DOUBLE: 3,
         TOP: 4,
+        MECHANICAL: 5
     },
     HeadPosition: {
         UNKNOWN: 0,
@@ -35,6 +36,15 @@ const SignalElementsEnums = {
         YELLOW: 2,
         GREEN: 3,
         YELLOW_GREEN: 4,
+    },
+    MechType: {
+        UNKNOWN: 0,
+        HOME_SINGLE: 1,
+        HOME_DOUBLE: 2,
+        SHUNTING: 3,
+        DISTANT_SINGLE: 4,
+        DISTANT_DOUBLE: 5,
+        STOP: 6
     }
 }
 

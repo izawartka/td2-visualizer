@@ -5,11 +5,12 @@ import SignalElementsParsersList from "./parsers-list";
 export default class SignalElements {
     type = SignalElementsEnums.Type.UNKNOWN;
     headPosition = SignalElementsEnums.HeadPosition.UNKNOWN;
+    mechType = SignalElementsEnums.MechType.UNKNOWN;
     units = [];
     bar;
     signs = {};
 
-    constructor(type, headPosition, units = [], bar = null, signs = []) {
+    constructor(type, headPosition, units = [], bar = null, signs = {}) {
         Object.assign(this, {
             type,
             headPosition,
@@ -19,12 +20,30 @@ export default class SignalElements {
         });
     }
 
+    static createMech(mechType, signs = {}) {
+        const signalElements = new SignalElements(
+            SignalElementsEnums.Type.MECHANICAL,
+            SignalElementsEnums.HeadPosition.STANDARD,
+            [],
+            null,
+            signs
+        );
+
+        signalElements.mechType = mechType;
+
+        return signalElements;
+    }
+
     isOverhead() {
         return this.headPosition === SignalElementsEnums.HeadPosition.UNKNOWN;
     }
 
     isDwarf() {
         return this.type === SignalElementsEnums.Type.DWARF || this.type === SignalElementsEnums.Type.DWARF_DOUBLE;
+    }
+
+    isMechanical() {
+        return this.type === SignalElementsEnums.Type.MECHANICAL;
     }
 
     static fromPrefabText(id, text) {
