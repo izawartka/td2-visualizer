@@ -102,9 +102,11 @@ function getPolePoints(object, headOffsetX) {
     if(isDwarf) return null;
 
     const isOverhead = object.signal_elements.isOverhead();
+    const isMechanical = object.signal_elements.isMechanical();
 
     const polePoints = {};
     polePoints.zigzag = headOffsetX !== 0 ? 0.4 : 0;
+    if(isMechanical) polePoints.zigzag += 3.5;
     polePoints.bars = polePoints.zigzag;
 
     switch(object.signal_elements.bar) {
@@ -121,7 +123,9 @@ function getPolePoints(object, headOffsetX) {
 
     const signsHeight = Object.keys(object.signal_elements.signs).map(key => (DefinedSignalSigns[key]?.height || 1.0) + 0.2).reduce((a, b) => a + b, 0) || 0;
     polePoints.signs = polePoints.bars + signsHeight;
-    polePoints.end = isOverhead ? polePoints.signs : Math.max(polePoints.signs + 0.8, 2.2);
+    polePoints.end = polePoints.signs;
+    if(isMechanical) polePoints.end = Math.max(polePoints.end + 0.8, 6.0);
+    else if(!isOverhead) polePoints.end = Math.max(polePoints.signs + 0.8, 2.2);
 
     return polePoints;
 }
@@ -186,6 +190,10 @@ function getUnit(key, unitType, x, y) {
 }
 
 function getHead(object, headOffsetY, headOffsetX) {
+    if(object.signal_elements.isMechanical()) {
+        return getHeadMech(object, headOffsetY);
+    }
+
     if(object.signal_elements.type === SignalElementsEnums.Type.TOP) {
         return getHeadTOP(object, headOffsetY);
     }
@@ -217,6 +225,67 @@ function getHeadTOP(object, headOffsetY) {
         { getUnit(2, SignalElementsEnums.UnitType.WHITE, 0, headOffsetY-5*r) }
         { getUnit(3, SignalElementsEnums.UnitType.YELLOW_LOWER, whiteCX, headOffsetY-r) }
     </>
+}
+
+function getHomeMechSignalArm(y, rot) {
+    return <g transform={`translate(0 ${y}) rotate(${rot}) translate(-0.576, -1.89)`}>
+        <ReactSVG
+            src={`${process.env.PUBLIC_URL}/assets/mech_signals/arm.svg`}
+            wrapper='svg'
+            beforeInjection={(svg) => {
+                svg.setAttribute('width', '1mm');
+                svg.setAttribute('height', '1mm');
+            }}
+        />;
+    </g>;
+}
+
+function getCustomMechHead(y, fileName) {
+    return <g transform={`translate(-1.89, ${y -1.89})`}>
+        <ReactSVG
+            src={`${process.env.PUBLIC_URL}/assets/mech_signals/${fileName}`}
+            wrapper='svg'
+            beforeInjection={(svg) => {
+                svg.setAttribute('width', '1mm');
+                svg.setAttribute('height', '1mm');
+            }}
+        />;
+    </g>;
+}
+
+function getHeadMech(object, headOffsetY) {
+    const mechType = object.signal_elements.mechType;
+
+    switch(mechType) {
+        case SignalElementsEnums.MechType.HOME_SINGLE:
+            return <g className="signal-head-mech">
+                { getHomeMechSignalArm(headOffsetY, 0) }
+            </g>
+        case SignalElementsEnums.MechType.HOME_DOUBLE:
+            return <g className="signal-head-mech">
+                { getHomeMechSignalArm(headOffsetY, 0) }
+                { getHomeMechSignalArm(headOffsetY + 3.5, -90) }
+            </g>
+        case SignalElementsEnums.MechType.SHUNTING:
+            return <g className="signal-head-mech">
+                { getCustomMechHead(headOffsetY, 'shunting_head.svg') }
+            </g>
+        case SignalElementsEnums.MechType.DISTANT_SINGLE:
+            return <g className="signal-head-mech">
+                { getCustomMechHead(headOffsetY, 'distant_head.svg') }
+            </g>
+        case SignalElementsEnums.MechType.DISTANT_DOUBLE:
+            return <g className="signal-head-mech">
+                { getCustomMechHead(headOffsetY, 'distant_head.svg') }
+                { getCustomMechHead(headOffsetY + 3.5, 'distant_arm.svg') }
+            </g>
+        case SignalElementsEnums.MechType.STOP:
+            return <g className="signal-head-mech">
+                { getCustomMechHead(headOffsetY, 'stop_head.svg') }
+            </g>
+        default:
+            return null;
+    }
 }
 
 function getBar(object, headOffsetX, y, isYellow, key = 0) {

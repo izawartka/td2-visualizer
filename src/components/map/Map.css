@@ -91,6 +91,14 @@
     fill: #111;
 }
 
+.map svg g.signal-head-mech path {
+    fill: #eee;
+}
+
+.map svg g.signal-head-mech path.background {
+    fill: #111;
+}
+
 .map svg g.nevp path {
     fill: #eee;
 }
