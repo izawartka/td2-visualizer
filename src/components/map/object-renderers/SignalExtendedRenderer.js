@@ -106,7 +106,7 @@ function getPolePoints(object, headOffsetX) {
 
     const polePoints = {};
     polePoints.zigzag = headOffsetX !== 0 ? 0.4 : 0;
-    if(isMechanical) polePoints.zigzag += 3.5;
+    if(isMechanical) polePoints.zigzag += 5.2;
     polePoints.bars = polePoints.zigzag;
 
     switch(object.signal_elements.bar) {
@@ -126,6 +126,7 @@ function getPolePoints(object, headOffsetX) {
     polePoints.end = polePoints.signs;
     if(isMechanical) polePoints.end = Math.max(polePoints.end + 0.8, 6.0);
     else if(!isOverhead) polePoints.end = Math.max(polePoints.signs + 0.8, 2.2);
+    else if(polePoints.end > 0.1) polePoints.end -= 0.1; 
 
     return polePoints;
 }
@@ -348,7 +349,7 @@ function getSign(id, y) {
                 svg.setAttribute('width', '1mm');
                 svg.setAttribute('height', '1mm');
             }}
-        />;
+        />
     </g>
 }
 
@@ -368,7 +369,6 @@ function getSigns(object, polePoints, headOffsetY) {
         const textComponent = getSignText(id, text, signY);
         if(textComponent) signs.push(textComponent);
 
-        signs.push(getSign(key, y - height / 2 + 0.1));
         y -= height + 0.2;
     }
 

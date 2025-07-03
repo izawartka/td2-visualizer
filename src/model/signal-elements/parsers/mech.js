@@ -20,9 +20,9 @@ export default class SignalElementsParserMech {
     }
 
     static getMechSigns(prefabName) {
-        if(prefabName.startsWith('tok')) return ['w1'];
+        if(prefabName.startsWith('tok')) return {'w1': true};
 
-        return [];
+        return {};
     }
 
     static fromPrefabText(id, text) {
