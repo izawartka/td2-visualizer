@@ -1,5 +1,5 @@
 const Constants = {
-    buildVersion: '1.1.0',
+    buildVersion: '1.2.0',
     map: {
         zoomSensitivity: 0.002,
         forcePointerEvents: false
@@ -18,7 +18,7 @@ const Constants = {
         attachSignsMaxDistanceZ: 1.0,
         attachSignsMaxDistanceX: 0.2,
         attachSignsGridSize: 10,
-        logAttachedSigns: true,
+        logAttachedSigns: false,
     },
     warnings: {
         all: false, // enable all warnings
