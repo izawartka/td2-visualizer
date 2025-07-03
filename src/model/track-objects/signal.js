@@ -2,21 +2,25 @@ import SceneryParserLog from "../scenery-parser-log";
 import SpawnInfo from "../spawn-info";
 import TrackObject from "./track-object";
 import Vector3 from "../vector3";
+import SignalElements from "../signal-elements/signal-elements";
 
 export default class Signal extends TrackObject {
     is_spawn;
     spawn_info;
     signal_name;
+    signal_elements;
     type = "Signal";
     applied = false;
+    attached_signs = [];
 
-    constructor(id, prefab_name, pos, rot, track_id, name, is_spawn, spawn_info, signal_name) {
+    constructor(id, prefab_name, pos, rot, track_id, name, is_spawn, spawn_info, signal_name, signal_elements) {
         super(id, prefab_name, pos, rot, track_id, name);
 
         Object.assign(this, {
             is_spawn,
             spawn_info: is_spawn ? spawn_info : null,
-            signal_name
+            signal_name,
+            signal_elements
         });
 
         if (this.is_spawn && !this.spawn_info) {
@@ -75,7 +79,8 @@ export default class Signal extends TrackObject {
             values[11], // name,
             values[12] === "Spawn Signal", // is_spawn
             SpawnInfo.fromText(values[15]), // spawn_info
-            values[29]
+            values[29],
+            SignalElements.fromPrefabText(values[1], values[2]) // signal_elements
         );
 
         return signal;

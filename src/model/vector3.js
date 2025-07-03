@@ -114,12 +114,31 @@ export default class Vector3 {
         return dx * dx + dy * dy + dz * dz;
     }
 
+    distanceSqExcludeY(other) {
+        const dx = this.x - other.x;
+        const dz = this.z - other.z;
+        return dx * dx + dz * dz;
+    }
+
     distance(other) {
         return Math.sqrt(this.distanceSq(other));
     }
 
+    distanceExcludeY(other) {
+        return Math.sqrt(this.distanceSqExcludeY(other));
+    }
+
     mannhattanDistance(other) {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
+    }
+
+    toLocal(parentPos, parentRot = Vector3.zero()) {
+        const localPos = this.sub(parentPos);
+        return localPos.rotate(parentRot.negate());
+    }
+
+    negate() {
+        return new Vector3(-this.x, -this.y, -this.z);
     }
 
     clone() {

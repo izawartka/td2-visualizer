@@ -18,10 +18,10 @@ import ElectrificationResolver from './electrification-resolver';
 import NEVP from './track-objects/nevp';
 import Derailer from './track-objects/derailer';
 import SpawnPoint from './track-objects/spawn-point';
+import { attachSigns } from './attach-signs';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
-TODO: check CameraHome and MainCamera
 */
 
 export default class SceneryParser {
@@ -46,6 +46,7 @@ export default class SceneryParser {
 
         if(Constants.parser.resolveElectrification) ElectrificationResolver.resolveScenery(scenery);
         if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
+        if(Constants.parser.attachSigns) attachSigns(scenery);
         if(Constants.parser.logSceneryAfterFinished) console.log(scenery);
 
         return scenery;

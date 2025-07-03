@@ -1,5 +1,5 @@
 const Constants = {
-    buildVersion: '1.1.0',
+    buildVersion: '1.2.0',
     map: {
         zoomSensitivity: 0.002,
         forcePointerEvents: false
@@ -13,6 +13,12 @@ const Constants = {
         runTracksConnectionTest: false,
         resolveElectrification: true,
         maxRouteConnectionDistance: 0.2,
+        attachSigns: true,
+        attachSignsNeedsSameTrack: false,
+        attachSignsMaxDistanceZ: 1.0,
+        attachSignsMaxDistanceX: 0.2,
+        attachSignsGridSize: 10,
+        logAttachedSigns: false,
     },
     warnings: {
         all: false, // enable all warnings
@@ -36,6 +42,12 @@ const Constants = {
         electrificationMissingRouteTracks: true,
         electrificationResolverError: true,
         electrificationResolverWarnings: true,
+        signalElemsUnknownPrefab: true,
+        signalElemsRecognizedUnknownPrefab: true,
+        attachSignsOutOfBounds: true,
+        signalElemsUnknownSign: true,
+        signalElemsUnknownSignText: true,
+
     },
     errors: {
         invalidSceneryInfo: true

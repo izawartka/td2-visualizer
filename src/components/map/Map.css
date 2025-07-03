@@ -49,6 +49,14 @@
     stroke: #eee;
 }
 
+.map svg g.extended-signal-icon {
+    stroke: #eee;
+}
+
+.map svg g.extended-signal-icon path.background {
+    fill: #111;
+}
+
 .map svg g.route g {
     fill: #eee;
 }
@@ -73,6 +81,26 @@
 
 .map svg g.sign path.background {
     fill: #111;
+}
+
+.map svg g.signal-sign path {
+    fill: #eee;
+}
+
+.map svg g.signal-sign path.background {
+    fill: #111;
+}
+
+.map svg g.signal-head-mech path {
+    fill: #eee;
+}
+
+.map svg g.signal-head-mech path.background {
+    fill: #111;
+}
+
+.map .signal-sign-text {
+    stroke: none;
 }
 
 .map svg g.nevp path {

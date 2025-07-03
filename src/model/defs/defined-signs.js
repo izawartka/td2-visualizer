@@ -190,22 +190,26 @@ const DefinedSigns = {
     "w18": {
         "name": "W18",
         "icon": "w18.svg",
-        "offsetY": 3.89
+        "offsetY": 3.89,
+        "attachAs": "w18",
     },
     "w19": {
         "name": "W19",
         "icon": "w19.svg",
-        "offsetY": 3.89
+        "offsetY": 3.89,
+        "attachAs": "w19"
     },
     "w20": {
         "name": "W20",
         "icon": "w20.svg",
-        "offsetY": 3.89
+        "offsetY": 3.89,
+        "attachAs": "w20"
     },
     "w1": {
         "name": "W1",
         "icon": "w1.svg",
-        "offsetY": 3.89
+        "offsetY": 3.89,
+        "attachAs": "w1"
     },
     "latarnia_w4": {alias: "w4"},
     "w4": {

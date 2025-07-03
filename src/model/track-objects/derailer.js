@@ -10,7 +10,7 @@ export default class Derailer extends TrackObject {
 
     static isDerailer(text) {
         const prefabName = text.split(";", 4)[2];
-        const regex = /^wykolejnica(?!_latarnia).*$/;
+        const regex = /^wykolejnica(?!_(?:latarnia|belka)).*$/;
         return regex.test(prefabName);
     }
 
