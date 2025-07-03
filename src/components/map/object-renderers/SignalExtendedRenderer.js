@@ -7,45 +7,63 @@ export default function SignalExtendedRenderer(props) {
     const { object } = props;
     const [x, y] = object.pos.toSVGCoords();
 
-    const overheadRot = object.signal_elements.isOverhead() ? 180 : 0;
     const baseRot = object.rot.y;
-    const rot = AngleHelper.normalizeDegAngle(overheadRot + baseRot);
+    const rot = AngleHelper.normalizeDegAngle(baseRot);
+
+    const pointsData = getSignalPointsData(object);
+
+    return (
+        <g className="extended-signal" transform={`translate(${x}, ${y}) rotate(${rot})`}>
+            <SignalIcon object={object} pointsData={pointsData} />
+            <SignalNameText object={object} rot={rot} pointsData={pointsData} />
+        </g>
+    );
+}
+
+function SignalNameText(props) {
+    const {object, rot, pointsData} = props;
+    
     const upsideDown = rot >= 180;
     const upsideDownRot = upsideDown ? 90 : -90;
     const anchor = upsideDown ? "start" : "end";
 
+    const isOverhead = object.signal_elements.isOverhead();
+    const baseY = isOverhead ? pointsData.headOffsetY + pointsData.polePoints.end : 0;
+
+
     return (
-        <g className="extended-signal" transform={`translate(${x}, ${y}) rotate(${rot})`}>
-            <g className="extended-signal-icon" transform={`rotate(${-overheadRot})`}>
-                <SignalIcon object={object} />
-            </g>
-            <g transform={`translate(0, 1) rotate(${upsideDownRot})`}>
-                <text x="0" y="0" textAnchor={anchor} dominantBaseline="middle">
-                    {object.getPrintableSignalName()}
-                </text>
-            </g>
+        <g transform={`translate(0, ${baseY + 1}) rotate(${upsideDownRot})`}>
+            <text x="0" y="0" textAnchor={anchor} dominantBaseline="middle">
+                {object.getPrintableSignalName()}
+            </text>
         </g>
     );
 }
 
 function SignalIcon(props) {
-    const { object } = props;
+    const { object, pointsData } = props;
 
+    return (
+        <g className="extended-signal-icon" strokeWidth={0.2} strokeLinecap="round" strokeLinejoin="round">
+            { getBase(pointsData) }
+            { getOverheadFrame(object) }
+            { getPole(pointsData) }
+            { getBars(object, pointsData) }
+            { getSigns(object, pointsData) }
+            { getHead(object, pointsData) }
+        </g>
+    );
+}
+
+function getSignalPointsData(object) {
     const halfBaseWidth = getHalfBaseWidth(object);
     const headOffsetX = getHeadOffsetX(object);
     const polePoints = getPolePoints(object, headOffsetX);
     const headOffsetY = getHeadOffsetY(object, polePoints);
 
-    return (
-        <g strokeWidth={0.2} strokeLinecap="round" strokeLinejoin="round">
-            { getBase(halfBaseWidth) }
-            { getOverheadFrame(object) }
-            { getPole(polePoints, headOffsetY, headOffsetX) }
-            { getBars(object, polePoints, headOffsetY) }
-            { getSigns(object, polePoints, headOffsetY) }
-            { getHead(object, headOffsetY, headOffsetX) }
-        </g>
-    );
+    return {
+        halfBaseWidth, headOffsetX, polePoints, headOffsetY
+    };
 }
 
 function getHeadOffsetY(object, polePoints) {
@@ -67,7 +85,7 @@ function getHalfBaseWidth(object) {
     return 0.4536;
 }
 
-function getBase(halfBaseWidth) {
+function getBase({halfBaseWidth}) {
     if(halfBaseWidth === 0) return null;
     return <path d={`M ${-halfBaseWidth} 0 L ${halfBaseWidth} 0`} />;
 }
@@ -131,7 +149,7 @@ function getPolePoints(object, headOffsetX) {
     return polePoints;
 }
 
-function getPole(polePoints, headOffsetY, headOffsetX) {
+function getPole({polePoints, headOffsetY, headOffsetX}) {
     if(!polePoints) return null;
 
     if(headOffsetX) {
@@ -190,13 +208,13 @@ function getUnit(key, unitType, x, y) {
     }
 }
 
-function getHead(object, headOffsetY, headOffsetX) {
+function getHead(object, {headOffsetY, headOffsetX}) {
     if(object.signal_elements.isMechanical()) {
-        return getHeadMech(object, headOffsetY);
+        return getHeadMech(object, {headOffsetY});
     }
 
     if(object.signal_elements.type === SignalElementsEnums.Type.TOP) {
-        return getHeadTOP(object, headOffsetY);
+        return getHeadTOP(object, {headOffsetY});
     }
 
     const isDoubleDwarf = object.signal_elements.type === SignalElementsEnums.Type.DWARF_DOUBLE;
@@ -214,7 +232,7 @@ function getHead(object, headOffsetY, headOffsetX) {
     return units;
 }
 
-function getHeadTOP(object, headOffsetY) {
+function getHeadTOP(object, {headOffsetY}) {
     const isLeft = object.signal_elements.headPosition === SignalElementsEnums.HeadPosition.LEFT;
     const r = 0.6;
     const whiteCX = isLeft ? r*2 : -r*2;
@@ -254,7 +272,7 @@ function getCustomMechHead(y, fileName) {
     </g>;
 }
 
-function getHeadMech(object, headOffsetY) {
+function getHeadMech(object, {headOffsetY}) {
     const mechType = object.signal_elements.mechType;
 
     switch(mechType) {
@@ -289,16 +307,16 @@ function getHeadMech(object, headOffsetY) {
     }
 }
 
-function getBar(object, headOffsetX, y, isYellow, key = 0) {
+function getBar(y, isYellow, key = 0) {
     const yellowOff = isYellow ? 0.2 : 0;
 
     return <g key={key}>
-        <rect x={headOffsetX-0.6} y={y-0.2} width={1.2} height={0.4} className='background' />;
-        <line x1={headOffsetX - yellowOff} y1={y-0.2} x2={headOffsetX + yellowOff} y2={y+0.2} />;
+        <rect x={-0.6} y={y-0.2} width={1.2} height={0.4} className='background' />;
+        <line x1={-yellowOff} y1={y-0.2} x2={yellowOff} y2={y+0.2} />;
     </g>
 }
 
-function getBars(object, polePoints, headOffsetY) {
+function getBars(object, {polePoints, headOffsetY}) {
     if(!polePoints) return null;
 
     const barType = object.signal_elements.bar;
@@ -311,13 +329,13 @@ function getBars(object, polePoints, headOffsetY) {
         default:
             return null;
         case SignalElementsEnums.BarType.YELLOW:
-            return getBar(object, 0, y, true);
+            return getBar(y, true);
         case SignalElementsEnums.BarType.GREEN:
-            return getBar(object, 0, y, false);
+            return getBar(y, false);
         case SignalElementsEnums.BarType.YELLOW_GREEN:
             return <>
-                { getBar(object, 0, y, true, 0) }
-                { getBar(object, 0, y - 0.8, false, 1) }
+                { getBar(y, true, 0) }
+                { getBar(y - 0.8, false, 1) }
             </>
     }
 }
@@ -353,7 +371,7 @@ function getSign(id, y) {
     </g>
 }
 
-function getSigns(object, polePoints, headOffsetY) {
+function getSigns(object, {polePoints, headOffsetY}) {
     if(!polePoints) return null;
     const signs = [];
     let y = headOffsetY + polePoints.signs;

@@ -49,11 +49,11 @@
     stroke: #eee;
 }
 
-.map svg g.extended-signal-icon g {
+.map svg g.extended-signal-icon {
     stroke: #eee;
 }
 
-.map svg g.extended-signal-icon g path.background {
+.map svg g.extended-signal-icon path.background {
     fill: #111;
 }
 
