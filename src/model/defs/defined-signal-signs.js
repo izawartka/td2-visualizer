@@ -29,6 +29,17 @@ const DefinedSignalSigns = {
         "name": "W24",
         "icon": "w24.svg",
     },
+    "w21x": {
+        "regex": /^(?:wsk_)?w21_led_\d$/,
+        "name": "W21",
+        "icon": "w21x.svg",
+    },
+    "w21": {
+        "regex": /^(?:wsk_)?w21(?!_led_)(?:\D)?.*$/,
+        "name": "W21",
+        "icon": "w21.svg",
+        "textRegex": /w21_(\d+)(?:v2)?/
+    },
 };
 
 export default DefinedSignalSigns;
