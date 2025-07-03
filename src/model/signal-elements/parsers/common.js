@@ -109,8 +109,22 @@ export default class SignalElementsParserCommon {
                 SceneryParserLog.warn('signalElemsUnknownSign', `Unknown signal sign: ${entry}`);
                 continue;
             }
-
+            
             signs[key] = true;
+
+            const def = DefinedSignalSigns[key];
+            if(!def.textRegex) continue;
+
+            const match = def.textRegex.exec(entry);
+            if(!match) {
+                SceneryParserLog.warn('signalElemsUnknownSignText', `Signal sign ${entry} does not match text regex for ${key}`);
+                continue;
+            }
+
+            const text = match[1]?.trim();
+            signs[key] = {
+                text: text || null,
+            }
         }
 
         return signs;

@@ -99,6 +99,10 @@
     fill: #111;
 }
 
+.map .signal-sign-text {
+    stroke: none;
+}
+
 .map svg g.nevp path {
     fill: #eee;
 }

@@ -321,6 +321,21 @@ function getBars(object, polePoints, headOffsetY) {
     }
 }
 
+function getSignText(id, text, y) {
+    if(!text) return null;
+    const def = DefinedSignalSigns[id];
+    if(!def) return null;
+
+    return <text
+        key={`${id}-text`}
+        className="signal-sign-text"
+        transform={`translate(${def.textOffsetX || 0}, ${y + (def.textOffsetY || 0)})`}
+        style={{ fontSize: `${def.textSize || 0.15}mm` }}
+        textAnchor="middle"
+        dominantBaseline="central"
+    >{text}</text>;
+}
+
 function getSign(id, y) {
     const def = DefinedSignalSigns[id];
     if(!def) return null;
@@ -342,9 +357,16 @@ function getSigns(object, polePoints, headOffsetY) {
     const signs = [];
     let y = headOffsetY + polePoints.signs;
 
-    for(const [key, def] of Object.entries(DefinedSignalSigns)) {
-        if(!object.signal_elements.signs.hasOwnProperty(key) || !DefinedSignalSigns[key]) continue;
+    for(const [id, def] of Object.entries(DefinedSignalSigns)) {
+        if(!object.signal_elements.signs.hasOwnProperty(id) || !DefinedSignalSigns[id]) continue;
         const height = (def.height || 1.0);
+        const text = object.signal_elements.signs[id]?.text || null;
+        const signY = y - height / 2 + 0.1;
+
+        signs.push(getSign(id, signY, text));
+
+        const textComponent = getSignText(id, text, signY);
+        if(textComponent) signs.push(textComponent);
 
         signs.push(getSign(key, y - height / 2 + 0.1));
         y -= height + 0.2;

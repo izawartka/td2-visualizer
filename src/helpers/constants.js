@@ -45,7 +45,9 @@ const Constants = {
         signalElemsUnknownPrefab: true,
         signalElemsRecognizedUnknownPrefab: true,
         attachSignsOutOfBounds: true,
-        signalElemsUnknownSign: true
+        signalElemsUnknownSign: true,
+        signalElemsUnknownSignText: true,
+
     },
     errors: {
         invalidSceneryInfo: true
