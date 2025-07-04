@@ -9,7 +9,7 @@ const ExtendedSignalsConstants = {
     HEAD_UNIT_UNUSED_SIZE_1: 0.2,
     HEAD_UNIT_UNUSED_SIZE_2: 0.5,
     MECH_SECOND_ARM_OFFSET: 3.5,
-    MECH_ARM_X_OFF: -1.314,
+    MECH_ARM_X_OFF: 1.314,
     BAR_HALF_W: 0.6,
     BAR_HALF_H: 0.2,
     OVERHEAD_FRAME_HALF_W: 1.0,

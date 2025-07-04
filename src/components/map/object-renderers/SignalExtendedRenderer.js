@@ -303,7 +303,7 @@ function SignalSigns(object, {polePoints, headOffsetY}) {
         if(!object.signal_elements.signs.hasOwnProperty(id) || !DefinedSignalSigns[id]) continue;
         const height = (def.height || C.SIGN_DEFAULT_HEIGHT);
         const text = object.signal_elements.signs[id]?.text || null;
-        const signY = y - height / 2 + C.STROKE_WIDTH / 2;
+        const signY = y - height / 2;
 
         signs.push(SignalSign(id, signY, text));
 
