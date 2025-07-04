@@ -18,9 +18,8 @@ https://maseuko.pl/soft/td2-visualizer-2/
 
 ## Known issues
 
-- Older type (dynamic_) signals extended parsing is not implemented yet
 - Not all signs have their icons
-- Electrification resolution fails with some sceneries (not resolvable)
+- Electrification resolution fails with some sceneries (not no be fixed)
 
 ## Author
 
