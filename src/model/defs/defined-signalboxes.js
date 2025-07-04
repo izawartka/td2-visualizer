@@ -79,7 +79,12 @@ const DefinedSignalBoxes = {
     "SignalBoxPrzyworyOpolskie": {},
     "SignalBoxSiechnice_m": {},
     "SignalBoxTurzyn": {},
-
+    "SignalBoxE_m": {
+        rot: 1
+    },
+    "SignalBoxEmptyControlBase": {
+        empty: true
+    }
 }
 
 export default DefinedSignalBoxes;
