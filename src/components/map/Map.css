@@ -50,10 +50,11 @@
 }
 
 .map svg g.extended-signal-icon {
+    fill: none;
     stroke: #eee;
 }
 
-.map svg g.extended-signal-icon path.background {
+.map svg g.extended-signal-icon .background {
     fill: #111;
 }
 
