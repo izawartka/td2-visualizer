@@ -9,6 +9,12 @@ https://td2.info.pl/narzedzie-tools/nowy-td2-visualizer!/
 
 #
 
+## Controls
+
+- **Mouse wheel** - przybliżanie/oddalanie **/** zoom in/out
+- **Mouse drag** - przesuwanie widoku **/** move view
+- **ALT + Mouse drag** - obracanie widoku **/** rotate view
+
 ## Online demo
 
 Wersja online może nie zawsze być aktualna<br>
