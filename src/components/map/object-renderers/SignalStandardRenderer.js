@@ -1,14 +1,9 @@
 import { ReactSVG } from "react-svg";
-import AngleHelper from "../../../helpers/angleHelper";
+import AlwaysUpText from "../text/AlwaysUpText";
 
 export default function SignalStandardRenderer(props) {
     const { object } = props;
     const [x, y] = object.pos.toSVGCoords();
-
-    const rot = AngleHelper.normalizeDegAngle(object.rot.y);
-    const upsideDown = rot >= 180;
-    const upsideDownRot = upsideDown ? 90 : -90;
-    const anchor = upsideDown ? "end" : "start";
 
     return (
         <g className="signal" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
@@ -23,11 +18,12 @@ export default function SignalStandardRenderer(props) {
                     }}
                 />
             </g>
-            <g transform={`translate(0, -2) rotate(${upsideDownRot})`}>
-                <text x="0" y="0" textAnchor={anchor} dominantBaseline="middle">
-                    {object.getPrintableSignalName()}
-                </text>
-            </g>
+            <AlwaysUpText
+                baseRot={object.rot.y}
+                additionalRot={-90}
+                offsetY={-2}
+                text={object.getPrintableSignalName()}
+            />
         </g>
     );
 }

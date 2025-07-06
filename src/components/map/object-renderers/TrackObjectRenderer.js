@@ -1,3 +1,5 @@
+import SimpleLabelText from "../text/SimpleLabelText";
+
 export default function TrackObjectRenderer(props) {
     const { object } = props;
     const [x, y] = object.pos.toSVGCoords();
@@ -6,29 +8,26 @@ export default function TrackObjectRenderer(props) {
     return (
         <g className="track-object">
             <rect
-                x={x - 2}
-                y={y - 2}
-                width='4px'
-                height='4px'
+                x={x - 1}
+                y={y - 1}
+                width='2px'
+                height='2px'
                 fill='transparent'
                 stroke='none'
             ></rect>
             <circle
                 cx={x}
                 cy={y}
-                r='1px'
+                r='0.5px'
             ></circle>
-            <text
+            <SimpleLabelText
+                text={text}
+                className="track-object-label"
                 x={x}
                 y={y}
-                id={`track-object-${object.id}`}
-                style={{ userSelect: "none" }}
                 enableBackground="new 0 0 100 100"
-                textAnchor="middle"
-                dominantBaseline="middle"
-            >
-                {text}
-            </text>
+                wrapperStyle={{pointerEvents: 'none'}}
+            />
         </g>
     );
 }

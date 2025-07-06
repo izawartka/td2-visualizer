@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import './ZoomPanWrapper.css';
 import Constants from '../../helpers/constants';
 import { useZoomPanSubscriber, viewBox$, clientRect$, camera$ } from '../../hooks/useZoomPubSub';
+import { mapRotation$ } from '../../services/mapRotationService';
 
 export default function ZoomPanWrapper({children}) {
     const wrapperRef = useRef(null);
@@ -38,6 +39,7 @@ export default function ZoomPanWrapper({children}) {
             rafScheduledRef.current = false;
             cameraWrapperRef.current.setAttribute('transform', getCameraTransformString());
             camera$.next(cameraRef.current);
+            mapRotation$.next(cameraRef.current.rotation);
         });
     }, []);
     

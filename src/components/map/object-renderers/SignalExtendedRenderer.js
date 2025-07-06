@@ -3,6 +3,7 @@ import AngleHelper from '../../../helpers/angleHelper';
 import DefinedSignalSigns from '../../../model/defs/defined-signal-signs';
 import SignalElementsEnums from '../../../model/signal-elements/enums';
 import ExtendedSignalsHelper from '../../../helpers/extendedSignalsHelper';
+import AlwaysUpText from '../text/AlwaysUpText';
 import C from '../../../helpers/extendedSignalsConstants';
 
 export default function SignalExtendedRenderer(props) {
@@ -24,20 +25,18 @@ export default function SignalExtendedRenderer(props) {
 
 function SignalNameText(props) {
     const {object, rot, pointsData} = props;
-    
-    const upsideDown = rot >= 180;
-    const upsideDownRot = upsideDown ? 90 : -90;
-    const anchor = upsideDown ? "start" : "end";
 
     const isOverhead = object.signal_elements.isOverhead();
     const baseY = isOverhead ? pointsData.headOffsetY + pointsData.polePoints.end : 0;
 
     return (
-        <g transform={`translate(0, ${baseY + C.NAME_TEXT_OFFSET}) rotate(${upsideDownRot})`}>
-            <text x="0" y="0" textAnchor={anchor} dominantBaseline="middle">
-                {object.getPrintableSignalName()}
-            </text>
-        </g>
+        <AlwaysUpText
+            baseRot={rot}
+            additionalRot={-90}
+            offsetY={baseY + C.NAME_TEXT_OFFSET}
+            text={object.getPrintableSignalName()}
+            reverseAnchor={true}
+        />
     );
 }
 

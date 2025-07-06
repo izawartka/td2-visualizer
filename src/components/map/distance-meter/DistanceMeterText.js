@@ -1,4 +1,9 @@
+import { useEffect, useState } from "react";
+import { mapRotation$ } from "../../../services/mapRotationService";
+import AngleHelper from "../../../helpers/angleHelper";
+
 export default function DistanceMeterText(props) {
+    const [mapRotation, setMapRotation] = useState(0);
     const { start, end, totalDistance } = props;
 
     const cx = (start[0] + end[0]) / 2;
@@ -7,9 +12,18 @@ export default function DistanceMeterText(props) {
     const dy = end[1] - start[1];
     const len = Math.sqrt(dx * dx + dy * dy);
     const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-    const upsideDown = angle >= 90 || angle <= -90;
+    const rotation = AngleHelper.normalizeDegAngle(mapRotation + angle);
+    const upsideDown = rotation >= 90 && rotation <= 270;
     const x = cx + len / 2;
     const y = cy + (upsideDown ? 2 : -2);
+
+    useEffect(() => {
+        const subscription = mapRotation$.subscribe(date => {
+            setMapRotation(date);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
 
     return (
         <text

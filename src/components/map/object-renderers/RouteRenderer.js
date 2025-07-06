@@ -1,15 +1,11 @@
 import { ReactSVG } from "react-svg";
-import AngleHelper from "../../../helpers/angleHelper";
+import AlwaysUpText from "../text/AlwaysUpText";
 
 export default function RouteRenderer(props) {
     const { object } = props;
     const [x, y] = object.pos.toSVGCoords();
 
-    const rot = AngleHelper.normalizeDegAngle(object.rot.y);
-    const upsideDown = rot >= 180;
-    const upsideDownRot = upsideDown ? 90 : -90;
     const offY = object.track_count === 2 ? -22 : -20;
-    const anchor = upsideDown ? "start" : "end";
     const arrowOffset = - object.track_offset - 37.8;
 
     return (
@@ -24,11 +20,15 @@ export default function RouteRenderer(props) {
                     }}
                 />
             </g>
-            <g transform={`translate(${object.track_offset}, 0) rotate(${upsideDownRot})`}>
-                <text x='0' y={offY} textAnchor={anchor} dominantBaseline="bottom">
-                    {object.route_name}
-                </text>
-            </g>
+            <AlwaysUpText
+                baseRot={object.rot.y}
+                additionalRot={-90}
+                offsetX={object.track_offset}
+                reverseAnchor={true}
+                y={offY}
+                dominantBaseline="bottom"
+                text={object.route_name}
+            />
         </g>
     );
 }

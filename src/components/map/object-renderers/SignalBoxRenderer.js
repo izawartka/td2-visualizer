@@ -1,5 +1,5 @@
 import { ReactSVG } from 'react-svg';
-import AngleHelper from '../../../helpers/angleHelper';
+import AlwaysUpText from '../text/AlwaysUpText';
 
 export default function SignalBoxRenderer(props) {
   const { object } = props;
@@ -7,9 +7,7 @@ export default function SignalBoxRenderer(props) {
   const text = object.getPrintableSignalBoxName();
 
   const rotDiff = object.def.undef ? Math.round(object.rot.y / 90) * (-90) : object.def.rot * 90;
-  const rot = AngleHelper.normalizeDegAngle(object.rot.y + rotDiff);
-  const upsideDown = rot >= 90 && rot < 270;
-  const upsideDownRot = upsideDown ? 180 : 0;
+  const rot = object.rot.y + rotDiff;
 
   return (
     <g className="signalbox" transform={`translate(${x}, ${y}) rotate(${rot})`}>
@@ -24,11 +22,13 @@ export default function SignalBoxRenderer(props) {
               }}
           />
       </g>
-      <g transform={`translate(0, 6) rotate(${upsideDownRot})`}>
-          <text x="0" y="0" textAnchor="middle" dominantBaseline="middle">
-              {text}
-          </text>
-      </g>
+      <AlwaysUpText
+        baseRot={rot - 90}
+        additionalRot={180}
+        offsetY={6}
+        textAnchor='middle'
+        text={text}
+      />
     </g>
   );
 }
