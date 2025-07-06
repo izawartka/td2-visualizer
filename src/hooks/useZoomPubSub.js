@@ -3,11 +3,10 @@ import { Subject, BehaviorSubject } from 'rxjs';
 
 const zoomCenter$ = new Subject();
 
-// BehaviorSubject to store current viewBox
+// BehaviorSubjects to store current viewBox, clientRect and camera transform
 export const viewBox$ = new BehaviorSubject(null);
-
-// BehaviorSubject to store the clientRect
 export const clientRect$ = new BehaviorSubject(null);
+export const camera$ = new BehaviorSubject(0);
 
 /**
  * Returns the current viewBox value synchronously.
@@ -21,6 +20,13 @@ export function getCurrentViewBox() {
  */
 export function getCurrentClientRect() {
     return clientRect$.getValue();
+}
+
+/**
+ * Returns the current camera transform value synchronously.
+ */
+export function getCurrentCamera() {
+    return camera$.getValue();
 }
 
 /**

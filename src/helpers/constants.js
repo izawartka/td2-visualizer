@@ -1,5 +1,4 @@
 const Constants = {
-    buildVersion: '1.2.0',
     buildVersion: '1.2.1',
     map: {
         zoomSensitivity: 0.002,

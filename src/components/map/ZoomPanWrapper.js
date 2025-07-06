@@ -1,65 +1,56 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import './ZoomPanWrapper.css';
 import Constants from '../../helpers/constants';
-import { useZoomPanSubscriber, viewBox$, clientRect$ } from '../../hooks/useZoomPubSub';
+import { useZoomPanSubscriber, viewBox$, clientRect$, camera$ } from '../../hooks/useZoomPubSub';
 
 export default function ZoomPanWrapper({children}) {
-    const [viewBox, setViewBox] = useState({x: 0, y: 0, w: 100, h: 100}); // Initial viewBox
     const wrapperRef = useRef(null);
     const svgRef = useRef(null);
-    const isPanning = useRef(false);
-    const panStart = useRef({ x: 0, y: 0 });
-    const vbStart = useRef(viewBox);
-    const clientRect = useRef(null);
-    const pendingViewBoxRef = useRef(viewBox);
+    const cameraWrapperRef = useRef(null);
+    const viewBoxRef = useRef({ x: -50, y: -50, w: 100, h: 100 });
+    const cameraRef = useRef({ x: 0, y: 0, zoom: 1 });
+    const clientRectRef = useRef(null);
     const rafScheduledRef = useRef(false);
+    const isMouseDownRef = useRef(false);
+
+    const getViewBoxString = () => {
+        const { x, y, w, h } = viewBoxRef.current;
+        return `${x} ${y} ${w} ${h}`;
+    };
     
-    const scheduleViewBoxUpdate = useCallback((newVB) => {
-        pendingViewBoxRef.current = newVB;
-        if (!rafScheduledRef.current) {
-            rafScheduledRef.current = true;
-            requestAnimationFrame(() => {
-                setViewBox(pendingViewBoxRef.current);
-                rafScheduledRef.current = false;
-            });
-        }
+    const updateViewBox = useCallback((viewBox) => {
+        viewBoxRef.current = viewBox;
+        svgRef.current.setAttribute('viewBox', getViewBoxString());
+        viewBox$.next(viewBoxRef.current);
+    }, []);
+    
+    const getCameraTransformString = () => {
+        const { x, y, zoom } = cameraRef.current;
+
+        return `scale(${zoom}) translate(${-x},${-y})`;
+    };
+
+    const scheduleCameraUpdate = useCallback(() => {
+        if (rafScheduledRef.current) return;
+
+        rafScheduledRef.current = true;
+        requestAnimationFrame(() => {
+            rafScheduledRef.current = false;
+            cameraWrapperRef.current.setAttribute('transform', getCameraTransformString());
+            camera$.next(cameraRef.current);
+        });
     }, []);
     
     const handleResize = useCallback(() => {
         const rect = wrapperRef.current?.getBoundingClientRect();
         if (!rect) return;
 
-        clientRect$.next(rect); // Update clientRect BehaviorSubject
-        
-        if (!clientRect.current) {
-            // First-time: initialize viewBox so SVG fits wrapper
-            const initialVB = {
-                x: -rect.width / 2,
-                y: -rect.height / 2,
-                w: rect.width,
-                h: rect.height
-            };
-
-            clientRect.current = rect;
-            scheduleViewBoxUpdate(initialVB);
-            return;
-        }
-        
-        const prev = pendingViewBoxRef.current;
-        const scaleX = rect.width / clientRect.current.width;
-        const scaleY = rect.height / clientRect.current.height;
-        const newX = prev.x + (prev.w / 2) * (1 - scaleX);
-        const newY = prev.y + (prev.h / 2) * (1 - scaleY);
-        clientRect.current = rect;
-        scheduleViewBoxUpdate({
-            x: newX,
-            y: newY,
-            w: prev.w * scaleX,
-            h: prev.h * scaleY,
-        });
-    }, [scheduleViewBoxUpdate]);
+        updateViewBox({ x: -rect.width/2, y: -rect.height/2, w: rect.width, h: rect.height });
+        clientRect$.next(rect);
+        clientRectRef.current = rect;
+    }, [updateViewBox]);
     
-    // change viewbox when the window resizes
+    // update viewbox when the window resizes
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         handleResize(); // Initial call to set the viewBox
@@ -68,80 +59,80 @@ export default function ZoomPanWrapper({children}) {
         };
     }, [handleResize]);
     
-    // Whenever viewBox state changes, publish to viewBox$
-    useEffect(() => {
-        // Push new value to BehaviorSubject
-        viewBox$.next(viewBox);
-    }, [viewBox]);
-    
     const centerOn = useCallback((cx, cy) => {
-        const { w, h } = pendingViewBoxRef.current;
-        const newX = cx - w / 2;
-        const newY = cy - h / 2;
-        scheduleViewBoxUpdate({ x: newX, y: newY, w, h });
-    }, [scheduleViewBoxUpdate]);
+        cameraRef.current.x = cx;
+        cameraRef.current.y = cy;
+
+        scheduleCameraUpdate();
+    }, [scheduleCameraUpdate]);
     
     // Subscribe to any external "center" calls
     useZoomPanSubscriber(centerOn);
 
     const onWheel = (e) => {
-        const { x, y, w, h } = pendingViewBoxRef.current;
-        const svgRect = svgRef.current.getBoundingClientRect();
-        const offsetX = e.clientX - svgRect.left;
-        const offsetY = e.clientY - svgRect.top;
-        
-        // mouse position in svg coordinates
-        const mx = (offsetX / svgRect.width) * w + x;
-        const my = (offsetY / svgRect.height) * h + y;
-        
-        // zoom factor
-        const scale = 1.0 + e.deltaY * Constants.map.zoomSensitivity;
-        const newW = w * scale;
-        const newH = h * scale;
-        
-        // adjust x,y so zoom centers at mouse
-        const newX = mx - (offsetX / svgRect.width) * newW;
-        const newY = my - (offsetY / svgRect.height) * newH;
-        scheduleViewBoxUpdate({ x: newX, y: newY, w: newW, h: newH });
+        const { left, top } = clientRectRef.current;
+        const { x, y, zoom } = cameraRef.current;
+        const { w, h } = viewBoxRef.current;
+
+        const newZoom = cameraRef.current.zoom * (1.0 - (e.deltaY * Constants.map.zoomSensitivity));
+
+        // screen space cursor pos
+        const cx = e.clientX - left;
+        const cy = e.clientY - top;
+
+        // svg space cursor pos
+        const scx = x - (w / 2 - cx) / zoom;
+        const scy = y - (h / 2 - cy) / zoom;
+
+        // "new" screen space cursor pos
+        const ncx = w/2 - (x - scx) * newZoom;
+        const ncy = h/2 - (y - scy) * newZoom;
+
+        // difference in screen space cursor pos
+        const offX = (ncx - cx) / newZoom;
+        const offY = (ncy - cy) / newZoom;
+
+        cameraRef.current.x += offX;
+        cameraRef.current.y += offY;
+        cameraRef.current.zoom = newZoom;
+
+        scheduleCameraUpdate();
     };
     
     const onMouseDown = (e) => {
         e.preventDefault();
-        isPanning.current = true;
-        panStart.current = { x: e.clientX, y: e.clientY };
-        vbStart.current = pendingViewBoxRef.current;
+        isMouseDownRef.current = true;
     };
 
     const onMouseMove = (e) => {
-        if (!isPanning.current) return;
+        if (!isMouseDownRef.current) return;
         e.preventDefault();
-        const dx = ((e.clientX - panStart.current.x) / svgRef.current.clientWidth) * vbStart.current.w;
-        const dy = ((e.clientY - panStart.current.y) / svgRef.current.clientHeight) * vbStart.current.h;
 
-        scheduleViewBoxUpdate({
-            x: vbStart.current.x - dx,
-            y: vbStart.current.y - dy,
-            w: vbStart.current.w,
-            h: vbStart.current.h,
-        });
+        cameraRef.current.x -= e.movementX / cameraRef.current.zoom;
+        cameraRef.current.y -= e.movementY / cameraRef.current.zoom;
+
+        scheduleCameraUpdate();
     };
 
-    const onMouseUp = () => {
-        isPanning.current = false;
+    const onMouseUp = (e) => {
+        e.preventDefault();
+        isMouseDownRef.current = false;
     };
     
     return (
         <div className="zoom-pan-wrapper" ref={wrapperRef}>
             <svg
                 ref={svgRef}
-                viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+                viewBox={getViewBoxString()}
                 onWheel={onWheel}
                 onMouseDown={onMouseDown}
                 onMouseMove={onMouseMove}
                 onMouseUp={onMouseUp}
                 onMouseLeave={onMouseUp}
             >
-                {children}
+                <g ref={cameraWrapperRef} transform={getCameraTransformString()}>
+                    {children}
+                </g>
             </svg>
         </div>
     );

@@ -1,14 +1,17 @@
-import { getCurrentClientRect, getCurrentViewBox } from "../../../hooks/useZoomPubSub";
+import { getCurrentCamera, getCurrentClientRect, getCurrentViewBox } from "../../../hooks/useZoomPubSub";
 
 export function getSVGCoords(event) {
-    const rect = getCurrentClientRect();
-    const viewBox = getCurrentViewBox();
-    if (!rect || !viewBox) return null;
+    const { left, top } = getCurrentClientRect();
+    const { x, y, zoom } = getCurrentCamera();
+    const { w, h } = getCurrentViewBox();
+    
+    // screen space cursor pos
+    const cx = event.clientX - left;
+    const cy = event.clientY - top;
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    const adjustedX = viewBox.x + (x / rect.width) * viewBox.w;
-    const adjustedY = viewBox.y + (y / rect.height) * viewBox.h;
+    // svg space cursor pos
+    const scx = x - (w / 2 - cx) / zoom;
+    const scy = y - (h / 2 - cy) / zoom;
 
-    return [adjustedX, adjustedY];
+    return [scx, scy];
 }
