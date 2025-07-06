@@ -2,6 +2,7 @@ const Constants = {
     buildVersion: '1.2.1',
     map: {
         zoomSensitivity: 0.002,
+        rotationSensitivity: 0.1,
         forcePointerEvents: false
     },
     parser: {

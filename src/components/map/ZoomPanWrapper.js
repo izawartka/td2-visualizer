@@ -8,7 +8,7 @@ export default function ZoomPanWrapper({children}) {
     const svgRef = useRef(null);
     const cameraWrapperRef = useRef(null);
     const viewBoxRef = useRef({ x: -50, y: -50, w: 100, h: 100 });
-    const cameraRef = useRef({ x: 0, y: 0, zoom: 1 });
+    const cameraRef = useRef({ x: 0, y: 0, zoom: 1, rotation: 0 });
     const clientRectRef = useRef(null);
     const rafScheduledRef = useRef(false);
     const isMouseDownRef = useRef(false);
@@ -25,9 +25,9 @@ export default function ZoomPanWrapper({children}) {
     }, []);
     
     const getCameraTransformString = () => {
-        const { x, y, zoom } = cameraRef.current;
+        const { x, y, zoom, rotation } = cameraRef.current;
 
-        return `scale(${zoom}) translate(${-x},${-y})`;
+        return `scale(${zoom}) rotate(${rotation}) translate(${-x},${-y})`;
     };
 
     const scheduleCameraUpdate = useCallback(() => {
@@ -49,6 +49,27 @@ export default function ZoomPanWrapper({children}) {
         clientRect$.next(rect);
         clientRectRef.current = rect;
     }, [updateViewBox]);
+
+    const handleRotation = (e) => {
+        const deltaAngle = e.movementX * Constants.map.rotationSensitivity;
+        if(deltaAngle === 0) return;
+
+        cameraRef.current.rotation = cameraRef.current.rotation + deltaAngle
+
+        scheduleCameraUpdate();
+    };
+
+    const handleMove = (e) => {
+        const cx = e.movementX / cameraRef.current.zoom;
+        const cy = e.movementY / cameraRef.current.zoom;
+        const cos = Math.cos(cameraRef.current.rotation * Math.PI / 180);
+        const sin = Math.sin(cameraRef.current.rotation * Math.PI / 180);
+        
+        cameraRef.current.x -= cx * cos + cy * sin;
+        cameraRef.current.y -= cy * cos - cx * sin;
+
+        scheduleCameraUpdate();
+    };
     
     // update viewbox when the window resizes
     useEffect(() => {
@@ -75,6 +96,7 @@ export default function ZoomPanWrapper({children}) {
         const { w, h } = viewBoxRef.current;
 
         const newZoom = cameraRef.current.zoom * (1.0 - (e.deltaY * Constants.map.zoomSensitivity));
+        cameraRef.current.zoom = newZoom;
 
         // screen space cursor pos
         const cx = e.clientX - left;
@@ -92,9 +114,11 @@ export default function ZoomPanWrapper({children}) {
         const offX = (ncx - cx) / newZoom;
         const offY = (ncy - cy) / newZoom;
 
-        cameraRef.current.x += offX;
-        cameraRef.current.y += offY;
-        cameraRef.current.zoom = newZoom;
+        // update camera position so the cursor stays in the same place
+        const cos = Math.cos(cameraRef.current.rotation * Math.PI / 180);
+        const sin = Math.sin(cameraRef.current.rotation * Math.PI / 180);
+        cameraRef.current.x += offX * cos + offY * sin;
+        cameraRef.current.y += offY * cos - offX * sin;
 
         scheduleCameraUpdate();
     };
@@ -108,10 +132,11 @@ export default function ZoomPanWrapper({children}) {
         if (!isMouseDownRef.current) return;
         e.preventDefault();
 
-        cameraRef.current.x -= e.movementX / cameraRef.current.zoom;
-        cameraRef.current.y -= e.movementY / cameraRef.current.zoom;
-
-        scheduleCameraUpdate();
+        if(e.altKey) {
+            handleRotation(e);
+        } else {
+            handleMove(e);
+        }
     };
 
     const onMouseUp = (e) => {
