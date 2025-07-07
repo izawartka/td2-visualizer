@@ -84,12 +84,25 @@ export default class Switch extends SceneryObject {
         
         this.def = def;
 
-        const trackAAliases = Array.from(new Set([ids[0][0], ids[2][0]]));
+        const trackAAliases = this._getTrackAliases(ids);
         this.trackA = this._createSwitchTrackFromDef(scenery, this.id+"A", def[0], ids[0][1], ids[2][1], def[3], def[5], trackAAliases);
 
-        const trackBAliases = Array.from(new Set([ids[1][0], ids[3][0]])).filter(alias => trackAAliases.includes(alias) === false);
+        const trackBAliases = this._getTrackAliases(ids, 1, trackAAliases);
         this.trackB = this._createSwitchTrackFromDef(scenery, this.id+"B", def[1], ids[1][1], ids[3][1], def[4], def[6], trackBAliases);
         this.trackB.hide_isolation = true; // hide isolation for the second track
+    }
+
+    _getTrackAliases(ids, startingId = 0, exclude = []) {
+        const aliases = new Set();
+        for(let i = startingId; i < ids.length; i+=2) {
+            aliases.add(ids[i][0]);
+        }
+
+        exclude.forEach(alias => {
+            aliases.delete(alias);
+        });
+
+        return Array.from(aliases);
     }
 
     _getTrackIds(outs) {

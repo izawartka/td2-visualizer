@@ -22,7 +22,7 @@ const DefinedSwitches = {
     "Rz 60E1-300-1_9 R": [
         0,
         -300,
-        [0, 0, 3, 4],
+        [0, 0, 3, 4, 2, 1],
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 33.231),
@@ -31,7 +31,7 @@ const DefinedSwitches = {
     "Rz 60E1-300-1_9 L": [
         0,
         300,
-        [0, 0, 3, 4],
+        [0, 0, 3, 4, 2, 1],
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 33.231),
@@ -40,7 +40,7 @@ const DefinedSwitches = {
     "Rz 60E1-190-1_9 R": [
         0,
         -190,
-        [0, 0, 5, 6],
+        [0, 0, 5, 6, 3, 4],
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 27.139),
@@ -49,7 +49,7 @@ const DefinedSwitches = {
     "Rz 60E1-190-1_9 L": [
         0,
         190,
-        [0, 0, 5, 6],
+        [0, 0, 5, 6, 3, 4],
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 27.139),
