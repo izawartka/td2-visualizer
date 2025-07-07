@@ -25,8 +25,10 @@ export default function RouteRenderer(props) {
                 additionalRot={-90}
                 offsetX={object.track_offset}
                 reverseAnchor={true}
-                y={offY}
-                dominantBaseline="bottom"
+                textProps={{
+                    y: offY,
+                    dominantBaseline: "bottom"
+                }}
                 text={object.route_name}
             />
         </g>

@@ -4,7 +4,7 @@ import { mapRotation$ } from "../../../services/mapRotationService";
 
 export default function AlwaysUpText(props) {
     const [mapRotation, setMapRotation] = useState(0);
-    const { baseRot, additionalRot, text, reverseAnchor, offsetX, offsetY } = props;
+    const { baseRot, additionalRot, text, reverseAnchor, offsetX, offsetY, textProps } = props;
     
     const adjustedRot = AngleHelper.normalizeDegAngle(baseRot + mapRotation);
     const upsideDown = adjustedRot >= 180;
@@ -21,7 +21,7 @@ export default function AlwaysUpText(props) {
 
     return (
         <g transform={`translate(${offsetX || 0}, ${offsetY || 0}) rotate(${upsideDownRot + additionalRot})`}>
-            <text textAnchor={anchor} dominantBaseline='middle' {...props}>
+            <text textAnchor={anchor} dominantBaseline='middle' {...textProps}>
                 {text}
             </text>
         </g>

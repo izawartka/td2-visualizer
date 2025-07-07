@@ -12,8 +12,10 @@ export default function IsolationIdRenderer(props) {
 
     return <SimpleLabelText
         text={text}
-        className="isolation-id"
         x={x}
         y={y}
+        textProps={{  
+            className: "isolation-id"
+        }}
     />
 }

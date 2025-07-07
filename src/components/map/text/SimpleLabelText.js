@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { mapRotation$ } from "../../../services/mapRotationService";
 
 export default function SimpleLabelText(props) {
-    const { text, x, y, wrapperStyle } = props;
+    const { text, x, y, wrapperStyle, textProps } = props;
     const gRef = useRef(null);
 
     const getTransformString = useCallback((rot) => (
@@ -21,7 +21,7 @@ export default function SimpleLabelText(props) {
 
     return (
         <g transform={getTransformString(0)} ref={gRef} style={wrapperStyle}>
-            <text textAnchor="middle" dominantBaseline="middle" {...props} x={null} y={null}>
+            <text textAnchor="middle" dominantBaseline="middle" {...textProps}>
                 {text}
             </text>
         </g>

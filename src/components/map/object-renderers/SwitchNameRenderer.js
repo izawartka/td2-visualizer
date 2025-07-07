@@ -7,8 +7,10 @@ export default function SwitchNameRenderer(props) {
 
     return <SimpleLabelText
         text={text}
-        className="switch-name"
         x={x}
         y={y}
+        textProps={{
+            className: "switch-name"
+        }}
     />;
 }

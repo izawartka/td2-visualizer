@@ -22,10 +22,12 @@ export default function TrackObjectRenderer(props) {
             ></circle>
             <SimpleLabelText
                 text={text}
-                className="track-object-label"
                 x={x}
                 y={y}
-                enableBackground="new 0 0 100 100"
+                textProps={{
+                    enableBackground: "new 0 0 100 100",
+                    className: "track-object-label"
+                }}
                 wrapperStyle={{pointerEvents: 'none'}}
             />
         </g>
