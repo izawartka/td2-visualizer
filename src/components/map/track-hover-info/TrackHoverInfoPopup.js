@@ -3,7 +3,10 @@ import TrackHoverInfoConsts from "./TrackHoverInfoConsts";
 export default function TrackHoverInfoPopup(props) {
     const { track } = props;
 
-    const slopeArr = Array.from(new Set([track['start_slope'], track['end_slope']]))
+    const slopeArr = Array.from(new Set([
+        Math.abs(track['start_slope']), 
+        Math.abs(track['end_slope'])
+    ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
 
     return (
