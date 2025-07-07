@@ -13,6 +13,7 @@ const Constants = {
         alwaysShowLogDialog: false,
         runTracksConnectionTest: false,
         resolveElectrification: true,
+        skipElectrificationErrorsPropagation: false,
         maxRouteConnectionDistance: 0.2,
         attachSigns: true,
         attachSignsNeedsSameTrack: false,

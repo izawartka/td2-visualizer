@@ -101,7 +101,7 @@ export default class ElectrificationResolver {
             if(!trackObject.track) {
                 ElectrificationResolver._passWarn(
                     'electrificationNevpNotApplied', 
-                    `NEVP object ${trackObject.id} at track ${trackObject.track_id} has not beed applied. Electrification resolution may fail`
+                    `NEVP object ${trackObject.name} (${trackObject.id}) at track ${trackObject.track_id} has not been applied. Electrification resolution may fail`
                 );
                 return;
             }
@@ -112,6 +112,9 @@ export default class ElectrificationResolver {
 
     static _propagate(scenery, track, skipTrackIds, status) {
         if (track.electrificationStatus === status) return; // already set
+        if (Constants.parser.skipElectrificationErrorsPropagation && status === ElectrificationStatus.CONFLICT) {
+            return;
+        }
 
         const fse = status === ElectrificationStatus.ELECTRIFIED;
         const fsne = status === ElectrificationStatus.NON_ELECTRIFIED;
