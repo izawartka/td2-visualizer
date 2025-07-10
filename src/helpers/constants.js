@@ -76,6 +76,7 @@ const Constants = {
         {
             id: 'isolations-ids',
             name: 'Isolations IDs',
+            name: 'Isolations',
             default: false,
         },
         {

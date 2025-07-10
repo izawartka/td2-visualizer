@@ -32,6 +32,11 @@
     fill: #ffa;
 }
 
+.map svg path.isolation-end-marker {
+    stroke: #ffa;
+    stroke-width: 0.5px;
+}
+
 .map svg g.track-object circle {
     fill: #eee;
 }
