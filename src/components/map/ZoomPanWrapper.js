@@ -97,7 +97,8 @@ export default function ZoomPanWrapper({children}) {
         const { x, y, zoom } = cameraRef.current;
         const { w, h } = viewBoxRef.current;
 
-        const newZoom = cameraRef.current.zoom * (1.0 - (e.deltaY * Constants.map.zoomSensitivity));
+        const newZoomCalc = cameraRef.current.zoom * (1.0 - (e.deltaY * Constants.map.zoomSensitivity));
+        const newZoom = Math.max(Constants.map.zoomMin, Math.min(Constants.map.zoomMax, newZoomCalc));
         cameraRef.current.zoom = newZoom;
 
         // screen space cursor pos

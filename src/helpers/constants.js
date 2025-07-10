@@ -2,6 +2,8 @@ const Constants = {
     buildVersion: '1.3.1',
     map: {
         zoomSensitivity: 0.002,
+        zoomMin: 0.03,
+        zoomMax: 200.0,
         rotationSensitivity: 0.2,
         forcePointerEvents: false
     },
