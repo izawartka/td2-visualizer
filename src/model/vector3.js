@@ -88,7 +88,7 @@ export default class Vector3 {
     atanY(other) {
         const dx = other.x - this.x;
         const dz = other.z - this.z;
-        return Math.atan2(dz, dx);
+        return Math.atan2(dx, dz);
     }
 
     add(other) {
