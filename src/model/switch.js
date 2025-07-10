@@ -7,6 +7,7 @@ import Constants from "../helpers/constants.js";
 
 export default class Switch extends SceneryObject {
     model;
+    bare_model;
     data;
     id_isolation;
     id_switch;

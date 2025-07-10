@@ -70,12 +70,11 @@ const Constants = {
         },
         {
             id: 'switches-names',
-            name: 'Switches names',
+            name: 'Switch names',
             default: false,
         },
         {
             id: 'isolations-ids',
-            name: 'Isolations IDs',
             name: 'Isolations',
             default: false,
         },

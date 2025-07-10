@@ -20,10 +20,21 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupItem value={slopeArr} label="Slope" options={slopeOptions} />
                     <InfoPopupItem value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
                     <InfoPopupItem value={track['type']} label="Type" options={{translationConstKey: 'type'}} />
+                    <InfoPopupSwitchItems track={track} />
                 </tbody>
             </table>
         </div>
     );
+}
+
+function InfoPopupSwitchItems(props) {
+    const { track } = props;
+    if (!track.switch) return null;
+
+    return <>
+        <InfoPopupItem value={track.switch.id_switch} label="Switch ID" />
+        <InfoPopupItem value={track.switch.bare_model} label="Switch model" />
+    </>
 }
 
 function processItemValue(value, options) {
@@ -37,7 +48,7 @@ function processItemValue(value, options) {
         return TrackHoverInfoConsts[translationConstKey]?.[value] || value;
     }
 
-    if (!value) {
+    if (value === undefined || value === null || value === '') {
         return "N/A";
     }
 
