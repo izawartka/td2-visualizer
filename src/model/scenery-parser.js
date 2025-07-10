@@ -19,6 +19,7 @@ import NEVP from './track-objects/nevp';
 import Derailer from './track-objects/derailer';
 import SpawnPoint from './track-objects/spawn-point';
 import { attachSigns } from './attach-signs';
+import { connectTracks } from './connect-tracks';
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -44,8 +45,9 @@ export default class SceneryParser {
 
         scenery.applyObjects();
 
-        if(Constants.parser.resolveElectrification) ElectrificationResolver.resolveScenery(scenery);
         if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
+        if(Constants.parser.connectTracks) connectTracks(scenery);
+        if(Constants.parser.resolveElectrification) ElectrificationResolver.resolveScenery(scenery);
         if(Constants.parser.attachSigns) attachSigns(scenery);
         if(Constants.parser.logSceneryAfterFinished) console.log(scenery);
 
