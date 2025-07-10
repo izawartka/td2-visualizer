@@ -19,6 +19,20 @@ export default class PointTrack extends Track
         });
     }
 
+    getStartAngleXZ() {
+        return AngleHelper.degToRad(this.rot.y);
+    }
+
+    getEndAngleXZ() {
+        const startAngle = AngleHelper.degToRad(this.rot.y);
+
+        if(this.r === 0) {
+            return startAngle;
+        }
+
+        return startAngle - this.len / this.r;
+    }
+
     static _getRotLen(start, end, r) {
         // TODO: include track slope in calculations
         const pointsAngle = start.atanY(end);

@@ -22,6 +22,14 @@ export default class BezierTrack extends Track
         });
     }
 
+    getStartAngleXZ() {
+        return this.points.start.atanY(this.points.control1);
+    }
+
+    getEndAngleXZ() {
+        return this.points.control2.atanY(this.points.end);
+    }
+
     static fromText(text) {
         const values = text.split(";");
         const track = new BezierTrack(

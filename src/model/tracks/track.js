@@ -34,6 +34,14 @@ export default class Track extends SceneryObject {
         });
     }
 
+    getStartAngleXZ() {
+        throw new Error("getStartAngleXZ() must be implemented in subclass");
+    }
+
+    getEndAngleXZ() {
+        throw new Error("getEndAngleXZ() must be implemented in subclass");
+    }
+
     static slopesFromText(text) {
         return text.split(",", 2);
     }
