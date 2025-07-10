@@ -14,9 +14,11 @@ class RouteTrack {
 
 export default class ElectrificationResolver {
     static hasWarnings = false;
+    static propagationQueue = [];
 
     static resolveScenery(scenery) {
         ElectrificationResolver.hasWarnings = false;
+        ElectrificationResolver.propagationQueue = [];
 
         try {
             const routeTracks = this._findRouteTracks(scenery);
@@ -24,12 +26,13 @@ export default class ElectrificationResolver {
 
             routeTracks.forEach(routeTrack => {
                 this._propagate(
-                    scenery, 
                     routeTrack.track, 
                     [], 
                     routeTrack.electrified ? ElectrificationStatus.ELECTRIFIED : ElectrificationStatus.NON_ELECTRIFIED
                 );
             });
+
+            this._runResolution();
         } catch (error) {
             scenery.electrificationResolved = ElectrificationResolutionStatus.ERROR;
             SceneryParserLog.warn('electrificationResolverError', `Error resolving electrification: ${error.message}`);
@@ -110,7 +113,18 @@ export default class ElectrificationResolver {
         });
     }
 
-    static _propagate(scenery, track, skipTrackIds, status) {
+    static _runResolution() {
+        while(ElectrificationResolver.propagationQueue.length > 0) {
+            const { track, skipTrackIds, status } = ElectrificationResolver.propagationQueue.shift();
+            ElectrificationResolver._resolveTrack(track, skipTrackIds, status);
+        }
+    }
+
+    static _propagate(track, skipTrackIds, status) {
+        ElectrificationResolver.propagationQueue.push({ track, skipTrackIds, status });
+    }
+
+    static _resolveTrack(track, skipTrackIds, status) {
         if (track.electrificationStatus === status) return; // already set
         if (Constants.parser.skipElectrificationErrorsPropagation && status === ElectrificationStatus.CONFLICT) {
             return;
@@ -148,13 +162,13 @@ export default class ElectrificationResolver {
         propagation.forEach(nextTrack => {
             if (skipTrackIds.includes(nextTrack.id)) return;
 
-            this._propagate(scenery, nextTrack, nextSkipIds, track.electrificationStatus);
+            this._propagate(nextTrack, nextSkipIds, track.electrificationStatus);
         });
 
         // Additional propagation for double switches
         if (!track.switch || track.switch.def?.[2]?.length <= 2 || track.hasNEVP) return;
 
         const otherSwitchTrack = track.switch.trackA === track ? track.switch.trackB : track.switch.trackA;
-        this._propagate(scenery, otherSwitchTrack, [track.id, ...propagation.map(track => track.id)], track.electrificationStatus);
+        this._propagate(otherSwitchTrack, [track.id, ...propagation.map(track => track.id)], track.electrificationStatus);
     }
 };
