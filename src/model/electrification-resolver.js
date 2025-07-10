@@ -115,6 +115,9 @@ export default class ElectrificationResolver {
         if (Constants.parser.skipElectrificationErrorsPropagation && status === ElectrificationStatus.CONFLICT) {
             return;
         }
+        if (track.electrificationStatus === ElectrificationStatus.CONFLICT) {
+            return;
+        }
 
         const fse = status === ElectrificationStatus.ELECTRIFIED;
         const fsne = status === ElectrificationStatus.NON_ELECTRIFIED;
@@ -130,33 +133,28 @@ export default class ElectrificationResolver {
             track.electrificationStatus = ElectrificationStatus.CONFLICT;
             ElectrificationResolver._passWarn(
                 'electrificationConflict', 
-                `Track ${track.id} has conflicting electrification status`
+                `Track ${track.id} has conflicting electrification status (=>${status})`
             );
             return;
         }
 
-        const propagation = [
-            track.nextid,
-            track.previd
-        ];
+        const propagation = track.connections.map(conn => conn.otherTrack);
+        const nextSkipIds = [track.id];
 
-        if (track.switch && !track.hasNEVP && track.switch.def[2].length > 2) {
-            propagation.push(
-                track.switch.trackA?.id,
-                track.switch.trackB?.id
-            );
+        if (track.switch) {
+            nextSkipIds.push(track.switch.trackA.id, track.switch.trackB.id);
         }
 
-        const skipIds = [track.id, ...propagation];
+        propagation.forEach(nextTrack => {
+            if (skipTrackIds.includes(nextTrack.id)) return;
 
-        propagation.forEach(next => {
-            if (!next) return;
-            if (skipTrackIds.includes(next)) return;
-            const nextTrackId = scenery.getTrackIdByAlias(next);
-            if (!nextTrackId || skipTrackIds.includes(nextTrackId)) return;
-            const nextTrack = scenery.getObject('tracks', nextTrackId);
-            if (!nextTrack) return;
-            this._propagate(scenery, nextTrack, skipIds, track.electrificationStatus);
+            this._propagate(scenery, nextTrack, nextSkipIds, track.electrificationStatus);
         });
+
+        // Additional propagation for double switches
+        if (!track.switch || track.switch.def?.[2]?.length <= 2 || track.hasNEVP) return;
+
+        const otherSwitchTrack = track.switch.trackA === track ? track.switch.trackB : track.switch.trackA;
+        this._propagate(scenery, otherSwitchTrack, [track.id, ...propagation.map(track => track.id)], track.electrificationStatus);
     }
 };
