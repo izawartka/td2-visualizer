@@ -8,8 +8,6 @@ const Constants = {
         forcePointerEvents: false
     },
     parser: {
-        forceAutoSwitches: false,
-        logNewAutoSwitches: true,
         logSceneryAfterFinished: true,
         sceneryInfoVersion: 29,
         alwaysShowLogDialog: false,
@@ -35,9 +33,10 @@ const Constants = {
         trackAliasAlreadyExists: true,
         trackAliasNoTrack: true,
         switchUndefinedModel: true,
-        switchAutoDefFailed: true,
         switchInvalidDataFormat: true,
         switchNoModel: true,
+        switchMissingTrackId: true,
+        switchInvalidInternalConnection: true,
         signalBoxUndefinedPrefabName: true,
         invalidSceneryInfoVersion: true,
         signUndefinedPrefabName: true,
