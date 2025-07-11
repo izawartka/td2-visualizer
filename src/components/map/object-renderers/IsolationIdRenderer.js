@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import SimpleLabelText from "../text/SimpleLabelText";
-import { TrackConnectionType } from "../../../model/track-connection";
+import { TrackConnectionEnd } from "../../../model/track-connection";
 
 export default function IsolationIdRenderer(props) {
     const { object } = props;
@@ -15,7 +15,7 @@ export default function IsolationIdRenderer(props) {
             text={text}
             x={x}
             y={y}
-            textProps={{  
+            textProps={{
                 className: "isolation-id"
             }}
         />}
@@ -29,7 +29,7 @@ function IsolationEndMarker(props) {
 
     const isShown = useMemo(() => {
         return object.connections.some(conn =>
-            (isStart ? conn.type === TrackConnectionType.START : conn.type === TrackConnectionType.END) &&
+            (isStart ? conn.type === TrackConnectionEnd.START : conn.type === TrackConnectionEnd.END) &&
             conn.otherTrack.id_isolation !== object.id_isolation
         );
     }, [object, isStart]);
@@ -46,5 +46,5 @@ function IsolationEndMarker(props) {
     return <path
         className="isolation-end-marker"
         d={`M ${x - 1.5 * cos} ${y - 1.5 * sin} L ${x + 1.5 * cos} ${y + 1.5 * sin}`}
-    />          
+    />
 }

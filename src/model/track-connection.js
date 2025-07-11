@@ -1,20 +1,15 @@
-export const TrackConnectionType = {
-    END: 0,
-    START: 1,
-}
+export const TrackConnectionEnd = {
+    START: Symbol('TrackConnectionEnd.START'),
+    END: Symbol('TrackConnectionEnd.END'),
+};
 
 export default class TrackConnection {
-    tracks;
-    otherTrack;
-    type;
-    otherType;
+    otherTrackId;
+    end;
 
-    constructor(track, otherTrack, type, otherType) {
+    constructor(otherTrackId, end) {
         Object.assign(this, {
-            track,
-            otherTrack,
-            type,
-            otherType
+            otherTrackId, end,
         });
     }
 }

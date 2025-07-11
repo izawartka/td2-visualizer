@@ -3,7 +3,8 @@ import SceneryObject from "./scenery-object.js";
 import SceneryParserLog from "./scenery-parser-log.js";
 import Vector3 from "./vector3.js";
 import DefinedSwitches from "./defs/defined-switches.js";
-import {SwitchTrackConnectionEnd, SwitchTrackConnectionType} from "./switch-descriptions/switch-prefab-track";
+import {SwitchTrackConnectionType} from "./switch-descriptions/switch-prefab-track";
+import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 
 export default class Switch extends SceneryObject {
     model;
@@ -76,7 +77,7 @@ export default class Switch extends SceneryObject {
         if (!trackIds) return;
 
         const tracks = Object.entries(def.tracks).map(([key, track]) => {
-            return this._createSwitchTrackFromDef(scenery, def, track, trackIds)
+            return this._createSwitchTrackFromDef(scenery, def, track, trackIds);
         });
 
         if (tracks.some(track => !track)) return;
@@ -109,10 +110,7 @@ export default class Switch extends SceneryObject {
         }
         const [trackId, prevId, nextId] = ids[trackDef.dataIndex];
 
-        const endIds = {
-            [SwitchTrackConnectionEnd.PREV]: [],
-            [SwitchTrackConnectionEnd.NEXT]: [],
-        };
+        const connections = [];
         trackDef.connections.forEach((connection) => {
             if (connection.type === SwitchTrackConnectionType.INTERNAL) {
                 const otherTrackDef = switchDef.tracks[connection.internalId];
@@ -132,12 +130,12 @@ export default class Switch extends SceneryObject {
                 }
                 const otherTrackId = ids[otherTrackDef.dataIndex][0];
                 if (otherTrackId) {
-                    endIds[connection.end].push(otherTrackId);
+                    connections.push(new TrackConnection(otherTrackId, connection.end));
                 }
             } else if (connection.type === SwitchTrackConnectionType.EXTERNAL) {
-                const otherTrackId = connection.end === SwitchTrackConnectionEnd.PREV ? prevId : nextId;
+                const otherTrackId = connection.end === TrackConnectionEnd.START ? prevId : nextId;
                 if (otherTrackId) {
-                    endIds[connection.end].push(otherTrackId);
+                    connections.push(new TrackConnection(otherTrackId, connection.end));
                 }
             }
         });
@@ -147,8 +145,7 @@ export default class Switch extends SceneryObject {
             this.pos.add(trackDef.startPos.rotate(rotRad)),
             this.pos.add(trackDef.endPos.rotate(rotRad)),
             trackDef.radius,
-            endIds[SwitchTrackConnectionEnd.PREV][0], // TODO: Pass the array
-            endIds[SwitchTrackConnectionEnd.NEXT][0], // TODO: --||--
+            connections,
             this.id_switch,
             0, // start_slope
             0, // end_slope

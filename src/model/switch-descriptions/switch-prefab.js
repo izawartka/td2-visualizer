@@ -1,6 +1,7 @@
 import Vector3 from "../vector3";
-import SwitchPrefabTrack, {SwitchTrackConnectionEnd, SwitchTrackConnectionType} from "./switch-prefab-track";
+import SwitchPrefabTrack, {SwitchTrackConnectionType} from "./switch-prefab-track";
 import SceneryParserLog from "../scenery-parser-log";
+import {TrackConnectionEnd} from "../track-connection";
 
 export default class SwitchPrefab {
     tracks = {};
@@ -58,18 +59,18 @@ export default class SwitchPrefab {
                 [
                     {
                         type: SwitchTrackConnectionType.EXTERNAL,
-                        end: SwitchTrackConnectionEnd.PREV,
+                        end: TrackConnectionEnd.START,
                     },
                     {
                         type: SwitchTrackConnectionType.INTERNAL,
-                        end: SwitchTrackConnectionEnd.NEXT,
-                        otherEnd: SwitchTrackConnectionEnd.PREV,
+                        end: TrackConnectionEnd.END,
+                        otherEnd: TrackConnectionEnd.START,
                         internalId: 'curve_a',
                     },
                     {
                         type: SwitchTrackConnectionType.INTERNAL,
-                        end: SwitchTrackConnectionEnd.NEXT,
-                        otherEnd: SwitchTrackConnectionEnd.PREV,
+                        end: TrackConnectionEnd.END,
+                        otherEnd: TrackConnectionEnd.START,
                         internalId: 'curve_b',
                     },
                 ],
@@ -113,14 +114,14 @@ export default class SwitchPrefab {
                 [
                     {
                         type: SwitchTrackConnectionType.INTERNAL,
-                        end: SwitchTrackConnectionEnd.PREV,
-                        otherEnd: SwitchTrackConnectionEnd.NEXT,
+                        end: TrackConnectionEnd.START,
+                        otherEnd: TrackConnectionEnd.END,
                         internalId: 'start',
                     },
                     {
                         type: SwitchTrackConnectionType.INTERNAL,
-                        end: SwitchTrackConnectionEnd.NEXT,
-                        otherEnd: SwitchTrackConnectionEnd.PREV,
+                        end: TrackConnectionEnd.END,
+                        otherEnd: TrackConnectionEnd.START,
                         internalId: addedLength > 0 ? `added_${side}` : `end_${side}`,
                     },
                 ],
@@ -138,14 +139,14 @@ export default class SwitchPrefab {
                 [
                     {
                         type: SwitchTrackConnectionType.INTERNAL,
-                        end: SwitchTrackConnectionEnd.PREV,
-                        otherEnd: SwitchTrackConnectionEnd.NEXT,
+                        end: TrackConnectionEnd.START,
+                        otherEnd: TrackConnectionEnd.END,
                         internalId: `curve_${side}`,
                     },
                     {
                         type: SwitchTrackConnectionType.INTERNAL,
-                        end: SwitchTrackConnectionEnd.NEXT,
-                        otherEnd: SwitchTrackConnectionEnd.PREV,
+                        end: TrackConnectionEnd.END,
+                        otherEnd: TrackConnectionEnd.START,
                         internalId: `end_${side}`,
                     },
                 ],
@@ -160,13 +161,13 @@ export default class SwitchPrefab {
             [
                 {
                     type: SwitchTrackConnectionType.INTERNAL,
-                    end: SwitchTrackConnectionEnd.PREV,
-                    otherEnd: SwitchTrackConnectionEnd.NEXT,
+                    end: TrackConnectionEnd.START,
+                    otherEnd: TrackConnectionEnd.END,
                     internalId: addedLength > 0 ? `added_${side}` : `curve_${side}`,
                 },
                 {
                     type: SwitchTrackConnectionType.EXTERNAL,
-                    end: SwitchTrackConnectionEnd.NEXT,
+                    end: TrackConnectionEnd.END,
                 },
             ]
         );

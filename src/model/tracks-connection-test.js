@@ -1,44 +1,41 @@
 import SceneryParserLog from './scenery-parser-log';
+import {TrackConnectionEnd} from "./track-connection";
 
 const connectionThresholdDistanceSq = 0.05;
 
-function trackEndConnectionTest(scenery, track, isPrev) {
-    const vNext = isPrev ? track.previd : track.nextid;
-    if (!vNext) return;
-    
-    const vEndPos = isPrev ? track.points.start : track.points.end;
-    const vNextTrackId = scenery.getTrackIdByAlias(vNext);
-    const vNextTrack = scenery.getObject('tracks', vNextTrackId);
-
-    if (!vNextTrack) {
-        SceneryParserLog.warn('tracksConnectionTest', `Track ${track.id} has non-existing ${isPrev ? 'previous' : 'next'} track: ${isPrev ? track.previd : track.nextid} (${vNextTrackId})`);
+function trackEndConnectionTest(scenery, track, connection) {
+    const otherTrack = scenery.getObject('tracks', connection.otherTrackId);
+    if (!otherTrack) {
+        SceneryParserLog.warn('tracksConnectionTest', `Track ${track.id} has a non-existing ${connection.end === TrackConnectionEnd.START ? 'previous' : 'next'} track: ${connection.otherTrackId}`);
         return;
     }
 
-    const [vNextTrackNext, vNextTrackPrev] = isPrev ? [vNextTrack.previd, vNextTrack.nextid] : [vNextTrack.nextid, vNextTrack.previd];
-    const vNextTrackNextId = scenery.getTrackIdByAlias(vNextTrackNext);
-    const vNextTrackPrevId = scenery.getTrackIdByAlias(vNextTrackPrev);
-    const directlyConnected = track.aliases.includes(vNextTrackPrevId) || vNextTrackPrevId === track.id;
-    const reverseConnected = track.aliases.includes(vNextTrackNextId) || vNextTrackNextId === track.id;
-    const isSwitchBTrackPrev = isPrev && track.id.at(-1) === 'B';
-
-    if (directlyConnected) {
-        const vNextTrackStartPos = isPrev ? vNextTrack.points.end : vNextTrack.points.start;
-        const distSq = vEndPos.distanceSq(vNextTrackStartPos);
-        if (distSq > connectionThresholdDistanceSq) {
-            SceneryParserLog.warn('tracksConnectionTest', `Track ${track.id} with ${isPrev ? 'start' : 'end'} position ${vEndPos.toString()} is too far from the ${isPrev ? 'previous' : 'next'} track ${vNextTrackId} with ${isPrev ? 'end' : 'start'} position ${vNextTrackStartPos.toString()}. Distance: ${Math.sqrt(distSq).toFixed(3)}`);
-            return;
-        }
-    } else if (reverseConnected) {
-        const vNextTrackEndPos = isPrev ? vNextTrack.points.start : vNextTrack.points.end;
-        const distSq = vEndPos.distanceSq(vNextTrackEndPos);
-        if (distSq > connectionThresholdDistanceSq) {
-            SceneryParserLog.warn('tracksConnectionTest', `Track ${track.id} with ${isPrev ? 'start' : 'end'} position ${vEndPos.toString()} is too far from the ${isPrev ? 'previous' : 'next'} track ${vNextTrackId} with ${isPrev ? 'start' : 'end'} position ${vNextTrackEndPos.toString()}. Distance: ${Math.sqrt(distSq).toFixed(3)}`);
-            return;
-        }
-    } else if(!isSwitchBTrackPrev) {
-        SceneryParserLog.warn('tracksConnectionTest', `Track ${track.id} ${isPrev ? 'previous' : 'next'} track ${vNextTrackId} does not match its ${isPrev ? 'next' : 'previous'} track id: ${vNextTrackNext} (${vNextTrackNextId}), ${vNextTrackPrev} (${vNextTrackPrevId})`);
+    const reverseConnections = otherTrack.connections.filter(
+        (otherConnection) => otherConnection.type === otherConnection.otherTrackId === track.id,
+    );
+    if (reverseConnections.length > 1) {
+        SceneryParserLog.warn(
+            'tracksConnectionTest',
+            `Track ${otherTrack.id} has multiple connections to ${track.id}`,
+        );
+    }
+    if (reverseConnections.length === 0) {
+        SceneryParserLog.warn(
+            'tracksConnectionTest',
+            `Track ${track.id} is connected to ${connection.otherTrackId} but there is not reverse connection`,
+        );
         return;
+    }
+    const reverseConnection = reverseConnections[0];
+
+    const ownPosition = track.getEndPos(connection.end);
+    const otherPosition = otherTrack.getEndPos(reverseConnection.end);
+    const distSq = ownPosition.distanceSq(otherPosition);
+    if (distSq > connectionThresholdDistanceSq) {
+        SceneryParserLog.warn(
+            'tracksConnectionTest',
+            `Track ${track.id} with ${connection.end === TrackConnectionEnd.START ? 'start' : 'end'} position ${ownPosition.toString()} is too far from the track ${connection.otherTrackId} with ${connection.end === TrackConnectionEnd.START ? 'start' : 'end'} position ${otherPosition.toString()}. Distance: ${Math.sqrt(distSq).toFixed(3)}`,
+        );
     }
 }
 
@@ -46,7 +43,8 @@ export function tracksConnectionTest(scenery) {
     const tracks = scenery.objects['tracks'] || [];
 
     Object.values(tracks).forEach(track => {
-        trackEndConnectionTest(scenery, track, false);
-        trackEndConnectionTest(scenery, track, true);
+        track.connections.forEach((connection) => {
+            trackEndConnectionTest(scenery, track, connection);
+        });
     });
 }

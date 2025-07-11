@@ -1,5 +1,6 @@
 import Track from "./track";
 import Vector3 from "../vector3";
+import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 
 export default class BezierTrack extends Track
 {
@@ -11,8 +12,8 @@ export default class BezierTrack extends Track
         control2: Vector3.zero()
     };
 
-    constructor(id, start, control1, end, control2, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
+    constructor(id, start, control1, end, control2, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
+        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
 
         Object.assign(this.points, {
             start,
@@ -42,8 +43,10 @@ export default class BezierTrack extends Track
             Vector3.zero(),
             0, // len ??
             0, // r ??
-            values[15], // nextid
-            values[16], // previd
+            [
+                new TrackConnection(values[15], TrackConnectionEnd.END),
+                new TrackConnection(values[16], TrackConnectionEnd.START),
+            ],
             values[17], // id_station
             ...Track.slopesFromText(values[18]), // start_slope, end_slope
             values[21], // id_isolation

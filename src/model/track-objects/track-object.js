@@ -15,7 +15,7 @@ export default class TrackObject extends SceneryObject {
         super(id, pos, rot);
         Object.assign(this, {
             prefab_name,
-            track_id, 
+            track_id,
             name
         });
     }
@@ -38,6 +38,7 @@ export default class TrackObject extends SceneryObject {
         if(this.applied) return; // already applied
         this.applied = true;
 
+        // TODO: Is the scenery.getTrackIdByAlias needed?
         const trackId = scenery.getTrackIdByAlias(this.track_id);
         const track = scenery.getObject('tracks', trackId);
         if (!track) {

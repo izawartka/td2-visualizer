@@ -21,7 +21,6 @@ const Constants = {
         attachSignsMaxDistanceX: 0.2,
         attachSignsGridSize: 10,
         logAttachedSigns: false,
-        connectTracks: true,
     },
     warnings: {
         all: false, // enable all warnings
@@ -51,7 +50,6 @@ const Constants = {
         attachSignsOutOfBounds: true,
         signalElemsUnknownSign: true,
         signalElemsUnknownSignText: true,
-        connectTracksFailed: true,
     },
     errors: {
         invalidSceneryInfo: true

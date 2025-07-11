@@ -1,8 +1,3 @@
-export const SwitchTrackConnectionEnd = {
-    PREV: Symbol('SwitchTrackConnectionEnd.PREV'),
-    NEXT: Symbol('SwitchTrackConnectionEnd.NEXT'),
-};
-
 export const SwitchTrackConnectionType = {
     INTERNAL: Symbol('SwitchTrackConnectionType.INTERNAL'),
     EXTERNAL: Symbol('SwitchTrackConnectionType.EXTERNAL'),
