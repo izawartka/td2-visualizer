@@ -25,6 +25,10 @@ const DefinedSigns = {
         "textOffsetY": 2.75,
         "rot": 2
     },
+    "w23": {
+        "name": "W23",
+        "icon": "w23.svg",
+    },
     "w27a": {alias: "w27"},
     "w27": {
         "name": "W27",
