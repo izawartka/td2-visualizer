@@ -22,6 +22,10 @@ const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 function StatelessTrackRenderer(props) {
   const { object, trackColorMode } = props;
 
+  if (object.points.start.distanceSq(object.points.end) < 0.001) {
+      return null;
+  }
+
   const onMouseEnter = () => {
     setHoveredTrack(object);
   };
