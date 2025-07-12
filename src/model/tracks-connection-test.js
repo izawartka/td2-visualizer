@@ -11,7 +11,7 @@ function trackEndConnectionTest(scenery, track, connection) {
     }
 
     const reverseConnections = otherTrack.connections.filter(
-        (otherConnection) => otherConnection.type === otherConnection.otherTrackId === track.id,
+        (otherConnection) => otherConnection.otherTrackId === track.id,
     );
     if (reverseConnections.length > 1) {
         SceneryParserLog.warn(
@@ -22,7 +22,7 @@ function trackEndConnectionTest(scenery, track, connection) {
     if (reverseConnections.length === 0) {
         SceneryParserLog.warn(
             'tracksConnectionTest',
-            `Track ${track.id} is connected to ${connection.otherTrackId} but there is not reverse connection`,
+            `Track ${track.id} is connected to ${connection.otherTrackId} but there is no reverse connection`,
         );
         return;
     }

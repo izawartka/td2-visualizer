@@ -26,14 +26,15 @@ export default class ElectrificationResolver {
 
             routeTracks.forEach(routeTrack => {
                 this._propagate(
-                    routeTrack.track, 
-                    [], 
+                    routeTrack.track,
+                    [],
                     routeTrack.electrified ? ElectrificationStatus.ELECTRIFIED : ElectrificationStatus.NON_ELECTRIFIED
                 );
             });
 
             this._runResolution();
         } catch (error) {
+            // TODO: There is no such field, should it be RESOLVING_ERROR?
             scenery.electrificationResolved = ElectrificationResolutionStatus.ERROR;
             SceneryParserLog.warn('electrificationResolverError', `Error resolving electrification: ${error.message}`);
             return;
@@ -89,7 +90,7 @@ export default class ElectrificationResolver {
 
         if(results.length < routePoints.length) {
             ElectrificationResolver._passWarn(
-                'electrificationMissingRouteTracks', 
+                'electrificationMissingRouteTracks',
                 `While resolving electrification, found ${results.length} tracks connected to routes, but expected ${routePoints.length}`
             );
         }
@@ -103,7 +104,7 @@ export default class ElectrificationResolver {
 
             if(!trackObject.track) {
                 ElectrificationResolver._passWarn(
-                    'electrificationNevpNotApplied', 
+                    'electrificationNevpNotApplied',
                     `NEVP object ${trackObject.name} (${trackObject.id}) at track ${trackObject.track_id} has not been applied. Electrification resolution may fail`
                 );
                 return;
@@ -124,7 +125,7 @@ export default class ElectrificationResolver {
         ElectrificationResolver.propagationQueue.push({ track, skipTrackIds, status });
     }
 
-    static _resolveTrack(track, skipTrackIds, status) {
+    static _resolveTrack(scenery, track, skipTrackIds, status) {
         if (track.electrificationStatus === status) return; // already set
         if (Constants.parser.skipElectrificationErrorsPropagation && status === ElectrificationStatus.CONFLICT) {
             return;
@@ -137,38 +138,29 @@ export default class ElectrificationResolver {
         const fsne = status === ElectrificationStatus.NON_ELECTRIFIED;
         const tse = track.electrificationStatus === ElectrificationStatus.ELECTRIFIED;
         const tsne = track.electrificationStatus === ElectrificationStatus.NON_ELECTRIFIED;
-        
+
         track.electrificationStatus = status;
-        
+
         if (track.hasNEVP) {
             track.electrificationStatus = ElectrificationStatus.NON_ELECTRIFIED;
             if(!fse) return;
         } else if ((tse && fsne) || (tsne && fse)) {
             track.electrificationStatus = ElectrificationStatus.CONFLICT;
             ElectrificationResolver._passWarn(
-                'electrificationConflict', 
+                'electrificationConflict',
                 `Track ${track.id} has conflicting electrification status (=>${status})`
             );
             return;
         }
 
-        const propagation = track.connections.map(conn => conn.otherTrack);
+        const propagation = track.connections
+            .map(conn => scenery.getObject('tracks', conn.otherTrackId))
+            .filter((track) => !!track);
         const nextSkipIds = [track.id];
-
-        if (track.switch) {
-            nextSkipIds.push(track.switch.trackA.id, track.switch.trackB.id);
-        }
 
         propagation.forEach(nextTrack => {
             if (skipTrackIds.includes(nextTrack.id)) return;
-
             this._propagate(nextTrack, nextSkipIds, track.electrificationStatus);
         });
-
-        // Additional propagation for double switches
-        if (!track.switch || track.switch.def?.[2]?.length <= 2 || track.hasNEVP) return;
-
-        const otherSwitchTrack = track.switch.trackA === track ? track.switch.trackB : track.switch.trackA;
-        this._propagate(otherSwitchTrack, [track.id, ...propagation.map(track => track.id)], track.electrificationStatus);
     }
 };

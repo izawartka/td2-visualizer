@@ -33,6 +33,11 @@ export default class BezierTrack extends Track
 
     static fromText(text) {
         const values = text.split(";");
+
+        const connections = [];
+        if (values[15]) connections.push(new TrackConnection(values[15], TrackConnectionEnd.END));
+        if (values[16]) connections.push(new TrackConnection(values[16], TrackConnectionEnd.START));
+
         const track = new BezierTrack(
             values[1], // id
             Vector3.fromValuesArray(values, 3), // start
@@ -43,10 +48,7 @@ export default class BezierTrack extends Track
             Vector3.zero(),
             0, // len ??
             0, // r ??
-            [
-                new TrackConnection(values[15], TrackConnectionEnd.END),
-                new TrackConnection(values[16], TrackConnectionEnd.START),
-            ],
+            connections,
             values[17], // id_station
             ...Track.slopesFromText(values[18]), // start_slope, end_slope
             values[21], // id_isolation

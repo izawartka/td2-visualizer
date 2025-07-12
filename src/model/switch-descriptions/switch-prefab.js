@@ -33,7 +33,7 @@ export default class SwitchPrefab {
                     if (!reverseConnection) {
                         SceneryParserLog.warn(
                             'switchInvalidInternalConnection',
-                            `In a switch prefab the internal track ${internalId} is connected to ${connection.internalId} but there is not reverse connection`,
+                            `In a switch prefab the internal track ${internalId} is connected to ${connection.internalId} but there is no reverse connection`,
                         );
                         return;
                     }
@@ -156,8 +156,8 @@ export default class SwitchPrefab {
         tracks[`end_${side}`] = SwitchPrefabTrack.point(
             end,
             addedLength > 0 ?
-                (side === 'a' ? 5 : 6) :
-                (side === 'a' ? 3 : 4),
+                (side === 'a' ? 5 : 6) : // A fork switch with added length has the track A before B
+                (side === 'a' ? 4 : 3), // and without any added length, track B before A,
             [
                 {
                     type: SwitchTrackConnectionType.INTERNAL,

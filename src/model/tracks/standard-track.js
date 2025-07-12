@@ -33,16 +33,18 @@ export default class StandardTrack extends Track
 
     static fromText(text) {
         const values = text.split(";");
+
+        const connections = [];
+        if (values[11]) connections.push(new TrackConnection(values[11], TrackConnectionEnd.END));
+        if (values[12]) connections.push(new TrackConnection(values[12], TrackConnectionEnd.START));
+
         const track = new StandardTrack(
             values[1], // id
             Vector3.fromValuesArray(values, 3), // start
             Vector3.fromValuesArray(values, 6), // rot
             parseFloat(values[9]), // len
             parseFloat(values[10]), // r
-            [
-                new TrackConnection(values[11], TrackConnectionEnd.END),
-                new TrackConnection(values[12], TrackConnectionEnd.START),
-            ],
+            connections,
             values[13], // id_station
             ...Track.slopesFromText(values[14]), // start_slope, end_slope
             values[17], // id_isolation
