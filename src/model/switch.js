@@ -157,7 +157,6 @@ export default class Switch extends SceneryObject {
 
         trackObj.switch = this;
         scenery.addObject(trackObj);
-        scenery.addTrackAlias(trackId, trackId);
 
         return trackObj;
     }

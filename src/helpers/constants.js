@@ -29,8 +29,6 @@ const Constants = {
         unknownObjectType: true,
         unknownTrackType: true,
         spawnWithoutSpawnInfo: true,
-        trackAliasAlreadyExists: true,
-        trackAliasNoTrack: true,
         switchUndefinedModel: true,
         switchInvalidDataFormat: true,
         switchNoModel: true,

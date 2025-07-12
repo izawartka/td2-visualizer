@@ -38,14 +38,11 @@ export default class TrackObject extends SceneryObject {
         if(this.applied) return; // already applied
         this.applied = true;
 
-        // TODO: Is the scenery.getTrackIdByAlias needed?
-        const trackId = scenery.getTrackIdByAlias(this.track_id);
-        const track = scenery.getObject('tracks', trackId);
+        const track = scenery.getObject('tracks', this.track_id);
         if (!track) {
-            SceneryParserLog.warn('trackObjectCannotBeApplied', `TrackObject ${this.id} cannot be applied: track ${trackId} not found`)
+            SceneryParserLog.warn('trackObjectCannotBeApplied', `TrackObject ${this.id} cannot be applied: track ${this.track_id} not found`)
             return;
         }
-
         this.track = track;
     }
 }

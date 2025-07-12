@@ -1,5 +1,4 @@
 import { ElectrificationResolutionStatus } from './electrification-status.js';
-import SceneryParserLog from './scenery-parser-log.js';
 
 export default class Scenery
 {
@@ -7,7 +6,6 @@ export default class Scenery
     signalBoxes = [];
     spawnPoints = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
-    trackAliases = {};
     electrificationResolved = ElectrificationResolutionStatus.NOT_RESOLVED;
     static nextMiscId = 1;
 
@@ -36,7 +34,7 @@ export default class Scenery
             this._updateBounds(object.getRenderBounds());
         }
     }
-    
+
     applyObjects() {
         Object.keys(this.objects).forEach(category => {
             Object.values(this.objects[category]).forEach(object => {
@@ -50,26 +48,6 @@ export default class Scenery
     getObject(category, id) {
         if(!this.objects[category]) return null;
         return this.objects[category][id] ?? null;
-    }
-
-    addTrackAlias(id, alias) {
-        if(this.trackAliases[alias]) {
-            SceneryParserLog.warn('trackAliasAlreadyExists', `Track alias "${alias}" already exists for track "${this.trackAliases[alias]}". Cannot add alias for "${id}"`);
-            return;
-        }
-
-        const track = this.getObject('tracks', id);
-        if(!track) {
-            SceneryParserLog.warn('trackAliasNoTrack', `Cannot add alias "${alias}" for non-existing track "${id}"`);
-            return;
-        }
-        
-        track.aliases.push(alias);
-        this.trackAliases[alias] = id;
-    }
-
-    getTrackIdByAlias(idOrAlias) {
-        return this.trackAliases[idOrAlias] || idOrAlias;
     }
 
     _updateBounds(objBounds) {
