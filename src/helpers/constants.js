@@ -42,7 +42,6 @@ const Constants = {
         tracksConnectionTest: true,
         electrificationNevpNotApplied: false,
         electrificationConflict: false,
-        electrificationMissingRouteTracks: true,
         electrificationResolverError: true,
         electrificationResolverWarnings: true,
         signalElemsUnknownPrefab: true,
