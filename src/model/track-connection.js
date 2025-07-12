@@ -5,11 +5,21 @@ export const TrackConnectionEnd = {
 
 export default class TrackConnection {
     otherTrackId;
+    otherTrack = null;
     end;
 
-    constructor(otherTrackId, end) {
-        Object.assign(this, {
-            otherTrackId, end,
-        });
+    /**
+     * If only an ID is passed as `otherTrack`,
+     * it needs to be resolved later in the `connectTracks` function.
+     */
+    constructor(otherTrack, end) {
+        this.end = end;
+        if (typeof otherTrack === 'string') {
+            this.otherTrackId = otherTrack;
+            this.otherTrack = null;
+        } else {
+            this.otherTrackId = otherTrack.id;
+            this.otherTrack = otherTrack;
+        }
     }
 }

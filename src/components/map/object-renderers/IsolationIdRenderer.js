@@ -19,26 +19,31 @@ export default function IsolationIdRenderer(props) {
                 className: "isolation-id"
             }}
         />}
-        <IsolationEndMarker object={object} isStart={true} />
-        <IsolationEndMarker object={object} />
+        <IsolationEndMarker object={object} end={TrackConnectionEnd.START} />
+        <IsolationEndMarker object={object} end={TrackConnectionEnd.END} />
     </>);
 }
 
 function IsolationEndMarker(props) {
-    const { object, isStart = false } = props;
+    const { object, end = false } = props;
 
     const isShown = useMemo(() => {
-        return object.connections.some(conn =>
-            (isStart ? conn.type === TrackConnectionEnd.START : conn.type === TrackConnectionEnd.END) &&
-            conn.otherTrack.id_isolation !== object.id_isolation
-        );
-    }, [object, isStart]);
+        return object.connections.some((conn) => {
+            const isCorrectEnd = conn.end === end;
+            const isolationIdChanged = conn.otherTrack.id_isolation !== object.id_isolation;
+
+            // Prevent the marker from showing twice for both tracks
+            const isPreferred = object.id < conn.otherTrackId;
+
+            return isCorrectEnd && isolationIdChanged && isPreferred;
+        });
+    }, [object, end]);
 
     if (!isShown) return null;
 
-    const pos = isStart ? object.points.start : object.points.end;
+    const pos = object.getEndPos(end);
     const [x, y] = pos.toSVGCoords();
-    const angle = isStart ? object.getStartAngleXZ() : object.getEndAngleXZ();
+    const angle = object.getAngleXZForEnd(end);
 
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);

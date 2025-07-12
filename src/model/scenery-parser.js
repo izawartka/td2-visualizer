@@ -1,5 +1,4 @@
 import Scenery from './scenery';
-import { tracksConnectionTest } from './tracks-connection-test';
 import Switch from './switch';
 import StandardTrack from './tracks/standard-track';
 import BezierTrack from './tracks/bezier-track';
@@ -19,7 +18,7 @@ import NEVP from './track-objects/nevp';
 import Derailer from './track-objects/derailer';
 import SpawnPoint from './track-objects/spawn-point';
 import { attachSigns } from './attach-signs';
-import {connectRoutes} from "./connect-routes";
+import {connectTracks} from "./connect-tracks";
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -58,9 +57,8 @@ export default class SceneryParser {
         });
 
         scenery.applyObjects();
-        connectRoutes(scenery);
+        connectTracks(scenery);
 
-        if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
         if(Constants.parser.resolveElectrification) ElectrificationResolver.resolveScenery(scenery);
         if(Constants.parser.attachSigns) attachSigns(scenery);
         if(Constants.parser.logSceneryAfterFinished) console.log(scenery);

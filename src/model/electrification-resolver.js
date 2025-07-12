@@ -22,7 +22,7 @@ export default class ElectrificationResolver {
                 );
             });
 
-            this._runResolution(scenery);
+            this._runResolution();
         } catch (error) {
             scenery.electrificationResolved = ElectrificationResolutionStatus.RESOLVING_ERROR;
             SceneryParserLog.warn('electrificationResolverError', `Error resolving electrification: ${error.message}`);
@@ -50,11 +50,10 @@ export default class ElectrificationResolver {
             return route.segments[0].tracks.flatMap((routeTrack) => {
                 return routeTrack.connections
                     .map((connection) => {
-                        const otherTrack = scenery.getObject('tracks', connection.otherTrackId);
-                        if (!otherTrack || otherTrack.type === 'RouteTrack') return null;
-                        return { track: otherTrack, routeTrack };
+                        if (connection.otherTrack.type === 'RouteTrack') return null;
+                        return { track: connection.otherTrack, routeTrack };
                     })
-                    .filter((adjacent) => adjacent !== null)
+                    .filter((adjacent) => adjacent !== null);
             });
         });
     }
@@ -75,10 +74,10 @@ export default class ElectrificationResolver {
         });
     }
 
-    static _runResolution(scenery) {
+    static _runResolution() {
         while(ElectrificationResolver.propagationQueue.length > 0) {
             const { track, skipTrackId, status } = ElectrificationResolver.propagationQueue.pop();
-            ElectrificationResolver._resolveTrack(scenery, track, skipTrackId, status);
+            ElectrificationResolver._resolveTrack(track, skipTrackId, status);
         }
     }
 
@@ -86,7 +85,7 @@ export default class ElectrificationResolver {
         ElectrificationResolver.propagationQueue.push({ track, skipTrackId, status });
     }
 
-    static _resolveTrack(scenery, track, skipTrackId, status) {
+    static _resolveTrack(track, skipTrackId, status) {
         if (track.electrificationStatus === status) return; // already set
         if (Constants.parser.skipElectrificationErrorsPropagation && status === ElectrificationStatus.CONFLICT) {
             return;
@@ -114,13 +113,9 @@ export default class ElectrificationResolver {
             return;
         }
 
-        const propagation = track.connections
-            .map(conn => scenery.getObject('tracks', conn.otherTrackId))
-            .filter((track) => !!track);
-
-        propagation.forEach(nextTrack => {
-            if (skipTrackId === nextTrack.id) return;
-            this._propagate(nextTrack, track.id, track.electrificationStatus);
+        track.connections.forEach(connection => {
+            if (skipTrackId === connection.otherTrackId) return;
+            this._propagate(connection.otherTrack, track.id, track.electrificationStatus);
         });
     }
 };

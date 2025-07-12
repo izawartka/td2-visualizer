@@ -112,8 +112,8 @@ export default class Route extends SceneryObject {
             const newSegment = this.segments[this.segments.length - 1];
             newSegment.tracks.forEach((track, index) => {
                 const prevTrack = prevSegment.tracks[index];
-                track.connections.push(new TrackConnection(prevTrack.id, TrackConnectionEnd.START));
-                prevTrack.connections.push(new TrackConnection(track.id, TrackConnectionEnd.END));
+                track.connections.push(new TrackConnection(prevTrack, TrackConnectionEnd.START));
+                prevTrack.connections.push(new TrackConnection(track, TrackConnectionEnd.END));
             });
         }
 

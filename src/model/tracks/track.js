@@ -41,6 +41,11 @@ export default class Track extends SceneryObject {
         throw new Error("getEndAngleXZ() must be implemented in subclass");
     }
 
+    getAngleXZForEnd(end) {
+        if (end === TrackConnectionEnd.START) return this.getStartAngleXZ();
+        else return this.getEndAngleXZ();
+    }
+
     static slopesFromText(text) {
         return text.split(",", 2);
     }

@@ -47,6 +47,7 @@ const Constants = {
         attachSignsOutOfBounds: true,
         signalElemsUnknownSign: true,
         signalElemsUnknownSignText: true,
+        connectTracksFailed: true,
         routeInvalidSegment: true,
     },
     errors: {
