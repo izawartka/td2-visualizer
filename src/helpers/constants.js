@@ -167,6 +167,7 @@ const Constants = {
             },
             options: {
                 'derail': ['#f22', 'Derail track'],
+                'unknown': ['#aaa', 'Unknown speed'],
             }
         }
     }
