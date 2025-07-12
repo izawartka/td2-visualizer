@@ -9,6 +9,7 @@ export default class Route extends SceneryObject {
     category = "routes";
     type = "Route";
     points = [];
+    segments = [];
 
     constructor(prefab_name, pos, rot, track_count, route_name, track_offset, electrified) {
         super(route_name, pos, rot);
@@ -24,7 +25,7 @@ export default class Route extends SceneryObject {
         this.points = this._getConnectionPoints();
     }
 
-    static fromText(text) {        
+    static fromText(text) {
         const values = text.split(";");
         const route = new Route(
             values[2], // prefab_name
@@ -37,6 +38,10 @@ export default class Route extends SceneryObject {
         );
 
         return route;
+    }
+
+    addSegment(length, radius, trackIds) {
+        this.segments.push({ length, radius, trackIds });
     }
 
     _getConnectionPoints() {

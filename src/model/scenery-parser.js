@@ -29,6 +29,8 @@ export default class SceneryParser {
         const lines = scText.split("\n").map(line => line.trim());
         const scenery = new Scenery();
 
+        let currentRoute = null;
+
         lines.forEach((line, index) => {
             if(index === 0) {
                 const sceneryInfo = SceneryParser._parseSceneryInfo(line);
@@ -37,9 +39,21 @@ export default class SceneryParser {
             }
             if(!line?.length) return;
 
-            const object = SceneryParser._parseObject(line);
-            if(!object) return; // skip null objects
-            scenery.addObject(object);
+            if (currentRoute !== null) {
+                const foundRouteEnd = SceneryParser._parseRouteLine(line, currentRoute);
+                if (foundRouteEnd) {
+                    scenery.addObject(currentRoute);
+                    currentRoute = null;
+                }
+            } else {
+                const object = SceneryParser._parseObject(line);
+                if(!object) return; // skip null objects
+                if (object.type === 'Route') {
+                    currentRoute = object;
+                } else {
+                    scenery.addObject(object);
+                }
+            }
         });
 
         scenery.applyObjects();
@@ -69,7 +83,8 @@ export default class SceneryParser {
     static _parseObject(text) {
         const type = text.split(";", 2)[0];
 
-        if(type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
+        if (type === '' || type === 'EndRoute' || type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
+            SceneryParserLog.warn('unknownObjectType', `Unexpected entry of type ${type} without a preceding Route object`);
             return null;
         }
 
@@ -88,7 +103,6 @@ export default class SceneryParser {
                 return CameraHome.fromText(text);
             case 'MainCamera':
                 return MainCamera.fromText(text);
-            case 'EndRoute':
             case 'MiscGroup':
             case 'EndMiscGroup':
             case 'Wires':
@@ -101,12 +115,11 @@ export default class SceneryParser {
             case 'SSPController':
             case 'TerrainGroup':
             case 'EndTerrainGroup':
-            case '':
                 return null;
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);
                 return null;
-        };
+        }
     }
 
     static _parseTrack(text) {
@@ -146,5 +159,36 @@ export default class SceneryParser {
         } else {
             return Misc.fromText(Scenery.nextMiscId++, text);
         }
+    }
+
+    // Returns true if EndRoute was found, false otherwise
+    static _parseRouteLine(text, route) {
+        if (text === 'EndRoute') return true;
+        const fields = text.split(';');
+        if (fields.length < 4) {
+            SceneryParserLog.warn('routeInvalidSegment', `Invalid route segment: "${text}", not enough fields`);
+            return;
+        }
+        const trackIds = fields[3]
+            .split(',')
+            .map(segment => {
+                const id = segment.split(':')[0];
+                if (!id) return null;
+                return parseInt(id);
+            });
+        if (trackIds.some(id => id === null || isNaN(id))) {
+            SceneryParserLog.warn('routeInvalidSegment', `Invalid route segment track IDs: ${fields[3]}`);
+            return;
+        }
+        if (trackIds.length !== route.track_count) {
+            SceneryParserLog.warn('routeInvalidSegment', `Route segment has invalid track count: expected ${route.track_count}, got ${trackIds.length}`);
+            return;
+        }
+        route.addSegment(
+            parseInt(fields[1]), // length
+            parseInt(fields[2]), // radius
+            trackIds,
+        );
+        return false;
     }
 }

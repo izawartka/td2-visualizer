@@ -50,6 +50,7 @@ const Constants = {
         attachSignsOutOfBounds: true,
         signalElemsUnknownSign: true,
         signalElemsUnknownSignText: true,
+        routeInvalidSegment: true,
     },
     errors: {
         invalidSceneryInfo: true
