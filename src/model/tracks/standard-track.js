@@ -2,6 +2,7 @@ import AngleHelper from "../../helpers/angleHelper";
 import Track from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
+import IsolationId from "../isolation-id";
 
 export default class StandardTrack extends Track
 {
@@ -9,7 +10,8 @@ export default class StandardTrack extends Track
     points = {
         start: Vector3.zero(),
         end: Vector3.zero(),
-        circleCenter: Vector3.zero()
+        circleCenter: Vector3.zero(),
+        middle: Vector3.zero(),
     };
 
     constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
@@ -60,12 +62,18 @@ export default class StandardTrack extends Track
         const rotRad = AngleHelper.degToRad(this.rot.y);
 
         this.points.start = this.pos.clone();
-        this.points.end = this.pos.add(Vector3.fromAngleY(rotRad, this.len));
-        this.points.circleCenter = this.pos.clone(); // default circle center
 
-        if (this.r !== 0) {
+        if (this.r === 0) {
+            this.points.end = this.pos.add(Vector3.fromAngleY(rotRad, this.len));
+            this.points.middle = this.points.start.lerp(this.points.end, 0.5);
+            this.points.circleCenter = this.pos.clone(); // default circle center
+        } else {
             const centerAngle = rotRad + Math.PI / 2;
             this.points.circleCenter = this.pos.sub(Vector3.fromAngleY(centerAngle, this.r));
+
+            const middleAngle = centerAngle - (this.len / this.r) / 2;
+            this.points.middle = this.points.circleCenter.add(Vector3.fromAngleY(middleAngle, this.r));
+
             const endAngle = centerAngle - this.len / this.r;
             this.points.end = this.points.circleCenter.add(Vector3.fromAngleY(endAngle, this.r));
         }
@@ -77,5 +85,10 @@ export default class StandardTrack extends Track
 
             this.points.end.y += startHeightDiff + (endHeightDiff - startHeightDiff) / 2;
         }
+    }
+
+    applyObject(scenery) {
+        super.applyObject(scenery);
+        scenery.addObject(new IsolationId(this.category, this.id, this.points.middle, this.id_isolation));
     }
 }

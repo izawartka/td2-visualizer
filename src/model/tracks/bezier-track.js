@@ -1,6 +1,7 @@
 import Track from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
+import IsolationId from "../isolation-id";
 
 export default class BezierTrack extends Track
 {
@@ -9,7 +10,8 @@ export default class BezierTrack extends Track
         start: Vector3.zero(),
         control1: Vector3.zero(),
         end: Vector3.zero(),
-        control2: Vector3.zero()
+        control2: Vector3.zero(),
+        middle: Vector3.zero(),
     };
 
     constructor(id, start, control1, end, control2, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
@@ -19,8 +21,21 @@ export default class BezierTrack extends Track
             start,
             control1: start.add(control1),
             end,
-            control2: end.add(control2)
+            control2: end.add(control2),
         });
+        // This is not the the actual middle point, but it's close enough
+        this.points.middle = this._pointAtT(0.5);
+    }
+
+    _pointAtT(t) {
+        const a1 = this.points.start.lerp(this.points.control1, t);
+        const a2 = this.points.control1.lerp(this.points.control2, t);
+        const a3 = this.points.control2.lerp(this.points.end, t);
+
+        const b1 = a1.lerp(a2, t);
+        const b2 = a2.lerp(a3, t);
+
+        return b1.lerp(b2, t);
     }
 
     getStartAngleXZ() {
@@ -58,5 +73,10 @@ export default class BezierTrack extends Track
         );
 
         return track;
+    }
+
+    applyObject(scenery) {
+        super.applyObject(scenery);
+        scenery.addObject(new IsolationId(this.category, this.id, this.points.middle, this.id_isolation));
     }
 }

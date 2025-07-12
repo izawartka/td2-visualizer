@@ -10,6 +10,7 @@ import NEVPRenderer from './object-renderers/NEVPRenderer';
 import DerailerRenderer from './object-renderers/DerailerRenderer';
 import ElectrificationStatusPopup from './additional-layer-components/ElectrificationStatusPopup';
 import SpawnPointRenderer from './object-renderers/SpawnPointRenderer';
+import IsolationEndRenderer from "./object-renderers/IsolationEndRenderer";
 
 const ObjectRendererQueue = [
     {
@@ -23,8 +24,14 @@ const ObjectRendererQueue = [
         'pointerEvents': true
     },
     {
-        'name': 'isolations-ids',
+        'name': 'isolations-ends',
         'category': 'tracks',
+        'renderer': IsolationEndRenderer,
+        'cond': (layers) => layers['isolations-ids']
+    },
+    {
+        'name': 'isolations-ids',
+        'category': 'isolation-ids',
         'renderer': IsolationIdRenderer,
         'cond': (layers) => layers['isolations-ids']
     },

@@ -15,7 +15,6 @@ export default class Track extends SceneryObject {
     start_slope;
     end_slope;
     prefab_name;
-    hide_isolation = false;
     switch = null;
     electrificationStatus = ElectrificationStatus.NOT_CHECKED;
     hasNEVP = false;

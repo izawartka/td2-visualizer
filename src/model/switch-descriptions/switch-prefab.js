@@ -5,10 +5,12 @@ import {TrackConnectionEnd} from "../track-connection";
 
 export default class SwitchPrefab {
     tracks = {};
+    isolation_id_offset;
 
-    constructor(tracks) {
+    constructor(tracks, isolation_id_offset) {
         Object.assign(this, {
             tracks,
+            isolation_id_offset,
         });
         this._verifyConnections();
     }
@@ -89,7 +91,10 @@ export default class SwitchPrefab {
             ),
         };
 
-        return new SwitchPrefab(tracks);
+        const midpointA = this._calculateCurveEnd(Vector3.zero(), 0, radiusA, curveLength / 2).endPos;
+        const midpointB = this._calculateCurveEnd(Vector3.zero(), 0, radiusB, curveLength / 2).endPos;
+        const isolationIdOffset = midpointA.lerp(midpointB, 0.5);
+        return new SwitchPrefab(tracks, isolationIdOffset);
     }
 
     static _calculateCurveEnd(startPos, startAngle, radius, curveLength) {
@@ -215,7 +220,7 @@ export default class SwitchPrefab {
             ),
         };
 
-        return new SwitchPrefab(tracks);
+        return new SwitchPrefab(tracks, Vector3.zero());
     }
 
     static slip(totalLength, outerLength, transitionLength, radius, tangentInv, leftSlipEnabled, rightSlipEnabled) {
@@ -457,6 +462,6 @@ export default class SwitchPrefab {
         addSideConnection('left', 'a', 'b', leftSlipEnabled);
         addSideConnection('right', 'b', 'a', rightSlipEnabled);
 
-        return new SwitchPrefab(tracks);
+        return new SwitchPrefab(tracks, Vector3.zero());
     }
 }
