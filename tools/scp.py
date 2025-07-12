@@ -7,22 +7,24 @@ import sys
 #    v1.4
 #
 
-BAD_WORDS = ['Empty,Empty', 'Forest Start,Forest Start', 'EndMiscGroup', 'Fence', 'TerrainPoint', 'Wires']
+BAD_WORDS = ['EndMiscGroup', 'Fence', 'TerrainPoint', 'Wires']
 
 def should_exclude(line: str) -> bool:
     for word in BAD_WORDS:
         if line.startswith(word):
             return True
-    
+
     if line.startswith("Misc"):
         values = line.split(';')
         return not values[2].startswith("SignalBox")
+
+    return False
 
 def process_file(file_path: str):
     if not file_path.endswith(".sc"):
         print(f"Skipping non-.sc file: {file_path}")
         return
-    
+
     if file_path.endswith(".lite.sc"):
         print(f"Skipping already processed file: {file_path}")
         return
