@@ -94,7 +94,7 @@ export default class SwitchPrefab {
 
     static _calculateCurveEnd(startPos, startAngle, radius, curveLength) {
         if (radius === 0) {
-            return { endPos: startPos, endAngle: startAngle };
+            return { endPos: Vector3.fromAngleY(startAngle, curveLength), endAngle: startAngle };
         }
         const centerToStart = Vector3.fromAngleY(startAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
         const circleCenter = startPos.add(centerToStart.negate());
