@@ -36,12 +36,29 @@ export default class Scenery
     }
 
     applyObjects() {
+        const categories_order = [
+            'switches', 'routes',   // switches and routes create tracks
+            'tracks',               // tracks create isolation ids
+            'isolation-ids',
+            'track-objects',        // track objects might refer to tracks
+        ];
+
+        categories_order.forEach((category) => this._applyCategory(category));
+
+        // Remaining categories
         Object.keys(this.objects).forEach(category => {
-            Object.values(this.objects[category]).forEach(object => {
-                if(object.applyObject) {
-                    object.applyObject(this);
-                }
-            });
+            if (categories_order.includes(category)) return;
+            this._applyCategory(category);
+        });
+    }
+
+    _applyCategory(category) {
+        if(!this.objects[category]) return;
+
+        Object.values(this.objects[category]).forEach(object => {
+            if (object.applyObject) {
+                object.applyObject(this);
+            }
         });
     }
 
@@ -58,7 +75,6 @@ export default class Scenery
             if(point.z < this.bounds.minZ) this.bounds.minZ = point.z;
             if(point.x > this.bounds.maxX) this.bounds.maxX = point.x;
             if(point.z > this.bounds.maxZ) this.bounds.maxZ = point.z;
-        }
-        );
+        });
     }
 }
