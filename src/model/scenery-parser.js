@@ -19,6 +19,7 @@ import NEVP from './track-objects/nevp';
 import Derailer from './track-objects/derailer';
 import SpawnPoint from './track-objects/spawn-point';
 import { attachSigns } from './attach-signs';
+import {connectRoutes} from "./connect-routes";
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -57,6 +58,7 @@ export default class SceneryParser {
         });
 
         scenery.applyObjects();
+        connectRoutes(scenery);
 
         if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
         if(Constants.parser.resolveElectrification) ElectrificationResolver.resolveScenery(scenery);
@@ -178,10 +180,6 @@ export default class SceneryParser {
             });
         if (trackIds.some(id => id === null || isNaN(id))) {
             SceneryParserLog.warn('routeInvalidSegment', `Invalid route segment track IDs: ${fields[3]}`);
-            return;
-        }
-        if (trackIds.length !== route.track_count) {
-            SceneryParserLog.warn('routeInvalidSegment', `Route segment has invalid track count: expected ${route.track_count}, got ${trackIds.length}`);
             return;
         }
         route.addSegment(
