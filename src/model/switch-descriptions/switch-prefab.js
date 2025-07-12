@@ -75,13 +75,13 @@ export default class SwitchPrefab {
                     },
                 ],
             ),
-            ...SwitchPrefab._createSwitchTracks(
+            ...SwitchPrefab._createForkSwitchTracks(
                 radiusA,
                 curveLength,
                 addedLength,
                 'a',
             ),
-            ...SwitchPrefab._createSwitchTracks(
+            ...SwitchPrefab._createForkSwitchTracks(
                 radiusB,
                 curveLength,
                 addedLength,
@@ -92,7 +92,7 @@ export default class SwitchPrefab {
         return new SwitchPrefab(tracks);
     }
 
-    static _createSwitchTracks(radius, curveLength, addedLength, side) {
+    static _createForkSwitchTracks(radius, curveLength, addedLength, side) {
         let curveEnd;
         let endAngle;
         if (radius === 0) {
@@ -173,5 +173,46 @@ export default class SwitchPrefab {
         );
 
         return tracks;
+    }
+
+    static crossing(length, tangentInv) {
+        const vectorA = Vector3.fromAngleY(Math.atan(1 / tangentInv / 2), length / 2);
+        const vectorB = Vector3.fromAngleY(-Math.atan(1 / tangentInv / 2), length / 2);
+        const tracks = {
+            a: new SwitchPrefabTrack(
+                vectorA.negate(),
+                vectorA,
+                0,
+                0,
+                [
+                    {
+                        type: SwitchTrackConnectionType.EXTERNAL,
+                        end: TrackConnectionEnd.START,
+                    },
+                    {
+                        type: SwitchTrackConnectionType.EXTERNAL,
+                        end: TrackConnectionEnd.END,
+                    },
+                ],
+            ),
+            b: new SwitchPrefabTrack(
+                vectorB.negate(),
+                vectorB,
+                0,
+                1,
+                [
+                    {
+                        type: SwitchTrackConnectionType.EXTERNAL,
+                        end: TrackConnectionEnd.START,
+                    },
+                    {
+                        type: SwitchTrackConnectionType.EXTERNAL,
+                        end: TrackConnectionEnd.END,
+                    },
+                ],
+            ),
+        };
+
+        return new SwitchPrefab(tracks);
     }
 }

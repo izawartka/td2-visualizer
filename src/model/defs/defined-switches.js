@@ -1,24 +1,8 @@
 import SwitchPrefab from "../switch-descriptions/switch-prefab";
 
 const DefinedSwitches = {
-    // "Crossing": [
-    //     0,
-    //     0,
-    //     [0,1],
-    //     new Vector3(-0.919, 0, -16.59),
-    //     new Vector3(0.919, 0, -16.59),
-    //     new Vector3(0.919, 0, 16.59),
-    //     new Vector3(-0.919, 0, 16.59)
-    // ],
-    // "Crossing4.444": [
-    //     0,
-    //     0,
-    //     [0,1],
-    //     new Vector3(-1.104, 0, -9.939),
-    //     new Vector3(1.104, 0, -9.939),
-    //     new Vector3(1.104, 0, 9.939),
-    //     new Vector3(-1.104, 0, 9.939)
-    // ],
+    "Crossing": SwitchPrefab.crossing(33.2294, 9.0),
+    "Crossing4.444": SwitchPrefab.crossing(20.0, 4.444),
     // Rkp 60E1-190-1_9 ab
     // Rkp 60E1-190-1_9 ba
     // Rkpd 60E1-190-1_9
