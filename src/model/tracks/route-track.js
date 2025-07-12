@@ -7,7 +7,7 @@ export default class RouteTrack extends Track {
     points;
     route;
 
-    constructor(id, start, end, rot, len, r, connections, route, electrified) {
+    constructor(id, start, end, rot, len, r, connections, electrified, route) {
         super(
             id, start, rot, len, r, connections,
             null, // id_station,

@@ -2,6 +2,7 @@ import SceneryObject from "./scenery-object";
 import Vector3 from "./vector3";
 import SceneryParserLog from "./scenery-parser-log";
 import RouteTrack from "./tracks/route-track";
+import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 
 export default class Route extends SceneryObject {
     track_count;
@@ -101,18 +102,30 @@ export default class Route extends SceneryObject {
                 lengths[index],
                 radii[index],
                 [], // connections
+                this.electrified,
                 this, // route
             );
         });
+
+        if (this.segments.length >= 2) {
+            const prevSegment = this.segments[this.segments.length - 2];
+            const newSegment = this.segments[this.segments.length - 1];
+            newSegment.tracks.forEach((track, index) => {
+                const prevTrack = prevSegment.tracks[index];
+                track.connections.push(new TrackConnection(prevTrack.id, TrackConnectionEnd.START));
+                prevTrack.connections.push(new TrackConnection(track.id, TrackConnectionEnd.END));
+            });
+        }
+
         this.segments.push({ length, radius, trackIds, tracks });
     }
 
     // This method is future-proofed for more than 2 tracks
     _getOffsets() {
-        const leftmost_offset = -(this.track_count - 1) * 2 + this.track_offset;
+        const leftmost_offset = (this.track_count - 1) * 2 + this.track_offset;
         const result = [];
         for (let i = 0; i < this.track_count; i++) {
-            result.push(leftmost_offset + i * 4);
+            result.push(leftmost_offset - i * 4);
         }
         return result;
     }

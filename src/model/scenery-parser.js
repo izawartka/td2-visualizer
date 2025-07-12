@@ -174,9 +174,9 @@ export default class SceneryParser {
         const trackIds = fields[3]
             .split(',')
             .map(segment => {
-                const id = segment.split(':')[0];
-                if (!id) return null;
-                return parseInt(id);
+                const id = segment.split(':')[0].trim();
+                if (id === '') return null;
+                return id;
             });
         if (trackIds.some(id => id === null || isNaN(id))) {
             SceneryParserLog.warn('routeInvalidSegment', `Invalid route segment track IDs: ${fields[3]}`);
