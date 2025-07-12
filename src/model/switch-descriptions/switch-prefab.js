@@ -2,6 +2,7 @@ import Vector3 from "../vector3";
 import SwitchPrefabTrack, {SwitchTrackConnectionType} from "./switch-prefab-track";
 import SceneryParserLog from "../scenery-parser-log";
 import {TrackConnectionEnd} from "../track-connection";
+import CurveHelper from "../../helpers/curveHelper";
 
 export default class SwitchPrefab {
     tracks = {};
@@ -52,145 +53,80 @@ export default class SwitchPrefab {
     }
 
     static fork(radiusA, radiusB, curveLength, addedLength = 0.0) {
-        const tracks = {
-            start: new SwitchPrefabTrack(
-                Vector3.zero(),
-                Vector3.zero(),
-                radiusA,
-                0,
-                [
-                    {
-                        type: SwitchTrackConnectionType.EXTERNAL,
-                        end: TrackConnectionEnd.START,
-                    },
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.END,
-                        otherEnd: TrackConnectionEnd.START,
-                        internalId: 'curve_a',
-                    },
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.END,
-                        otherEnd: TrackConnectionEnd.START,
-                        internalId: 'curve_b',
-                    },
-                ],
-            ),
+        const startTrack = SwitchPrefabTrack.point('start', 0, 0, Vector3.zero(), [
+            {
+                type: SwitchTrackConnectionType.EXTERNAL,
+                end: TrackConnectionEnd.START,
+            },
+        ]);
+
+        const tracks = SwitchPrefab._joinTrackList([
+            startTrack,
             ...SwitchPrefab._createForkSwitchTracks(
+                startTrack,
                 radiusA,
                 curveLength,
                 addedLength,
                 'a',
             ),
             ...SwitchPrefab._createForkSwitchTracks(
+                startTrack,
                 radiusB,
                 curveLength,
                 addedLength,
                 'b',
             ),
-        };
+        ]);
 
-        const midpointA = this._calculateCurveEnd(Vector3.zero(), 0, radiusA, curveLength / 2).endPos;
-        const midpointB = this._calculateCurveEnd(Vector3.zero(), 0, radiusB, curveLength / 2).endPos;
+        const midpointA = CurveHelper.calculateCurveEnd(Vector3.zero(), 0, radiusA, curveLength / 2).endPos;
+        const midpointB = CurveHelper.calculateCurveEnd(Vector3.zero(), 0, radiusB, curveLength / 2).endPos;
         const isolationIdOffset = midpointA.lerp(midpointB, 0.5);
         return new SwitchPrefab(tracks, isolationIdOffset);
     }
 
-    static _calculateCurveEnd(startPos, startAngle, radius, curveLength) {
-        if (radius === 0) {
-            return { endPos: Vector3.fromAngleY(startAngle, curveLength), endAngle: startAngle };
-        }
-        const centerToStart = Vector3.fromAngleY(startAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-        const circleCenter = startPos.add(centerToStart.negate());
-        const endAngle = startAngle -curveLength / radius;
-        const centerToEnd = Vector3.fromAngleY(endAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-        const endPos = circleCenter.add(centerToEnd);
-        return { endPos, endAngle };
-    }
+    static _createForkSwitchTracks(startPrefab, radius, curveLength, addedLength, side) {
+        const sideTracks = [
+            startPrefab.extend(`curve_${side}`, side === 'a' ? 1 : 2, curveLength, radius),
+        ];
 
-    static _createForkSwitchTracks(radius, curveLength, addedLength, side) {
-        const { endPos: curveEnd, endAngle } = SwitchPrefab._calculateCurveEnd(Vector3.zero(), 0, radius, curveLength);
-
-        const tracks = {
-            [`curve_${side}`]: new SwitchPrefabTrack(
-                Vector3.zero(),
-                curveEnd,
-                radius,
-                side === 'a' ? 1 : 2,
-                [
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.START,
-                        otherEnd: TrackConnectionEnd.END,
-                        internalId: 'start',
-                    },
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.END,
-                        otherEnd: TrackConnectionEnd.START,
-                        internalId: addedLength > 0 ? `added_${side}` : `end_${side}`,
-                    },
-                ],
-            ),
-        };
-
-        let end = curveEnd;
         if (addedLength > 0) {
-            end = end.add(Vector3.fromAngleY(endAngle, addedLength));
-            tracks[`added_${side}`] = new SwitchPrefabTrack(
-                curveEnd,
-                end,
-                0,
+            sideTracks.push(sideTracks[sideTracks.length - 1].extend(
+                `added_${side}`,
                 side === 'a' ? 3 : 4,
-                [
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.START,
-                        otherEnd: TrackConnectionEnd.END,
-                        internalId: `curve_${side}`,
-                    },
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.END,
-                        otherEnd: TrackConnectionEnd.START,
-                        internalId: `end_${side}`,
-                    },
-                ],
-            );
+                addedLength,
+                0,
+            ));
         }
 
-        tracks[`end_${side}`] = SwitchPrefabTrack.point(
-            end,
+        sideTracks.push(sideTracks[sideTracks.length - 1].extend(
+            `end_${side}`,
             addedLength > 0 ?
                 (side === 'a' ? 5 : 6) : // A fork switch with added length has the track A before B
-                (side === 'a' ? 4 : 3), // and without any added length, track B before A,
+                (side === 'a' ? 4 : 3),  // and without any added length, track B before A,
+            0,
+            0,
             [
-                {
-                    type: SwitchTrackConnectionType.INTERNAL,
-                    end: TrackConnectionEnd.START,
-                    otherEnd: TrackConnectionEnd.END,
-                    internalId: addedLength > 0 ? `added_${side}` : `curve_${side}`,
-                },
                 {
                     type: SwitchTrackConnectionType.EXTERNAL,
                     end: TrackConnectionEnd.END,
                 },
-            ]
-        );
+            ],
+        ));
 
-        return tracks;
+        return sideTracks;
     }
 
     static crossing(length, tangentInv) {
-        const vectorA = Vector3.fromAngleY(Math.atan(1 / tangentInv / 2), length / 2);
-        const vectorB = Vector3.fromAngleY(-Math.atan(1 / tangentInv / 2), length / 2);
-        const tracks = {
-            a: new SwitchPrefabTrack(
-                vectorA.negate(),
-                vectorA,
+        const angleA = Math.atan(1 / tangentInv / 2);
+        const angleB = -angleA;
+        const tracks = SwitchPrefab._joinTrackList([
+            SwitchPrefabTrack.straight(
+                'a',
                 0,
-                0,
+                angleA,
+                Vector3.zero(),
+                length,
+                -length/2,
                 [
                     {
                         type: SwitchTrackConnectionType.EXTERNAL,
@@ -202,11 +138,13 @@ export default class SwitchPrefab {
                     },
                 ],
             ),
-            b: new SwitchPrefabTrack(
-                vectorB.negate(),
-                vectorB,
-                0,
+            SwitchPrefabTrack.straight(
+                'b',
                 1,
+                angleB,
+                Vector3.zero(),
+                length,
+                -length/2,
                 [
                     {
                         type: SwitchTrackConnectionType.EXTERNAL,
@@ -218,7 +156,7 @@ export default class SwitchPrefab {
                     },
                 ],
             ),
-        };
+        ]);
 
         return new SwitchPrefab(tracks, Vector3.zero());
     }
@@ -226,242 +164,126 @@ export default class SwitchPrefab {
     static slip(totalLength, outerLength, transitionLength, radius, tangentInv, leftSlipEnabled, rightSlipEnabled) {
         const aAngle = Math.atan(1 / tangentInv / 2);
         const bAngle = -aAngle;
-        const unitVectorA = Vector3.fromAngleY(aAngle);
-        const unitVectorB = Vector3.fromAngleY(bAngle);
 
-        const outerStart = totalLength / 2;
-        const transitionStart = outerStart - outerLength;
-        const innerStart = transitionStart - transitionLength;
-
-        const makeSlipConfig = (radiusSign, unitVector, startAngle) => {
-            const startPos = unitVector.multiply(transitionStart);
-            const slipRadius = radiusSign * radius;
-            const { endPos } = SwitchPrefab._calculateCurveEnd(startPos, startAngle, slipRadius, transitionLength);
-            return {
-                startPos,
-                slipRadius,
-                endPos,
-            };
-        };
-        const slipPoints = {
-            a_enter: makeSlipConfig(1, unitVectorA.negate(), aAngle),
-            a_exit: makeSlipConfig(1, unitVectorA, aAngle + Math.PI),
-            b_enter: makeSlipConfig(-1, unitVectorB.negate(), bAngle),
-            b_exit: makeSlipConfig(-1, unitVectorB, bAngle + Math.PI),
+        const tracks = {};
+        const addTrack = (track) => {
+            tracks[track.id] = track;
         };
 
         let dataIndex = 0;
-        const outerTrack = (unitVector, name) => [
-            `outer_${name}`,
-            new SwitchPrefabTrack(
-                unitVector.multiply(outerStart),
-                unitVector.multiply(transitionStart),
-                0,
+        const outerTrack = (angle, name) => {
+            addTrack(SwitchPrefabTrack.straight(
+                `outer_${name}`,
                 dataIndex++,
+                angle,
+                Vector3.zero(),
+                outerLength,
+                -(totalLength / 2),
                 [
                     {
                         type: SwitchTrackConnectionType.EXTERNAL,
                         end: TrackConnectionEnd.START,
                     },
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.END,
-                        otherEnd: TrackConnectionEnd.START,
-                        internalId: `transition_${name}`,
-                    },
                 ],
-            ),
-        ];
-        const transitionTrack = (unitVector, path, end) => [
-            `transition_${path}_${end}`,
-            new SwitchPrefabTrack(
-                unitVector.multiply(transitionStart),
-                unitVector.multiply(innerStart),
-                0,
-                dataIndex++,
-                [
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.START,
-                        otherEnd: TrackConnectionEnd.END,
-                        internalId: `outer_${path}_${end}`,
-                    },
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.END,
-                        otherEnd: end === 'enter' ? TrackConnectionEnd.START : TrackConnectionEnd.END,
-                        internalId: `crossing_${path}`,
-                    },
-                ],
-            ),
-        ];
-        const slipTransitionTrack = (path, side, end) => {
-            const { startPos, slipRadius, endPos } = slipPoints[`${path}_${end}`];
-            return [
-                `slip_transition_${path}_${end}`,
-                new SwitchPrefabTrack(
-                    startPos,
-                    endPos,
-                    slipRadius,
-                    dataIndex++,
-                    [
-                        {
-                            type: SwitchTrackConnectionType.INTERNAL,
-                            end: TrackConnectionEnd.START,
-                            otherEnd: TrackConnectionEnd.END,
-                            internalId: `outer_${path}_${end}`,
-                        },
-                        {
-                            type: SwitchTrackConnectionType.INTERNAL,
-                            end: TrackConnectionEnd.END,
-                            otherEnd: end === 'enter' ? TrackConnectionEnd.START : TrackConnectionEnd.END,
-                            internalId: `side_${side}`,
-                        },
-                    ],
-                ),
-            ];
+            ));
         };
-        const crossingTrack = (unitVector, path) => [
-            `crossing_${path}`,
-            new SwitchPrefabTrack(
-                unitVector.multiply(-innerStart),
-                unitVector.multiply(innerStart),
-                0,
+        const transitionTrack = (name) => {
+            addTrack(tracks[`outer_${name}`].extend(
+                `transition_${name}`,
                 dataIndex++,
-                [
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.START,
-                        otherEnd: TrackConnectionEnd.END,
-                        internalId: `transition_${path}_enter`,
-                    },
-                    {
-                        type: SwitchTrackConnectionType.INTERNAL,
-                        end: TrackConnectionEnd.END,
-                        otherEnd: TrackConnectionEnd.END,
-                        internalId: `transition_${path}_exit`,
-                    },
-                ],
-            ),
-        ];
-        const sideTrack = (unitVectorEnter, unitVectorExit, enterPath, exitPath, side, slipEnabled) => {
+                transitionLength,
+            ));
+        };
+        const slipTransitionTrack = (name, radiusSign) => {
+            addTrack(tracks[`outer_${name}`].extend(
+                `slip_transition_${name}`,
+                dataIndex++,
+                transitionLength,
+                radius * radiusSign,
+            ));
+        };
+        const crossingTrack = (path) => {
+            const previous = tracks[`transition_${path}_enter`];
+            const next = tracks[`transition_${path}_exit`];
+            const track = new SwitchPrefabTrack(
+                `crossing_${path}`,
+                dataIndex++,
+                previous.endAngle,
+                previous.endPos,
+                previous.endAngle,
+                next.endPos,
+                0,
+            );
+            SwitchPrefabTrack.connect(previous, track);
+            SwitchPrefabTrack.connect(track, next, TrackConnectionEnd.END, TrackConnectionEnd.END);
+            addTrack(track);
+        };
+        const sideTrack = (enterPath, exitPath, side, slipEnabled) => {
+            let enter, exit, track;
             if (slipEnabled) {
-                const enterConfig = slipPoints[`${enterPath}_enter`];
-                const exitConfig = slipPoints[`${exitPath}_exit`];
-                return [
+                enter = tracks[`outer_${enterPath}_enter`];
+                exit = tracks[`outer_${exitPath}_exit`];
+                track = new SwitchPrefabTrack(
                     `side_${side}`,
-                    new SwitchPrefabTrack(
-                        enterConfig.endPos,
-                        exitConfig.endPos,
-                        enterConfig.slipRadius,
-                        dataIndex++,
-                        [
-                            {
-                                type: SwitchTrackConnectionType.INTERNAL,
-                                end: TrackConnectionEnd.START,
-                                otherEnd: TrackConnectionEnd.END,
-                                internalId: `slip_transition_${enterPath}_enter`,
-                            },
-                            {
-                                type: SwitchTrackConnectionType.INTERNAL,
-                                end: TrackConnectionEnd.END,
-                                otherEnd: TrackConnectionEnd.END,
-                                internalId: `slip_transition_${exitPath}_exit`,
-                            },
-                        ]
-                    ),
-                ];
+                    dataIndex++,
+                    enter.endAngle,
+                    enter.endPos,
+                    exit.endAngle + Math.PI,
+                    exit.endPos,
+                    enter.radius,
+                );
             } else {
-                return [
+                enter = tracks[`transition_${enterPath}_enter`];
+                exit = tracks[`transition_${exitPath}_exit`];
+                track = new SwitchPrefabTrack(
                     `side_${side}`,
-                    new SwitchPrefabTrack(
-                        unitVectorEnter.multiply(innerStart),
-                        unitVectorExit.multiply(innerStart),
-                        0,
-                        dataIndex++,
-                        [
-                            {
-                                type: SwitchTrackConnectionType.INTERNAL,
-                                end: TrackConnectionEnd.START,
-                                otherEnd: TrackConnectionEnd.END,
-                                internalId: `transition_${enterPath}_enter`,
-                            },
-                            {
-                                type: SwitchTrackConnectionType.INTERNAL,
-                                end: TrackConnectionEnd.END,
-                                otherEnd: TrackConnectionEnd.END,
-                                internalId: `transition_${exitPath}_exit`,
-                            },
-                        ]
-                    ),
-                ];
+                    dataIndex++,
+                    0,
+                    enter.endPos,
+                    0,
+                    exit.endPos,
+                    0,
+                );
             }
+            SwitchPrefabTrack.connect(enter, track);
+            SwitchPrefabTrack.connect(track, exit, TrackConnectionEnd.END, TrackConnectionEnd.END);
+            addTrack(track);
         };
 
         // the order is important, each function call increments dataIndex
-        const trackList = [
-            outerTrack(unitVectorA.negate(), 'a_enter'),
-            outerTrack(unitVectorB.negate(), 'b_enter'),
-            outerTrack(unitVectorA, 'a_exit'),
-            outerTrack(unitVectorB, 'b_exit'),
-            transitionTrack(unitVectorA.negate(), 'a', 'enter'),
-            transitionTrack(unitVectorB.negate(), 'b', 'enter'),
-        ];
+        outerTrack(aAngle,'a_enter');
+        outerTrack(bAngle, 'b_enter');
+        outerTrack(aAngle + Math.PI, 'a_exit');
+        outerTrack(bAngle + Math.PI, 'b_exit');
+        transitionTrack('a_enter');
+        transitionTrack('b_enter');
         if (leftSlipEnabled) {
-            trackList.push(slipTransitionTrack('a', 'left', 'enter'));
+            slipTransitionTrack('a_enter', 1);
         }
         if (rightSlipEnabled) {
-            trackList.push(slipTransitionTrack('b', 'right', 'enter'));
+            slipTransitionTrack('b_enter', -1);
         }
-        trackList.push(
-            crossingTrack(unitVectorA, 'a'),
-            crossingTrack(unitVectorB, 'b'),
-            sideTrack(unitVectorA.negate(), unitVectorB, 'a', 'b', 'left', leftSlipEnabled),
-            sideTrack(unitVectorB.negate(), unitVectorA, 'b', 'a', 'right', rightSlipEnabled),
-            transitionTrack(unitVectorA, 'a', 'exit'),
-            transitionTrack(unitVectorB, 'b', 'exit'),
-        );
+        const innerIndexesStart = dataIndex;
+        dataIndex += 4;
+        transitionTrack('a_exit');
+        transitionTrack('b_exit');
         if (rightSlipEnabled) {
-            trackList.push(slipTransitionTrack('a', 'right', 'exit'));
+            slipTransitionTrack('a_exit', 1);
         }
         if (leftSlipEnabled) {
-            trackList.push(slipTransitionTrack('b', 'left', 'exit'));
+            slipTransitionTrack('b_exit', -1);
         }
 
-        const tracks = Object.fromEntries(trackList);
-
-        const addSideConnection = (side, enter_path, exit_path, slipEnabled) => {
-            if (slipEnabled) {
-                tracks[`outer_${enter_path}_enter`].connections.push({
-                    type: SwitchTrackConnectionType.INTERNAL,
-                    end: TrackConnectionEnd.END,
-                    otherEnd: TrackConnectionEnd.START,
-                    internalId: `slip_transition_${enter_path}_enter`,
-                });
-                tracks[`outer_${exit_path}_exit`].connections.push({
-                    type: SwitchTrackConnectionType.INTERNAL,
-                    end: TrackConnectionEnd.END,
-                    otherEnd: TrackConnectionEnd.START,
-                    internalId: `slip_transition_${exit_path}_exit`,
-                });
-            } else {
-                tracks[`transition_${enter_path}_enter`].connections.push({
-                    type: SwitchTrackConnectionType.INTERNAL,
-                    end: TrackConnectionEnd.END,
-                    otherEnd: TrackConnectionEnd.START,
-                    internalId: `side_${side}`,
-                });
-                tracks[`transition_${exit_path}_exit`].connections.push({
-                    type: SwitchTrackConnectionType.INTERNAL,
-                    end: TrackConnectionEnd.END,
-                    otherEnd: TrackConnectionEnd.END,
-                    internalId: `side_${side}`,
-                });
-            }
-        };
-        addSideConnection('left', 'a', 'b', leftSlipEnabled);
-        addSideConnection('right', 'b', 'a', rightSlipEnabled);
+        dataIndex = innerIndexesStart;
+        crossingTrack('a');
+        crossingTrack('b');
+        sideTrack('a', 'b', 'left', leftSlipEnabled);
+        sideTrack('b', 'a', 'right', rightSlipEnabled);
 
         return new SwitchPrefab(tracks, Vector3.zero());
+    }
+
+    static _joinTrackList(list) {
+        return Object.fromEntries(list.map((track) => [track.id, track]));
     }
 }
