@@ -10,9 +10,9 @@ export default class PointTrack extends Track
         end: Vector3.zero()
     };
 
-    constructor(id, start, end, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
+    constructor(id, start, end, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
         const [rot, len] = PointTrack._getRotLen(start, end, r);
-        super(id, start, rot, len, r, nextid, previd, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
+        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
 
         Object.assign(this.points, {
             start, end

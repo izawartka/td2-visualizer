@@ -11,6 +11,7 @@ const TrackHoverInfoConsts = {
         'StandardTrack': 'Standard track',
         'PointTrack': 'Switch track',
         'BezierTrack': 'Bezier track',
+        'RouteTrack': 'Route track',
     }
 };
 

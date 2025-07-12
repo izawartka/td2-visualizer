@@ -2,16 +2,6 @@ import Constants from "../helpers/constants";
 import SceneryParserLog from "./scenery-parser-log";
 import {ElectrificationStatus, ElectrificationResolutionStatus} from "./electrification-status";
 
-class RouteTrack {
-    route;
-    track;
-    electrified;
-
-    constructor(route, track, electrified) {
-        Object.assign(this, { route, track, electrified });
-    }
-}
-
 export default class ElectrificationResolver {
     static hasWarnings = false;
     static propagationQueue = [];
@@ -21,21 +11,22 @@ export default class ElectrificationResolver {
         ElectrificationResolver.propagationQueue = [];
 
         try {
-            const routeTracks = this._findRouteTracks(scenery);
+            const routeTracks = this._findTracksAdjacentToRoutes(scenery);
             this._markNEVPTracks(scenery);
 
-            routeTracks.forEach(routeTrack => {
+            routeTracks.forEach(({ track, routeTrack }) => {
                 this._propagate(
-                    routeTrack.track, 
-                    [], 
-                    routeTrack.electrified ? ElectrificationStatus.ELECTRIFIED : ElectrificationStatus.NON_ELECTRIFIED
+                    track,
+                    routeTrack.id,
+                    routeTrack.electrificationStatus,
                 );
             });
 
             this._runResolution();
         } catch (error) {
-            scenery.electrificationResolved = ElectrificationResolutionStatus.ERROR;
+            scenery.electrificationResolved = ElectrificationResolutionStatus.RESOLVING_ERROR;
             SceneryParserLog.warn('electrificationResolverError', `Error resolving electrification: ${error.message}`);
+            console.warn(error);
             return;
         }
 
@@ -53,48 +44,18 @@ export default class ElectrificationResolver {
         SceneryParserLog.warn(type, message);
     }
 
-    static _checkTrackConnectedToRoute(track, routePoint) {
-        const mStartDist = track.points.start.mannhattanDistance(routePoint.point);
-        if(mStartDist <= Constants.parser.maxRouteConnectionDistance) {
-            const startDistSq = track.points.start.distanceSq(routePoint.point);
-            if(startDistSq <= Constants.parser.maxRouteConnectionDistance ** 2) {
-                return true;
-            }
-        }
-
-        const mEndDist = track.points.end.mannhattanDistance(routePoint.point);
-        if(mEndDist <= Constants.parser.maxRouteConnectionDistance) {
-            const endDistSq = track.points.end.distanceSq(routePoint.point);
-            if(endDistSq <= Constants.parser.maxRouteConnectionDistance ** 2) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    static _findRouteTracks(scenery) {
-        const routePoints = Object.values(scenery.objects.routes || {})
-            .map(route => route.points.map(point => ({ route, point }))).flat();
-
-        const results = [];
-
-        Object.values(scenery.objects.tracks || {}).forEach(track => {
-            routePoints.forEach(routePoint => {
-                if (this._checkTrackConnectedToRoute(track, routePoint)) {
-                    results.push(new RouteTrack(routePoint.route, track, routePoint.route.electrified));
-                }
+    static _findTracksAdjacentToRoutes(scenery) {
+        return Object.values(scenery.objects.routes || {}).flatMap(route => {
+            if (route.segments.length === 0) return;
+            return route.segments[0].tracks.flatMap((routeTrack) => {
+                return routeTrack.connections
+                    .map((connection) => {
+                        if (connection.otherTrack.type === 'RouteTrack') return null;
+                        return { track: connection.otherTrack, routeTrack };
+                    })
+                    .filter((adjacent) => adjacent !== null);
             });
         });
-
-        if(results.length < routePoints.length) {
-            ElectrificationResolver._passWarn(
-                'electrificationMissingRouteTracks', 
-                `While resolving electrification, found ${results.length} tracks connected to routes, but expected ${routePoints.length}`
-            );
-        }
-
-        return results;
     }
 
     static _markNEVPTracks(scenery) {
@@ -103,7 +64,7 @@ export default class ElectrificationResolver {
 
             if(!trackObject.track) {
                 ElectrificationResolver._passWarn(
-                    'electrificationNevpNotApplied', 
+                    'electrificationNevpNotApplied',
                     `NEVP object ${trackObject.name} (${trackObject.id}) at track ${trackObject.track_id} has not been applied. Electrification resolution may fail`
                 );
                 return;
@@ -115,16 +76,16 @@ export default class ElectrificationResolver {
 
     static _runResolution() {
         while(ElectrificationResolver.propagationQueue.length > 0) {
-            const { track, skipTrackIds, status } = ElectrificationResolver.propagationQueue.shift();
-            ElectrificationResolver._resolveTrack(track, skipTrackIds, status);
+            const { track, skipTrackId, status } = ElectrificationResolver.propagationQueue.pop();
+            ElectrificationResolver._resolveTrack(track, skipTrackId, status);
         }
     }
 
-    static _propagate(track, skipTrackIds, status) {
-        ElectrificationResolver.propagationQueue.push({ track, skipTrackIds, status });
+    static _propagate(track, skipTrackId, status) {
+        ElectrificationResolver.propagationQueue.push({ track, skipTrackId, status });
     }
 
-    static _resolveTrack(track, skipTrackIds, status) {
+    static _resolveTrack(track, skipTrackId, status) {
         if (track.electrificationStatus === status) return; // already set
         if (Constants.parser.skipElectrificationErrorsPropagation && status === ElectrificationStatus.CONFLICT) {
             return;
@@ -137,38 +98,24 @@ export default class ElectrificationResolver {
         const fsne = status === ElectrificationStatus.NON_ELECTRIFIED;
         const tse = track.electrificationStatus === ElectrificationStatus.ELECTRIFIED;
         const tsne = track.electrificationStatus === ElectrificationStatus.NON_ELECTRIFIED;
-        
+
         track.electrificationStatus = status;
-        
+
         if (track.hasNEVP) {
             track.electrificationStatus = ElectrificationStatus.NON_ELECTRIFIED;
             if(!fse) return;
         } else if ((tse && fsne) || (tsne && fse)) {
             track.electrificationStatus = ElectrificationStatus.CONFLICT;
             ElectrificationResolver._passWarn(
-                'electrificationConflict', 
+                'electrificationConflict',
                 `Track ${track.id} has conflicting electrification status (=>${status})`
             );
             return;
         }
 
-        const propagation = track.connections.map(conn => conn.otherTrack);
-        const nextSkipIds = [track.id];
-
-        if (track.switch) {
-            nextSkipIds.push(track.switch.trackA.id, track.switch.trackB.id);
-        }
-
-        propagation.forEach(nextTrack => {
-            if (skipTrackIds.includes(nextTrack.id)) return;
-
-            this._propagate(nextTrack, nextSkipIds, track.electrificationStatus);
+        track.connections.forEach(connection => {
+            if (skipTrackId === connection.otherTrackId) return;
+            this._propagate(connection.otherTrack, track.id, track.electrificationStatus);
         });
-
-        // Additional propagation for double switches
-        if (!track.switch || track.switch.def?.[2]?.length <= 2 || track.hasNEVP) return;
-
-        const otherSwitchTrack = track.switch.trackA === track ? track.switch.trackB : track.switch.trackA;
-        this._propagate(otherSwitchTrack, [track.id, ...propagation.map(track => track.id)], track.electrificationStatus);
     }
 };
