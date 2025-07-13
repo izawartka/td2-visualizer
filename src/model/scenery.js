@@ -38,8 +38,7 @@ export default class Scenery
     applyObjects() {
         const categories_order = [
             'switches', 'routes',   // switches and routes create tracks
-            'tracks',               // tracks create isolation ids
-            'isolation-ids',
+            'tracks',
             'track-objects',        // track objects might refer to tracks
         ];
 

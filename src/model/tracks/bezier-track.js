@@ -1,7 +1,6 @@
 import Track from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
-import IsolationId from "../isolation-id";
 
 export default class BezierTrack extends Track
 {
@@ -77,6 +76,5 @@ export default class BezierTrack extends Track
 
     applyObject(scenery) {
         super.applyObject(scenery);
-        scenery.addObject(new IsolationId(this.category, this.id, this.points.middle, this.id_isolation));
     }
 }

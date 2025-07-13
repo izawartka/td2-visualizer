@@ -5,7 +5,6 @@ import Vector3 from "./vector3.js";
 import DefinedSwitches from "./defs/defined-switches.js";
 import {SwitchTrackConnectionType} from "./switch-descriptions/switch-prefab-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
-import IsolationId from "./isolation-id";
 
 export default class Switch extends SceneryObject {
     model;
@@ -21,6 +20,7 @@ export default class Switch extends SceneryObject {
     track_prefab_name;
     tracks = [];
     def = null;
+    isolation_id_pos = null;
 
     constructor(id, model, pos, rot, data, id_isolation, id_switch, maxspeed, derailspeed, track_prefab_name) {
         super(id, pos, rot);
@@ -87,9 +87,8 @@ export default class Switch extends SceneryObject {
         this.def = def;
 
         const rotRad = this.rot.multiply(Math.PI / 180);
-        const isolationIdPos = this.pos.add(def.isolation_id_offset.rotate(rotRad));
+        this.isolation_id_pos = this.pos.add(def.isolation_id_offset.rotate(rotRad));
         super.applyObject(scenery);
-        scenery.addObject(new IsolationId(this.category, this.id, isolationIdPos, this.id_isolation));
     }
 
     _getTrackIds() {
