@@ -1,94 +1,87 @@
-import AngleHelper from "../../helpers/angleHelper";
 import Track from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
-import IsolationId from "../isolation-id";
+import SceneryParserLog from "../scenery-parser-log";
+import ShapeFactory from "../shape/shape-factory";
 
-export default class StandardTrack extends Track
-{
+export default class StandardTrack extends Track {
     type = "StandardTrack";
-    points = {
-        start: Vector3.zero(),
-        end: Vector3.zero(),
-        circleCenter: Vector3.zero(),
-        middle: Vector3.zero(),
-    };
 
-    constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
-        this._calcPoints();
-    }
-
-    getStartAngleXZ() {
-        return AngleHelper.degToRad(this.rot.y);
-    }
-
-    getEndAngleXZ() {
-        const startAngle = AngleHelper.degToRad(this.rot.y);
-
-        if(this.r === 0) {
-            return startAngle
-        }
-
-        return startAngle - this.len / this.r;
+    constructor(id, rot, shape, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
+        super(id, rot, shape, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
     }
 
     static fromText(text) {
         const values = text.split(";");
+        const trackType = values[2];
+        switch (trackType) {
+            case 'Track':
+                return StandardTrack._fromValuesArc(values);
+            case 'BTrack':
+                return StandardTrack._fromValuesBezier(values);
+            default:
+                SceneryParserLog.warn('unknownTrackType', `Unknown track type: ${trackType}`);
+                return null;
+        }
+    }
 
+    static _fromValuesArc(values) {
         const connections = [];
         if (values[11]) connections.push(new TrackConnection(values[11], TrackConnectionEnd.END));
         if (values[12]) connections.push(new TrackConnection(values[12], TrackConnectionEnd.START));
 
-        const track = new StandardTrack(
+        const start = Vector3.fromValuesArray(values, 3);
+        const rotDeg = Vector3.fromValuesArray(values, 6);
+        const length = parseFloat(values[9]);
+        const radius = parseFloat(values[10]);
+        const [startSlope, endSlope] = Track.slopesFromText(values[14]);
+
+        const shape = ShapeFactory.fromArcDescription(rotDeg, start, radius, length, startSlope, endSlope);
+
+        return new StandardTrack(
             values[1], // id
-            Vector3.fromValuesArray(values, 3), // start
-            Vector3.fromValuesArray(values, 6), // rot
-            parseFloat(values[9]), // len
-            parseFloat(values[10]), // r
+            rotDeg,
+            shape,
             connections,
             values[13], // id_station
-            ...Track.slopesFromText(values[14]), // start_slope, end_slope
+            startSlope,
+            endSlope,
             values[17], // id_isolation
             values[19], // prefab_name
             parseFloat(values[20]) || 0, // maxspeed
             parseFloat(values[21]) || 0 // derailspeed
         );
-
-        return track;
     }
 
-    _calcPoints() {
-        const rotRad = AngleHelper.degToRad(this.rot.y);
+    static _fromValuesBezier(values) {
+        const connections = [];
+        if (values[15]) connections.push(new TrackConnection(values[15], TrackConnectionEnd.END));
+        if (values[16]) connections.push(new TrackConnection(values[16], TrackConnectionEnd.START));
 
-        this.points.start = this.pos.clone();
+        const shape = ShapeFactory.fromBezierDescription(
+            Vector3.fromValuesArray(values, 3), // start
+            Vector3.fromValuesArray(values, 6), // control1
+            Vector3.fromValuesArray(values, 9), // end
+            Vector3.fromValuesArray(values, 12), // control2
+        );
 
-        if (this.r === 0) {
-            this.points.end = this.pos.add(Vector3.fromAngleY(rotRad, this.len));
-            this.points.middle = this.points.start.lerp(this.points.end, 0.5);
-            this.points.circleCenter = this.pos.clone(); // default circle center
-        } else {
-            const centerAngle = rotRad + Math.PI / 2;
-            this.points.circleCenter = this.pos.sub(Vector3.fromAngleY(centerAngle, this.r));
-
-            const middleAngle = centerAngle - (this.len / this.r) / 2;
-            this.points.middle = this.points.circleCenter.add(Vector3.fromAngleY(middleAngle, this.r));
-
-            const endAngle = centerAngle - this.len / this.r;
-            this.points.end = this.points.circleCenter.add(Vector3.fromAngleY(endAngle, this.r));
-        }
-
-        // adjust end point by the slope
-        if (this.end_slope !== 0) {
-            const startHeightDiff = this.start_slope * this.len / 1000;
-            const endHeightDiff = this.end_slope * this.len / 1000;
-
-            this.points.end.y += startHeightDiff + (endHeightDiff - startHeightDiff) / 2;
-        }
+        return new StandardTrack(
+            values[1], // id
+            Vector3.zero(), // rotation
+            shape,
+            connections,
+            values[17], // id_station
+            ...Track.slopesFromText(values[18]), // start_slope, end_slope
+            values[21], // id_isolation
+            values[23], // prefab_name
+            parseFloat(values[24]) || 0, // maxspeed
+            parseFloat(values[25]) || 0 // derailspeed
+        );
     }
 
     applyObject(scenery) {
         super.applyObject(scenery);
-        scenery.addObject(new IsolationId(this.category, this.id, this.points.middle, this.id_isolation));
+        // TODO: Restore
+        // scenery.addObject(new IsolationId(this.category, this.id, this.points.middle, this.id_isolation));
     }
 }

@@ -1,7 +1,6 @@
 import Scenery from './scenery';
 import Switch from './switch';
 import StandardTrack from './tracks/standard-track';
-import BezierTrack from './tracks/bezier-track';
 import TrackObject from './track-objects/track-object';
 import Signal from './track-objects/signal';
 import Route from './route';
@@ -90,7 +89,7 @@ export default class SceneryParser {
 
         switch(type) {
             case 'Track':
-                return SceneryParser._parseTrack(text);
+                return StandardTrack.fromText(text);
             case 'TrackStructure':
                 return Switch.fromText(text);
             case 'TrackObject':
@@ -118,19 +117,6 @@ export default class SceneryParser {
                 return null;
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);
-                return null;
-        }
-    }
-
-    static _parseTrack(text) {
-        const trackType = text.split(';', 4)[2];
-        switch(trackType) {
-            case 'Track':
-                return StandardTrack.fromText(text);
-            case 'BTrack':
-                return BezierTrack.fromText(text);
-            default:
-                SceneryParserLog.warn('unknownTrackType', `Unknown track type: ${trackType}`);
                 return null;
         }
     }

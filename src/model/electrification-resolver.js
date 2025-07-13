@@ -46,7 +46,7 @@ export default class ElectrificationResolver {
 
     static _findTracksAdjacentToRoutes(scenery) {
         return Object.values(scenery.objects.routes || {}).flatMap(route => {
-            if (route.segments.length === 0) return;
+            if (route.segments.length === 0) return [];
             return route.segments[0].tracks.flatMap((routeTrack) => {
                 return routeTrack.connections
                     .map((connection) => {

@@ -1,4 +1,4 @@
-import PointTrack from "./tracks/point-track.js";
+import SwitchTrack from "./tracks/switch-track.js";
 import SceneryObject from "./scenery-object.js";
 import SceneryParserLog from "./scenery-parser-log.js";
 import Vector3 from "./vector3.js";
@@ -106,6 +106,7 @@ export default class Switch extends SceneryObject {
     }
 
     _createSwitchTrackFromDef(scenery, switchDef, trackDef, ids) {
+        return null; // TODO: Restore
         const rotRad = this.rot.multiply(Math.PI / 180);
         if (trackDef.dataIndex >= ids.length) {
             SceneryParserLog.warn(
@@ -146,7 +147,7 @@ export default class Switch extends SceneryObject {
             }
         });
 
-        const trackObj = new PointTrack(
+        const trackObj = new SwitchTrack(
             trackId,
             this.pos.add(trackDef.startPos.rotate(rotRad)),
             this.pos.add(trackDef.endPos.rotate(rotRad)),

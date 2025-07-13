@@ -26,9 +26,9 @@ function IsolationEndMarker(props) {
 
     if (!isShown) return null;
 
-    const pos = object.getEndPos(end);
+    const pos = object.shape.getEndPos(end);
     const [x, y] = pos.toSVGCoords();
-    const angle = object.getAngleXZForEnd(end);
+    const angle = object.shape.getEndAngleXZ(end);
 
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);

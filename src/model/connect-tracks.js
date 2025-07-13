@@ -59,7 +59,7 @@ function _checkConnection(scenery, track, connection) {
     if (reverseConnections.length > 1) {
         SceneryParserLog.warn(
             'tracksConnectionTest',
-            `Track ${otherTrack.id} has multiple connections to ${track.id}`,
+            `Track ${connection.otherTrack.id} has multiple connections to ${track.id}`,
         );
     }
     if (reverseConnections.length === 0) {
@@ -71,8 +71,8 @@ function _checkConnection(scenery, track, connection) {
     }
     const reverseConnection = reverseConnections[0];
 
-    const ownPosition = track.getEndPos(connection.end);
-    const otherPosition = connection.otherTrack.getEndPos(reverseConnection.end);
+    const ownPosition = track.shape.getEndPos(connection.end);
+    const otherPosition = connection.otherTrack.shape.getEndPos(reverseConnection.end);
     const distSq = ownPosition.distanceSq(otherPosition);
     if (distSq > connectionThresholdDistanceSq) {
         SceneryParserLog.warn(

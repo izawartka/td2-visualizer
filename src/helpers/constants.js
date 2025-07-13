@@ -140,7 +140,7 @@ const Constants = {
             optionDefault: 'standard-track',
             options: {
                 'standard-track': ['#00a', 'Standard track'],
-                'point-track': ['#0a0', 'Switch track'],
+                'switch-track': ['#0a0', 'Switch track'],
                 'bezier-track': ['#aa8', 'Bezier track'],
                 'route-track': ['#a6d', 'Route track'],
             }

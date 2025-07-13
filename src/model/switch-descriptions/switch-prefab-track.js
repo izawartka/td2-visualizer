@@ -14,10 +14,11 @@ export default class SwitchPrefabTrack {
     startPos;
     endAngle;
     endPos;
+    circleCenterPos;
     radius;
     connections;
 
-    constructor(id, dataIndex, startAngle, startPos, endAngle, endPos, radius, connections = []) {
+    constructor(id, dataIndex, startAngle, startPos, endAngle, endPos, circleCenterPos, radius, connections = []) {
         Object.assign(this, {
             id,
             dataIndex,

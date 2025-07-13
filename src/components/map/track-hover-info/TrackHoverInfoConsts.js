@@ -9,8 +9,8 @@ const TrackHoverInfoConsts = {
     },
     type: {
         'StandardTrack': 'Standard track',
-        'PointTrack': 'Switch track',
-        'BezierTrack': 'Bezier track',
+        'SwitchTrack': 'Switch track',
+        'BezierTrack': 'Bezier track', // TODO: Shape is now separate from track type
         'RouteTrack': 'Route track',
     }
 };

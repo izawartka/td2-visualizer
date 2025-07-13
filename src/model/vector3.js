@@ -132,6 +132,10 @@ export default class Vector3 {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
     }
 
+    dotProduct(other) {
+        return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
+
     toLocal(parentPos, parentRot = Vector3.zero()) {
         const localPos = this.sub(parentPos);
         return localPos.rotate(parentRot.negate());

@@ -52,21 +52,24 @@ export default class Route extends SceneryObject {
     }
 
     addSegment(length, radius, trackIds) {
+        return; // TODO: Restore
+
         if (trackIds.length !== this.track_count) {
             SceneryParserLog.warn('routeInvalidSegment', `Route segment has invalid track count: expected ${this.track_count}, got ${trackIds.length}`);
             return;
         }
         const startAngleRad = this.end_angle_rad;
-        const start_rot = new Vector3(0, startAngleRad * 180 / Math.PI, 0);
 
         const startPoints = this.end_points;
         this.end_points = [];
 
         const radii = [];
         const lengths = [];
+        let circleCenter;
 
         if (radius === 0) {
             this.end_center = this.end_center.add(Vector3.fromAngleY(startAngleRad, length));
+            circleCenter = Vector3.zero();
             this.offsets.forEach(offset => {
                 radii.push(0);
                 lengths.push(length);
@@ -77,7 +80,7 @@ export default class Route extends SceneryObject {
         } else {
             this.end_angle_rad -= length / radius;
             const startToCenter = Vector3.fromAngleY(startAngleRad + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-            const circleCenter = this.end_center.add(startToCenter.negate());
+            circleCenter = this.end_center.add(startToCenter.negate());
             const centerToEndUnit = Vector3.fromAngleY(this.end_angle_rad + Math.sign(radius) * Math.PI / 2, 1).multiply(Math.sign(radius));
             this.end_center = circleCenter.add(centerToEndUnit.multiply(radius));
 
@@ -98,7 +101,7 @@ export default class Route extends SceneryObject {
                 trackId,
                 startPoints[index],
                 this.end_points[index],
-                start_rot,
+                circleCenter,
                 lengths[index],
                 radii[index],
                 [], // connections
