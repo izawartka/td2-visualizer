@@ -8,22 +8,18 @@ const Constants = {
         forcePointerEvents: false
     },
     parser: {
-        forceAutoSwitches: false,
-        logNewAutoSwitches: true,
         logSceneryAfterFinished: true,
         sceneryInfoVersion: 29,
         alwaysShowLogDialog: false,
         runTracksConnectionTest: false,
         resolveElectrification: true,
         skipElectrificationErrorsPropagation: false,
-        maxRouteConnectionDistance: 0.2,
         attachSigns: true,
         attachSignsNeedsSameTrack: false,
         attachSignsMaxDistanceZ: 1.0,
         attachSignsMaxDistanceX: 0.2,
         attachSignsGridSize: 10,
         logAttachedSigns: false,
-        connectTracks: true,
     },
     warnings: {
         all: false, // enable all warnings
@@ -32,19 +28,17 @@ const Constants = {
         unknownObjectType: true,
         unknownTrackType: true,
         spawnWithoutSpawnInfo: true,
-        trackAliasAlreadyExists: true,
-        trackAliasNoTrack: true,
         switchUndefinedModel: true,
-        switchAutoDefFailed: true,
         switchInvalidDataFormat: true,
         switchNoModel: true,
+        switchMissingTrackId: true,
+        switchInvalidInternalConnection: true,
         signalBoxUndefinedPrefabName: true,
         invalidSceneryInfoVersion: true,
         signUndefinedPrefabName: true,
         tracksConnectionTest: true,
         electrificationNevpNotApplied: false,
         electrificationConflict: false,
-        electrificationMissingRouteTracks: true,
         electrificationResolverError: true,
         electrificationResolverWarnings: true,
         signalElemsUnknownPrefab: true,
@@ -53,6 +47,7 @@ const Constants = {
         signalElemsUnknownSign: true,
         signalElemsUnknownSignText: true,
         connectTracksFailed: true,
+        routeInvalidSegment: true,
     },
     errors: {
         invalidSceneryInfo: true
@@ -146,6 +141,7 @@ const Constants = {
                 'standard-track': ['#00a', 'Standard track'],
                 'point-track': ['#0a0', 'Switch track'],
                 'bezier-track': ['#aa8', 'Bezier track'],
+                'route-track': ['#a6d', 'Route track'],
             }
         },
         'slope': {
@@ -170,6 +166,7 @@ const Constants = {
             },
             options: {
                 'derail': ['#f22', 'Derail track'],
+                'unknown': ['#aaa', 'Unknown speed'],
             }
         }
     }

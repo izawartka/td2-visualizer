@@ -1,70 +1,83 @@
+import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 import SceneryParserLog from "./scenery-parser-log";
-import TrackConnection, { TrackConnectionType } from "./track-connection";
+import Constants from "../helpers/constants";
+
+const connectionThresholdDistanceSq = 0.05;
 
 export function connectTracks(scenery) {
-    const tracks = scenery.objects['tracks'] || {};
-    
-    Object.values(tracks).forEach(track => {
-        connectTrack(scenery, track, false);
-        connectTrack(scenery, track, true);
+    _connectRoutes(scenery);
+    _connectRemainingTracks(scenery);
+}
+
+function _connectRoutes(scenery) {
+    const routeTracks = new Map();
+
+    Object.values(scenery.objects['routes'] || {}).forEach((route) => {
+        if (!route.segments[0]) return;
+        route.segments[0].tracks.forEach((track) => {
+            routeTracks.set(track.id, track);
+        });
+    });
+
+    Object.values(scenery.objects['tracks'] || {}).forEach((track) => {
+        track.connections.forEach((connection) => {
+            const routeTrack = routeTracks.get(connection.otherTrackId);
+            if (!routeTrack) return;
+            const alreadyConnected = routeTrack.connections.some(
+                (reverseConnection) => reverseConnection.otherTrackId === track.id,
+            );
+            if (alreadyConnected) return;
+            routeTrack.connections.push(new TrackConnection(track, TrackConnectionEnd.START));
+        });
     });
 }
 
-function connectTrack(scenery, track, isPrev) {
-    const vNext = isPrev ? track.previd : track.nextid;
-    if (!vNext) return;
-    
-    const vNextTrackId = scenery.getTrackIdByAlias(vNext);
-    const vNextTrack = scenery.getObject('tracks', vNextTrackId);
-    
-    if (!vNextTrack) {
-        SceneryParserLog.warn('connectTracks', `Track ${track.id} has non-existing ${isPrev ? 'previous' : 'next'} track: ${isPrev ? track.previd : track.nextid} (${vNextTrackId})`);
+function _connectRemainingTracks(scenery) {
+    Object.values(scenery.objects['tracks'] || {}).forEach((track) => {
+        track.connections.forEach((connection) => {
+            _checkConnection(scenery, track, connection);
+        });
+        track.connections = track.connections.filter((connection) => connection.otherTrack !== null);
+    });
+}
+
+function _checkConnection(scenery, track, connection) {
+    if (connection.otherTrack === null) {
+        const otherTrack = scenery.getObject('tracks', connection.otherTrackId);
+        if (!otherTrack) {
+            SceneryParserLog.warn('connectTracksFailed', `Track ${track.id} has a non-existing ${connection.end === TrackConnectionEnd.START ? 'previous' : 'next'} track: ${connection.otherTrackId}`);
+            return;
+        }
+        connection.otherTrack = otherTrack;
+    }
+
+    if (!Constants.parser.runTracksConnectionTest) return;
+
+    const reverseConnections = connection.otherTrack.connections.filter(
+        (otherConnection) => otherConnection.otherTrackId === track.id,
+    );
+    if (reverseConnections.length > 1) {
+        SceneryParserLog.warn(
+            'tracksConnectionTest',
+            `Track ${connection.otherTrack.id} has multiple connections to ${track.id}`,
+        );
+    }
+    if (reverseConnections.length === 0) {
+        SceneryParserLog.warn(
+            'tracksConnectionTest',
+            `Track ${track.id} is connected to ${connection.otherTrackId} but there is no reverse connection`,
+        );
         return;
     }
-    
-    const vNextTrackNextId = scenery.getTrackIdByAlias(vNextTrack.nextid);
-    const vNextTrackPrevId = scenery.getTrackIdByAlias(vNextTrack.previd);
-    const isConnectedAsNext = vNextTrackPrevId === track.id || track.aliases.includes(vNextTrackPrevId);
-    const isConnectedAsPrev = vNextTrackNextId === track.id || track.aliases.includes(vNextTrackNextId);
-    
-    let otherConnectionType = isConnectedAsNext ? TrackConnectionType.START : TrackConnectionType.END;
-    let addReverseConnection = false;
-    
-    if (!isConnectedAsNext && !isConnectedAsPrev) {
-        // switch connection
-        if(!track.switch) {
-            SceneryParserLog.warn('connectTracksFailed', `${isPrev ? 'Previous' : 'Next'} track ${vNextTrackId} is not connected back to track ${track.id} (${track.previd} / ${track.nextid}). Cannot connect tracks`);
-            return;
-        }
-        
-        const switchId = track.switch.id;
-        const isConnectedAsSwitchNext = vNextTrackNextId.slice(0, -1) === switchId;
-        const isConnectedAsSwitchPrev = vNextTrackPrevId.slice(0, -1) === switchId;
-        
-        if(!isConnectedAsSwitchNext && !isConnectedAsSwitchPrev) {
-            SceneryParserLog.warn('connectTracksFailed', `${isPrev ? 'Previous' : 'Next'} track ${vNextTrackId} is not connected back to switch track ${track.id} (${track.previd} / ${track.nextid}). Cannot connect tracks`);
-            return;
-        }
-        
-        otherConnectionType = isConnectedAsSwitchNext ? TrackConnectionType.START : TrackConnectionType.END;
-        addReverseConnection = true;
+    const reverseConnection = reverseConnections[0];
+
+    const ownPosition = track.getEndPos(connection.end);
+    const otherPosition = connection.otherTrack.getEndPos(reverseConnection.end);
+    const distSq = ownPosition.distanceSq(otherPosition);
+    if (distSq > connectionThresholdDistanceSq) {
+        SceneryParserLog.warn(
+            'tracksConnectionTest',
+            `Track ${track.id} with ${connection.end === TrackConnectionEnd.START ? 'start' : 'end'} position ${ownPosition.toString()} is too far from the track ${connection.otherTrackId} with ${connection.end === TrackConnectionEnd.START ? 'start' : 'end'} position ${otherPosition.toString()}. Distance: ${Math.sqrt(distSq).toFixed(3)}`,
+        );
     }
-    
-    const mainConnectionType = isPrev ? TrackConnectionType.START : TrackConnectionType.END;
-    
-    track.connections.push(new TrackConnection(
-        track,
-        vNextTrack,
-        mainConnectionType,
-        otherConnectionType
-    ));
-    
-    if(!addReverseConnection) return;
-    
-    vNextTrack.connections.push(new TrackConnection(
-        vNextTrack,
-        track,
-        otherConnectionType,
-        mainConnectionType
-    ));
 }

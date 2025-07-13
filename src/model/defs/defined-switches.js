@@ -1,573 +1,96 @@
-import Vector3 from "../vector3";
+import SwitchPrefab from "../switch-descriptions/switch-prefab";
 
 const DefinedSwitches = {
-    "Crossing": [
-        0,
-        0,
-        [0,1],
-        new Vector3(-0.919, 0, -16.59),
-        new Vector3(0.919, 0, -16.59),
-        new Vector3(0.919, 0, 16.59),
-        new Vector3(-0.919, 0, 16.59)
-    ],
-    "Crossing4.444": [
-        0,
-        0,
-        [0,1],
-        new Vector3(-1.104, 0, -9.939),
-        new Vector3(1.104, 0, -9.939),
-        new Vector3(1.104, 0, 9.939),
-        new Vector3(-1.104, 0, 9.939)
-    ],
-    "Rz 60E1-300-1_9 R": [
-        0,
-        -300,
-        [0, 0, 3, 4, 2, 1],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 33.231),
-        new Vector3(1.835, 0, 33.129)
-    ],
-    "Rz 60E1-300-1_9 L": [
-        0,
-        300,
-        [0, 0, 3, 4, 2, 1],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 33.231),
-        new Vector3(-1.835, 0, 33.129)
-    ],
-    "Rz 60E1-190-1_9 R": [
-        0,
-        -190,
-        [0, 0, 5, 6, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 27.139),
-        new Vector3(1.835, 0, 27.037)
-    ],
-    "Rz 60E1-190-1_9 L": [
-        0,
-        190,
-        [0, 0, 5, 6, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 27.139),
-        new Vector3(-1.835, 0, 27.037)
-    ],
-    "Rz 60E1-500-1_12 R": [
-        0,
-        -500,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 41.595),
-        new Vector3(1.727, 0, 41.523)
-    ],
-    "Rz 60E1-500-1_12 L": [
-        0,
-        500,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 41.595),
-        new Vector3(-1.727, 0, 41.523)
-    ],
-    "Rkpd 60E1-190-1_9": [
-        0,
-        0,
-        [0, 1, 2, 3],
-        new Vector3(-0.918, 0, -16.557),
-        new Vector3(0.917, 0, -16.557),
-        new Vector3(0.917, 0, 16.557),
-        new Vector3(-0.917, 0, 16.557)
-    ],
-    "Rkp 60E1-190-1_9 ab": [
-        0,
-        0,
-        [0, 1, 2, 3],
-        new Vector3(-0.918, 0, -16.557),
-        new Vector3(0.917, 0, -16.556),
-        new Vector3(0.917, 0, 16.558),
-        new Vector3(-0.921, 0, 16.558)
-    ],
-    "Rkp 60E1-190-1_9 ba": [
-        0,
-        0,
-        [0, 1, 2, 3],
-        new Vector3(-0.918, 0, -16.557),
-        new Vector3(0.917, 0, -16.556),
-        new Vector3(0.917, 0, 16.558),
-        new Vector3(-0.921, 0, 16.558)
-    ],
-    "Rz 60E1-265-1_10 R": [
-        0,
-        -265,
-        [0, 0, 5, 6],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 31.181),
-        new Vector3(1.789, 0, 31.094)
-    ],
-    "Rz 60E1-265-1_10 L": [
-        0,
-        265,
-        [0, 0, 5, 6],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 31.181),
-        new Vector3(-1.789, 0, 31.094)
-    ],
-    "Rz 60E1-760-1_14 R": [
-        0,
-        -760,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 54.217),
-        new Vector3(1.931, 0, 54.148)
-    ],
-    "Rz 60E1-760-1_14 L": [
-        0,
-        760,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 54.217),
-        new Vector3(-1.931, 0, 54.148)
-    ],
-    "Rz 60E1-1200-1_18.5 R": [
-        0,
-        -1200,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 64.817),
-        new Vector3(1.749, 0, 64.77)
-    ],
-    "Rz 60E1-1200-1_18.5 L": [
-        0,
-        1200,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 64.817),
-        new Vector3(-1.75, 0, 64.77)
-    ],
-    "Rld 60E1-2500_250-1_8.5 R": [
-        2500,
-        -250,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.172, 0, 29.31),
-        new Vector3(-1.716, 0, 29.244)
-    ],
-    "Rld 60E1-2500_250-1_8.5 L": [
-        -2500,
-        250,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.172, 0, 29.31),
-        new Vector3(1.716, 0, 29.244)
-    ],
-    "Rld 60E1-700_300-1_10 R": [
-        700,
-        -300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.616, 0, 29.377),
-        new Vector3(1.438, 0, 29.339)
-    ],
-    "Rld 60E1-700_300-1_10 L": [
-        -700,
-        300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.616, 0, 29.377),
-        new Vector3(-1.438, 0, 29.339)
-    ],
-    "Rld 60E1-1800_300-1_9 R": [
-        1800,
-        -300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.307, 0, 33.228),
-        new Vector3(1.838, 0, 33.163)
-    ],
-    "Rld 60E1-1800_300-1_9 L": [
-        -1800,
-        300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.307, 0, 33.228),
-        new Vector3(-1.838, 0, 33.163)
-    ],
-    "Rld 60E1-2500_1200-1_22 R": [
-        2500,
-        -1200,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.586, 0, 54.51),
-        new Vector3(1.238, 0, 54.499)
-    ],
-    "Rld 60E1-2500_1200-1_22 L": [
-        -2500,
-        1200,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.586, 0, 54.51),
-        new Vector3(-1.238, 0, 54.499)
-    ],
-    "Rld 60E1-650_450-1_15 R": [
-        650,
-        -450,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.691, 0, 29.956),
-        new Vector3(0.997, 0, 29.945)
-    ],
-    "Rld 60E1-650_450-1_15 L": [
-        -650,
-        450,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.691, 0, 29.956),
-        new Vector3(-0.997, 0, 29.945)
-    ],
-    "Rld 60E1-600_300-1_9 R": [
-        600,
-        -300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.749, 0, 29.918),
-        new Vector3(1.49, 0, 29.881)
-    ],
-    "Rld 60E1-600_300-1_9 L": [
-        -600,
-        300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.749, 0, 29.918),
-        new Vector3(-1.49, 0, 29.881)
-    ],
-    "Rz 60E1-205-1_9 R": [
-        0,
-        -205,
-        [0, 0, 5, 6],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 28.127),
-        new Vector3(1.853, 0, 28.025)
-    ],
-    "Rz 60E1-205-1_9 L": [
-        0,
-        205,
-        [0, 0, 5, 6],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 28.127),
-        new Vector3(-1.853, 0, 28.025),
-    ],
-    "Rz 60E1-190-1_7.5 R": [
-        0,
-        -190,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 25.221),
-        new Vector3(1.667, 0, 25.111)
-    ],
-    "Rz 60E1-190-1_7.5 L": [
-        0,
-        190,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 25.221),
-        new Vector3(-1.667, 0, 25.111)
-    ],
-    "Rz 60E1-2500-1_26.5 R": [
-        0,
-        -2500,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 94.306),
-        new Vector3(1.778, 0, 94.273)
-    ],
-    "Rz 60E1-2500-1_26.5 L": [
-        0,
-        2500,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 94.306),
-        new Vector3(-1.778, 0, 94.273)
-    ],
-    "Rlds 60E1-600-600-1_18.5": [
-        -600,
-        600,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.92, 0, 33.206),
-        new Vector3(-0.92, 0, 33.206)
-    ],
-    "Rlds 60E1-190-190-1_9": [
-        -190,
-        190,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(1.184, 0, 21.186),
-        new Vector3(-1.185, 0, 21.186)
-    ],
-    "Rlj 60E1-650_190-1_20 R": [
-        -650,
-        -190,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.811, 0, 32.466),
-        new Vector3(2.77, 0, 32.332)
-    ],
-    "Rlj 60E1-650_190-1_20 L": [
-        650,
-        190,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.811, 0, 32.466),
-        new Vector3(-2.77, 0, 32.332)
-    ],
-    "Rlj 60E1-1200_300-1_7 R": [
-        -1200,
-        -300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.758, 0, 42.632),
-        new Vector3(3.025, 0, 42.498)
-    ],
-    "Rlj 60E1-1200_300-1_7 L": [
-        1200,
-        300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.758, 0, 42.632),
-        new Vector3(-3.025, 0, 42.498)
-    ],
-    "Rlj 60E1-750_190-1_6 R": [
-        -750,
-        -190,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.66, 0, 31.44),
-        new Vector3(2.597, 0, 31.306)
-    ],
-    "Rlj 60E1-750_190-1_6 L": [
-        750,
-        190,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.66, 0, 31.44),
-        new Vector3(-2.597, 0, 31.306)
-    ],
-    "Rld 60E1-1200_600-1_15 R": [
-        1200,
-        -600,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.665, 0, 39.948),
-        new Vector3(1.33, 0, 39.926)
-    ],
-    "Rld 60E1-1200_600-1_15 L": [
-        -1200,
-        600,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.665, 0, 39.948),
-        new Vector3(-1.33, 0, 39.926)
-    ],
-    "Rld 60E1-1200_900-1_18.5 R": [
-        1200,
-        -900,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.984, 0, 48.6),
-        new Vector3(1.313, 0, 48.589)
-    ],
-    "Rld 60E1-1200_900-1_18.5 L": [
-        -1200,
-        900,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.984, 0, 48.6),
-        new Vector3(-1.313, 0, 48.589)
-    ],
-    "Rlj 60E1-900_300-1_7.5 R": [
-        -900,
-        -300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.881, 0, 39.81),
-        new Vector3(2.639, 0, 39.706)
-    ],
-    "Rlj 60E1-900_300-1_7.5 L": [
-        900,
-        300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.881, 0, 39.81),
-        new Vector3(-2.639, 0, 39.706)
-    ],
-    "Rlj 60E1-600_300-1_6 R": [
-        -600,
-        -300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(1.919, 0, 47.949),
-        new Vector3(3.832, 0, 47.795)
-    ],
-    "Rlj 60E1-600_300-1_6 L": [
-        600,
-        300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-1.919, 0, 47.949),
-        new Vector3(-3.832, 0, 47.795)
-    ],
-    "Rld 60E1-900_450-1_12 R": [
-        900,
-        -450,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.778, 0, 37.425),
-        new Vector3(1.556, 0, 37.392)
-    ],
-    "Rld 60E1-900_450-1_12 L": [
-        -900,
-        450,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.778, 0, 37.425),
-        new Vector3(-1.556, 0, 37.392)
-    ],
-    "Rld 60E1-700_500-1_14 R": [
-        700,
-        -500,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.909, 0, 35.653),
-        new Vector3(1.272, 0, 35.639)
-    ],
-    "Rld 60E1-700_500-1_14 L": [
-        -700,
-        500,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.909, 0, 35.653),
-        new Vector3(-1.272, 0, 35.639)
-    ],
-    "Rld 60E1-2500_400-1_10.5 R": [
-        2500,
-        -400,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.289, 0, 38.008),
-        new Vector3(1.805, 0, 37.952)
-    ],
-    "Rld 60E1-2500_400-1_10.5 L": [
-        -2500,
-        400,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.289, 0, 38.008),
-        new Vector3(-1.805, 0, 37.952)
-    ],
-    "Rlj 60E1-1800_300-1_7.5 R": [
-        -1800,
-        -300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.423, 0, 38.998),
-        new Vector3(2.531, 0, 38.89)
-    ],
-    "Rlj 60E1-1800_300-1_7.5 L": [
-        1800,
-        300,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.423, 0, 38.998),
-        new Vector3(-2.531, 0, 38.89)
-    ],
-    "Rld 60E1-1800_600-1_14 R": [
-        1800,
-        -600,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.509, 0, 42.798),
-        new Vector3(1.526, 0, 42.767)
-    ],
-    "Rld 60E1-1800_600-1_14 L": [
-        -1800,
-        600,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.509, 0, 42.798),
-        new Vector3(-1.526, 0, 42.767)
-    ],
-    "Rlj 60E1-1800_450-1_9 R": [
-        -1800,
-        -450,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0.69, 0, 49.84),
-        new Vector3(2.758, 0, 49.744)
-    ],
-    "Rlj 60E1-1800_450-1_9 L": [
-        1800,
-        450,
-        [0, 0, 3, 4],
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(-0.69, 0, 49.84),
-        new Vector3(-2.758, 0, 49.745)
-    ]
-}
+    "Crossing": SwitchPrefab.crossing(33.2294, 9.0),
+    "Crossing4.444": SwitchPrefab.crossing(20.0, 4.444),
+
+    "Rkp 60E1-190-1_9 ab": SwitchPrefab.slip(33.165, 6.06, 7.461676, 190.0, 9.0, false, true),
+    "Rkp 60E1-190-1_9 ba": SwitchPrefab.slip(33.165, 6.06, 7.461676, 190.0, 9.0, false, true),
+    "Rkpd 60E1-190-1_9": SwitchPrefab.slip(33.165, 6.06, 7.461676, 190.0, 9.0, true, true),
+
+    "Rld 60E1-1200_600-1_15 L": SwitchPrefab.fork(600.0, -1200.0, 39.95566),
+    "Rld 60E1-1200_600-1_15 R": SwitchPrefab.fork(-600.0, 1200.0, 39.95566),
+    "Rld 60E1-1200_900-1_18.5 L": SwitchPrefab.fork(900.0, -1200.0, 48.61317),
+    "Rld 60E1-1200_900-1_18.5 R": SwitchPrefab.fork(-900.0, 1200.0, 48.61317),
+    "Rld 60E1-1800_300-1_9 L": SwitchPrefab.fork(300.0, -1800.0, 33.23108),
+    "Rld 60E1-1800_300-1_9 R": SwitchPrefab.fork(-300.0, 1800.0, 33.23108),
+    "Rld 60E1-1800_600-1_14 L": SwitchPrefab.fork(600.0, -1800.0, 42.80262),
+    "Rld 60E1-1800_600-1_14 R": SwitchPrefab.fork(-600.0, 1800.0, 42.80262),
+    "Rld 60E1-1800_900-1_18.5 L": SwitchPrefab.fork(900.0, -1800.0, 48.61317),
+    "Rld 60E1-1800_900-1_18.5 R": SwitchPrefab.fork(-900.0, 1800.0, 48.61317),
+    "Rld 60E1-2500_1200-1_22 L": SwitchPrefab.fork(1200.0, -2500.0, 54.51731),
+    "Rld 60E1-2500_1200-1_22 R": SwitchPrefab.fork(-1200.0, 2500.0, 54.51731),
+    "Rld 60E1-2500_250-1_8.5 L": SwitchPrefab.fork(250.0, -2500.0, 29.31069),
+    "Rld 60E1-2500_250-1_8.5 R": SwitchPrefab.fork(-250.0, 2500.0, 29.31069),
+    "Rld 60E1-2500_400-1_10.5 L": SwitchPrefab.fork(400.0, -2500.0, 38.00925),
+    "Rld 60E1-2500_400-1_10.5 R": SwitchPrefab.fork(-400.0, 2500.0, 38.00925),
+    "Rld 60E1-2500_600-1_14 L": SwitchPrefab.fork(600.0, -2500.0, 42.80262),
+    "Rld 60E1-2500_600-1_14 R": SwitchPrefab.fork(-600.0, 2500.0, 42.80262),
+    "Rld 60E1-2500_900-1_17 L": SwitchPrefab.fork(900.0, -2500.0, 52.14928),
+    "Rld 60E1-2500_900-1_17 R": SwitchPrefab.fork(-900.0, 2500.0, 52.14928),
+    "Rld 60E1-600_300-1_9 L": SwitchPrefab.fork(300.0, -600.0, 29.92537),
+    "Rld 60E1-600_300-1_9 R": SwitchPrefab.fork(-300.0, 600.0, 29.92537),
+    "Rld 60E1-650_450-1_15 L": SwitchPrefab.fork(450.0, -650.0, 29.96674),
+    "Rld 60E1-650_450-1_15 R": SwitchPrefab.fork(-450.0, 650.0, 29.96674),
+    "Rld 60E1-700_190-1_7.5 L": SwitchPrefab.fork(190.0, -700.0, 25.22173),
+    "Rld 60E1-700_190-1_7.5 R": SwitchPrefab.fork(-190.0, 700.0, 25.22173),
+    "Rld 60E1-700_300-1_10 L": SwitchPrefab.fork(300.0, -700.0, 29.38637),
+    "Rld 60E1-700_300-1_10 R": SwitchPrefab.fork(-300.0, 700.0, 29.38637),
+    "Rld 60E1-700_500-1_14 L": SwitchPrefab.fork(500.0, -700.0, 35.66885),
+    "Rld 60E1-700_500-1_14 R": SwitchPrefab.fork(-500.0, 700.0, 35.66885),
+    "Rld 60E1-900_300-1_9 L": SwitchPrefab.fork(300.0, -900.0, 33.23108),
+    "Rld 60E1-900_300-1_9 R": SwitchPrefab.fork(-300.0, 900.0, 33.23108),
+    "Rld 60E1-900_450-1_12 L": SwitchPrefab.fork(450.0, -900.0, 37.43512),
+    "Rld 60E1-900_450-1_12 R": SwitchPrefab.fork(-450.0, 900.0, 37.43512),
+    "Rld 60E1-900_600-1_15 L": SwitchPrefab.fork(600.0, -900.0, 39.95566),
+    "Rld 60E1-900_600-1_15 R": SwitchPrefab.fork(-600.0, 900.0, 39.95566),
+    "Rlds 60E1-1000-1000-1_23": SwitchPrefab.fork(1000.0, -1000.0, 43.45773),
+    "Rlds 60E1-190-190-1_9": SwitchPrefab.fork(190.0, -190.0, 21.23),
+    "Rlds 60E1-600-600-1_18.5": SwitchPrefab.fork(599.9205, -600.0, 33.22262),
+    "Rlj 60E1-1200_300-1_7 L": SwitchPrefab.fork(300.0, 1200.0, 42.64069),
+    "Rlj 60E1-1200_300-1_7 R": SwitchPrefab.fork(-300.0, -1200.0, 42.64069),
+    "Rlj 60E1-1200_600-1_9 L": SwitchPrefab.fork(600.0, 1200.0, 68.0),
+    "Rlj 60E1-1200_600-1_9 R": SwitchPrefab.fork(-600.0, -1200.0, 68.0),
+    "Rlj 60E1-1500_450-1_9 L": SwitchPrefab.fork(450.0, 1500.0, 49.84663),
+    "Rlj 60E1-1500_450-1_9 R": SwitchPrefab.fork(-450.0, -1500.0, 49.84663),
+    "Rlj 60E1-1800_300-1_7.5 L": SwitchPrefab.fork(300.0, 1800.0, 39.0),
+    "Rlj 60E1-1800_300-1_7.5 R": SwitchPrefab.fork(-300.0, -1800.0, 39.0),
+    "Rlj 60E1-1800_450-1_9 L": SwitchPrefab.fork(450.0, 1800.0, 49.84663),
+    "Rlj 60E1-1800_450-1_9 R": SwitchPrefab.fork(-450.0, -1800.0, 49.84663),
+    "Rlj 60E1-1800_600-1_10 L": SwitchPrefab.fork(599.48096, 1800.0, 59.85075),
+    "Rlj 60E1-1800_600-1_10 R": SwitchPrefab.fork(-599.48096, -1800.0, 59.85075),
+    "Rlj 60E1-600_300-1_6 L": SwitchPrefab.fork(300.0, 600.0, 48.0),
+    "Rlj 60E1-600_300-1_6 R": SwitchPrefab.fork(-300.0, -600.0, 48.0),
+    "Rlj 60E1-650_190-1_20 L": SwitchPrefab.fork(190.0, 650.0, 32.47971),
+    "Rlj 60E1-650_190-1_20 R": SwitchPrefab.fork(-190.0, -650.0, 32.47971),
+    "Rlj 60E1-750_190-1_6 L": SwitchPrefab.fork(190.0, 750.0, 31.44976),
+    "Rlj 60E1-750_190-1_6 R": SwitchPrefab.fork(-190.0, -750.0, 31.44976),
+    "Rlj 60E1-800_250-1_6.5 L": SwitchPrefab.fork(250.0, 800.0, 38.23661),
+    "Rlj 60E1-800_250-1_6.5 R": SwitchPrefab.fork(-250.0, -800.0, 38.23661),
+    "Rlj 60E1-900_300-1_7.5 L": SwitchPrefab.fork(300.0, 900.0, 39.82378),
+    "Rlj 60E1-900_300-1_7.5 R": SwitchPrefab.fork(-300.0, -900.0, 39.82378),
+    "Rlj 60E1-900_300-1_9 L": SwitchPrefab.fork(300.0, 900.0, 49.84663),
+    "Rlj 60E1-900_300-1_9 R": SwitchPrefab.fork(-300.0, -900.0, 49.84663),
+    "Rlj 60E1-900_450-1_7.5 L": SwitchPrefab.fork(450.0, 900.0, 59.0),
+    "Rlj 60E1-900_450-1_7.5 R": SwitchPrefab.fork(-450.0, -900.0, 59.0),
+    "Rz 60E1-1200-1_18.5 L": SwitchPrefab.fork(1200.0, 0.0, 64.81756),
+    "Rz 60E1-1200-1_18.5 R": SwitchPrefab.fork(-1200.0, 0.0, 64.81756),
+    "Rz 60E1-190-1_7.5 L": SwitchPrefab.fork(190.0, 0.0, 25.221731),
+    "Rz 60E1-190-1_7.5 R": SwitchPrefab.fork(-190.0, 0.0, 25.221731),
+    "Rz 60E1-190-1_9 L": SwitchPrefab.fork(0.0, 190.0, 21.046352, 6.0923653),
+    "Rz 60E1-190-1_9 R": SwitchPrefab.fork(0.0, -190.0, 21.046352, 6.0923653),
+    "Rz 60E1-205-1_9 L": SwitchPrefab.fork(205.0, 0.0, 22.707907, 5.42 /* added manually */),
+    "Rz 60E1-205-1_9 R": SwitchPrefab.fork(-205.0, 0.0, 22.707907, 5.42 /* added manually */),
+    "Rz 60E1-2500-1_26.5 L": SwitchPrefab.fork(2500.0, 0.0, 94.30607),
+    "Rz 60E1-2500-1_26.5 R": SwitchPrefab.fork(-2500.0, 0.0, 94.30607),
+    "Rz 60E1-265-1_10 L": SwitchPrefab.fork(0.0, 265.0, 26.434078, 4.75 /* added manually */),
+    "Rz 60E1-265-1_10 R": SwitchPrefab.fork(0.0, -265.0, 26.434078, 4.75 /* added manually */),
+    "Rz 60E1-300-1_9 L": SwitchPrefab.fork(300.0, 0.0, 33.231083),
+    "Rz 60E1-300-1_9 R": SwitchPrefab.fork(-300.0, 0.0, 33.231083),
+    "Rz 60E1-500-1_12 L": SwitchPrefab.fork(500.0, 0.0, 41.59458),
+    "Rz 60E1-500-1_12 R": SwitchPrefab.fork(-500.0, 0.0, 41.59458),
+    "Rz 60E1-760-1_14 L": SwitchPrefab.fork(760.0, 0.0, 54.21665),
+    "Rz 60E1-760-1_14 R": SwitchPrefab.fork(-760.0, 0.0, 54.21665),
+};
 
 export default DefinedSwitches;

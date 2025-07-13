@@ -1,5 +1,4 @@
 import Scenery from './scenery';
-import { tracksConnectionTest } from './tracks-connection-test';
 import Switch from './switch';
 import StandardTrack from './tracks/standard-track';
 import BezierTrack from './tracks/bezier-track';
@@ -19,7 +18,7 @@ import NEVP from './track-objects/nevp';
 import Derailer from './track-objects/derailer';
 import SpawnPoint from './track-objects/spawn-point';
 import { attachSigns } from './attach-signs';
-import { connectTracks } from './connect-tracks';
+import {connectTracks} from "./connect-tracks";
 
 /*
 TODO: add support for WorldRotation and WorldTranslation
@@ -30,23 +29,36 @@ export default class SceneryParser {
         const lines = scText.split("\n").map(line => line.trim());
         const scenery = new Scenery();
 
+        let currentRoute = null;
+
         lines.forEach((line, index) => {
             if(index === 0) {
                 const sceneryInfo = SceneryParser._parseSceneryInfo(line);
                 if(sceneryInfo) scenery.addObject(sceneryInfo);
                 return;
             }
-            if(!line?.length) return; 
+            if(!line?.length) return;
 
-            const object = SceneryParser._parseObject(line);
-            if(!object) return; // skip null objects
-            scenery.addObject(object);
+            if (currentRoute !== null) {
+                const foundRouteEnd = SceneryParser._parseRouteLine(line, currentRoute);
+                if (foundRouteEnd) {
+                    scenery.addObject(currentRoute);
+                    currentRoute = null;
+                }
+            } else {
+                const object = SceneryParser._parseObject(line);
+                if(!object) return; // skip null objects
+                if (object.type === 'Route') {
+                    currentRoute = object;
+                } else {
+                    scenery.addObject(object);
+                }
+            }
         });
 
         scenery.applyObjects();
+        connectTracks(scenery);
 
-        if(Constants.parser.runTracksConnectionTest) tracksConnectionTest(scenery);
-        if(Constants.parser.connectTracks) connectTracks(scenery);
         if(Constants.parser.resolveElectrification) ElectrificationResolver.resolveScenery(scenery);
         if(Constants.parser.attachSigns) attachSigns(scenery);
         if(Constants.parser.logSceneryAfterFinished) console.log(scenery);
@@ -66,12 +78,13 @@ export default class SceneryParser {
         }
 
         return SceneryInfo.fromText(text);
-    }        
+    }
 
     static _parseObject(text) {
         const type = text.split(";", 2)[0];
 
-        if(type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
+        if (type === 'EndRoute' || type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
+            SceneryParserLog.warn('unknownObjectType', `Unexpected entry of type ${type} without a preceding Route object`);
             return null;
         }
 
@@ -90,7 +103,6 @@ export default class SceneryParser {
                 return CameraHome.fromText(text);
             case 'MainCamera':
                 return MainCamera.fromText(text);
-            case 'EndRoute':
             case 'MiscGroup':
             case 'EndMiscGroup':
             case 'Wires':
@@ -108,7 +120,7 @@ export default class SceneryParser {
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);
                 return null;
-        };
+        }
     }
 
     static _parseTrack(text) {
@@ -148,5 +160,32 @@ export default class SceneryParser {
         } else {
             return Misc.fromText(Scenery.nextMiscId++, text);
         }
+    }
+
+    // Returns true if EndRoute was found, false otherwise
+    static _parseRouteLine(text, route) {
+        if (text === 'EndRoute') return true;
+        const fields = text.split(';');
+        if (fields.length < 4) {
+            SceneryParserLog.warn('routeInvalidSegment', `Invalid route segment: "${text}", not enough fields`);
+            return;
+        }
+        const trackIds = fields[3]
+            .split(',')
+            .map(segment => {
+                const id = segment.split(':')[0].trim();
+                if (id === '') return null;
+                return id;
+            });
+        if (trackIds.some(id => id === null || isNaN(id))) {
+            SceneryParserLog.warn('routeInvalidSegment', `Invalid route segment track IDs: ${fields[3]}`);
+            return;
+        }
+        route.addSegment(
+            parseInt(fields[1]), // length
+            parseInt(fields[2]), // radius
+            trackIds,
+        );
+        return false;
     }
 }

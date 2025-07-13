@@ -22,6 +22,10 @@ const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 function StatelessTrackRenderer(props) {
   const { object, trackColorMode } = props;
 
+  if (object.points.start.distanceSq(object.points.end) < 0.001) {
+      return null;
+  }
+
   const onMouseEnter = () => {
     setHoveredTrack(object);
   };
@@ -56,7 +60,8 @@ function StatelessTrackRenderer(props) {
 function getTrackPath(object) {
     switch (object.type) {
         case "StandardTrack":
-        case "PointTrack": 
+        case "PointTrack":
+        case "RouteTrack":
             const [x1, y1] = object.points.start.toSVGCoords();
             const [x2, y2] = object.points.end.toSVGCoords();
             const ra = Math.abs(object.r);
@@ -84,7 +89,7 @@ function getTrackColor(object, trackColorMode) {
   switch (trackColorMode) {
     case "standard":
     default:
-      if(object.prefab_name.includes('trans-mat'))
+      if(object.prefab_name && object.prefab_name.includes('trans-mat'))
         return modeDef.options['invisible'][0];
 
       return modeDef.options[modeDef.optionDefault][0];
@@ -102,13 +107,15 @@ function getTrackColor(object, trackColorMode) {
         default:
           return modeDef.options[modeDef.optionDefault][0];
       }
-    
+
     case "type":
       switch (object.type) {
         case "StandardTrack":
           return modeDef.options['standard-track'][0];
         case "PointTrack":
           return modeDef.options['point-track'][0];
+        case "RouteTrack":
+          return modeDef.options['route-track'][0];
         case "BezierTrack":
           return modeDef.options['bezier-track'][0];
         default:
@@ -123,7 +130,8 @@ function getTrackColor(object, trackColorMode) {
       return `url(#track-slope-${object.id})`;
 
     case "max-speed":
-      if(!object.maxspeed) {
+      if (!object.maxspeed) {
+        if (object.type === 'RouteTrack') return modeDef.options['unknown'][0];
         return modeDef.options['derail'][0];
       }
       return MiscHelper.getTrackGradient(modeDef.gradient, object.maxspeed);
@@ -133,13 +141,13 @@ function getTrackColor(object, trackColorMode) {
 function getTrackDefs(object, trackColorMode) {
     if (trackColorMode !== "slope") return null;
     if (object.start_slope === object.end_slope) return null;
-    
+
     const [x1, y1] = object.points.start.toSVGCoords();
     const [x2, y2] = object.points.end.toSVGCoords();
     const gradId = `track-slope-${object.id}`;
     const startColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.start_slope));
     const endColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.end_slope));
-    
+
     return (
         <defs>
         <linearGradient
