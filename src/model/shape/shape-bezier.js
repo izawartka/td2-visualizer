@@ -1,4 +1,5 @@
 import Shape from "./shape";
+import CurveHelper from "../../helpers/curveHelper";
 
 export default class ShapeBezier extends Shape {
     type = 'ShapeBezier';
@@ -9,6 +10,8 @@ export default class ShapeBezier extends Shape {
             end,
             control1,
             control2,
+            // This is not the actual middle point, but it's close enough
+            middle: CurveHelper.bezierPointAtT(start, control1, control2, end, 0.5),
         };
         super(
             points,

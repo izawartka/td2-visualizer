@@ -7,6 +7,7 @@ export default class ShapeStraight extends Shape {
         const points = {
             start,
             end,
+            middle: start.lerp(end, 0.5),
         };
         super(
             points,

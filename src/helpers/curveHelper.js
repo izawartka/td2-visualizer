@@ -36,12 +36,24 @@ function curveLength(start, end, radius) {
     return Math.abs(2 * radius * Math.asin(start.distance(end) / (2 * radius)));
 }
 
+function bezierPointAtT(start, control1, control2, end, t) {
+    const a1 = start.lerp(control1, t);
+    const a2 = control1.lerp(control2, t);
+    const a3 = control2.lerp(end, t);
+
+    const b1 = a1.lerp(a2, t);
+    const b2 = a2.lerp(a3, t);
+
+    return b1.lerp(b2, t);
+}
+
 const CurveHelper = {
     calculateCurveEnd,
     calculateEndTangentVec,
     arcEndAngleXZ,
     rotatedAngleXZ,
     curveLength,
+    bezierPointAtT,
 };
 
 export default CurveHelper;

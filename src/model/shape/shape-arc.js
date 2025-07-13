@@ -12,6 +12,8 @@ export default class ShapeArc extends Shape {
             start,
             end,
             circleCenter,
+            // TODO: Calculate midpoint on arc
+            middle: start.lerp(end, 0.5),
         };
         super(
             points,

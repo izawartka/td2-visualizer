@@ -6,7 +6,7 @@ export default function IsolationIdRenderer(props) {
     const text = object.id_isolation ?? '';
     if (!text) return null;
 
-    let pos = (object.type === 'Switch' ? object.isolation_id_pos : object.points.middle) ?? object.pos;
+    let pos = (object.type === 'Switch' ? object.isolation_id_pos : object.shape.points.middle) ?? object.pos;
     const [x, y] = pos.toSVGCoords();
 
     return (<SimpleLabelText
