@@ -3,6 +3,7 @@ import Vector3 from "./vector3";
 import SceneryParserLog from "./scenery-parser-log";
 import RouteTrack from "./tracks/route-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import AngleHelper from "../helpers/angleHelper";
 
 export default class Route extends SceneryObject {
     track_count;
@@ -57,7 +58,7 @@ export default class Route extends SceneryObject {
             return;
         }
         const startAngleRad = this.end_angle_rad;
-        const start_rot = new Vector3(0, startAngleRad * 180 / Math.PI, 0);
+        const startRot = new Vector3(0, AngleHelper.radToDeg(startAngleRad), 0);
 
         const startPoints = this.end_points;
         this.end_points = [];
@@ -98,7 +99,7 @@ export default class Route extends SceneryObject {
                 trackId,
                 startPoints[index],
                 this.end_points[index],
-                start_rot,
+                startRot,
                 lengths[index],
                 radii[index],
                 [], // connections
