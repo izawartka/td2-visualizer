@@ -230,7 +230,7 @@ export default class SwitchPrefab {
                     exit.endPos,
                     enter.circleCenter,
                     enter.radius,
-                    0, // TODO
+                    null,
                 );
             } else {
                 enter = tracks[`transition_${enterPath}_enter`];

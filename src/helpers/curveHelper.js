@@ -32,11 +32,16 @@ function rotatedAngleXZ(rotationRad, angle) {
     return Vector3.zero().atanY(Vector3.fromAngleY(angle).rotate(rotationRad));
 }
 
+function curveLength(start, end, radius) {
+    return Math.abs(2 * radius * Math.asin(start.distance(end) / (2 * radius)));
+}
+
 const CurveHelper = {
     calculateCurveEnd,
     calculateEndTangentVec,
     arcEndAngleXZ,
     rotatedAngleXZ,
+    curveLength,
 };
 
 export default CurveHelper;

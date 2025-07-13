@@ -58,6 +58,9 @@ export default class SwitchPrefabTrack {
     }
 
     static rawArc(id, dataIndex, startAngle, startPos, endAngle, endPos, circleCenter, radius, length, connections = []) {
+        if (!length) {
+            length = CurveHelper.curveLength(startPos, endPos, radius);
+        }
         const toShape = (switchRotDeg, switchStart) => {
             return ShapeFactory.rotatedArc(switchRotDeg, switchStart, startAngle, startPos, endAngle, endPos, circleCenter, radius, length);
         };
