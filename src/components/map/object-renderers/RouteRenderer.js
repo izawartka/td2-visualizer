@@ -1,28 +1,33 @@
 import { ReactSVG } from "react-svg";
 import AlwaysUpText from "../text/AlwaysUpText";
+import AngleHelper from "../../../helpers/angleHelper";
 
 export default function RouteRenderer(props) {
     const { object } = props;
-    const [x, y] = object.end_center.toSVGCoords();
-    const angle = object.end_angle_rad * 180 / Math.PI;
+
+    const [startX, startY] = object.pos.toSVGCoords();
+    const startAngle = object.rot.y;
+
+    const [endX, endY] = object.end_center.toSVGCoords();
+    const endAngle = AngleHelper.radToDeg(object.end_angle_rad);
 
     const offY = object.track_count === 2 ? -22 : -20;
     const arrowOffset = - object.track_offset - 37.8;
 
-    return (
-        <g className="route" transform={`translate(${x}, ${y}) rotate(${angle})`}>
-            <g transform={`rotate(90) translate(-80, ${arrowOffset})`}>
-                <ReactSVG
-                    src={`${process.env.PUBLIC_URL}/assets/route.svg`}
-                    wrapper='svg'
-                    beforeInjection={(svg) => {
-                        svg.setAttribute('width', '20mm');
-                        svg.setAttribute('height', '20mm');
-                    }}
-                />
-            </g>
+    return (<>
+        <g className="route-arrow" transform={`translate(${endX}, ${endY}) rotate(${endAngle + 90}) translate(-80, ${arrowOffset})`}>
+            <ReactSVG
+                src={`${process.env.PUBLIC_URL}/assets/route.svg`}
+                wrapper='svg'
+                beforeInjection={(svg) => {
+                    svg.setAttribute('width', '20mm');
+                    svg.setAttribute('height', '20mm');
+                }}
+            />
+        </g>
+        <g className="route-name" transform={`translate(${startX}, ${startY}) rotate(${startAngle})`}>
             <AlwaysUpText
-                baseRot={angle}
+                baseRot={startAngle}
                 additionalRot={-90}
                 offsetX={object.track_offset}
                 reverseAnchor={true}
@@ -33,5 +38,5 @@ export default function RouteRenderer(props) {
                 text={object.route_name}
             />
         </g>
-    );
+    </>);
 }

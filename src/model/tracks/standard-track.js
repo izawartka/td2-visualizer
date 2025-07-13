@@ -81,7 +81,5 @@ export default class StandardTrack extends Track {
 
     applyObject(scenery) {
         super.applyObject(scenery);
-        // TODO: Restore
-        // scenery.addObject(new IsolationId(this.category, this.id, this.points.middle, this.id_isolation));
     }
 }

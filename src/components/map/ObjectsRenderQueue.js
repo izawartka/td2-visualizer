@@ -10,7 +10,7 @@ import NEVPRenderer from './object-renderers/NEVPRenderer';
 import DerailerRenderer from './object-renderers/DerailerRenderer';
 import ElectrificationStatusPopup from './additional-layer-components/ElectrificationStatusPopup';
 import SpawnPointRenderer from './object-renderers/SpawnPointRenderer';
-import IsolationEndRenderer from "./object-renderers/IsolationEndRenderer";
+import IsolationEndRenderer from './object-renderers/IsolationEndRenderer';
 
 const ObjectRendererQueue = [
     {
@@ -31,7 +31,8 @@ const ObjectRendererQueue = [
     },
     {
         'name': 'isolations-ids',
-        'category': 'isolation-ids',
+        'category': ['tracks', 'switches'],
+        'types': ['StandardTrack', 'BezierTrack', 'Switch'],
         'renderer': IsolationIdRenderer,
         'cond': (layers) => layers['isolations-ids']
     },

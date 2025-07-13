@@ -82,7 +82,7 @@ export default class SceneryParser {
     static _parseObject(text) {
         const type = text.split(";", 2)[0];
 
-        if (type === '' || type === 'EndRoute' || type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
+        if (type === 'EndRoute' || type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
             SceneryParserLog.warn('unknownObjectType', `Unexpected entry of type ${type} without a preceding Route object`);
             return null;
         }
@@ -114,6 +114,7 @@ export default class SceneryParser {
             case 'SSPController':
             case 'TerrainGroup':
             case 'EndTerrainGroup':
+            case '':
                 return null;
             default:
                 SceneryParserLog.warn('unknownObjectType', `Unknown object type: ${type}`);

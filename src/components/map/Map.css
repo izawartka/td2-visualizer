@@ -63,11 +63,11 @@
     fill: #111;
 }
 
-.map svg g.route g {
+.map svg g.route-arrow {
     fill: #eee;
 }
 
-.map svg g.route text {
+.map svg g.route-name text {
     fill: #eee;
     font-size: 72mm;
 }
