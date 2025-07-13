@@ -13,12 +13,15 @@ export default function SceneryLayer(props) {
 
     const objects = useMemo(() => {
         if (!scenery || !isVisible) return [];
-        const categoryList = typeof category === 'string' ? [category] : category;
-        return categoryList.flatMap((category) => {
+
+        const getCategoryObjects = (category) => {
             const categoryObjs = scenery.objects[category];
             if (!categoryObjs) return [];
             return Object.values(categoryObjs);
-        });
+        }
+        // flatMap is not used in the case of a single category to avoid an unnecessary array copy
+        if (typeof category === 'string') return getCategoryObjects(category);
+        return category.flatMap(getCategoryObjects);
     }, [scenery, category, isVisible]);
 
     if (!scenery || !isVisible) return null;
