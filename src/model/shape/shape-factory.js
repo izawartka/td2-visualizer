@@ -22,6 +22,7 @@ function fromArcDescription(rotDeg, startPos, radius, length, startSlope, endSlo
         return new ShapeStraight(
             startPos,
             endPos,
+            length,
             rotRad.y,
         );
     }
@@ -30,7 +31,7 @@ function fromArcDescription(rotDeg, startPos, radius, length, startSlope, endSlo
     circleCenter = startPos.add(circleCenter.rotate(rotRad));
     endPos.y += yChange;
     endPos = startPos.add(endPos.rotate(rotRad));
-    return new ShapeArc(startPos, endPos, circleCenter, radius);
+    return new ShapeArc(startPos, endPos, circleCenter, radius, length);
 }
 
 function fromBezierDescription(startPos, startToControl1, endPos, endToControl2) {
@@ -42,9 +43,19 @@ function fromBezierDescription(startPos, startToControl1, endPos, endToControl2)
     );
 }
 
+function straightRaw(startPos, endPos, length, angleXZ) {
+    return new ShapeStraight(startPos, endPos, length, angleXZ);
+}
+
+function arcRaw(startPos, endPos, circleCenter, radius, length) {
+    return new ShapeArc(startPos, endPos, circleCenter, radius, length);
+}
+
 const ShapeFactory = {
     fromArcDescription,
     fromBezierDescription,
+    straightRaw,
+    arcRaw,
 };
 
 export default ShapeFactory;

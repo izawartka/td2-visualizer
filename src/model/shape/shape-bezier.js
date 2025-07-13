@@ -12,6 +12,7 @@ export default class ShapeBezier extends Shape {
         };
         super(
             points,
+            start.distance(end), // length, temporary TODO: Calculate actual length of bezier curve
             control1.atanY(start),
             control2.atanY(end),
         );

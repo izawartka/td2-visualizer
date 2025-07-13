@@ -6,11 +6,11 @@ export default class RouteTrack extends Track {
     type = "RouteTrack";
     route;
 
-    constructor(id, rot, shape, connections, electrified, route) {
+    constructor(id, shape, connections, electrified, route) {
         super(
             id,
             Vector3.zero(), // ignore rotation for route tracks
-            shape.
+            shape,
             connections,
             null, // id_station,
             0, // start_slope,

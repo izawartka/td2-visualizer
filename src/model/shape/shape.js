@@ -2,12 +2,14 @@ import {TrackConnectionEnd} from "../track-connection";
 
 export default class Shape {
     points;
+    length;
     startAngleXZ;
     endAngleXZ;
 
-    constructor(points, startAngleXZ, endAngleXZ) {
+    constructor(points, length, startAngleXZ, endAngleXZ) {
         Object.assign(this, {
             points,
+            length,
             startAngleXZ,
             endAngleXZ,
         });

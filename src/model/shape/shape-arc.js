@@ -6,7 +6,7 @@ export default class ShapeArc extends Shape {
     type = 'ShapeArc';
     radius;
 
-    constructor(start, end, circleCenter, radius) {
+    constructor(start, end, circleCenter, radius, length) {
         const points = {
             start,
             end,
@@ -14,6 +14,7 @@ export default class ShapeArc extends Shape {
         };
         super(
             points,
+            length,
             ShapeArc._getEndAngle(end, start, circleCenter),
             ShapeArc._getEndAngle(start, end, circleCenter),
         );

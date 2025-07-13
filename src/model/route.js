@@ -3,6 +3,7 @@ import Vector3 from "./vector3";
 import SceneryParserLog from "./scenery-parser-log";
 import RouteTrack from "./tracks/route-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import ShapeFactory from "./shape/shape-factory";
 
 export default class Route extends SceneryObject {
     track_count;
@@ -52,45 +53,38 @@ export default class Route extends SceneryObject {
     }
 
     addSegment(length, radius, trackIds) {
-        return; // TODO: Restore
-
         if (trackIds.length !== this.track_count) {
             SceneryParserLog.warn('routeInvalidSegment', `Route segment has invalid track count: expected ${this.track_count}, got ${trackIds.length}`);
             return;
         }
-        const startAngleRad = this.end_angle_rad;
 
         const startPoints = this.end_points;
         this.end_points = [];
 
-        const radii = [];
-        const lengths = [];
-        let circleCenter;
+        const shapes = [];
 
         if (radius === 0) {
-            this.end_center = this.end_center.add(Vector3.fromAngleY(startAngleRad, length));
-            circleCenter = Vector3.zero();
-            this.offsets.forEach(offset => {
-                radii.push(0);
-                lengths.push(length);
+            this.end_center = this.end_center.add(Vector3.fromAngleY(this.end_angle_rad, length));
+            this.offsets.forEach((offset, index) => {
                 const end_point = this.end_center
                     .add(Vector3.fromAngleY(this.end_angle_rad + Math.PI / 2, offset));
                 this.end_points.push(end_point);
+                shapes.push(ShapeFactory.straightRaw(startPoints[index], end_point, this.end_angle_rad));
             });
         } else {
+            const startAngleRad = this.end_angle_rad;
             this.end_angle_rad -= length / radius;
             const startToCenter = Vector3.fromAngleY(startAngleRad + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-            circleCenter = this.end_center.add(startToCenter.negate());
+            const circleCenter = this.end_center.add(startToCenter.negate());
             const centerToEndUnit = Vector3.fromAngleY(this.end_angle_rad + Math.sign(radius) * Math.PI / 2, 1).multiply(Math.sign(radius));
             this.end_center = circleCenter.add(centerToEndUnit.multiply(radius));
 
-            this.offsets.forEach(offset => {
+            this.offsets.forEach((offset, index) => {
                 const trackRadius = radius + offset;
                 const trackLength = length * trackRadius / radius;
-                radii.push(trackRadius);
-                lengths.push(trackLength);
                 const end_point = circleCenter.add(centerToEndUnit.multiply(trackRadius));
                 this.end_points.push(end_point);
+                shapes.push(ShapeFactory.arcRaw(startPoints[index], this.end_points[index], circleCenter, trackRadius, trackLength));
             });
         }
 
@@ -99,11 +93,7 @@ export default class Route extends SceneryObject {
         const tracks = trackIds.map((trackId, index) => {
             return new RouteTrack(
                 trackId,
-                startPoints[index],
-                this.end_points[index],
-                circleCenter,
-                lengths[index],
-                radii[index],
+                shapes[index],
                 [], // connections
                 this.electrified,
                 this, // route
