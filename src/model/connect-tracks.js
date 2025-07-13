@@ -59,7 +59,7 @@ function _checkConnection(scenery, track, connection) {
     if (reverseConnections.length > 1) {
         SceneryParserLog.warn(
             'tracksConnectionTest',
-            `Track ${otherTrack.id} has multiple connections to ${track.id}`,
+            `Track ${connection.otherTrack.id} has multiple connections to ${track.id}`,
         );
     }
     if (reverseConnections.length === 0) {
