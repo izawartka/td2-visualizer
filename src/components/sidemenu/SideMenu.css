@@ -31,6 +31,7 @@
 
 .side-menu .hidden {
     visibility: hidden;
+    height: 0;
 }
 
 .side-menu h3 {
