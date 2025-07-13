@@ -4,6 +4,7 @@ import SceneryParserLog from "./scenery-parser-log";
 import RouteTrack from "./tracks/route-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 import ShapeFactory from "./shape/shape-factory";
+import CurveHelper from "../helpers/curveHelper";
 
 export default class Route extends SceneryObject {
     track_count;
@@ -72,19 +73,19 @@ export default class Route extends SceneryObject {
                 shapes.push(ShapeFactory.straightRaw(startPoints[index], end_point, this.end_angle_rad));
             });
         } else {
+            const { circleCenter, endPos: centerEndPos, endAngle } = CurveHelper.calculateCurveEnd(this.end_center, this.end_angle_rad, radius, length);
+            this.end_center = centerEndPos;
             const startAngleRad = this.end_angle_rad;
-            this.end_angle_rad -= length / radius;
-            const startToCenter = Vector3.fromAngleY(startAngleRad + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-            const circleCenter = this.end_center.add(startToCenter.negate());
-            const centerToEndUnit = Vector3.fromAngleY(this.end_angle_rad + Math.sign(radius) * Math.PI / 2, 1).multiply(Math.sign(radius));
-            this.end_center = circleCenter.add(centerToEndUnit.multiply(radius));
+            this.end_angle_rad = endAngle;
+            let centerToEndUnit = centerEndPos.sub(circleCenter).normalize();
+            if (radius < 0) centerToEndUnit = centerToEndUnit.negate();
 
             this.offsets.forEach((offset, index) => {
                 const trackRadius = radius + offset;
                 const trackLength = length * trackRadius / radius;
                 const end_point = circleCenter.add(centerToEndUnit.multiply(trackRadius));
                 this.end_points.push(end_point);
-                shapes.push(ShapeFactory.arcRaw(startPoints[index], this.end_points[index], circleCenter, trackRadius, trackLength));
+                shapes.push(ShapeFactory.arcRaw(startPoints[index], end_point, circleCenter, trackRadius, trackLength, startAngleRad, this.end_angle_rad));
             });
         }
 

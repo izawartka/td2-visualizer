@@ -63,31 +63,31 @@ export default class Switch extends SceneryObject {
             return;
         }
 
-        let def = DefinedSwitches[this.bare_model] || null;
+        const prefab = DefinedSwitches[this.bare_model] || null;
 
-        if (!def) {
+        if (!prefab) {
             SceneryParserLog.warn('switchUndefinedModel', `Switch ${this.id} has an undefined model "${this.bare_model}"`);
             return;
         }
 
-        this._applySwitchFromDef(scenery, def);
+        this._applySwitchFromPrefab(scenery, prefab);
     }
 
-    _applySwitchFromDef(scenery, def) {
+    _applySwitchFromPrefab(scenery, prefab) {
         const trackIds = this._getTrackIds();
         if (!trackIds) return;
 
-        const tracks = Object.entries(def.tracks).map(([key, track]) => {
-            return this._createSwitchTrackFromDef(scenery, def, track, trackIds);
+        const tracks = Object.entries(prefab.tracks).map(([key, track]) => {
+            return this._createSwitchTrackFromPrefab(scenery, prefab, track, trackIds);
         });
 
         if (tracks.some(track => !track)) return;
 
         this.tracks = tracks;
-        this.def = def;
+        this.def = prefab;
 
         const rotRad = this.rot.multiply(Math.PI / 180);
-        const isolationIdPos = this.pos.add(def.isolation_id_offset.rotate(rotRad));
+        const isolationIdPos = this.pos.add(prefab.isolation_id_offset.rotate(rotRad));
         super.applyObject(scenery);
         scenery.addObject(new IsolationId(this.category, this.id, isolationIdPos, this.id_isolation));
     }
@@ -105,22 +105,20 @@ export default class Switch extends SceneryObject {
         return ids;
     }
 
-    _createSwitchTrackFromDef(scenery, switchDef, trackDef, ids) {
-        return null; // TODO: Restore
-        const rotRad = this.rot.multiply(Math.PI / 180);
-        if (trackDef.dataIndex >= ids.length) {
+    _createSwitchTrackFromPrefab(scenery, switchPrefab, trackPrefab, ids) {
+        if (trackPrefab.dataIndex >= ids.length) {
             SceneryParserLog.warn(
                 'switchMissingTrackId',
-                `Switch ${this.id} with model ${this.bare_model} is missing an id for the track at index ${trackDef.dataIndex}`,
+                `Switch ${this.id} with model ${this.bare_model} is missing an id for the track at index ${trackPrefab.dataIndex}`,
             );
             return null;
         }
-        const [trackId, prevId, nextId] = ids[trackDef.dataIndex];
+        const [trackId, prevId, nextId] = ids[trackPrefab.dataIndex];
 
         const connections = [];
-        trackDef.connections.forEach((connection) => {
+        trackPrefab.connections.forEach((connection) => {
             if (connection.type === SwitchTrackConnectionType.INTERNAL) {
-                const otherTrackDef = switchDef.tracks[connection.internalId];
+                const otherTrackDef = switchPrefab.tracks[connection.internalId];
                 if (!otherTrackDef) {
                     SceneryParserLog.warn(
                         'switchMissingTrackId',
@@ -149,13 +147,9 @@ export default class Switch extends SceneryObject {
 
         const trackObj = new SwitchTrack(
             trackId,
-            this.pos.add(trackDef.startPos.rotate(rotRad)),
-            this.pos.add(trackDef.endPos.rotate(rotRad)),
-            trackDef.radius,
+            trackPrefab.toShape(this.rot, this.pos),
             connections,
             this.id_switch,
-            0, // start_slope
-            0, // end_slope
             this.id_isolation,
             this.track_prefab_name,
             this.maxspeed,

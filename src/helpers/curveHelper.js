@@ -2,11 +2,10 @@ import Vector3 from "../model/vector3";
 
 function calculateCurveEnd(startPos, startAngle, radius, curveLength) {
     if (radius === 0) {
-        console.warn('CurveHelper.calculateCurveEnd() called with radius 0');
         return {
             endPos: startPos.add(Vector3.fromAngleY(startAngle, curveLength)),
             endAngle: startAngle,
-            circleCenter: Vector3.zero(),
+            circleCenter: null,
         };
     }
     const centerToStart = Vector3.fromAngleY(startAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
@@ -25,9 +24,19 @@ function calculateEndTangentVec(startPos, endPos, centerPos) {
     return centerToStart.sub(centerToEnd.multiply(dot1 / dot2));
 }
 
+function arcEndAngleXZ(startPoint, endPoint, circleCenter) {
+    return Vector3.zero().atanY(calculateEndTangentVec(startPoint, endPoint, circleCenter));
+}
+
+function rotatedAngleXZ(rotationRad, angle) {
+    return Vector3.zero().atanY(Vector3.fromAngleY(angle).rotate(rotationRad));
+}
+
 const CurveHelper = {
     calculateCurveEnd,
     calculateEndTangentVec,
+    arcEndAngleXZ,
+    rotatedAngleXZ,
 };
 
 export default CurveHelper;

@@ -31,7 +31,11 @@ function fromArcDescription(rotDeg, startPos, radius, length, startSlope, endSlo
     circleCenter = startPos.add(circleCenter.rotate(rotRad));
     endPos.y += yChange;
     endPos = startPos.add(endPos.rotate(rotRad));
-    return new ShapeArc(startPos, endPos, circleCenter, radius, length);
+
+    const startAngle = CurveHelper.arcEndAngleXZ(endPos, startPos, circleCenter);
+    const endAngle = CurveHelper.arcEndAngleXZ(startPos, endPos, circleCenter);
+
+    return new ShapeArc(startPos, endPos, circleCenter, radius, length, startAngle, endAngle);
 }
 
 function fromBezierDescription(startPos, startToControl1, endPos, endToControl2) {
@@ -43,19 +47,44 @@ function fromBezierDescription(startPos, startToControl1, endPos, endToControl2)
     );
 }
 
+function arcRaw(startPos, endPos, circleCenter, radius, length, startAngleXZ, endAngleXZ) {
+    return new ShapeArc(startPos, endPos, circleCenter, radius, length, startAngleXZ, endAngleXZ);
+}
+
 function straightRaw(startPos, endPos, length, angleXZ) {
     return new ShapeStraight(startPos, endPos, length, angleXZ);
 }
 
-function arcRaw(startPos, endPos, circleCenter, radius, length) {
-    return new ShapeArc(startPos, endPos, circleCenter, radius, length);
+function rotatedArc(rotationDeg, rotationCenter, startAngle, startPos, endAngle, endPos, circleCenter, radius, length) {
+    const rotationRad = AngleHelper.rotationDegToRad(rotationDeg);
+    return new ShapeArc(
+        startPos.rotate(rotationRad).add(rotationCenter),
+        endPos.rotate(rotationRad).add(rotationCenter),
+        circleCenter.rotate(rotationRad).add(rotationCenter),
+        radius,
+        length,
+        CurveHelper.rotatedAngleXZ(rotationRad, startAngle) + Math.PI,
+        CurveHelper.rotatedAngleXZ(rotationRad, endAngle),
+    );
+}
+
+function rotatedStraight(rotationDeg, rotationCenter, startPos, endPos, angle) {
+    const rotationRad = AngleHelper.rotationDegToRad(rotationDeg);
+    return straightRaw(
+        startPos.rotate(rotationRad).add(rotationCenter),
+        endPos.rotate(rotationRad).add(rotationCenter),
+        startPos.distance(endPos),
+        CurveHelper.rotatedAngleXZ(rotationRad, rotationCenter, angle),
+    );
 }
 
 const ShapeFactory = {
     fromArcDescription,
     fromBezierDescription,
-    straightRaw,
     arcRaw,
+    straightRaw,
+    rotatedArc,
+    rotatedStraight,
 };
 
 export default ShapeFactory;

@@ -145,6 +145,16 @@ export default class Vector3 {
         return new Vector3(-this.x, -this.y, -this.z);
     }
 
+    normalize() {
+        if (this.x === 0 && this.y === 0 && this.z === 0) return Vector3.zero();
+        const length = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        return new Vector3(
+            this.x / length,
+            this.y / length,
+            this.z / length,
+        );
+    }
+
     clone() {
         return new Vector3(this.x, this.y, this.z);
     }

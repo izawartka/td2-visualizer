@@ -205,14 +205,12 @@ export default class SwitchPrefab {
         const crossingTrack = (path) => {
             const previous = tracks[`transition_${path}_enter`];
             const next = tracks[`transition_${path}_exit`];
-            const track = new SwitchPrefabTrack(
+            const track = SwitchPrefabTrack.rawStraight(
                 `crossing_${path}`,
                 dataIndex++,
                 previous.endAngle,
                 previous.endPos,
-                previous.endAngle,
                 next.endPos,
-                0,
             );
             SwitchPrefabTrack.connect(previous, track);
             SwitchPrefabTrack.connect(track, next, TrackConnectionEnd.END, TrackConnectionEnd.END);
@@ -221,28 +219,28 @@ export default class SwitchPrefab {
         const sideTrack = (enterPath, exitPath, side, slipEnabled) => {
             let enter, exit, track;
             if (slipEnabled) {
-                enter = tracks[`outer_${enterPath}_enter`];
-                exit = tracks[`outer_${exitPath}_exit`];
-                track = new SwitchPrefabTrack(
+                enter = tracks[`slip_transition_${enterPath}_enter`];
+                exit = tracks[`slip_transition_${exitPath}_exit`];
+                track = SwitchPrefabTrack.rawArc(
                     `side_${side}`,
                     dataIndex++,
                     enter.endAngle,
                     enter.endPos,
                     exit.endAngle + Math.PI,
                     exit.endPos,
+                    enter.circleCenter,
                     enter.radius,
+                    0, // TODO
                 );
             } else {
                 enter = tracks[`transition_${enterPath}_enter`];
                 exit = tracks[`transition_${exitPath}_exit`];
-                track = new SwitchPrefabTrack(
+                track = SwitchPrefabTrack.rawStraight(
                     `side_${side}`,
                     dataIndex++,
                     0,
                     enter.endPos,
-                    0,
                     exit.endPos,
-                    0,
                 );
             }
             SwitchPrefabTrack.connect(enter, track);
