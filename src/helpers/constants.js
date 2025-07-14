@@ -136,12 +136,14 @@ const Constants = {
         },
         'type': {
             name: 'Type',
-            optionDefault: 'standard-track',
+            optionDefault: 'standard-track-arc',
             options: {
-                'standard-track': ['#00a', 'Standard track'],
+                'standard-track-straight': ['#00a', 'Standard track (straight)'],
+                'standard-track-arc': ['#44d', 'Standard track (curved)'],
+                'standard-track-bezier': ['#aa8', 'Bezier track'],
                 'switch-track': ['#0a0', 'Switch track'],
-                'bezier-track': ['#aa8', 'Bezier track'],
-                'route-track': ['#a6d', 'Route track'],
+                'route-track-straight': ['#96c', 'Route track (straight)'],
+                'route-track-arc': ['#b8d', 'Route track (curved)'],
             }
         },
         'slope': {

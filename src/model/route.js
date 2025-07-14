@@ -4,7 +4,6 @@ import SceneryParserLog from "./scenery-parser-log";
 import RouteTrack from "./tracks/route-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 import ShapeFactory from "./shape/shape-factory";
-import AngleHelper from "../helpers/angleHelper";
 import CurveHelper from "../helpers/curveHelper";
 
 export default class Route extends SceneryObject {
