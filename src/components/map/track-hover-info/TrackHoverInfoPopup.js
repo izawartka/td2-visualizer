@@ -4,7 +4,7 @@ export default function TrackHoverInfoPopup(props) {
     const { track } = props;
 
     const slopeArr = Array.from(new Set([
-        Math.abs(track['start_slope']), 
+        Math.abs(track['start_slope']),
         Math.abs(track['end_slope'])
     ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
@@ -20,11 +20,26 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupItem value={slopeArr} label="Slope" options={slopeOptions} />
                     <InfoPopupItem value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
                     <InfoPopupItem value={track['type']} label="Type" options={{translationConstKey: 'type'}} />
+                    <InfoPopupItem value={track.shape.type} label="Shape" options={{translationConstKey: 'shape'}} />
+                    <InfoPopupItem value={track.shape.length} label="Length" options={{suffix: ' m', precision: 2}} />
+                    <InfoPopupShapeItems shape={track.shape} />
                     <InfoPopupSwitchItems track={track} />
                 </tbody>
             </table>
         </div>
     );
+}
+
+function InfoPopupShapeItems(props) {
+    const { shape } = props;
+
+    if (shape.type === 'ShapeArc') {
+        return <>
+            <InfoPopupItem value={Math.abs(shape.radius)} label="Radius" options={{suffix: ' m', precision: 0}} />
+        </>
+    }
+
+    return null;
 }
 
 function InfoPopupSwitchItems(props) {
@@ -50,6 +65,10 @@ function processItemValue(value, options) {
 
     if (value === undefined || value === null || value === '') {
         return "N/A";
+    }
+
+    if (typeof value === 'number' && 'precision' in options) {
+        value = value.toFixed(options.precision);
     }
 
     return `${value}${suffix || ''}`.trim();

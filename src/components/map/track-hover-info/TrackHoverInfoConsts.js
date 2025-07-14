@@ -11,7 +11,12 @@ const TrackHoverInfoConsts = {
         'StandardTrack': 'Standard track',
         'SwitchTrack': 'Switch track',
         'RouteTrack': 'Route track',
-    }
+    },
+    shape: {
+        'ShapeStraight': 'Straight',
+        'ShapeArc': 'Circle arc',
+        'ShapeBezier': 'Bézier curve',
+    },
 };
 
 export default TrackHoverInfoConsts;
