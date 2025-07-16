@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import traceback
+from pathlib import Path
 
 import yaml
 #
@@ -119,11 +120,11 @@ def parse_track(track):
         next_id = track["MonoBehaviour"]["nextTrack"]["__component_id"]
 
     return {
-        "shape": track_shape,
-        "transform": track_transform,
         "id": track["__component_id"],
         "prev_id": prev_id,
         "next_id": next_id,
+        "shape": track_shape,
+        "transform": track_transform,
     }
 
 
@@ -166,23 +167,29 @@ def resolve_references(value, component_map, visited_ids):
         resolve_references(value[key], component_map, visited_ids)
 
 
+def format_tracks(prefab_name, tracks):
+    print(f"{prefab_name}: [")
+    for track in tracks:
+        print(f"    {json.dumps(track)},")
+    print("],")
+
+
 def process_file(file_path):
     if file_path.endswith(".prefab.meta"):
         return
 
     if not file_path.endswith(".prefab"):
-        print(f"Skipping non-.prefab file: {file_path}")
+        print(f"Skipping non-.prefab file: {file_path}", file=sys.stderr)
         return
-
-    print(f"Processing file: {file_path}")
 
     try:
         with open(file_path, encoding="utf8") as infile:
             prefab = parse_prefab(infile)
-            print(json.dumps(find_tracks(prefab), indent=4))
+            tracks = find_tracks(prefab)
+            format_tracks(Path(file_path).stem, tracks)
     except Exception:
-        print(f"Error processing {file_path}:")
-        traceback.print_exc()
+        print(f"Error processing {file_path}:", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
 
 
 def process_directory(directory: str):
