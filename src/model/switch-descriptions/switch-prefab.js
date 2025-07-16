@@ -98,7 +98,7 @@ export default class SwitchPrefab {
         });
     }
 
-    static parseExported(exportedTracks) {
+    static parseExported(prefabName, exportedTracks) {
         const trackList = exportedTracks.map((exportedTrack, index) => {
             const rotationQuat = new Quaternion(exportedTrack.rotation.x, exportedTrack.rotation.y, exportedTrack.rotation.z, exportedTrack.rotation.w);
             const startPos = new Vector3(exportedTrack.position.x, exportedTrack.position.y, exportedTrack.position.z);
@@ -123,6 +123,10 @@ export default class SwitchPrefab {
         });
         const tracks = Object.fromEntries(trackList);
         SwitchPrefab._addMissingConnections(tracks);
-        return new SwitchPrefab(tracks, Vector3.zero());
+
+        const isolationIdOffset = prefabName.startsWith("Rkp") || prefabName.startsWith("Crossing")
+            ? Vector3.zero() : new Vector3(0, 0, 6);
+
+        return new SwitchPrefab(tracks, isolationIdOffset);
     }
 }
