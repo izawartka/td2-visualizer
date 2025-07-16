@@ -27,6 +27,7 @@ https://maseuko.pl/soft/td2-visualizer-2/
 - Not all signs have their icons
 - Electrification resolution fails with some sceneries (not no be fixed)
 
-## Author
+## Authors
 
-masuo / izawartka
+[masuo / izawartka](https://github.com/izawartka/)<br>
+[dominik-korsa](https://github.com/dominik-korsa/)

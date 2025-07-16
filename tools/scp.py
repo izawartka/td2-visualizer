@@ -4,7 +4,7 @@ import sys
 #
 #    [ TD2 SCENERY PROCESSOR ]
 #    by masuo
-#    v1.4
+#    v1.5
 #
 
 BAD_WORDS = ['EndMiscGroup', 'Fence', 'TerrainPoint', 'Wires']

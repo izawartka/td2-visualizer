@@ -12,8 +12,7 @@ export default class SceneryObject {
     }
 
     static fromText(text) {
-        console.error("SceneryObject.fromText not implemented");
-        return null;
+        throw new Error("fromText() must be implemented in subclass");
     }
 
     applyObject(scenery) {

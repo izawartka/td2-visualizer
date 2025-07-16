@@ -1,5 +1,5 @@
 const Constants = {
-    buildVersion: '1.3.1',
+    buildVersion: '1.4.0',
     map: {
         zoomSensitivity: 0.002,
         zoomMin: 0.03,
@@ -39,6 +39,7 @@ const Constants = {
         tracksConnectionTest: true,
         electrificationNevpNotApplied: false,
         electrificationConflict: false,
+        tracksConnectionTestSwitchRelated: true,
         electrificationResolverError: true,
         electrificationResolverWarnings: true,
         signalElemsUnknownPrefab: true,

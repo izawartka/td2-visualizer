@@ -113,8 +113,20 @@ export default class ElectrificationResolver {
             return;
         }
 
+        // only propagate NON_ELECTRIFIED status forward when NEVP is on a track with more than 2 connections
+        let additionalSkipIds = [];
+        if(track.hasNEVP && track.connections.length > 2) {
+            const comingFromConnection = track.connections.find(connection => connection.otherTrackId === skipTrackId) || null;
+            const comingFromEnd = comingFromConnection?.end || null;
+
+            additionalSkipIds = track.connections
+                .filter(connection => connection.end === comingFromEnd)
+                .map(connection => connection.otherTrackId);
+        }
+
         track.connections.forEach(connection => {
             if (skipTrackId === connection.otherTrackId) return;
+            if (additionalSkipIds.includes(connection.otherTrackId)) return;
             this._propagate(connection.otherTrack, track.id, track.electrificationStatus);
         });
     }
