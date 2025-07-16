@@ -2,7 +2,7 @@ import json
 import os
 import re
 import sys
-from pathlib import Path
+import traceback
 
 import yaml
 #
@@ -41,21 +41,108 @@ def parse_prefab(file):
             component_list.append(component)
             component_map[component_id] = component
 
+    for component in component_list:
+        if not isinstance(component, dict):
+            continue
+        for value in component.values():
+            if "m_GameObject" not in value:
+                continue
+            component_map[str(value["m_GameObject"]["fileID"])]["__children"].append(component)
+
     visited_ids = set()
-    resolve_references(component_list[0], component_map, visited_ids)
+    for component in component_list:
+        resolve_references(component, component_map, visited_ids)
 
     return component_list[0]
 
 
+def try_parse_switch_component(prefab):
+    if "component" not in prefab:
+        return None
+    component = prefab["component"]
+    if "MonoBehaviour" not in component:
+        return None
+    mono = component["MonoBehaviour"]
+    if "tracks" not in mono or "namedSwitch" not in mono:
+        return None
+    return mono
+
+
+def try_parse_track_shape(component):
+    if "MonoBehaviour" not in component:
+        return None
+    mono = component["MonoBehaviour"]
+    if "slope1" not in mono:
+        return None
+    return {
+        "radius": mono["radius"],
+        "length": mono["length"],
+        "rz1": mono["rz1"],
+        "rz2": mono["rz2"],
+        "slope1": mono["slope1"],
+        "slope2": mono["slope2"],
+    }
+
+
+def try_parse_track_transform(component):
+    if "Transform" not in component:
+        return None
+    transform = component["Transform"]
+    return {
+        "position": transform["m_LocalPosition"],
+        "rotation": transform["m_LocalRotation"],
+    }
+
+
+def parse_track(track):
+    track_shape = None
+    track_transform = None
+
+    game_object = track["MonoBehaviour"]["m_GameObject"]["GameObject"]
+
+    for child in game_object["m_Component"]:
+        if "component" not in child:
+            continue
+        child = child["component"]
+        maybe_track_shape = try_parse_track_shape(child)
+        if maybe_track_shape is not None:
+            track_shape = maybe_track_shape
+        maybe_track_transform = try_parse_track_transform(child)
+        if maybe_track_transform is not None:
+            track_transform = maybe_track_transform
+
+    prev_id = None
+    next_id = None
+    if "__component_id" in track["MonoBehaviour"]["prevTrack"]:
+        prev_id = track["MonoBehaviour"]["prevTrack"]["__component_id"]
+    if "__component_id" in track["MonoBehaviour"]["nextTrack"]:
+        next_id = track["MonoBehaviour"]["nextTrack"]["__component_id"]
+
+    return {
+        "shape": track_shape,
+        "transform": track_transform,
+        "id": track["__component_id"],
+        "prev_id": prev_id,
+        "next_id": next_id,
+    }
+
+
 def find_tracks(prefab):
-    # print(prefab)
-    pass
+    tracks = []
+    for component in prefab["GameObject"]["m_Component"]:
+        switch = try_parse_switch_component(component)
+        if switch is None:
+            continue
+        for track in switch["tracks"]:
+            tracks.append(parse_track(track))
+    return tracks
 
 
 def parse_prefab_component(component_yaml, component_type, component_id):
     loaded = yaml.load(component_yaml, yaml.SafeLoader)
     loaded["__component_id"] = component_id
     loaded["__component_type"] = component_type
+    loaded["__children"] = []
     return loaded
 
 
@@ -74,9 +161,7 @@ def resolve_references(value, component_map, visited_ids):
             file_id = str(value[key]["fileID"])
             if file_id in component_map:
                 component = component_map[file_id]
-                # Prevent circular references
-                if id(component) not in visited_ids:
-                    value[key] = component_map[file_id]
+                value[key] = component
 
         resolve_references(value[key], component_map, visited_ids)
 
@@ -89,19 +174,15 @@ def process_file(file_path):
         print(f"Skipping non-.prefab file: {file_path}")
         return
 
-    file_path = Path(file_path)
-    output_path = file_path.with_suffix(".json")
-
-
-    print(f"Processing file: {file_path} -> {output_path}")
+    print(f"Processing file: {file_path}")
 
     try:
-        with open(file_path, encoding="utf8") as infile, open(output_path, 'w', encoding="utf8") as outfile:
+        with open(file_path, encoding="utf8") as infile:
             prefab = parse_prefab(infile)
-            # print(find_tracks(prefab))
-            json.dump(prefab, outfile, indent=4, ensure_ascii=False)
-    except Exception as e:
-        print(f"Error processing {file_path}: {e}")
+            print(json.dumps(find_tracks(prefab), indent=4))
+    except Exception:
+        print(f"Error processing {file_path}:")
+        traceback.print_exc()
 
 
 def process_directory(directory: str):
