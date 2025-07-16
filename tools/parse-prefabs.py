@@ -11,6 +11,9 @@ import yaml
 #    by dkgl
 #    v1.0
 #
+#   The assets are exported using https://github.com/AssetRipper/AssetRipper in the "Export Unity Project" mode.
+#   Pass the path to the "(...)/ExportedProject/Assets/Resources/track structures" directory as a command line argument to this script.
+#
 
 prefab_header_pattern = re.compile(r"^--- !u!(\d+) &(\d+)$")
 
