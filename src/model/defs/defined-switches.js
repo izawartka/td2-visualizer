@@ -656,7 +656,7 @@ const exportedSwitches = {
 
 const DefinedSwitches = Object.fromEntries(
     Object.entries(exportedSwitches).map(([id, tracks]) => {
-        return [id, SwitchPrefab.parseExported(tracks)];
+        return [id, SwitchPrefab.parseExported(id, tracks)];
     }),
 );
 
