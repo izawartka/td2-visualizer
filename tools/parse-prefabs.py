@@ -14,6 +14,12 @@ import yaml
 #   The assets are exported using https://github.com/AssetRipper/AssetRipper in the "Export Unity Project" mode.
 #   Pass the path to the "(...)/ExportedProject/Assets/Resources/track structures" directory as a command line argument to this script.
 #
+#   This script uses stdout for the output and stderr for log and error messages.
+#
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 
 prefab_header_pattern = re.compile(r"^--- !u!(\d+) &(\d+)$")
 
@@ -182,21 +188,22 @@ def process_file(file_path):
         return
 
     if not file_path.endswith(".prefab"):
-        print(f"Skipping non-.prefab file: {file_path}", file=sys.stderr)
+        eprint(f"Skipping non-.prefab file: {file_path}", file=sys.stderr)
         return
 
+    eprint(f"Processing file: {file_path}")
     try:
         with open(file_path, encoding="utf8") as infile:
             prefab = parse_prefab(infile)
             tracks = find_tracks(prefab)
             format_tracks(Path(file_path).stem, tracks)
     except Exception:
-        print(f"Error processing {file_path}:", file=sys.stderr)
+        eprint(f"Error processing {file_path}:", file=sys.stderr)
         traceback.print_exc(file=sys.stderr)
 
 
 def process_directory(directory: str):
-    print(f"Processing directory: {directory}")
+    eprint(f"Processing directory: {directory}")
     for entry in os.listdir(directory):
         full_path = os.path.join(directory, entry)
         if os.path.isfile(full_path):
@@ -205,7 +212,7 @@ def process_directory(directory: str):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python prase-prefabs.py <file_or_directory> [<file_or_directory> ...]")
+        eprint("Usage: python prase-prefabs.py <file_or_directory> [<file_or_directory> ...]")
         return
 
     for path in sys.argv[1:]:
@@ -214,9 +221,9 @@ def main():
         elif os.path.isfile(path):
             process_file(path)
         else:
-            print(f"Invalid path: {path}")
+            eprint(f"Invalid path: {path}")
 
-    print("Done!")
+    eprint("Done!")
 
 
 if __name__ == "__main__":
