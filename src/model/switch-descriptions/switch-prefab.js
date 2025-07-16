@@ -3,6 +3,7 @@ import SwitchPrefabTrack, {SwitchTrackConnectionType} from "./switch-prefab-trac
 import SceneryParserLog from "../scenery-parser-log";
 import {otherEnd, TrackConnectionEnd} from "../track-connection";
 import Quaternion from "../quaternion";
+import CurveHelper from "../../helpers/curveHelper";
 
 export default class SwitchPrefab {
     tracks = {};
@@ -49,18 +50,6 @@ export default class SwitchPrefab {
         });
     }
 
-    static _calculateCurveEnd(startPos, startAngle, radius, curveLength) {
-        if (radius === 0) {
-            return { endPos: Vector3.fromAngleY(startAngle, curveLength), endAngle: startAngle };
-        }
-        const centerToStart = Vector3.fromAngleY(startAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-        const circleCenter = startPos.add(centerToStart.negate());
-        const endAngle = startAngle -curveLength / radius;
-        const centerToEnd = Vector3.fromAngleY(endAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-        const endPos = circleCenter.add(centerToEnd);
-        return { endPos, endAngle };
-    }
-
     static _exportedConnection(end, ownId, otherId) {
         // Ignore connections to self, TD2 has them in Rkp switches
         if (ownId === otherId) return [];
@@ -100,16 +89,17 @@ export default class SwitchPrefab {
 
     static parseExported(prefabName, exportedTracks) {
         const trackList = exportedTracks.map((exportedTrack, index) => {
-            const rotationQuat = new Quaternion(exportedTrack.rotation.x, exportedTrack.rotation.y, exportedTrack.rotation.z, exportedTrack.rotation.w);
             const startPos = new Vector3(exportedTrack.position.x, exportedTrack.position.y, exportedTrack.position.z);
-            const startToEnd = SwitchPrefab._calculateCurveEnd(Vector3.zero(), 0 , exportedTrack.shape.radius, exportedTrack.shape.length).endPos;
-            const endPos = startPos.add(startToEnd.rotateByQuaternion(rotationQuat));
+            let rotationQuat = new Quaternion(exportedTrack.rotation.x, exportedTrack.rotation.y, exportedTrack.rotation.z, exportedTrack.rotation.w);
             let radius = exportedTrack.shape.radius;
             if (exportedTrack.mirror_x) {
                 startPos.x = -startPos.x;
-                endPos.x = -endPos.x;
                 radius = -radius;
+                rotationQuat = rotationQuat.mirroredX();
             }
+
+            const startToEnd = CurveHelper.calculateCurveEnd(Vector3.zero(), 0, radius, exportedTrack.shape.length).endPos;
+            const endPos = startPos.add(startToEnd.rotateByQuaternion(rotationQuat));
 
             const connections = [
                 ...SwitchPrefab._exportedConnection(TrackConnectionEnd.START, exportedTrack.id, exportedTrack.prev_id),

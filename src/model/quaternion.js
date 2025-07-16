@@ -1,3 +1,5 @@
+import Vector3 from "./vector3";
+
 export default class Quaternion {
     x;
     y;
@@ -21,7 +23,28 @@ export default class Quaternion {
         );
     }
 
+    /**
+     * If this quaternion is a rotation that rotates the vector [0, 0, 1] to the vector [x, y, z],
+     * then this method returns a rotation that rotates the vector [0, 0, 1] to the vector [-x, y, z].
+     */
+    mirroredX() {
+        const v = new Vector3(0, 0, 1).rotateByQuaternion(this);
+        let adjustment;
+        if (Math.abs(v.x) > 1 - 1e-7) {
+            // in this case, denom would be almost 0
+            adjustment = new Quaternion(0, 1, 0, 0);
+        } else {
+            const denom = Math.sqrt(1 - v.x*v.x)
+            adjustment = new Quaternion(0, -v.x * v.z / denom, v.x * v.y / denom, denom)
+        }
+        return adjustment.multiply(this);
+    }
+
     static fromVec(vec) {
         return new Quaternion(vec.x, vec.y, vec.z, 0);
+    }
+
+    static identity() {
+        return new Quaternion(0, 0, 0, 1);
     }
 }
