@@ -49,6 +49,7 @@ const Constants = {
         signalElemsUnknownSignText: true,
         connectTracksFailed: true,
         routeInvalidSegment: true,
+        derailerUnknownDirection: true,
     },
     errors: {
         invalidSceneryInfo: true
