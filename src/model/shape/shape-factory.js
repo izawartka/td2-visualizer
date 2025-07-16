@@ -78,6 +78,28 @@ function rotatedStraight(rotationDeg, rotationCenter, startPos, endPos, angle) {
     );
 }
 
+function betweenPoints(globalRotDeg, globalStart, localStart, localEnd, radius) {
+    const rotationRad = AngleHelper.rotationDegToRad(globalRotDeg);
+
+    const start = globalStart.add(localStart.rotate(rotationRad));
+    const end = globalStart.add(localEnd.rotate(rotationRad));
+
+    if (radius === 0) {
+        return straightRaw(start, end, start.distance(end), start.atanY(end));
+    }
+
+    const length = CurveHelper.curveLength(localStart, localEnd, radius);
+    return arcRaw(
+        start,
+        end,
+        Vector3.zero(), // TODO
+        radius,
+        length,
+        0, // TODO
+        0, // TODO
+    );
+}
+
 const ShapeFactory = {
     fromArcDescription,
     fromBezierDescription,
@@ -85,6 +107,7 @@ const ShapeFactory = {
     straightRaw,
     rotatedArc,
     rotatedStraight,
+    betweenPoints,
 };
 
 export default ShapeFactory;
