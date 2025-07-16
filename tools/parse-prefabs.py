@@ -94,13 +94,38 @@ def try_parse_track_shape(component):
     }
 
 
-def try_parse_track_transform(component):
+def try_parse_track_transform(component, ancestor_level=0):
     if "Transform" not in component:
         return None
     transform = component["Transform"]
+    parent = None
+    if "Transform" in transform["m_Father"]:
+        parent = try_parse_track_transform(transform["m_Father"], True)
+
+    if transform["m_LocalScale"]["x"] not in {-1, 1} or transform["m_LocalScale"]["y"] != 1 or transform["m_LocalScale"]["z"] != 1:
+        eprint("Unexpected scale in track transform")
+
+    if ancestor_level > 0:
+        if transform["m_LocalPosition"]["x"] != 0 or transform["m_LocalPosition"]["y"] != 0 or transform["m_LocalPosition"]["z"] != 0:
+            eprint("Unexpected position change in ancestor track transform")
+        if transform["m_LocalRotation"]["x"] != 0 or transform["m_LocalRotation"]["y"] != 0 or transform["m_LocalRotation"]["z"] != 0 or transform["m_LocalRotation"]["w"] != 1:
+            eprint("Unexpected rotation change in ancestor track transform")
+
+    mirror_x = transform["m_LocalScale"]["x"] == -1
+    if mirror_x and ancestor_level != 1:
+        eprint("Expected mirror_x only in the direct parent of the track transform")
+
+    parent_mirror_x = False
+    if parent is not None:
+        parent_mirror_x = parent["mirror_x"]
+
     return {
         "position": transform["m_LocalPosition"],
         "rotation": transform["m_LocalRotation"],
+        "scale": transform["m_LocalScale"],
+        "mirror_x": mirror_x,
+        "parent_mirror_x": parent_mirror_x,
+        "parent": parent,
     }
 
 
@@ -133,7 +158,9 @@ def parse_track(track):
         "prev_id": prev_id,
         "next_id": next_id,
         "shape": track_shape,
-        "transform": track_transform,
+        "mirror_x": track_transform["parent_mirror_x"],
+        "position": track_transform["position"],
+        "rotation": track_transform["rotation"],
     }
 
 
@@ -177,7 +204,7 @@ def resolve_references(value, component_map, visited_ids):
 
 
 def format_tracks(prefab_name, tracks):
-    print(f"{prefab_name}: [")
+    print(f"\"{prefab_name}\": [")
     for track in tracks:
         print(f"    {json.dumps(track)},")
     print("],")
@@ -204,7 +231,7 @@ def process_file(file_path):
 
 def process_directory(directory: str):
     eprint(f"Processing directory: {directory}")
-    for entry in os.listdir(directory):
+    for entry in sorted(os.listdir(directory)):
         full_path = os.path.join(directory, entry)
         if os.path.isfile(full_path):
             process_file(full_path)
