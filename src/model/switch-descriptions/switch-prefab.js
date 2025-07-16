@@ -8,11 +8,13 @@ import CurveHelper from "../../helpers/curveHelper";
 export default class SwitchPrefab {
     tracks = {};
     isolation_id_offset;
+    prefab_name;
 
-    constructor(tracks, isolation_id_offset) {
+    constructor(tracks, isolation_id_offset, prefab_name) {
         Object.assign(this, {
             tracks,
             isolation_id_offset,
+            prefab_name,
         });
         this._verifyConnections();
     }
@@ -26,7 +28,7 @@ export default class SwitchPrefab {
                     if (!otherTrack) {
                         SceneryParserLog.warn(
                             'switchInvalidInternalConnection',
-                            `In a switch  prefab the referenced internal track ${connection.internalId} in a connection of track ${internalId} not found`,
+                            `In switch prefab ${this.prefab_name} the referenced internal track ${connection.internalId} in a connection of track ${internalId} not found`,
                         );
                         return;
                     }
@@ -37,12 +39,12 @@ export default class SwitchPrefab {
                     if (reverseConnections.length === 0) {
                         SceneryParserLog.warn(
                             'switchInvalidInternalConnection',
-                            `In a switch prefab the internal track ${internalId} is connected to ${connection.internalId} but there is no reverse connection`,
+                            `In switch prefab ${this.prefab_name} the internal track ${internalId} is connected to ${connection.internalId} but there is no reverse connection`,
                         );
                     } else if (reverseConnections.length > 1) {
                         SceneryParserLog.warn(
                             'switchInvalidInternalConnection',
-                            `In a switch prefab the internal track ${connection.internalId} is connected to ${internalId} multiple times`,
+                            `In switch prefab ${this.prefab_name} the internal track ${connection.internalId} is connected to ${internalId} multiple times`,
                         );
                     }
                 }
@@ -66,15 +68,27 @@ export default class SwitchPrefab {
         }]
     }
 
-    static _addMissingConnections(tracks) {
+    static _addMissingConnections(tracks, prefabName) {
+        let addedMissing = 0;
+        let foundExternal = 0;
+
         Object.entries(tracks).forEach(([internalId, track]) => {
             track.connections.forEach((connection) => {
+                if (connection.type === SwitchTrackConnectionType.EXTERNAL) ++foundExternal;
                 if (connection.type !== SwitchTrackConnectionType.INTERNAL) return;
                 const otherTrack = tracks[connection.internalId];
+                if (!otherTrack) {
+                    SceneryParserLog.warn(
+                        'switchInvalidInternalConnection',
+                        `In switch prefab ${prefabName} the referenced internal track ${connection.internalId} in a connection of track ${internalId} not found`,
+                    );
+                    return;
+                }
                 const hasReverseConnection = otherTrack.connections.some(
                     (reverseConnection) => reverseConnection.type === SwitchTrackConnectionType.INTERNAL && reverseConnection.internalId === internalId,
                 );
                 if (!hasReverseConnection) {
+                    ++addedMissing;
                     otherTrack.connections.push({
                         type: SwitchTrackConnectionType.INTERNAL,
                         internalId,
@@ -85,6 +99,31 @@ export default class SwitchPrefab {
                 }
             });
         });
+
+        let expectedMissing = 1;
+        let expectedExternal = 3;
+
+        if (prefabName.startsWith("Crossing")) {
+            expectedMissing = 0;
+            expectedExternal = 4;
+        } else if (prefabName.startsWith("Rkpd ")) {
+            expectedMissing = 4;
+            expectedExternal = 4;
+        } else if (prefabName.startsWith("Rkp ")) {
+            expectedMissing = 2;
+            expectedExternal = 4;
+        }
+
+        if (addedMissing !== expectedMissing) {
+            SceneryParserLog.warn("switchInvalidInternalConnection",
+                `In switch prefab ${prefabName} expected to add ${expectedMissing} internal connections but added ${addedMissing}`,
+            );
+        }
+        if (foundExternal !== expectedExternal) {
+            SceneryParserLog.warn("switchInvalidInternalConnection",
+                `In switch prefab ${prefabName} expected to find ${expectedExternal} external connections but found ${foundExternal}`,
+            );
+        }
     }
 
     static parseExported(prefabName, exportedTracks) {
@@ -112,11 +151,11 @@ export default class SwitchPrefab {
             ];
         });
         const tracks = Object.fromEntries(trackList);
-        SwitchPrefab._addMissingConnections(tracks);
+        SwitchPrefab._addMissingConnections(tracks, prefabName);
 
         const isolationIdOffset = prefabName.startsWith("Rkp") || prefabName.startsWith("Crossing")
             ? Vector3.zero() : new Vector3(0, 0, 6);
 
-        return new SwitchPrefab(tracks, isolationIdOffset);
+        return new SwitchPrefab(tracks, isolationIdOffset, prefabName);
     }
 }
