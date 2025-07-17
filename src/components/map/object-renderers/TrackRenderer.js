@@ -133,8 +133,8 @@ function getTrackColor(object, trackColorMode) {
             }
         case "slope":
             // do not use track gradient unless the slope is different on both ends
-            if (object.start_slope === object.end_slope) {
-                return MiscHelper.getTrackGradient(modeDef.gradient, Math.abs(object.start_slope));
+            if (object.shape.startSlope === object.shape.endSlope) {
+                return MiscHelper.getTrackGradient(modeDef.gradient, Math.abs(object.shape.startSlope));
             }
 
             return `url(#track-slope-${object.id})`;
@@ -150,13 +150,13 @@ function getTrackColor(object, trackColorMode) {
 
 function getTrackDefs(object, trackColorMode) {
     if (trackColorMode !== "slope") return null;
-    if (object.start_slope === object.end_slope) return null;
+    if (object.shape.startSlope === object.shape.endSlope) return null;
 
     const [x1, y1] = object.shape.points.start.toSVGCoords();
     const [x2, y2] = object.shape.points.end.toSVGCoords();
     const gradId = `track-slope-${object.id}`;
-    const startColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.start_slope));
-    const endColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.end_slope));
+    const startColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.shape.startSlope));
+    const endColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.shape.endSlope));
 
     return (
         <defs>

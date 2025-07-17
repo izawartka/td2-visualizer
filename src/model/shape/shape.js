@@ -5,13 +5,17 @@ export default class Shape {
     length;
     startAngleXZ;
     endAngleXZ;
+    startSlope;
+    endSlope;
 
-    constructor(points, length, startAngleXZ, endAngleXZ) {
+    constructor(points, length, startAngleXZ, endAngleXZ, startSlope, endSlope) {
         Object.assign(this, {
             points,
             length,
             startAngleXZ,
             endAngleXZ,
+            startSlope,
+            endSlope,
         });
     }
 

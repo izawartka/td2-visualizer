@@ -4,7 +4,7 @@ import CurveHelper from "../../helpers/curveHelper";
 export default class ShapeBezier extends Shape {
     type = 'ShapeBezier';
 
-    constructor(start, control1, control2, end) {
+    constructor(start, control1, control2, end, startSlope, endSlope) {
         const points = {
             start,
             end,
@@ -18,6 +18,8 @@ export default class ShapeBezier extends Shape {
             start.distance(end), // length, temporary TODO: Calculate actual length of bezier curve
             control1.atanY(start),
             control2.atanY(end),
+            startSlope,
+            endSlope,
         );
     }
 }

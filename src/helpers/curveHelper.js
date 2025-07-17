@@ -18,6 +18,24 @@ function calculateCurveEnd(startPos, startAngle, radius, curveLength) {
     return { endPos, endAngle, circleCenter };
 }
 
+/**
+ * Does the same as calculateCurveEnd with `startPos = Vector3.zero()` and `startAngle = 0`.
+ */
+function calculateCurveEndStandard(radius, curveLength) {
+    if (radius === 0) {
+        return {
+            endPos: new Vector3(0, 0, curveLength),
+            endAngle: 0,
+            circleCenter: null,
+        };
+    }
+    const circleCenter = new Vector3(-radius, 0, 0);
+    const endAngle = -curveLength / radius;
+    const centerToEnd = Vector3.fromAngleY(endAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
+    const endPos = circleCenter.add(centerToEnd);
+    return { endPos, endAngle, circleCenter };
+}
+
 function calculateEndTangentVec(startPos, endPos, centerPos) {
     const centerToStart = startPos.sub(centerPos);
     const centerToEnd = endPos.sub(centerPos);
@@ -64,6 +82,7 @@ function transformStart(globalStart, globalRotationDeg, localStart, localRotatio
 
 const CurveHelper = {
     calculateCurveEnd,
+    calculateCurveEndStandard,
     calculateEndTangentVec,
     arcEndAngleXZ,
     rotatedAngleXZ,
