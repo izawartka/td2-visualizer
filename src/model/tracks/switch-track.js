@@ -10,8 +10,6 @@ export default class SwitchTrack extends Track {
             Vector3.zero(), // ignore rotation for switch tracks
             shape,
             connections, id_station,
-            0, // start_slope
-            0, // end_slope
             id_isolation, prefab_name, maxspeed, derailspeed,
         );
     }
