@@ -2,8 +2,9 @@ import Track from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 import SceneryParserLog from "../scenery-parser-log";
-import ShapeFactory from "../shape/shape-factory";
 import AngleHelper from "../../helpers/angleHelper";
+import ShapeBezier from "../shape/shape-bezier";
+import ShapeArc from "../shape/shape-arc";
 
 export default class StandardTrack extends Track {
     type = "StandardTrack";
@@ -42,7 +43,7 @@ export default class StandardTrack extends Track {
         const [startSlope, endSlope] = StandardTrack._slopesFromText(values[14]);
 
         const rotRad = AngleHelper.rotationDegToRad(rotDeg);
-        const shape = ShapeFactory.fromArcDescription(rotRad, start, radius, length, startSlope, endSlope);
+        const shape = new ShapeArc(rotRad, start, radius, length, startSlope, endSlope);
 
         return new StandardTrack(
             values[1], // id
@@ -64,11 +65,13 @@ export default class StandardTrack extends Track {
 
         const [startSlope, endSlope] = StandardTrack._slopesFromText(values[18]);
 
-        const shape = ShapeFactory.fromBezierDescription(
-            Vector3.fromValuesArray(values, 3), // start
-            Vector3.fromValuesArray(values, 6), // control1
-            Vector3.fromValuesArray(values, 9), // end
-            Vector3.fromValuesArray(values, 12), // control2
+        const start = Vector3.fromValuesArray(values, 3);
+        const control1 = start.add(Vector3.fromValuesArray(values, 6));
+        const end = Vector3.fromValuesArray(values, 9);
+        const control2 = end.add(Vector3.fromValuesArray(values, 12));
+
+        const shape = new ShapeBezier(
+            start, control1, control2, end,
             startSlope,
             endSlope,
         );

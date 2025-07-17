@@ -3,15 +3,11 @@ import CurveHelper from "../../helpers/curveHelper";
 import Vector3 from "../vector3";
 
 export default class ShapeArc extends Shape {
-    type = 'ShapeArc';
+    type;
     radius;
     rotRad;
 
-    constructor(startPos, rotRad, radius, length, startSlope, endSlope) {
-        if (radius === 0) {
-            console.error('ShapeArc created with radius 0');
-        }
-
+    constructor(rotRad, startPos, radius, length, startSlope, endSlope) {
         const points = {
             start: startPos,
             end: undefined,
@@ -19,8 +15,11 @@ export default class ShapeArc extends Shape {
         };
 
         const startAngleXZ = rotRad.y;
-        // Assumes the arc is flat on the XZ plane
-        const endAngleXZ = rotRad.y - length / radius;
+        let endAngleXZ = startAngleXZ;
+        if (radius !== 0) {
+            // Assumes the arc is flat on the XZ plane
+            endAngleXZ -= length / radius;
+        }
 
         super(
             points,
@@ -31,6 +30,7 @@ export default class ShapeArc extends Shape {
             endSlope,
         );
         Object.assign(this, {
+            type: radius === 0 ? 'ShapeStraight' : 'ShapeArc',
             radius,
             rotRad,
         });

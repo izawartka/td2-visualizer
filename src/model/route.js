@@ -3,8 +3,8 @@ import Vector3 from "./vector3";
 import SceneryParserLog from "./scenery-parser-log";
 import RouteTrack from "./tracks/route-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
-import ShapeFactory from "./shape/shape-factory";
 import CurveHelper from "../helpers/curveHelper";
+import ShapeArc from "./shape/shape-arc";
 
 export default class Route extends SceneryObject {
     track_count;
@@ -67,7 +67,7 @@ export default class Route extends SceneryObject {
                 trackLength *= (trackRadius / radius);
             }
 
-            return ShapeFactory.fromArcDescription(rotRad, startPoint, trackRadius, trackLength, 0, 0);
+            return new ShapeArc(rotRad, startPoint, trackRadius, trackLength, 0, 0);
         });
 
         const { endPos: centerEndPos, endAngle } = CurveHelper.calculateCurveEnd(this.end_center, this.end_angle_rad, radius, length);

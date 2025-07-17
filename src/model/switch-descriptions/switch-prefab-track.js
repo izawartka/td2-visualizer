@@ -1,5 +1,5 @@
-import ShapeFactory from "../shape/shape-factory";
 import CurveHelper from "../../helpers/curveHelper";
+import ShapeArc from "../shape/shape-arc";
 
 export const SwitchTrackConnectionType = {
     INTERNAL: Symbol('SwitchTrackConnectionType.INTERNAL'),
@@ -31,6 +31,6 @@ export default class SwitchPrefabTrack {
 
     toShape(switchRotDeg, switchStart) {
         const { startPos, rotationRad } = CurveHelper.transformStart(switchStart, switchRotDeg, this.localStartPos, this.localRotationQuat);
-        return ShapeFactory.fromArcDescription(rotationRad, startPos, this.radius, this.length, this.startSlope, this.endSlope);
+        return new ShapeArc(rotationRad, startPos, this.radius, this.length, this.startSlope, this.endSlope);
     }
 }
