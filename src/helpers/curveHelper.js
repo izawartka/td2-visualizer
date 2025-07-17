@@ -54,13 +54,11 @@ function transformStart(globalStart, globalRotationDeg, localStart, localRotatio
     const startPos = globalStart.add(localStart.rotate(globalRotationRad));
     const rotationQuat = Quaternion.fromEulerAnglesRad(globalRotationRad).multiply(localRotationQuat);
     const rotationRad = rotationQuat.toEulerAnglesRad();
-    const rotationDeg = AngleHelper.rotationRadToDeg(rotationRad);
 
     return {
         startPos,
         rotationQuat,
         rotationRad,
-        rotationDeg,
     };
 }
 

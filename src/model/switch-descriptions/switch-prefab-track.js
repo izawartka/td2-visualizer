@@ -30,7 +30,7 @@ export default class SwitchPrefabTrack {
     }
 
     toShape(switchRotDeg, switchStart) {
-        const { startPos, rotationDeg } = CurveHelper.transformStart(switchStart, switchRotDeg, this.localStartPos, this.localRotationQuat);
-        return ShapeFactory.fromArcDescription(rotationDeg, startPos, this.radius, this.length, this.startSlope, this.endSlope);
+        const { startPos, rotationRad } = CurveHelper.transformStart(switchStart, switchRotDeg, this.localStartPos, this.localRotationQuat);
+        return ShapeFactory.fromArcDescription(rotationRad, startPos, this.radius, this.length, this.startSlope, this.endSlope);
     }
 }

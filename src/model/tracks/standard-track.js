@@ -3,6 +3,7 @@ import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 import SceneryParserLog from "../scenery-parser-log";
 import ShapeFactory from "../shape/shape-factory";
+import AngleHelper from "../../helpers/angleHelper";
 
 export default class StandardTrack extends Track {
     type = "StandardTrack";
@@ -36,7 +37,8 @@ export default class StandardTrack extends Track {
         const radius = parseFloat(values[10]);
         const [startSlope, endSlope] = Track.slopesFromText(values[14]);
 
-        const shape = ShapeFactory.fromArcDescription(rotDeg, start, radius, length, startSlope, endSlope);
+        const rotRad = AngleHelper.rotationDegToRad(rotDeg);
+        const shape = ShapeFactory.fromArcDescription(rotRad, start, radius, length, startSlope, endSlope);
 
         return new StandardTrack(
             values[1], // id

@@ -3,11 +3,11 @@ import ShapeArc from "./shape-arc";
 import Vector3 from "../vector3";
 import CurveHelper from "../../helpers/curveHelper";
 import ShapeStraight from "./shape-straight";
-import AngleHelper from "../../helpers/angleHelper";
 
-function fromArcDescription(rotDeg, startPos, radius, length, startSlope, endSlope) {
-    const rotRad = AngleHelper.rotationDegToRad(rotDeg);
-
+/**
+ * Creates ShapeStraight if the radius is 0, and a ShapeArc otherwise.
+ */
+function fromArcDescription(rotRad, startPos, radius, length, startSlope, endSlope) {
     // TODO: Verify how slope changes work with rotations
     // adjust end point by the slope
     let yChange = 0;
@@ -47,67 +47,9 @@ function fromBezierDescription(startPos, startToControl1, endPos, endToControl2)
     );
 }
 
-function arcRaw(startPos, endPos, circleCenter, radius, length, startAngleXZ, endAngleXZ) {
-    return new ShapeArc(startPos, endPos, circleCenter, radius, length, startAngleXZ, endAngleXZ);
-}
-
-function straightRaw(startPos, endPos, length, angleXZ) {
-    return new ShapeStraight(startPos, endPos, length, angleXZ);
-}
-
-function rotatedArc(rotationDeg, rotationCenter, startAngle, startPos, endAngle, endPos, circleCenter, radius, length) {
-    const rotationRad = AngleHelper.rotationDegToRad(rotationDeg);
-    return new ShapeArc(
-        startPos.rotate(rotationRad).add(rotationCenter),
-        endPos.rotate(rotationRad).add(rotationCenter),
-        circleCenter.rotate(rotationRad).add(rotationCenter),
-        radius,
-        length,
-        CurveHelper.rotatedAngleXZ(rotationRad, startAngle) + Math.PI,
-        CurveHelper.rotatedAngleXZ(rotationRad, endAngle),
-    );
-}
-
-function rotatedStraight(rotationDeg, rotationCenter, startPos, endPos, angle) {
-    const rotationRad = AngleHelper.rotationDegToRad(rotationDeg);
-    return straightRaw(
-        startPos.rotate(rotationRad).add(rotationCenter),
-        endPos.rotate(rotationRad).add(rotationCenter),
-        startPos.distance(endPos),
-        CurveHelper.rotatedAngleXZ(rotationRad, rotationCenter, angle),
-    );
-}
-
-function betweenPoints(globalRotDeg, globalStart, localStart, localEnd, radius) {
-    const rotationRad = AngleHelper.rotationDegToRad(globalRotDeg);
-
-    const start = globalStart.add(localStart.rotate(rotationRad));
-    const end = globalStart.add(localEnd.rotate(rotationRad));
-
-    if (radius === 0) {
-        return straightRaw(start, end, start.distance(end), start.atanY(end));
-    }
-
-    const length = CurveHelper.curveLength(localStart, localEnd, radius);
-    return arcRaw(
-        start,
-        end,
-        Vector3.zero(), // TODO
-        radius,
-        length,
-        0, // TODO
-        0, // TODO
-    );
-}
-
 const ShapeFactory = {
     fromArcDescription,
     fromBezierDescription,
-    arcRaw,
-    straightRaw,
-    rotatedArc,
-    rotatedStraight,
-    betweenPoints,
 };
 
 export default ShapeFactory;
