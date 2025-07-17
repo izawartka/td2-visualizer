@@ -4,15 +4,23 @@ import Constants from "../../../helpers/constants";
 import {ElectrificationStatus} from "../../../model/electrification-status";
 import MiscHelper from "../../../helpers/miscHelper";
 import {setHoveredTrack, unsetHoveredTrack} from "../../../services/trackHoverInfoService";
+import ZoomPanContext from "../../../contexts/ZoomPanContext";
+import AngleHelper from "../../../helpers/angleHelper";
 
 export default function TrackRenderer(props) {
     const {object} = props;
     const {trackColorMode} = useContext(SettingsContext);
+    const {alignView} = useContext(ZoomPanContext);
+
+    const onAlign = (event) => {
+        alignView(AngleHelper.radToDeg(object.shape.startAngleXZ), event);
+    };
 
     return (
         <MemoizedTrackRenderer
             object={object}
             trackColorMode={trackColorMode}
+            onAlign={onAlign}
         />
     );
 }
@@ -20,7 +28,7 @@ export default function TrackRenderer(props) {
 const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 
 function StatelessTrackRenderer(props) {
-    const {object, trackColorMode} = props;
+    const {object, trackColorMode, onAlign} = props;
 
     if (object.shape.points.start.distanceSq(object.shape.points.end) < 0.001) {
         return null;
@@ -32,6 +40,14 @@ function StatelessTrackRenderer(props) {
 
     const onMouseLeave = () => {
         unsetHoveredTrack(null);
+    };
+
+    const onClick = (event) => {
+        if (object.shape.type !== 'ShapeStraight') return;
+        if (event.detail === 2) {
+            event.preventDefault();
+            onAlign(event);
+        }
     };
 
     const path = getTrackPath(object.shape);
@@ -52,6 +68,7 @@ function StatelessTrackRenderer(props) {
                 className="track"
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
+                onClick={onClick}
             />
         </g>
     );

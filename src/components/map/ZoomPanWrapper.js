@@ -2,7 +2,9 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import './ZoomPanWrapper.css';
 import Constants from '../../helpers/constants';
 import { useZoomPanSubscriber, viewBox$, clientRect$, camera$ } from '../../hooks/useZoomPubSub';
-import { mapRotation$ } from '../../services/mapRotationService';
+import {mapRotation$} from '../../services/mapRotationService';
+import ZoomPanContext from "../../contexts/ZoomPanContext";
+import AngleHelper from "../../helpers/angleHelper";
 
 export default function ZoomPanWrapper({children}) {
     const wrapperRef = useRef(null);
@@ -18,13 +20,13 @@ export default function ZoomPanWrapper({children}) {
         const { x, y, w, h } = viewBoxRef.current;
         return `${x} ${y} ${w} ${h}`;
     };
-    
+
     const updateViewBox = useCallback((viewBox) => {
         viewBoxRef.current = viewBox;
         svgRef.current.setAttribute('viewBox', getViewBoxString());
         viewBox$.next(viewBoxRef.current);
     }, []);
-    
+
     const getCameraTransformString = () => {
         const { x, y, zoom, rotation } = cameraRef.current;
 
@@ -42,7 +44,7 @@ export default function ZoomPanWrapper({children}) {
             mapRotation$.next(cameraRef.current.rotation);
         });
     }, []);
-    
+
     const handleResize = useCallback(() => {
         const rect = wrapperRef.current?.getBoundingClientRect();
         if (!rect) return;
@@ -66,13 +68,13 @@ export default function ZoomPanWrapper({children}) {
         const cy = e.movementY / cameraRef.current.zoom;
         const cos = Math.cos(cameraRef.current.rotation * Math.PI / 180);
         const sin = Math.sin(cameraRef.current.rotation * Math.PI / 180);
-        
+
         cameraRef.current.x -= cx * cos + cy * sin;
         cameraRef.current.y -= cy * cos - cx * sin;
 
         scheduleCameraUpdate();
     };
-    
+
     // update viewbox when the window resizes
     useEffect(() => {
         window.addEventListener('resize', handleResize);
@@ -81,14 +83,14 @@ export default function ZoomPanWrapper({children}) {
             window.removeEventListener('resize', handleResize);
         };
     }, [handleResize]);
-    
+
     const centerOn = useCallback((cx, cy) => {
         cameraRef.current.x = cx;
         cameraRef.current.y = cy;
 
         scheduleCameraUpdate();
     }, [scheduleCameraUpdate]);
-    
+
     // Subscribe to any external "center" calls
     useZoomPanSubscriber(centerOn);
 
@@ -125,7 +127,7 @@ export default function ZoomPanWrapper({children}) {
 
         scheduleCameraUpdate();
     };
-    
+
     const onMouseDown = (e) => {
         e.preventDefault();
         isMouseDownRef.current = true;
@@ -146,22 +148,36 @@ export default function ZoomPanWrapper({children}) {
         e.preventDefault();
         isMouseDownRef.current = false;
     };
-    
+
+    // `event` could be used in the future to perform the rotation around the click position
+    const alignView = (angleDeg, _event) => {
+        // Find such relative rotation in the range [-45, 45] degrees that aligns the track
+        // with y rotation angleDeg to the X or Y screen axis.
+        const angleDifference = -angleDeg - cameraRef.current.rotation;
+        let deltaAngle = AngleHelper.normalizeDegAngle(angleDifference, 90);
+        if (deltaAngle > 45) deltaAngle -= 90;
+
+        cameraRef.current.rotation += deltaAngle;
+        scheduleCameraUpdate();
+    };
+
     return (
-        <div className="zoom-pan-wrapper" ref={wrapperRef}>
-            <svg
-                ref={svgRef}
-                viewBox={getViewBoxString()}
-                onWheel={onWheel}
-                onMouseDown={onMouseDown}
-                onMouseMove={onMouseMove}
-                onMouseUp={onMouseUp}
-                onMouseLeave={onMouseUp}
-            >
-                <g ref={cameraWrapperRef} transform={getCameraTransformString()}>
-                    {children}
-                </g>
-            </svg>
-        </div>
+        <ZoomPanContext.Provider value={{alignView}}>
+            <div className="zoom-pan-wrapper" ref={wrapperRef}>
+                <svg
+                    ref={svgRef}
+                    viewBox={getViewBoxString()}
+                    onWheel={onWheel}
+                    onMouseDown={onMouseDown}
+                    onMouseMove={onMouseMove}
+                    onMouseUp={onMouseUp}
+                    onMouseLeave={onMouseUp}
+                >
+                    <g ref={cameraWrapperRef} transform={getCameraTransformString()}>
+                        {children}
+                    </g>
+                </svg>
+            </div>
+        </ZoomPanContext.Provider>
     );
 }

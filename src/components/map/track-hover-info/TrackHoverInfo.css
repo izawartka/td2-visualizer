@@ -12,8 +12,18 @@
     padding: 1em;
 }
 
+.track-hover-info-popup table {
+    border-spacing: 2px;
+}
+
 .track-hover-info-popup th {
     text-align: start;
     padding-right: 2em;
+    color: #888;
+}
+
+.track-hover-info-popup__align {
+    margin-top: 1.5em;
+    padding: 2px;
     color: #888;
 }

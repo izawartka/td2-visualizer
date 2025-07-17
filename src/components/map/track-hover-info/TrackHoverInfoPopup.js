@@ -26,6 +26,9 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupSwitchItems track={track} />
                 </tbody>
             </table>
+            {track.shape.type === 'ShapeStraight' && <div className="track-hover-info-popup__align">
+                Double click to align view
+            </div>}
         </div>
     );
 }
