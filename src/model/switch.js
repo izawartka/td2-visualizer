@@ -5,6 +5,7 @@ import Vector3 from "./vector3.js";
 import DefinedSwitches from "./defs/defined-switches.js";
 import {SwitchTrackConnectionType} from "./switch-descriptions/switch-prefab-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import AngleHelper from "../helpers/angleHelper";
 
 export default class Switch extends SceneryObject {
     model;
@@ -86,7 +87,7 @@ export default class Switch extends SceneryObject {
         this.tracks = tracks;
         this.def = def;
 
-        const rotRad = this.rot.multiply(Math.PI / 180);
+        const rotRad = AngleHelper.rotationDegToRad(this.rot);
         this.isolation_id_pos = this.pos.add(def.isolation_id_offset.rotate(rotRad));
         super.applyObject(scenery);
     }
@@ -144,15 +145,17 @@ export default class Switch extends SceneryObject {
             }
         });
 
+        const shape = trackDef.toShape(this.rot, this.pos);
+
         const trackObj = new SwitchTrack(
             trackId,
-            trackDef.toShape(this.rot, this.pos),
+            shape,
             connections,
             this.id_switch,
             this.id_isolation,
             this.track_prefab_name,
             this.maxspeed,
-            this.derailspeed
+            this.derailspeed,
         );
 
         trackObj.switch = this;

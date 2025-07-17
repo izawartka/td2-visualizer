@@ -3,7 +3,6 @@ import SwitchPrefabTrack, {SwitchTrackConnectionType} from "./switch-prefab-trac
 import SceneryParserLog from "../scenery-parser-log";
 import {otherEnd, TrackConnectionEnd} from "../track-connection";
 import Quaternion from "../quaternion";
-import CurveHelper from "../../helpers/curveHelper";
 
 export default class SwitchPrefab {
     tracks = {};
@@ -128,17 +127,14 @@ export default class SwitchPrefab {
 
     static parseExported(prefabName, exportedTracks) {
         const trackList = exportedTracks.map((exportedTrack, index) => {
-            const startPos = new Vector3(exportedTrack.position.x, exportedTrack.position.y, exportedTrack.position.z);
-            let rotationQuat = new Quaternion(exportedTrack.rotation.x, exportedTrack.rotation.y, exportedTrack.rotation.z, exportedTrack.rotation.w);
+            const localStartPos = new Vector3(exportedTrack.position.x, exportedTrack.position.y, exportedTrack.position.z);
+            let localRotationQuat = new Quaternion(exportedTrack.rotation.x, exportedTrack.rotation.y, exportedTrack.rotation.z, exportedTrack.rotation.w);
             let radius = exportedTrack.shape.radius;
             if (exportedTrack.mirror_x) {
-                startPos.x = -startPos.x;
+                localStartPos.x = -localStartPos.x;
                 radius = -radius;
-                rotationQuat = rotationQuat.mirroredX();
+                localRotationQuat = localRotationQuat.mirroredX();
             }
-
-            const startToEnd = CurveHelper.calculateCurveEnd(Vector3.zero(), 0, radius, exportedTrack.shape.length).endPos;
-            const endPos = startPos.add(startToEnd.rotateByQuaternion(rotationQuat));
 
             const connections = [
                 ...SwitchPrefab._exportedConnection(TrackConnectionEnd.START, exportedTrack.id, exportedTrack.prev_id),
@@ -147,7 +143,7 @@ export default class SwitchPrefab {
 
             return [
                 exportedTrack.id,
-                new SwitchPrefabTrack(startPos, endPos, radius, index, connections),
+                new SwitchPrefabTrack(localStartPos, localRotationQuat, radius, exportedTrack.shape.length, exportedTrack.shape.slope1, exportedTrack.shape.slope2, index, connections),
             ];
         });
         const tracks = Object.fromEntries(trackList);

@@ -30,7 +30,7 @@ export default class Quaternion {
     mirroredX() {
         const v = new Vector3(0, 0, 1).rotateByQuaternion(this);
         let adjustment;
-        if (Math.abs(v.x) > 1 - 1e-7) {
+        if (Math.abs(v.x) > 1 - 1e-6) {
             // in this case, denom would be almost 0
             adjustment = new Quaternion(0, 1, 0, 0);
         } else {
@@ -42,6 +42,44 @@ export default class Quaternion {
 
     static fromVec(vec) {
         return new Quaternion(vec.x, vec.y, vec.z, 0);
+    }
+
+    /**
+     * Convert a Unity rotation vector (extrinsic z-x-y) in radians to a quaternion.
+     */
+    static fromEulerAnglesRad(vec) {
+        const cosX = Math.cos(vec.x/2);
+        const sinX = Math.sin(vec.x/2);
+        const cosY = Math.cos(vec.y/2);
+        const sinY = Math.sin(vec.y/2);
+        const cosZ = Math.cos(vec.z/2);
+        const sinZ = Math.sin(vec.z/2);
+
+        return new Quaternion(
+            cosY * sinX * cosZ + sinY * cosX * sinZ,
+            sinY * cosX * cosZ - cosY * sinX * sinZ,
+            cosY * cosX * sinZ - sinY * sinX * cosZ,
+            cosY * cosX * cosZ + sinY * sinX * sinZ,
+        );
+    }
+
+    toEulerAnglesRad() {
+        const sinX = Math.min(Math.max(-1, 2 * (this.w * this.x - this.y * this.z)), 1);
+        const xRad = Math.asin(sinX);
+        const yRad = Math.atan2(
+            2 * (this.x * this.z + this.w * this.y),
+            1 - 2 * (this.x * this.x + this.y * this.y)
+        );
+
+        if (Math.abs(sinX) > 1 - 1e-6) {
+            return new Vector3(xRad, yRad, 0);
+        }
+
+        const zRad = Math.atan2(
+            2 * (this.x * this.y + this.w * this.z),
+            1 - 2 * (this.x * this.x + this.z * this.z)
+        );
+        return new Vector3(xRad, yRad, zRad);
     }
 
     static identity() {

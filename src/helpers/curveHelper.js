@@ -1,4 +1,6 @@
 import Vector3 from "../model/vector3";
+import Quaternion from "../model/quaternion";
+import AngleHelper from "./angleHelper";
 
 function calculateCurveEnd(startPos, startAngle, radius, curveLength) {
     if (radius === 0) {
@@ -47,6 +49,21 @@ function bezierPointAtT(start, control1, control2, end, t) {
     return b1.lerp(b2, t);
 }
 
+function transformStart(globalStart, globalRotationDeg, localStart, localRotationQuat) {
+    const globalRotationRad = AngleHelper.rotationDegToRad(globalRotationDeg);
+    const startPos = globalStart.add(localStart.rotate(globalRotationRad));
+    const rotationQuat = Quaternion.fromEulerAnglesRad(globalRotationRad).multiply(localRotationQuat);
+    const rotationRad = rotationQuat.toEulerAnglesRad();
+    const rotationDeg = AngleHelper.rotationRadToDeg(rotationRad);
+
+    return {
+        startPos,
+        rotationQuat,
+        rotationRad,
+        rotationDeg,
+    };
+}
+
 const CurveHelper = {
     calculateCurveEnd,
     calculateEndTangentVec,
@@ -54,6 +71,7 @@ const CurveHelper = {
     rotatedAngleXZ,
     curveLength,
     bezierPointAtT,
+    transformStart,
 };
 
 export default CurveHelper;
