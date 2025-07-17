@@ -4,23 +4,29 @@ import Constants from "../../../helpers/constants";
 import { ElectrificationStatus } from "../../../model/electrification-status";
 import MiscHelper from "../../../helpers/miscHelper";
 import { setHoveredTrack, unsetHoveredTrack } from "../../../services/trackHoverInfoService";
+import ZoomPanContext from "../../../contexts/ZoomPanContext";
 
 export default function TrackRenderer(props) {
   const { object } = props;
   const { trackColorMode } = useContext(SettingsContext);
+    const {alignView} = useContext(ZoomPanContext);
+
+    const onAlign = (event) => {
+        alignView(object.rot.y, event);
+    };
 
   return (
     <MemoizedTrackRenderer
       object={object}
       trackColorMode={trackColorMode}
-    />
+    onAlign={onAlign}/>
   );
 }
 
 const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 
 function StatelessTrackRenderer(props) {
-  const { object, trackColorMode } = props;
+  const { object, trackColorMode , onAlign} = props;
 
   if (object.points.start.distanceSq(object.points.end) < 0.001) {
       return null;
@@ -34,7 +40,15 @@ function StatelessTrackRenderer(props) {
     unsetHoveredTrack(null);
   };
 
-  const path = getTrackPath(object);
+  const onClick = (event) => {
+        if (object.type !== 'StandardTrack' || object.r !== 0) return;
+        if (event.detail === 2) {
+            event.preventDefault();
+            onAlign(event);
+        }
+    };
+
+    const path = getTrackPath(object);
   const color = getTrackColor(object, trackColorMode);
   const defs = getTrackDefs(object, trackColorMode);
 
@@ -52,7 +66,7 @@ function StatelessTrackRenderer(props) {
         className="track"
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-      />
+      onClick={onClick}/>
     </g>
   );
 }
