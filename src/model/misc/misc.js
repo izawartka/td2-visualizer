@@ -1,5 +1,5 @@
-import SceneryObject from "./scenery-object";
-import Vector3 from "./vector3";
+import SceneryObject from "../scenery-object";
+import Vector3 from "../vector3";
 
 export default class Misc extends SceneryObject {
     prefab_name;
