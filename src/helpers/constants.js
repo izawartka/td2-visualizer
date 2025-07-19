@@ -17,7 +17,7 @@ const Constants = {
         attachSigns: true,
         attachSignsNeedsSameTrack: false,
         attachSignsMaxDistanceZ: 1.0,
-        attachSignsMaxDistanceX: 0.2,
+        attachSignsMaxDistanceX: 0.3,
         attachSignsGridSize: 10,
         logAttachedSigns: false,
         skipBaseMisc: true
