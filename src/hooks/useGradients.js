@@ -4,8 +4,8 @@ import Constants from "../helpers/constants";
 class Gradients {
     gradientSettings;
 
-    constructor(trackElevationBounds) {
-        this.trackElevationBounds = trackElevationBounds;
+    constructor(scenery) {
+        this.scenery = scenery;
         this.gradientSettings = Object.fromEntries(
             Object.entries(Constants.trackColorModes).map(
                 ([mode, def]) => [mode, this._createGradientSettings(mode, def)],
@@ -15,10 +15,10 @@ class Gradients {
 
     _getMinMax(trackColorMode) {
         if (trackColorMode === 'elevation') {
-            if (!this.trackElevationBounds) return null;
-            if (this.trackElevationBounds.minY > this.trackElevationBounds.maxY) return null;
+            if (!this.scenery) return null;
+            if (this.scenery.trackElevationBounds.minY > this.scenery.trackElevationBounds.maxY) return null;
             // Ensure min and max values are even so that the min, max and middle values are integers
-            return [Math.floor(this.trackElevationBounds.minY/2)*2, Math.ceil(this.trackElevationBounds.maxY/2)*2];
+            return [Math.floor(this.scenery.trackElevationBounds.minY/2)*2, Math.ceil(this.scenery.trackElevationBounds.maxY/2)*2];
         }
         return null;
     }
@@ -62,7 +62,5 @@ class Gradients {
 }
 
 export function useGradients(scenery) {
-    return useMemo(() => {
-        return new Gradients(scenery?.trackElevationBounds ?? null);
-    }, [scenery?.trackElevationBounds?.minY, scenery?.trackElevationBounds?.maxY]);
+    return useMemo(() => new Gradients(scenery), [scenery]);
 }
