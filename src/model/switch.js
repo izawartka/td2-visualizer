@@ -29,8 +29,10 @@ export default class Switch extends SceneryObject {
         Object.assign(this, {
             model,
             data,
-            id_switch, id_isolation,
-            maxspeed, derailspeed,
+            id_switch,
+            id_isolation,
+            maxspeed,
+            derailspeed,
             track_prefab_name
         });
 
@@ -106,24 +108,16 @@ export default class Switch extends SceneryObject {
         return ids;
     }
 
-    _createSwitchTrackFromDef(scenery, switchDef, trackDef, ids) {
-        if (trackDef.dataIndex >= ids.length) {
-            SceneryParserLog.warn(
-                'switchMissingTrackId',
-                `Switch ${this.id} with model ${this.bare_model} is missing an id for the track at index ${trackDef.dataIndex}`,
-            );
-            return null;
-        }
-        const [trackId, prevId, nextId] = ids[trackDef.dataIndex];
-
+    _createTrackConnections(switchDef, trackDef, ids) {
         const connections = [];
+        const [_, prevId, nextId] = ids[trackDef.dataIndex];
         trackDef.connections.forEach((connection) => {
             if (connection.type === SwitchTrackConnectionType.INTERNAL) {
                 const otherTrackDef = switchDef.tracks[connection.internalId];
                 if (!otherTrackDef) {
                     SceneryParserLog.warn(
                         'switchMissingTrackId',
-                        `Switch prefab for model with model ${this.bare_model} of track ${this.id} does not have the internal track ${connection.internalId}`,
+                        `Switch ${this.id} with model ${this.bare_model} does not have the internal track ${connection.internalId}`,
                     );
                     return;
                 }
@@ -145,6 +139,19 @@ export default class Switch extends SceneryObject {
                 }
             }
         });
+        return connections;
+    }
+
+    _createSwitchTrackFromDef(scenery, switchDef, trackDef, ids) {
+        if (trackDef.dataIndex >= ids.length) {
+            SceneryParserLog.warn(
+                'switchMissingTrackId',
+                `Switch ${this.id} with model ${this.bare_model} is missing an id for the track at index ${trackDef.dataIndex}`,
+            );
+            return null;
+        }
+        const trackId = ids[trackDef.dataIndex][0];
+        const connections = this._createTrackConnections(switchDef, trackDef, ids);
 
         const { startPos, rotationRad } = CurveHelper.transformStart(this.pos, this.rot, trackDef.pos, trackDef.rot);
         const shape = new ShapeArc(rotationRad, startPos, trackDef.radius, trackDef.length, trackDef.slope1, trackDef.slope2);
