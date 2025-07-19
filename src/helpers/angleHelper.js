@@ -34,12 +34,21 @@ function normalizeDegAngle(angle) {
     }
 }
 
+function normalizeDegVector(vector) {
+    return new Vector3(
+        normalizeDegAngle(vector.x),
+        normalizeDegAngle(vector.y),
+        normalizeDegAngle(vector.z)
+    )
+}
+
 const AngleHelper = {
     degToRad,
     radToDeg,
     rotationDegToRad,
     rotationRadToDeg,
     normalizeDegAngle,
+    normalizeDegVector
 }
 
 export default AngleHelper;

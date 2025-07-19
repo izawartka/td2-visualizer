@@ -7,7 +7,6 @@ export default class Scenery
     spawnPoints = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
     electrificationResolved = ElectrificationResolutionStatus.NOT_RESOLVED;
-    static nextMiscId = 1;
 
     getBounds () {
         return { ...this.bounds };

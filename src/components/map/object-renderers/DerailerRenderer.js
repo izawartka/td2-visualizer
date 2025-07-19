@@ -5,9 +5,14 @@ export default function DerailerRenderer(props) {
     const { object } = props;
     const [x, y] = object.pos.toSVGCoords();
 
+    let icon_transform = `translate(-2.835, -2.835)`;
+    if (object.is_left) {
+        icon_transform = 'scale(-1, 1) ' + icon_transform;
+    }
+
     return (
         <g className="derailer" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
-            <g className="derailer-icon" transform={`translate(-2.835, -2.835)`}>
+            <g className="derailer-icon" transform={icon_transform}>
                 <ReactSVG
                     src={`${process.env.PUBLIC_URL}/assets/derailer.svg`}
                     wrapper='svg'
