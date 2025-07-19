@@ -1,6 +1,5 @@
 import Vector3 from "../vector3";
-import SwitchPrefabTrack, {SwitchTrackConnectionType} from "./switch-prefab-track";
-import SceneryParserLog from "../scenery-parser-log";
+import SwitchPrefabTrack from "./switch-prefab-track";
 import MiscHelper from "../../helpers/miscHelper";
 
 export default class SwitchPrefab {
@@ -13,40 +12,6 @@ export default class SwitchPrefab {
             tracks,
             isolation_id_offset,
             prefab_name,
-        });
-        this._verifyConnections();
-    }
-
-    _verifyConnections() {
-        // TODO: Should SceneryParserLog be used here?
-        Object.entries(this.tracks).forEach(([internalId, track]) => {
-            track.connections.forEach((connection) => {
-                if (connection.type === SwitchTrackConnectionType.INTERNAL) {
-                    const otherTrack = this.tracks[connection.internalId];
-                    if (!otherTrack) {
-                        SceneryParserLog.warn(
-                            'switchInvalidInternalConnection',
-                            `In switch prefab ${this.prefab_name} the referenced internal track ${connection.internalId} in a connection of track ${internalId} not found`,
-                        );
-                        return;
-                    }
-
-                    const reverseConnections = otherTrack.connections.filter(
-                        (otherConnection) => otherConnection.type === SwitchTrackConnectionType.INTERNAL && otherConnection.internalId === internalId,
-                    );
-                    if (reverseConnections.length === 0) {
-                        SceneryParserLog.warn(
-                            'switchInvalidInternalConnection',
-                            `In switch prefab ${this.prefab_name} the internal track ${internalId} is connected to ${connection.internalId} but there is no reverse connection`,
-                        );
-                    } else if (reverseConnections.length > 1) {
-                        SceneryParserLog.warn(
-                            'switchInvalidInternalConnection',
-                            `In switch prefab ${this.prefab_name} the internal track ${connection.internalId} is connected to ${internalId} multiple times`,
-                        );
-                    }
-                }
-            });
         });
     }
 
