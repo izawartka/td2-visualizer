@@ -32,8 +32,6 @@ export default class Platform extends Misc {
             values[9] // name
         );
 
-        object.miscGroups = [...miscGroups];
-
         return object;
     }
 
@@ -41,6 +39,7 @@ export default class Platform extends Misc {
         let def = DefinedPlatforms[prefabName];
         if (!def) {
             SceneryParserLog.warn('platformUndefinedPrefabName', `Platform ${name} has an undefined prefab name ${prefabName}`);
+            return null;
         }
 
         if(def.alias) return Platform.getDef(name, def.alias);
