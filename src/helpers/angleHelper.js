@@ -1,3 +1,5 @@
+import Vector3 from "../model/vector3";
+
 function degToRad(angle) {
     return angle * (Math.PI / 180);
 }
@@ -16,10 +18,19 @@ function normalizeDegAngle(angle) {
     }
 }
 
+function normalizeDegVector(vector) {
+    return new Vector3(
+        normalizeDegAngle(vector.x),
+        normalizeDegAngle(vector.y),
+        normalizeDegAngle(vector.z)
+    )
+}
+
 const AngleHelper = {
     degToRad,
     radToDeg,
     normalizeDegAngle,
+    normalizeDegVector
 }
 
 export default AngleHelper;

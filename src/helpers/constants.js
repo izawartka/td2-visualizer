@@ -20,6 +20,7 @@ const Constants = {
         attachSignsMaxDistanceX: 0.2,
         attachSignsGridSize: 10,
         logAttachedSigns: false,
+        skipBaseMisc: true
     },
     warnings: {
         all: false, // enable all warnings
@@ -37,9 +38,9 @@ const Constants = {
         invalidSceneryInfoVersion: true,
         signUndefinedPrefabName: true,
         tracksConnectionTest: true,
+        tracksConnectionTestSwitchRelated: true,
         electrificationNevpNotApplied: false,
         electrificationConflict: false,
-        tracksConnectionTestSwitchRelated: true,
         electrificationResolverError: true,
         electrificationResolverWarnings: true,
         signalElemsUnknownPrefab: true,
@@ -50,6 +51,7 @@ const Constants = {
         connectTracksFailed: true,
         routeInvalidSegment: true,
         derailerUnknownDirection: true,
+        endMiscGroupWithoutStart: true,
     },
     errors: {
         invalidSceneryInfo: true

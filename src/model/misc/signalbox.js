@@ -25,14 +25,21 @@ export default class SignalBox extends Misc {
         scenery.addSignalBox(this);
     }
 
-    static fromText(id, text) {        
+    static isSignalBox(prefabName) { 
+        return prefabName.startsWith('SignalBox');
+    }
+
+    static fromText(id, text, miscGroups = []) {        
         const values = text.split(";");
         const object = new SignalBox(
             id, // id
             values[1], // misc_id
             values[2], // prefab_name
-            Vector3.fromValuesArray(values, 3), // pos
-            Vector3.fromValuesArray(values, 6), // rot
+            ...Misc.applyGroupTransforms(
+                Vector3.fromValuesArray(values, 3), // pos
+                Vector3.fromValuesArray(values, 6), // rot
+                miscGroups
+            ),
             values[9] // name
         );
 
