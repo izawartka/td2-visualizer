@@ -8,7 +8,7 @@ export default function TrackHoverInfo() {
     const { showTrackHoverInfo } = useContext(SettingsContext);
 
     if (!showTrackHoverInfo) return null;
-    
+
     return (
         <InnerTrackHoverInfo />
     );
