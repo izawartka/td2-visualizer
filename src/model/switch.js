@@ -2,9 +2,9 @@ import SwitchTrack from "./tracks/switch-track.js";
 import SceneryObject from "./scenery-object.js";
 import SceneryParserLog from "./scenery-parser-log.js";
 import Vector3 from "./vector3.js";
-import DefinedSwitches from "./defs/defined-switches.js";
-import {SwitchTrackConnectionType} from "./switch-descriptions/switch-prefab-track";
+import {DefinedSwitches, SwitchTrackConnectionType} from "./defs/defined-switches.js";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import CurveHelper from "../helpers/curveHelper";
 import AngleHelper from "../helpers/angleHelper";
 
 export default class Switch extends SceneryObject {
@@ -88,7 +88,7 @@ export default class Switch extends SceneryObject {
         this.def = def;
 
         const rotRad = AngleHelper.rotationDegToRad(this.rot);
-        this.isolation_id_pos = this.pos.add(def.isolation_id_offset.rotate(rotRad));
+        this.isolation_id_pos = this.pos.add(def.isolationLabelPos.rotate(rotRad));
         super.applyObject(scenery);
     }
 

@@ -32,7 +32,6 @@ const Constants = {
         switchInvalidDataFormat: true,
         switchNoModel: true,
         switchMissingTrackId: true,
-        switchInvalidInternalConnection: true,
         signalBoxUndefinedPrefabName: true,
         invalidSceneryInfoVersion: true,
         signUndefinedPrefabName: true,

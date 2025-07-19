@@ -3,7 +3,7 @@ export const TrackConnectionEnd = {
     END: Symbol('TrackConnectionEnd.END'),
 };
 
-export function otherEnd(end) {
+export function getOtherEnd(end) {
     return {
         [TrackConnectionEnd.START]: TrackConnectionEnd.END,
         [TrackConnectionEnd.END]: TrackConnectionEnd.START,

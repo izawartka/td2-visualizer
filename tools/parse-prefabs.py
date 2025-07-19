@@ -1,8 +1,19 @@
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "pyyaml",
+#     "scipy",
+# ]
+# ///
+
 import json
 import os
 import re
 import sys
 import traceback
+from scipy.spatial.transform import Rotation
 from pathlib import Path
 
 import yaml
@@ -21,10 +32,21 @@ def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
+def parse_prefab(file, prefab_name):
+    main_component = parse_prefab_components(file)
+    tracks = find_tracks(main_component)
+    isolation_label_pos = get_isolation_label_pos(prefab_name)
+    return {
+        "name": prefab_name,
+        "tracks": tracks,
+        "isolation_label_pos": isolation_label_pos,
+    }
+
+
 prefab_header_pattern = re.compile(r"^--- !u!(\d+) &(\d+)$")
 
 
-def parse_prefab(file):
+def parse_prefab_components(file):
     component_list = []
     component_map = {}
     current_yaml = ""
@@ -94,42 +116,56 @@ def try_parse_track_shape(component):
     }
 
 
-def try_parse_track_transform(component, ancestor_level=0):
+def mirror_rotation_x(rotation):
+    rot_vet = rotation.as_rotvec()
+    # Flip the x-axis to apply the mirroring and then negate the whole vector to change the rotation direction
+    return Rotation.from_rotvec([rot_vet[0], -rot_vet[1], -rot_vet[2]])
+
+
+def try_parse_track_transform(component):
     if "Transform" not in component:
         return None
     transform = component["Transform"]
-    parent = None
     if "Transform" in transform["m_Father"]:
-        parent = try_parse_track_transform(transform["m_Father"], True)
+        parent = try_parse_track_transform(transform["m_Father"])
+    else:
+        parent = {
+            "position": [0, 0, 0],
+            "rotation": Rotation.identity(),
+            "mirror_x": False,
+            "negate_radius": False,
+        }
 
     if transform["m_LocalScale"]["x"] not in {-1, 1} or transform["m_LocalScale"]["y"] != 1 or transform["m_LocalScale"]["z"] != 1:
         eprint("Unexpected scale in track transform")
 
-    if ancestor_level > 0:
-        if transform["m_LocalPosition"]["x"] != 0 or transform["m_LocalPosition"]["y"] != 0 or transform["m_LocalPosition"]["z"] != 0:
-            eprint("Unexpected position change in ancestor track transform")
-        if transform["m_LocalRotation"]["x"] != 0 or transform["m_LocalRotation"]["y"] != 0 or transform["m_LocalRotation"]["z"] != 0 or transform["m_LocalRotation"]["w"] != 1:
-            eprint("Unexpected rotation change in ancestor track transform")
-
+    position = [transform["m_LocalPosition"][key] for key in ["x", "y", "z"]]
+    rotation = Rotation.from_quat([transform["m_LocalRotation"][key] for key in ["x", "y", "z", "w"]])
     mirror_x = transform["m_LocalScale"]["x"] == -1
-    if mirror_x and ancestor_level != 1:
-        eprint("Expected mirror_x only in the direct parent of the track transform")
+    negate_radius = mirror_x
 
-    parent_mirror_x = False
-    if parent is not None:
-        parent_mirror_x = parent["mirror_x"]
+    # Apply own scaleX transform to rotation, then the parent's
+    if mirror_x ^ parent["mirror_x"]:
+        rotation = mirror_rotation_x(rotation)
+
+    # Apply remaining parent transforms
+    if parent["mirror_x"]:
+        position[0] = -position[0]
+    position = parent["position"] + parent["rotation"].apply(position)
+    rotation = parent["rotation"] * rotation
+    if parent["negate_radius"]:
+        negate_radius = not negate_radius
 
     return {
-        "position": transform["m_LocalPosition"],
-        "rotation": transform["m_LocalRotation"],
-        "scale": transform["m_LocalScale"],
+        "position": position,
+        "rotation": rotation,
         "mirror_x": mirror_x,
-        "parent_mirror_x": parent_mirror_x,
-        "parent": parent,
+        "negate_radius": negate_radius,
     }
 
 
-def parse_track(track):
+def parse_track(track, data_index):
+    track_id = track["__component_id"]
     track_shape = None
     track_transform = None
 
@@ -146,22 +182,38 @@ def parse_track(track):
         if maybe_track_transform is not None:
             track_transform = maybe_track_transform
 
-    prev_id = None
-    next_id = None
-    if "__component_id" in track["MonoBehaviour"]["prevTrack"]:
-        prev_id = track["MonoBehaviour"]["prevTrack"]["__component_id"]
-    if "__component_id" in track["MonoBehaviour"]["nextTrack"]:
-        next_id = track["MonoBehaviour"]["nextTrack"]["__component_id"]
+    connections = []
 
-    return {
-        "id": track["__component_id"],
-        "prev_id": prev_id,
-        "next_id": next_id,
-        "shape": track_shape,
-        "mirror_x": track_transform["parent_mirror_x"],
-        "position": track_transform["position"],
-        "rotation": track_transform["rotation"],
-    }
+    def append_connection(end, field):
+        if "__component_id" in track["MonoBehaviour"][field]:
+            other_id = track["MonoBehaviour"][field]["__component_id"]
+            if other_id == track_id:
+                # Ignore connections to self, TD2 has them in Rkp switches
+                return
+            connections.append({
+                "type": "<INTERNAL>",
+                "end": end,
+                "internalId": other_id
+            })
+        else:
+            connections.append({
+                "type": "<EXTERNAL>",
+                "end": end,
+            })
+
+    append_connection("<START>", "prevTrack")
+    append_connection("<END>", "nextTrack")
+
+    if track_transform["negate_radius"]:
+        track_shape["radius"] = -track_shape["radius"]
+
+    return (track_id, {
+        "dataIndex": data_index,
+        **track_shape,
+        "pos": f"<new Vector3({", ".join([str(x) for x in track_transform["position"].tolist()])})>",
+        "rot": f"<new Quaternion({", ".join([str(x) for x in track_transform["rotation"].as_quat().tolist()])})>",
+        "connections": connections,
+    })
 
 
 def find_tracks(prefab):
@@ -170,10 +222,45 @@ def find_tracks(prefab):
         switch = try_parse_switch_component(component)
         if switch is None:
             continue
-        for track in switch["tracks"]:
-            tracks.append(parse_track(track))
+        for data_index, track in enumerate(switch["tracks"]):
+            tracks.append(parse_track(track, data_index))
+    add_missing_connections(tracks)
+    tracks = change_ids(tracks)
     return tracks
 
+def add_missing_connections(tracks):
+    track_map = dict(tracks)
+    for (track_id, track) in tracks:
+        for connection in track["connections"]:
+            if connection["type"] == "<EXTERNAL>":
+                continue
+            other_track = track_map.get(connection["internalId"], None)
+            if other_track is None:
+                eprint(f"Warning: Track {track_id} has a connection to an unknown track {connection['internalId']}")
+                continue
+            reverse_connections = [conn for conn in other_track["connections"] if conn["type"] == "<INTERNAL>" and conn["internalId"] == track_id]
+            if len(reverse_connections) > 1:
+                eprint(f"Warning: Track {other_track['id']} has multiple connections to {track_id}")
+            if len(reverse_connections) == 0:
+                other_track["connections"].append({
+                    "type": "<INTERNAL>",
+                    "end": "<START>" if connection["end"] == "<END>" else "<END>", # Heuristic
+                    "internalId": track_id
+                })
+    return tracks
+
+def change_ids(tracks):
+    new_id_map = dict()
+    new_tracks = []
+    for (track_id, track) in tracks:
+        new_id = f"I{track["dataIndex"]}"
+        new_id_map[track_id] = new_id
+        new_tracks.append((new_id, track))
+    for (new_id, track) in new_tracks:
+        for connection in track["connections"]:
+            if connection["type"] == "<INTERNAL>":
+                connection["internalId"] = new_id_map[connection["internalId"]]
+    return new_tracks
 
 def parse_prefab_component(component_yaml, component_type, component_id):
     loaded = yaml.load(component_yaml, yaml.SafeLoader)
@@ -203,11 +290,25 @@ def resolve_references(value, component_map, visited_ids):
         resolve_references(value[key], component_map, visited_ids)
 
 
-def format_tracks(prefab_name, tracks):
-    print(f"\"{prefab_name}\": [")
-    for track in tracks:
-        print(f"    {json.dumps(track)},")
-    print("],")
+def get_isolation_label_pos(prefab_name):
+    if prefab_name.startswith("Rkp") or prefab_name.startswith("Crossing"):
+        return "new Vector3(0, 0, 0)"
+    return "new Vector3(0, 0, 6)"
+
+
+def format_prefab(prefab):
+    print(f"'{prefab["name"]}': {{")
+    print("    tracks: {")
+    for (track_id, track) in prefab["tracks"]:
+        track_object = json.dumps(track)
+        # Replace "<FOO>" with FOO
+        track_object = re.sub(r'(?<!\\)"<([^<>"]+)>"', r'\1', track_object)
+        # Remove quotes around keys
+        track_object = re.sub(r'(?<!\\)"([a-zA-Z][a-zA-Z0-9]*)":', r'\1:', track_object)
+        print(f"        '{track_id}': {track_object},")
+    print("    },")
+    print(f"    isolationLabelPos: {prefab["isolation_label_pos"]},")
+    print("},")
 
 
 def process_file(file_path):
@@ -221,9 +322,9 @@ def process_file(file_path):
     eprint(f"Processing file: {file_path}")
     try:
         with open(file_path, encoding="utf8") as infile:
-            prefab = parse_prefab(infile)
-            tracks = find_tracks(prefab)
-            format_tracks(Path(file_path).stem, tracks)
+            prefab_name = Path(file_path).stem
+            prefab = parse_prefab(infile, prefab_name)
+            format_prefab(prefab)
     except Exception:
         eprint(f"Error processing {file_path}:", file=sys.stderr)
         traceback.print_exc(file=sys.stderr)
