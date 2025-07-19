@@ -13,8 +13,15 @@ export default class BezierTrack extends Track
         middle: Vector3.zero(),
     };
 
-    constructor(id, start, control1, end, control2, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, TrackSource.BEZIER);
+    constructor(id, start, control1, end, control2, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
+        const length = start.distance(end); // TODO: calculate more precise length
+        super(
+            id, start,
+            Vector3.zero(), // rotation
+            length,
+            0, // radius
+            connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, TrackSource.BEZIER,
+        );
 
         Object.assign(this.points, {
             start,
@@ -22,11 +29,10 @@ export default class BezierTrack extends Track
             end,
             control2: end.add(control2),
         });
-        // This is not the the actual middle point, but it's close enough
-        this.points.middle = this._pointAtT(0.5);
+        this.points.middle = this.getPointAtDist(length / 2);
     }
 
-    _pointAtT(t) {
+    _getPointAtT(t) {
         const a1 = this.points.start.lerp(this.points.control1, t);
         const a2 = this.points.control1.lerp(this.points.control2, t);
         const a3 = this.points.control2.lerp(this.points.end, t);
@@ -35,6 +41,12 @@ export default class BezierTrack extends Track
         const b2 = a2.lerp(a3, t);
 
         return b1.lerp(b2, t);
+    }
+
+    getPointAtDist(dist, fromEnd = TrackConnectionEnd.START) {
+        if (fromEnd === TrackConnectionEnd.END) return this.getPointAtDist(this.len - dist, TrackConnectionEnd.START);
+        // TODO: This is just an approximation for a Bezier curve
+        return this._getPointAtT(dist / this.len);
     }
 
     getStartAngleXZ() {
@@ -58,10 +70,6 @@ export default class BezierTrack extends Track
             Vector3.fromValuesArray(values, 6), // control1
             Vector3.fromValuesArray(values, 9), // end
             Vector3.fromValuesArray(values, 12), // control2
-            // TODO: values below
-            Vector3.zero(),
-            0, // len ??
-            0, // r ??
             connections,
             values[17], // id_station
             ...Track.slopesFromText(values[18]), // start_slope, end_slope

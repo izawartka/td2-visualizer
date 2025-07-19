@@ -55,6 +55,10 @@ export default class Track extends SceneryObject {
         else return this.getEndAngleXZ();
     }
 
+    getPointAtDist(_dist, _fromEnd) {
+        throw new Error("getPointAtDist() must be implemented in subclass");
+    }
+
     static slopesFromText(text) {
         return text.split(",", 2).map((slope) => parseFloat(slope));
     }

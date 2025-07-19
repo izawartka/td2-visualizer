@@ -3,19 +3,32 @@ import Track, {TrackSource} from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 import {ElectrificationStatus} from "../electrification-status";
+import CurveHelper from "../../helpers/curveHelper";
 
 export default class StandardTrack extends Track  {
     type = "StandardTrack";
     points = {
         start: Vector3.zero(),
         end: Vector3.zero(),
-        circleCenter: Vector3.zero(),
         middle: Vector3.zero(),
     };
 
     constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source) {
         super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source);
         this._calcPoints();
+    }
+
+    _transformPoint(point) {
+        const rotRad = AngleHelper.rotationDegToRad(this.rot);
+        return point.rotate(rotRad).add(this.points.start);
+    }
+
+    getPointAtDist(dist, fromEnd = TrackConnectionEnd.START) {
+        if (fromEnd === TrackConnectionEnd.END) return this.getPointAtDist(this.len - dist, TrackConnectionEnd.START)
+        const curveEnd = CurveHelper.calculateCurveEndStandard(this.r, dist).endPos;
+        // TODO: Verify slope logic
+        curveEnd.y += (this.start_slope + this.end_slope) / 2000 * dist;
+        return this._transformPoint(curveEnd);
     }
 
     getStartAngleXZ() {
@@ -25,10 +38,9 @@ export default class StandardTrack extends Track  {
     getEndAngleXZ() {
         const startAngle = AngleHelper.degToRad(this.rot.y);
 
-        if(this.r === 0) {
-            return startAngle
-        }
+        if (this.r === 0) return startAngle
 
+        // This is only correct for a flat arc on the XZ plane
         return startAngle - this.len / this.r;
     }
 
@@ -59,32 +71,9 @@ export default class StandardTrack extends Track  {
     }
 
     _calcPoints() {
-        const rotRad = AngleHelper.degToRad(this.rot.y);
-
         this.points.start = this.pos.clone();
-
-        if (this.r === 0) {
-            this.points.end = this.pos.add(Vector3.fromAngleY(rotRad, this.len));
-            this.points.middle = this.points.start.lerp(this.points.end, 0.5);
-            this.points.circleCenter = this.pos.clone(); // default circle center
-        } else {
-            const centerAngle = rotRad + Math.PI / 2;
-            this.points.circleCenter = this.pos.sub(Vector3.fromAngleY(centerAngle, this.r));
-
-            const middleAngle = centerAngle - (this.len / this.r) / 2;
-            this.points.middle = this.points.circleCenter.add(Vector3.fromAngleY(middleAngle, this.r));
-
-            const endAngle = centerAngle - this.len / this.r;
-            this.points.end = this.points.circleCenter.add(Vector3.fromAngleY(endAngle, this.r));
-        }
-
-        // adjust end point by the slope
-        if (this.end_slope !== 0) {
-            const startHeightDiff = this.start_slope * this.len / 1000;
-            const endHeightDiff = this.end_slope * this.len / 1000;
-
-            this.points.end.y += startHeightDiff + (endHeightDiff - startHeightDiff) / 2;
-        }
+        this.points.middle = this.getPointAtDist(this.len / 2, TrackConnectionEnd.START);
+        this.points.end = this.getPointAtDist(this.len, TrackConnectionEnd.START);
     }
 
     applyObject(scenery) {

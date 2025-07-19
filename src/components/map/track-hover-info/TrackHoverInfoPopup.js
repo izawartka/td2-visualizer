@@ -40,7 +40,7 @@ function InfoPopupSwitchItems(props) {
 
 function InfoPopupShapeItems(props) {
     const { track } = props;
-    if (track.type !== 'StandardTrack' || track.r === 0) return null;
+    if (track.r === 0) return null;
 
     return <InfoPopupItem value={Math.abs(track.r)} label="Radius" options={{suffix: ' m', precision: 0}} />
 }
