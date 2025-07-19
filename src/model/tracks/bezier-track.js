@@ -1,4 +1,4 @@
-import Track from "./track";
+import Track, {TrackSource} from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 
@@ -14,7 +14,7 @@ export default class BezierTrack extends Track
     };
 
     constructor(id, start, control1, end, control2, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
+        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, TrackSource.BEZIER);
 
         Object.assign(this.points, {
             start,

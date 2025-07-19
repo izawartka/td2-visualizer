@@ -1,5 +1,5 @@
 import AngleHelper from '../../helpers/angleHelper';
-import Track from './track';
+import Track, {TrackSource} from './track';
 import Vector3 from '../vector3';
 
 export default class PointTrack extends Track
@@ -12,7 +12,7 @@ export default class PointTrack extends Track
 
     constructor(id, start, end, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
         const [rot, len] = PointTrack._getRotLen(start, end, r);
-        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
+        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, TrackSource.SWITCH);
 
         Object.assign(this.points, {
             start, end

@@ -4,7 +4,7 @@ export default function TrackHoverInfoPopup(props) {
     const { track } = props;
 
     const slopeArr = Array.from(new Set([
-        Math.abs(track['start_slope']), 
+        Math.abs(track['start_slope']),
         Math.abs(track['end_slope'])
     ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
@@ -19,7 +19,7 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupItem value={track['maxspeed']} label="Max. speed" options={{suffix: ' km/h'}} />
                     <InfoPopupItem value={slopeArr} label="Slope" options={slopeOptions} />
                     <InfoPopupItem value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
-                    <InfoPopupItem value={track['type']} label="Type" options={{translationConstKey: 'type'}} />
+                    <InfoPopupItem value={track['source']} label="Type" options={{translationConstKey: 'source'}} />
                     <InfoPopupSwitchItems track={track} />
                 </tbody>
             </table>

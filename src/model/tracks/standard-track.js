@@ -1,10 +1,10 @@
 import AngleHelper from "../../helpers/angleHelper";
-import Track from "./track";
+import Track, {TrackSource} from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
+import {ElectrificationStatus} from "../electrification-status";
 
-export default class StandardTrack extends Track
-{
+export default class StandardTrack extends Track  {
     type = "StandardTrack";
     points = {
         start: Vector3.zero(),
@@ -13,8 +13,8 @@ export default class StandardTrack extends Track
         middle: Vector3.zero(),
     };
 
-    constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
-        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed);
+    constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source = TrackSource.STANDARD) {
+        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source);
         this._calcPoints();
     }
 
@@ -88,5 +88,23 @@ export default class StandardTrack extends Track
 
     applyObject(scenery) {
         super.applyObject(scenery);
+    }
+
+    static route(id, start, rot, len, r, connections, electrified, route) {
+        const track = new StandardTrack(
+            id, start, rot, len, r,
+            connections,
+            null, // id_station,
+            0, // start_slope,
+            0, // end_slope,
+            null, // id_isolation
+            null, // prefab_name
+            null, // maxspeed,
+            null, // derailspeed,
+            TrackSource.ROUTE,
+        );
+        track.electrificationStatus = electrified ? ElectrificationStatus.ELECTRIFIED : ElectrificationStatus.NON_ELECTRIFIED;
+        track.route = route;
+        return track;
     }
 }

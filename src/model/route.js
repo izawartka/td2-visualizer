@@ -1,8 +1,9 @@
 import SceneryObject from "./scenery-object";
 import Vector3 from "./vector3";
 import SceneryParserLog from "./scenery-parser-log";
-import RouteTrack from "./tracks/route-track";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import CurveHelper from "../helpers/curveHelper";
+import StandardTrack from "./tracks/standard-track";
 import AngleHelper from "../helpers/angleHelper";
 
 export default class Route extends SceneryObject {
@@ -17,7 +18,6 @@ export default class Route extends SceneryObject {
     offsets;
     segments = [];
     end_center;
-    end_points;
     end_angle_rad;
 
     constructor(prefab_name, pos, rot, track_count, route_name, track_offset, electrified) {
@@ -34,13 +34,12 @@ export default class Route extends SceneryObject {
         this.offsets = this._getOffsets();
         this.end_angle_rad = this.rot.y * Math.PI / 180;
         this.end_center = this.pos.clone();
-        this.end_points = this._getConnectionPoints();
-        this.points = [...this.end_points];
+        this.points = [this.pos.clone()];
     }
 
     static fromText(text) {
         const values = text.split(";");
-        const route = new Route(
+        return new Route(
             values[2], // prefab_name
             Vector3.fromValuesArray(values, 3), // pos
             Vector3.fromValuesArray(values, 6), // rot
@@ -49,8 +48,6 @@ export default class Route extends SceneryObject {
             parseFloat(values[11]) || 0, // center_offset
             values[13] === "True" || values[12] === "1" // electrified
         );
-
-        return route;
     }
 
     addSegment(length, radius, trackIds) {
@@ -58,67 +55,43 @@ export default class Route extends SceneryObject {
             SceneryParserLog.warn('routeInvalidSegment', `Route segment has invalid track count: expected ${this.track_count}, got ${trackIds.length}`);
             return;
         }
-        const startAngleRad = this.end_angle_rad;
-        const startRot = new Vector3(0, AngleHelper.radToDeg(startAngleRad), 0);
+        const rotDeg = new Vector3(0, AngleHelper.radToDeg(this.end_angle_rad), 0);
+        const perpendicularUnitVec = Vector3.fromAngleY(this.end_angle_rad + Math.PI / 2);
 
-        const startPoints = this.end_points;
-        this.end_points = [];
+        const tracks = this.offsets.map((offset, index) => {
+            const startPoint = this.end_center.add(perpendicularUnitVec.multiply(offset));
 
-        const radii = [];
-        const lengths = [];
+            let trackRadius = radius;
+            let trackLength = length;
+            if (radius !== 0) {
+                trackRadius += offset;
+                trackLength *= (trackRadius / radius);
+            }
 
-        if (radius === 0) {
-            this.end_center = this.end_center.add(Vector3.fromAngleY(startAngleRad, length));
-            this.offsets.forEach(offset => {
-                radii.push(0);
-                lengths.push(length);
-                const end_point = this.end_center
-                    .add(Vector3.fromAngleY(this.end_angle_rad + Math.PI / 2, offset));
-                this.end_points.push(end_point);
-            });
-        } else {
-            this.end_angle_rad -= length / radius;
-            const startToCenter = Vector3.fromAngleY(startAngleRad + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-            const circleCenter = this.end_center.add(startToCenter.negate());
-            const centerToEndUnit = Vector3.fromAngleY(this.end_angle_rad + Math.sign(radius) * Math.PI / 2, 1).multiply(Math.sign(radius));
-            this.end_center = circleCenter.add(centerToEndUnit.multiply(radius));
-
-            this.offsets.forEach(offset => {
-                const trackRadius = radius + offset;
-                const trackLength = length * trackRadius / radius;
-                radii.push(trackRadius);
-                lengths.push(trackLength);
-                const end_point = circleCenter.add(centerToEndUnit.multiply(trackRadius));
-                this.end_points.push(end_point);
-            });
-        }
-
-        this.points.push(...this.end_points);
-
-        const tracks = trackIds.map((trackId, index) => {
-            return new RouteTrack(
-                trackId,
-                startPoints[index],
-                this.end_points[index],
-                startRot,
-                lengths[index],
-                radii[index],
+            return StandardTrack.route(
+                trackIds[index],
+                startPoint,
+                rotDeg,
+                trackLength,
+                trackRadius,
                 [], // connections
                 this.electrified,
                 this, // route
             );
         });
 
-        if (this.segments.length >= 2) {
-            const prevSegment = this.segments[this.segments.length - 2];
-            const newSegment = this.segments[this.segments.length - 1];
-            newSegment.tracks.forEach((track, index) => {
+        const { endPos: centerEndPos, endAngle } = CurveHelper.calculateCurveEnd(this.end_center, this.end_angle_rad, radius, length);
+        this.end_center = centerEndPos;
+        this.end_angle_rad = endAngle;
+
+        if (this.segments.length > 0) {
+            const prevSegment = this.segments[this.segments.length - 1];
+            tracks.forEach((track, index) => {
                 const prevTrack = prevSegment.tracks[index];
                 track.connections.push(new TrackConnection(prevTrack, TrackConnectionEnd.START));
                 prevTrack.connections.push(new TrackConnection(track, TrackConnectionEnd.END));
             });
         }
-
         this.segments.push({ length, radius, trackIds, tracks });
     }
 
@@ -132,21 +105,20 @@ export default class Route extends SceneryObject {
         return result;
     }
 
-    _getConnectionPoints() {
-        return this.offsets.map((offset) => {
-            const offsetVec = Vector3.fromAngleY(this.end_angle_rad + Math.PI / 2, offset);
-            return this.pos.add(offsetVec);
-        });
-    }
-
     applyObject(scenery) {
         if(this.applied) return; // already applied
         this.applied = true;
-        
+
         this.segments.forEach((segment) => {
             segment.tracks.forEach((track) => {
                 scenery.addObject(track);
             });
         });
+    }
+
+    getRenderBounds() {
+        // These points are used for rendering the route name and arrow
+        // Route segment endpoints are not included here
+        return [this.pos, this.end_center];
     }
 }

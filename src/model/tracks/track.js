@@ -2,6 +2,13 @@ import SceneryObject from "../scenery-object";
 import { ElectrificationStatus } from "../electrification-status";
 import {TrackConnectionEnd} from "../track-connection";
 
+export const TrackSource = {
+    STANDARD: Symbol("TrackSource.STANDARD"),
+    BEZIER: Symbol("TrackSource.BEZIER"),
+    SWITCH: Symbol("TrackSource.SWITCH"),
+    ROUTE: Symbol("TrackSource.ROUTE"),
+};
+
 export default class Track extends SceneryObject {
     len;
     r;
@@ -16,10 +23,12 @@ export default class Track extends SceneryObject {
     end_slope;
     prefab_name;
     switch = null;
+    route = null;
     electrificationStatus = ElectrificationStatus.NOT_CHECKED;
     hasNEVP = false;
+    source;
 
-    constructor(id, pos, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
+    constructor(id, pos, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source) {
         super(id, pos, rot);
         Object.assign(this, {
             len, r,
@@ -29,6 +38,7 @@ export default class Track extends SceneryObject {
             id_isolation,
             prefab_name,
             maxspeed, derailspeed,
+            source,
         });
     }
 

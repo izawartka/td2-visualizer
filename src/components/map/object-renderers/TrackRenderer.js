@@ -4,6 +4,7 @@ import Constants from "../../../helpers/constants";
 import { ElectrificationStatus } from "../../../model/electrification-status";
 import MiscHelper from "../../../helpers/miscHelper";
 import { setHoveredTrack, unsetHoveredTrack } from "../../../services/trackHoverInfoService";
+import {TrackSource} from "../../../model/tracks/track";
 
 export default function TrackRenderer(props) {
   const { object } = props;
@@ -109,14 +110,14 @@ function getTrackColor(object, trackColorMode) {
       }
 
     case "type":
-      switch (object.type) {
-        case "StandardTrack":
+      switch (object.source) {
+        case TrackSource.STANDARD:
           return modeDef.options['standard-track'][0];
-        case "PointTrack":
+        case TrackSource.SWITCH:
           return modeDef.options['point-track'][0];
-        case "RouteTrack":
+        case TrackSource.ROUTE:
           return modeDef.options['route-track'][0];
-        case "BezierTrack":
+        case TrackSource.BEZIER:
           return modeDef.options['bezier-track'][0];
         default:
           return modeDef.options[modeDef.optionDefault][0];
