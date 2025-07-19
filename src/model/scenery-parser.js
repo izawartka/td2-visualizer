@@ -4,9 +4,9 @@ import StandardTrack from './tracks/standard-track';
 import TrackObject from './track-objects/track-object';
 import Signal from './track-objects/signal';
 import Route from './route';
-import Misc from './misc';
+import Misc from './misc/misc';
 import SceneryParserLog from './scenery-parser-log';
-import SignalBox from './signalbox';
+import SignalBox from './misc/signalbox';
 import Constants from '../helpers/constants';
 import SceneryInfo from './special-objects/scenery-info';
 import Sign from './track-objects/sign';
@@ -16,19 +16,21 @@ import ElectrificationResolver from './electrification-resolver';
 import NEVP from './track-objects/nevp';
 import Derailer from './track-objects/derailer';
 import SpawnPoint from './track-objects/spawn-point';
+import Platform from './misc/platform';
 import { attachSigns } from './attach-signs';
 import {connectTracks} from "./connect-tracks";
-
-/*
-TODO: add support for WorldRotation and WorldTranslation
-*/
+import MiscGroup from './misc-group';
 
 export default class SceneryParser {
+    static nextMiscId = 1;
+
     static fromText(scText) {
+        SceneryParser.nextMiscId = 1;
         const lines = scText.split("\n").map(line => line.trim());
         const scenery = new Scenery();
 
         let currentRoute = null;
+        const currentMiscGroups = [];
 
         lines.forEach((line, index) => {
             if(index === 0) {
@@ -36,22 +38,30 @@ export default class SceneryParser {
                 if(sceneryInfo) scenery.addObject(sceneryInfo);
                 return;
             }
+
             if(!line?.length) return;
 
             if (currentRoute !== null) {
-                const foundRouteEnd = SceneryParser._parseRouteLine(line, currentRoute);
-                if (foundRouteEnd) {
+                const isRouteEnd = SceneryParser._parseRouteLine(line, currentRoute);
+                
+                if (isRouteEnd) {
                     scenery.addObject(currentRoute);
                     currentRoute = null;
                 }
-            } else {
-                const object = SceneryParser._parseObject(line);
-                if(!object) return; // skip null objects
-                if (object.type === 'Route') {
+
+                return;
+            }
+
+            const object = SceneryParser._parseObject(line, currentMiscGroups);
+            if(!object) return; // skip null objects
+
+            switch(object.type) {
+                case 'Route':
                     currentRoute = object;
-                } else {
+                    return; // do not add Route object yet
+                default:
                     scenery.addObject(object);
-                }
+                    break;
             }
         });
 
@@ -79,7 +89,7 @@ export default class SceneryParser {
         return SceneryInfo.fromText(text);
     }
 
-    static _parseObject(text) {
+    static _parseObject(text, currentMiscGroups) {
         const type = text.split(";", 2)[0];
 
         if (type === 'EndRoute' || type.indexOf("Forest") !== -1 || type.indexOf("Empty") !== -1) {
@@ -97,13 +107,22 @@ export default class SceneryParser {
             case 'Route':
                 return Route.fromText(text);
             case 'Misc':
-                return SceneryParser._parseMisc(text);
+                return SceneryParser._parseMisc(text, currentMiscGroups);
             case 'CameraHome':
                 return CameraHome.fromText(text);
             case 'MainCamera':
                 return MainCamera.fromText(text);
             case 'MiscGroup':
+                const group = MiscGroup.fromText(text);
+                currentMiscGroups.push(group);
+
+                return null;
             case 'EndMiscGroup':
+                if(!currentMiscGroups.pop()) {
+                    SceneryParserLog.warn('endMiscGroupWithoutStart', 'Unexpected EndMiscGroup found without a preceding MiscGroup');
+                }
+
+                return null;
             case 'Wires':
             case 'Fence':
             case 'TerrainPoint':
@@ -138,13 +157,18 @@ export default class SceneryParser {
         }
     }
 
-    static _parseMisc(text) {
+    static _parseMisc(text, miscGroups) {
         const prefabName = text.split(';', 4)[2];
+        const id = SceneryParser.nextMiscId++;
 
-        if(prefabName.startsWith("SignalBox")) {
-            return SignalBox.fromText(Scenery.nextMiscId++, text);
+        if (Platform.isPlatform(prefabName)) {
+            return Platform.fromText(id, text, miscGroups);
+        } else if(SignalBox.isSignalBox(prefabName)) {
+            return SignalBox.fromText(id, text, miscGroups);
+        } else if(Constants.parser.skipBaseMisc) {
+            return null;
         } else {
-            return Misc.fromText(Scenery.nextMiscId++, text);
+            return Misc.fromText(id, text, miscGroups);
         }
     }
 

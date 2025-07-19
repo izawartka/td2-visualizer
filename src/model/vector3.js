@@ -84,6 +84,14 @@ export default class Vector3 {
         );
     }
 
+    divide(scalar) {
+        return new Vector3(
+            this.x / scalar,
+            this.y / scalar,
+            this.z / scalar
+        );
+    }
+
     lerp(other, t) {
         return new Vector3(
             this.x + (other.x - this.x) * t,
@@ -146,6 +154,25 @@ export default class Vector3 {
     toLocal(parentPos, parentRot = Vector3.zero()) {
         const localPos = this.sub(parentPos);
         return localPos.rotate(parentRot.negate());
+    }
+
+    length() {
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+    
+    lengthSq() {
+        return this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+
+    normalize() {
+        const len = this.length();
+        if (len === 0) return new Vector3(0, 0, 0);
+
+        return new Vector3(
+            this.x / len,
+            this.y / len,
+            this.z / len
+        );
     }
 
     negate() {

@@ -13,6 +13,7 @@ export default class Route extends SceneryObject {
     track_offset;
     category = "routes";
     type = "Route";
+    applied = false;
     points;
     offsets;
     segments = [];
@@ -108,6 +109,9 @@ export default class Route extends SceneryObject {
     }
 
     applyObject(scenery) {
+        if(this.applied) return; // already applied
+        this.applied = true;
+        
         this.segments.forEach((segment) => {
             segment.tracks.forEach((track) => {
                 scenery.addObject(track);
