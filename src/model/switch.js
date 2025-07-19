@@ -6,6 +6,7 @@ import {DefinedSwitches, SwitchTrackConnectionType} from "./defs/defined-switche
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 import CurveHelper from "../helpers/curveHelper";
 import AngleHelper from "../helpers/angleHelper";
+import ShapeArc from "./shape/shape-arc";
 
 export default class Switch extends SceneryObject {
     model;
@@ -145,7 +146,8 @@ export default class Switch extends SceneryObject {
             }
         });
 
-        const shape = trackDef.toShape(this.rot, this.pos);
+        const { startPos, rotationRad } = CurveHelper.transformStart(this.pos, this.rot, trackDef.pos, trackDef.rot);
+        const shape = new ShapeArc(rotationRad, startPos, trackDef.radius, trackDef.length, trackDef.slope1, trackDef.slope2);
 
         const trackObj = new SwitchTrack(
             trackId,

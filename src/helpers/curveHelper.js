@@ -18,40 +18,6 @@ function calculateCurveEnd(startPos, startAngle, radius, curveLength) {
     return { endPos, endAngle, circleCenter };
 }
 
-/**
- * Does the same as calculateCurveEnd with `startPos = Vector3.zero()` and `startAngle = 0`.
- */
-function calculateCurveEndStandard(radius, curveLength) {
-    if (radius === 0) {
-        return {
-            endPos: new Vector3(0, 0, curveLength),
-            endAngle: 0,
-            circleCenter: null,
-        };
-    }
-    const circleCenter = new Vector3(-radius, 0, 0);
-    const endAngle = -curveLength / radius;
-    const centerToEnd = Vector3.fromAngleY(endAngle + Math.sign(radius) * Math.PI / 2, Math.abs(radius));
-    const endPos = circleCenter.add(centerToEnd);
-    return { endPos, endAngle, circleCenter };
-}
-
-function calculateEndTangentVec(startPos, endPos, centerPos) {
-    const centerToStart = startPos.sub(centerPos);
-    const centerToEnd = endPos.sub(centerPos);
-    const dot1 = centerToStart.dotProduct(centerToEnd);
-    const dot2 = centerToEnd.dotProduct(centerToEnd);
-    return centerToStart.sub(centerToEnd.multiply(dot1 / dot2));
-}
-
-function arcEndAngleXZ(startPoint, endPoint, circleCenter) {
-    return Vector3.zero().atanY(calculateEndTangentVec(startPoint, endPoint, circleCenter));
-}
-
-function rotatedAngleXZ(rotationRad, angle) {
-    return Vector3.zero().atanY(Vector3.fromAngleY(angle).rotate(rotationRad));
-}
-
 function curveLength(start, end, radius) {
     return Math.abs(2 * radius * Math.asin(start.distance(end) / (2 * radius)));
 }
@@ -82,10 +48,6 @@ function transformStart(globalStart, globalRotationDeg, localStart, localRotatio
 
 const CurveHelper = {
     calculateCurveEnd,
-    calculateCurveEndStandard,
-    calculateEndTangentVec,
-    arcEndAngleXZ,
-    rotatedAngleXZ,
     curveLength,
     bezierPointAtT,
     transformStart,
