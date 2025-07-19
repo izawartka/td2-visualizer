@@ -13,7 +13,7 @@ export default class StandardTrack extends Track  {
         middle: Vector3.zero(),
     };
 
-    constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source = TrackSource.STANDARD) {
+    constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source) {
         super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source);
         this._calcPoints();
     }
@@ -51,7 +51,8 @@ export default class StandardTrack extends Track  {
             values[17], // id_isolation
             values[19], // prefab_name
             parseFloat(values[20]) || 0, // maxspeed
-            parseFloat(values[21]) || 0 // derailspeed
+            parseFloat(values[21]) || 0, // derailspeed,
+            TrackSource.STANDARD,
         );
 
         return track;

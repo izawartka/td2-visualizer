@@ -56,7 +56,7 @@ export default class Track extends SceneryObject {
     }
 
     static slopesFromText(text) {
-        return text.split(",", 2);
+        return text.split(",", 2).map((slope) => parseFloat(slope));
     }
 
     getEndPos(end) {
