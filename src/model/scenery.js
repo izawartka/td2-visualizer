@@ -6,6 +6,7 @@ export default class Scenery
     signalBoxes = [];
     spawnPoints = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
+    trackElevationBounds = { minY: Infinity, maxY: -Infinity };
     electrificationResolved = ElectrificationResolutionStatus.NOT_RESOLVED;
 
     getBounds () {
@@ -31,6 +32,9 @@ export default class Scenery
 
         if(object.getRenderBounds) {
             this._updateBounds(object.getRenderBounds());
+        }
+        if (object.category === 'tracks') {
+            this._updateTrackElevationBounds(object);
         }
     }
 
@@ -69,10 +73,17 @@ export default class Scenery
         if(!objBounds || !Array.isArray(objBounds)) return;
 
         objBounds.forEach(point => {
-            if(point.x < this.bounds.minX) this.bounds.minX = point.x;
-            if(point.z < this.bounds.minZ) this.bounds.minZ = point.z;
-            if(point.x > this.bounds.maxX) this.bounds.maxX = point.x;
-            if(point.z > this.bounds.maxZ) this.bounds.maxZ = point.z;
+            if (point.x < this.bounds.minX) this.bounds.minX = point.x;
+            if (point.z < this.bounds.minZ) this.bounds.minZ = point.z;
+            if (point.x > this.bounds.maxX) this.bounds.maxX = point.x;
+            if (point.z > this.bounds.maxZ) this.bounds.maxZ = point.z;
         });
+    }
+
+    _updateTrackElevationBounds(object) {
+        [object.points.start, object.points.end].forEach(point => {
+            if (point.y < this.trackElevationBounds.minY) this.trackElevationBounds.minY = point.y;
+            if (point.y > this.trackElevationBounds.maxY) this.trackElevationBounds.maxY = point.y;
+        })
     }
 }
