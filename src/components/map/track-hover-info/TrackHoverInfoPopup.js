@@ -21,6 +21,7 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupItem value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
                     <InfoPopupItem value={track['source']} label="Type" options={{translationConstKey: 'source'}} />
                     <InfoPopupSwitchItems track={track} />
+                    <InfoPopupShapeItems track={track} />
                 </tbody>
             </table>
         </div>
@@ -37,6 +38,13 @@ function InfoPopupSwitchItems(props) {
     </>
 }
 
+function InfoPopupShapeItems(props) {
+    const { track } = props;
+    if (track.type !== 'StandardTrack' || track.r === 0) return null;
+
+    return <InfoPopupItem value={Math.abs(track.r)} label="Radius" options={{suffix: ' m', precision: 0}} />
+}
+
 function processItemValue(value, options) {
     const { translationConstKey, join, subOptions, suffix } = options || {};
 
@@ -46,6 +54,10 @@ function processItemValue(value, options) {
 
     if (translationConstKey) {
         return TrackHoverInfoConsts[translationConstKey]?.[value] || value;
+    }
+
+    if (typeof value === 'number' && 'precision' in options) {
+        value = value.toFixed(options.precision);
     }
 
     if (value === undefined || value === null || value === '') {
