@@ -8,6 +8,22 @@ function radToDeg(angle) {
     return angle * (180 / Math.PI);
 }
 
+function rotationDegToRad(vector) {
+    return new Vector3(
+        degToRad(vector.x),
+        degToRad(vector.y),
+        degToRad(vector.z),
+    );
+}
+
+function rotationRadToDeg(vector) {
+    return new Vector3(
+        radToDeg(vector.x),
+        radToDeg(vector.y),
+        radToDeg(vector.z),
+    );
+}
+
 function normalizeDegAngle(angle) {
     if (angle < 0) {
         return angle + 360 * Math.ceil(Math.abs(angle) / 360);
@@ -29,6 +45,8 @@ function normalizeDegVector(vector) {
 const AngleHelper = {
     degToRad,
     radToDeg,
+    rotationDegToRad,
+    rotationRadToDeg,
     normalizeDegAngle,
     normalizeDegVector
 }

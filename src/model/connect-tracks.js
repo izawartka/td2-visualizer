@@ -1,12 +1,13 @@
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 import SceneryParserLog from "./scenery-parser-log";
 import Constants from "../helpers/constants";
+import {TrackSource} from "./tracks/track";
 
 const connectionThresholdDistanceSq = 0.05;
 
 export function connectTracks(scenery) {
     Object.values(scenery.objects['tracks'] || {}).forEach((track) => {
-        track.connections.filter((connection) => 
+        track.connections.filter((connection) =>
             _applyTrackConnection(scenery, track, connection)
         );
     });
@@ -32,8 +33,7 @@ function _applyTrackConnection(scenery, track, connection) {
     connection.otherTrack = otherTrack;
 
     // route tracks dont have reverse connections saved in file, so we add them here
-    const isRouteTrack = otherTrack.type === 'RouteTrack';
-    if (isRouteTrack) {
+    if (otherTrack.source === TrackSource.ROUTE) {
         const reverseConnection = new TrackConnection(track, TrackConnectionEnd.START);
         otherTrack.connections.push(reverseConnection);
     }
@@ -42,6 +42,8 @@ function _applyTrackConnection(scenery, track, connection) {
 }
 
 function _testTrackConnection(track, connection) {
+    if (!connection.otherTrack) return;
+
     const reverseConnections = connection.otherTrack.connections.filter(
         (otherConnection) => otherConnection.otherTrackId === track.id,
     );
