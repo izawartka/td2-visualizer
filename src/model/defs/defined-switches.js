@@ -1,12 +1,13 @@
 import SwitchPrefab from "../switch-descriptions/switch-prefab";
 import Quaternion from "../quaternion";
 import Vector3 from "../vector3";
-import {SwitchTrackConnectionType} from "../switch-descriptions/switch-prefab-track";
 import {TrackConnectionEnd} from "../track-connection";
 import MiscHelper from "../../helpers/miscHelper";
 
 const { START, END } = TrackConnectionEnd;
-const { INTERNAL, EXTERNAL } = SwitchTrackConnectionType;
+const INTERNAL = Symbol('SwitchTrackConnectionType.INTERNAL');
+const EXTERNAL = Symbol('SwitchTrackConnectionType.INTERNAL');
+export const SwitchTrackConnectionType = { INTERNAL, EXTERNAL };
 
 const exportedSwitches = {
     'Crossing': {
@@ -839,8 +840,6 @@ const exportedSwitches = {
     },
 };
 
-const DefinedSwitches = MiscHelper.mapObject(exportedSwitches, (def, prefabName) => {
+export const DefinedSwitches = MiscHelper.mapObject(exportedSwitches, (def, prefabName) => {
     return SwitchPrefab.parseExported(prefabName, def);
 });
-
-export default DefinedSwitches;

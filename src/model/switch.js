@@ -2,9 +2,10 @@ import PointTrack from "./tracks/point-track.js";
 import SceneryObject from "./scenery-object.js";
 import SceneryParserLog from "./scenery-parser-log.js";
 import Vector3 from "./vector3.js";
-import DefinedSwitches from "./defs/defined-switches.js";
-import {SwitchTrackConnectionType} from "./switch-descriptions/switch-prefab-track";
+import {DefinedSwitches, SwitchTrackConnectionType} from "./defs/defined-switches.js";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import CurveHelper from "../helpers/curveHelper";
+import AngleHelper from "../helpers/angleHelper";
 
 export default class Switch extends SceneryObject {
     model;
@@ -105,7 +106,7 @@ export default class Switch extends SceneryObject {
     }
 
     _createSwitchTrackFromDef(scenery, switchDef, trackDef, ids) {
-        const rotRad = this.rot.multiply(Math.PI / 180);
+        const rotRad = AngleHelper.rotationDegToRad(this.rot);
         if (trackDef.dataIndex >= ids.length) {
             SceneryParserLog.warn(
                 'switchMissingTrackId',
@@ -145,10 +146,16 @@ export default class Switch extends SceneryObject {
             }
         });
 
+        const localEndPos = CurveHelper
+            .calculateCurveEndStandard(trackDef.radius, trackDef.length)
+            .endPos
+            .rotateByQuaternion(trackDef.rot)
+            .add(trackDef.pos);
+
         const trackObj = new PointTrack(
             trackId,
-            this.pos.add(trackDef.startPos.rotate(rotRad)),
-            this.pos.add(trackDef.endPos.rotate(rotRad)),
+            this.pos.add(trackDef.pos.rotate(rotRad)),
+            this.pos.add(localEndPos.rotate(rotRad)),
             trackDef.radius,
             connections,
             this.id_switch,
