@@ -32,10 +32,21 @@ def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
+def parse_prefab(file, prefab_name):
+    main_component = parse_prefab_components(file)
+    tracks = find_tracks(main_component)
+    isolation_label_pos = get_isolation_label_pos(prefab_name)
+    return {
+        "name": prefab_name,
+        "tracks": tracks,
+        "isolation_label_pos": isolation_label_pos,
+    }
+
+
 prefab_header_pattern = re.compile(r"^--- !u!(\d+) &(\d+)$")
 
 
-def parse_prefab(file):
+def parse_prefab_components(file):
     component_list = []
     component_map = {}
     current_yaml = ""
@@ -278,10 +289,17 @@ def resolve_references(value, component_map, visited_ids):
 
         resolve_references(value[key], component_map, visited_ids)
 
-def format_prefab(prefab_name, tracks):
-    print(f"'{prefab_name}': {{")
-    print('    tracks: {')
-    for (track_id, track) in tracks:
+
+def get_isolation_label_pos(prefab_name):
+    if prefab_name.startswith("Rkp") or prefab_name.startswith("Crossing"):
+        return "new Vector3(0, 0, 0)"
+    return "new Vector3(0, 0, 6)"
+
+
+def format_prefab(prefab):
+    print(f"'{prefab["name"]}': {{")
+    print("    tracks: {")
+    for (track_id, track) in prefab["tracks"]:
         track_object = json.dumps(track)
         # Replace "<FOO>" with FOO
         track_object = re.sub(r'(?<!\\)"<([^<>"]+)>"', r'\1', track_object)
@@ -289,6 +307,7 @@ def format_prefab(prefab_name, tracks):
         track_object = re.sub(r'(?<!\\)"([a-zA-Z][a-zA-Z0-9]*)":', r'\1:', track_object)
         print(f"        '{track_id}': {track_object},")
     print("    },")
+    print(f"    isolationLabelPos: {prefab["isolation_label_pos"]},")
     print("},")
 
 
@@ -303,9 +322,9 @@ def process_file(file_path):
     eprint(f"Processing file: {file_path}")
     try:
         with open(file_path, encoding="utf8") as infile:
-            prefab = parse_prefab(infile)
-            tracks = find_tracks(prefab)
-            format_prefab(Path(file_path).stem, tracks)
+            prefab_name = Path(file_path).stem
+            prefab = parse_prefab(infile, prefab_name)
+            format_prefab(prefab)
     except Exception:
         eprint(f"Error processing {file_path}:", file=sys.stderr)
         traceback.print_exc(file=sys.stderr)

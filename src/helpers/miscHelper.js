@@ -7,10 +7,4 @@ export default class MiscHelper {
 
         return `rgb(${out[0]}, ${out[1]}, ${out[2]})`;
     }
-
-    static mapObject(object, callback) {
-        return Object.fromEntries(
-            Object.entries(object).map(([key, value]) => [key, callback(value, key)])
-        )
-    }
 }

@@ -87,8 +87,8 @@ export default class Switch extends SceneryObject {
         this.tracks = tracks;
         this.def = def;
 
-        const rotRad = this.rot.multiply(Math.PI / 180);
-        this.isolation_id_pos = this.pos.add(def.isolation_id_offset.rotate(rotRad));
+        const rotRad = AngleHelper.rotationDegToRad(this.rot);
+        this.isolation_id_pos = this.pos.add(def.isolationLabelPos.rotate(rotRad));
         super.applyObject(scenery);
     }
 
