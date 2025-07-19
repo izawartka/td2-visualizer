@@ -17,6 +17,7 @@ import ElectrificationResolver from './electrification-resolver';
 import NEVP from './track-objects/nevp';
 import Derailer from './track-objects/derailer';
 import SpawnPoint from './track-objects/spawn-point';
+import Platform from './misc/platform';
 import { attachSigns } from './attach-signs';
 import {connectTracks} from "./connect-tracks";
 import MiscGroup from './misc-group';
@@ -174,7 +175,9 @@ export default class SceneryParser {
         const prefabName = text.split(';', 4)[2];
         const id = SceneryParser.nextMiscId++;
 
-        if(SignalBox.isSignalBox(prefabName)) {
+        if (Platform.isPlatform(prefabName)) {
+            return Platform.fromText(id, text, miscGroups);
+        } else if(SignalBox.isSignalBox(prefabName)) {
             return SignalBox.fromText(id, text, miscGroups);
         } else if(Constants.parser.skipBaseMisc) {
             return null;

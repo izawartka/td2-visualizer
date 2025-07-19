@@ -1,13 +1,15 @@
 import os
+import re
 import sys
 
 #
 #    [ TD2 SCENERY PROCESSOR ]
 #    by masuo
-#    v1.5
+#    v1.6
 #
 
-BAD_WORDS = ['EndMiscGroup', 'Fence', 'TerrainPoint', 'Wires']
+BAD_WORDS = ['Fence', 'TerrainPoint', 'Wires']
+MISC_REGEX = r'^(?:SignalBox|wgt_peron|peron|platform).*$'
 
 def should_exclude(line: str) -> bool:
     for word in BAD_WORDS:
@@ -15,8 +17,8 @@ def should_exclude(line: str) -> bool:
             return True
 
     if line.startswith("Misc"):
-        values = line.split(';')
-        return not values[2].startswith("SignalBox")
+        if re.match(MISC_REGEX, line):
+            return True
 
     return False
 

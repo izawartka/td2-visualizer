@@ -51,6 +51,7 @@ const Constants = {
         connectTracksFailed: true,
         routeInvalidSegment: true,
         derailerUnknownDirection: true,
+        platformUndefinedPrefabName: true,
         endMiscGroupWithoutStart: true,
     },
     errors: {
