@@ -1,4 +1,6 @@
 import Vector3 from "../model/vector3";
+import Quaternion from "../model/quaternion";
+import AngleHelper from "./angleHelper";
 
 function calculateCurveEnd(startPos, startAngle, radius, curveLength) {
     if (radius === 0) {
@@ -34,9 +36,24 @@ function calculateCurveEndStandard(radius, curveLength) {
     return { endPos, endAngle, circleCenter };
 }
 
+function transformStart(globalStart, globalRotationDeg, localStart, localRotationQuat) {
+    const globalRotationRad = AngleHelper.rotationDegToRad(globalRotationDeg);
+    const startPos = globalStart.add(localStart.rotate(globalRotationRad));
+    const rotationQuat = Quaternion.fromEulerAnglesRad(globalRotationRad).multiply(localRotationQuat);
+    const rotationRad = rotationQuat.toEulerAnglesRad();
+    const rotationDeg = AngleHelper.rotationRadToDeg(rotationRad);
+
+    return {
+        startPos,
+        rotationQuat,
+        rotationDeg,
+    };
+}
+
 const CurveHelper = {
     calculateCurveEnd,
     calculateCurveEndStandard,
+    transformStart,
 };
 
 export default CurveHelper;

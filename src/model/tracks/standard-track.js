@@ -107,4 +107,21 @@ export default class StandardTrack extends Track  {
         track.route = route;
         return track;
     }
+
+    static switch(id, start, rot, len, r, connections, start_slope, end_slope, object) {
+        const track = new StandardTrack(
+            id, start, rot, len, r,
+            connections,
+            object.id_switch,
+            start_slope,
+            end_slope,
+            object.id_isolation,
+            object.prefab_name,
+            object.maxspeed,
+            object.derailspeed,
+            TrackSource.SWITCH,
+        );
+        track.switch = object;
+        return track;
+    }
 }
