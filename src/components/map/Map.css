@@ -128,3 +128,7 @@
 .map svg g.spawn-point path.background {
     fill: #111;
 }
+
+.map svg g.platform rect {
+    fill: #333;
+}

@@ -64,6 +64,11 @@ const Constants = {
     },
     layers: [
         {
+            id: 'platforms',
+            name: 'Platforms (WIP)',
+            default: true,
+        },
+        {
             id: 'tracks',
             name: 'Tracks',
             default: true,
