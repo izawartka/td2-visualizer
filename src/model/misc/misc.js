@@ -1,4 +1,3 @@
-import AngleHelper from "../../helpers/angleHelper";
 import SceneryObject from "../scenery-object";
 import Vector3 from "../vector3";
 
@@ -13,7 +12,7 @@ export default class Misc extends SceneryObject {
         Object.assign(this, {
             misc_id,
             prefab_name,
-            name,
+            name
         });
     }
 
@@ -35,19 +34,15 @@ export default class Misc extends SceneryObject {
         return object;
     }
 
-    static applyGroupTransforms(pos, rot, miscGroups) {
-        if(!miscGroups) return [ pos, rot ];
-
+    static applyGroupTransforms(localPos, localRot, miscGroups) {
+        let worldPos = localPos.clone();
+        let worldRot = localRot.clone();
+      
         for (const group of miscGroups) {
-            const rotRad = AngleHelper.degToRad(group.rot.y);
-            const rotRadY = new Vector3(0, rotRad, 0);
-            pos = pos.rotate(rotRadY).add(group.pos);
-            rot = rot.add(group.rot); 
-            // TODO: Replace this with some fancy quaternion math maybe
+            worldPos = group.getQuaternion().rotateVector(worldPos).add(group.pos);
+            worldRot = worldRot.add(group.rot);
         }
-
-        rot = AngleHelper.normalizeDegVector(rot);
-
-        return [ pos, rot ];
+      
+        return [ worldPos, worldRot ];
     }
 }

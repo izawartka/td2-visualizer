@@ -115,11 +115,11 @@ export default class SceneryParser {
                 return MainCamera.fromText(text);
             case 'MiscGroup':
                 const group = MiscGroup.fromText(text);
-                currentMiscGroups.push(group);
+                currentMiscGroups.unshift(group);
 
                 return null;
             case 'EndMiscGroup':
-                if(!currentMiscGroups.pop()) {
+                if(!currentMiscGroups.shift()) {
                     SceneryParserLog.warn('endMiscGroupWithoutStart', 'Unexpected EndMiscGroup found without a preceding MiscGroup');
                 }
 
