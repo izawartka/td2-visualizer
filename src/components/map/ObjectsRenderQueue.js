@@ -12,6 +12,7 @@ import ElectrificationStatusPopup from './additional-layer-components/Electrific
 import SpawnPointRenderer from './object-renderers/SpawnPointRenderer';
 import IsolationEndRenderer from './object-renderers/IsolationEndRenderer';
 import PlatformRenderer from './object-renderers/PlatformRenderer';
+import Constants from '../../helpers/constants';
 
 const ObjectRendererQueue = [
     {
@@ -19,7 +20,7 @@ const ObjectRendererQueue = [
         'category': 'misc',
         'type': 'Platform',
         'renderer': PlatformRenderer,
-        'cond': (layers) => layers['platforms'],
+        'cond': (layers) => layers['platforms'] && !Constants.parser.skipPlatforms
     },
     {
         'name': 'tracks',

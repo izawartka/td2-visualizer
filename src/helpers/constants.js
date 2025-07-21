@@ -20,7 +20,8 @@ const Constants = {
         attachSignsMaxDistanceX: 0.3,
         attachSignsGridSize: 10,
         logAttachedSigns: false,
-        skipBaseMisc: true
+        skipBaseMisc: true,
+        skipPlatforms: false
     },
     warnings: {
         all: false, // enable all warnings
@@ -67,6 +68,7 @@ const Constants = {
             id: 'platforms',
             name: 'Platforms (WIP)',
             default: true,
+            cond: () => !Constants.parser.skipPlatforms,
         },
         {
             id: 'tracks',

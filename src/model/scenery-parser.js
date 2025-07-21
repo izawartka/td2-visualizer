@@ -176,12 +176,12 @@ export default class SceneryParser {
         const id = SceneryParser.nextMiscId++;
 
         if (Platform.isPlatform(prefabName)) {
+            if(Constants.parser.skipPlatforms) return null;
             return Platform.fromText(id, text, miscGroups);
         } else if(SignalBox.isSignalBox(prefabName)) {
             return SignalBox.fromText(id, text, miscGroups);
-        } else if(Constants.parser.skipBaseMisc) {
-            return null;
         } else {
+            if(Constants.parser.skipBaseMisc) return null;
             return Misc.fromText(id, text, miscGroups);
         }
     }
