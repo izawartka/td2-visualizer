@@ -1,4 +1,4 @@
-import Quaternion from "./quaternion";
+import QuaternionPrefabParser from "./quaternion-prefab-parser";
 
 export default class Vector3 {
     x;
@@ -64,7 +64,7 @@ export default class Vector3 {
     }
 
     rotateByQuaternion(quat) {
-        const resultQuat = quat.multiply(Quaternion.fromVec(this)).multiply(quat.conjugate());
+        const resultQuat = quat.multiply(QuaternionPrefabParser.fromVec(this)).multiply(quat.conjugate());
         return new Vector3(resultQuat.x, resultQuat.y, resultQuat.z);
     }
 
@@ -155,7 +155,7 @@ export default class Vector3 {
     length() {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
-    
+
     lengthSq() {
         return this.x * this.x + this.y * this.y + this.z * this.z;
     }
