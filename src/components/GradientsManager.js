@@ -7,11 +7,12 @@ function getMinMax(trackColorMode, scenery) {
         if (!scenery) return null;
         if (scenery.trackElevationBounds.minY > scenery.trackElevationBounds.maxY) return null;
 
-        // Ensure min and max values are even so that the min, max and middle values are integers
-        const min = Math.floor(scenery.trackElevationBounds.minY/2)*2;
-        let max = Math.ceil((scenery.trackElevationBounds.maxY)/2)*2;
-        // Make sure max > min even on flat sceneries, otherwise `diff` calculation would result in division by 0
-        if (max <= min) max = min + 2;
+        const min = scenery.trackElevationBounds.minY;
+        // Make sure diff > 0 even on flat sceneries
+        let diff = Math.max(scenery.trackElevationBounds.maxY - scenery.trackElevationBounds.minY, 1);
+        // Ensure `diff` is even so that the min, max and middle legend values are integers
+        diff = Math.ceil(diff / 2)*2;
+        const max = min + diff;
 
         return [min, max];
     }
@@ -38,6 +39,7 @@ function createGradientSettings(trackColorMode, scenery, def) {
             legendMin: minValue,
             legendMax: maxValue,
             unit: gradient.unit,
+            startLegendAt0: gradient.startLegendAt0 ?? false,
         };
     }
     return null;

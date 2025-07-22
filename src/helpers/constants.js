@@ -154,6 +154,7 @@ const Constants = {
                 legendMin: 0,
                 legendMax: 10,
                 unit: '‰',
+                startLegendAt0: false,
             }
         },
         'max-speed': {
@@ -165,6 +166,7 @@ const Constants = {
                 legendMin: 0,
                 legendMax: 170,
                 unit: 'km/h',
+                startLegendAt0: false,
             },
             options: {
                 'derail': ['#f22', 'Derail track'],
@@ -178,8 +180,9 @@ const Constants = {
                 min: [0, 190, 0],
                 max: [255, 22, 22],
                 defaultMin: 0,
-                defaultMax: 1,
+                defaultMax: 2,
                 unit: 'm',
+                startLegendAt0: true,
             },
         },
     }

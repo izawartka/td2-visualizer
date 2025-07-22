@@ -50,15 +50,21 @@ function LegendGradient(props) {
     const to = MiscHelper.getTrackGradientColor(gradientDef, gradientDef.legendMax);
     const gradientStyle = `linear-gradient(to right, ${from}, ${to})`;
 
-    const midVal = (gradientDef.legendMin + gradientDef.legendMax) / 2;
+    let { legendMin, legendMax } = gradientDef;
+    if (gradientDef.startLegendAt0) {
+        legendMax -= legendMin;
+        legendMin = 0;
+    }
+
+    const midVal = (legendMin + legendMax) / 2;
 
     return (
         <div className="gradient">
             <div className="gradient-bar" style={{ background: gradientStyle}}></div>
             <div className="gradient-labels">
-                <span className="gradient-label">{gradientDef.legendMin} {gradientDef.unit}</span>
+                <span className="gradient-label">{legendMin} {gradientDef.unit}</span>
                 <span className="gradient-label">{midVal} {gradientDef.unit}</span>
-                <span className="gradient-label">{gradientDef.legendMax} {gradientDef.unit}</span>
+                <span className="gradient-label">{legendMax} {gradientDef.unit}</span>
             </div>
         </div>
     );
