@@ -7,8 +7,8 @@ export default class Platform extends Misc {
     type = "Platform";
     def = null;
 
-    constructor(id, misc_id, prefab_name, pos, rot, name) {
-        super(id, misc_id, prefab_name, pos, rot, name);
+    constructor(id, misc_id, prefab_name, pos, rot, yawData, name) {
+        super(id, misc_id, prefab_name, pos, rot, yawData, name);
 
         this.def = Platform.getDef(name, prefab_name);
     }

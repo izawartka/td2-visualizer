@@ -36,6 +36,8 @@ export default function LayersMenu(props) {
 function LayersMenuItem(props) {
     const { layer, isChecked, onToggle } = props;
 
+    if(layer.cond && !layer.cond()) return null;
+
     return (
         <li>
             <label>

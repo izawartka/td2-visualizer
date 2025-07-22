@@ -4,16 +4,19 @@ import Constants from "../../../helpers/constants";
 import { ElectrificationStatus } from "../../../model/electrification-status";
 import MiscHelper from "../../../helpers/miscHelper";
 import { setHoveredTrack, unsetHoveredTrack } from "../../../services/trackHoverInfoService";
-import {TrackSource} from "../../../model/tracks/track";
+import GradientsContext from "../../../contexts/GradientsContext";
+import { TrackSource } from "../../../model/tracks/track";
 
 export default function TrackRenderer(props) {
   const { object } = props;
   const { trackColorMode } = useContext(SettingsContext);
+  const { gradientDefs } = useContext(GradientsContext);
 
   return (
     <MemoizedTrackRenderer
       object={object}
       trackColorMode={trackColorMode}
+      gradientDef={gradientDefs[trackColorMode] ?? null}
     />
   );
 }
@@ -21,7 +24,7 @@ export default function TrackRenderer(props) {
 const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 
 function StatelessTrackRenderer(props) {
-  const { object, trackColorMode } = props;
+  const { object, trackColorMode, gradientDef } = props;
 
   if (object.points.start.distanceSq(object.points.end) < 0.001) {
       return null;
@@ -36,8 +39,8 @@ function StatelessTrackRenderer(props) {
   };
 
   const path = getTrackPath(object);
-  const color = getTrackColor(object, trackColorMode);
-  const defs = getTrackDefs(object, trackColorMode);
+  const color = getTrackColor(object, trackColorMode, gradientDef);
+  const defs = getTrackDefs(object, trackColorMode, gradientDef);
 
   return (
     <g id={`track-${object.id}`}>
@@ -84,7 +87,18 @@ function getTrackPath(object) {
     }
 }
 
-function getTrackColor(object, trackColorMode) {
+function getGradientValues(object, trackColorMode) {
+    switch (trackColorMode) {
+        case 'slope':
+            return [Math.abs(object.start_slope), Math.abs(object.end_slope)];
+        case 'elevation':
+            return [object.points.start.y, object.points.end.y];
+        default:
+            return null;
+    }
+}
+
+function getTrackColor(object, trackColorMode, gradientDef) {
   const modeDef = Constants.trackColorModes[trackColorMode];
 
   switch (trackColorMode) {
@@ -122,46 +136,50 @@ function getTrackColor(object, trackColorMode) {
         default:
           return modeDef.options[modeDef.optionDefault][0];
       }
-    case "slope":
-      // do not use track gradient unless the slope is different on both ends
-      if (object.start_slope === object.end_slope) {
-        return MiscHelper.getTrackGradient(modeDef.gradient, Math.abs(object.start_slope));
-      }
-
-      return `url(#track-slope-${object.id})`;
 
     case "max-speed":
       if (!object.maxspeed) {
         if (object.type === 'RouteTrack') return modeDef.options['unknown'][0];
         return modeDef.options['derail'][0];
       }
-      return MiscHelper.getTrackGradient(modeDef.gradient, object.maxspeed);
+      return MiscHelper.getTrackGradientColor(gradientDef, object.maxspeed);
+
+    case "elevation":
+    case "slope":
+      const [startValue, endValue] = getGradientValues(object, trackColorMode);
+      if (startValue === endValue) return MiscHelper.getTrackGradientColor(gradientDef, startValue);
+      return `url(#track-${trackColorMode}-${object.id})`;
   }
 }
 
-function getTrackDefs(object, trackColorMode) {
-    if (trackColorMode !== "slope") return null;
-    if (object.start_slope === object.end_slope) return null;
-
+function getGradientDefs(object, trackColorMode, gradientDef, startValue, endValue) {
+    if (startValue === endValue) return null;
     const [x1, y1] = object.points.start.toSVGCoords();
     const [x2, y2] = object.points.end.toSVGCoords();
-    const gradId = `track-slope-${object.id}`;
-    const startColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.start_slope));
-    const endColor = MiscHelper.getTrackGradient(Constants.trackColorModes['slope'].gradient, Math.abs(object.end_slope));
+    const gradId = `track-${trackColorMode}-${object.id}`;
+    const startColor = MiscHelper.getTrackGradientColor(gradientDef, startValue);
+    const endColor = MiscHelper.getTrackGradientColor(gradientDef, endValue);
 
     return (
         <defs>
-        <linearGradient
-            id={gradId}
-            gradientUnits="userSpaceOnUse"
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
-        >
-            <stop offset="0%" stopColor={startColor} />
-            <stop offset="100%" stopColor={endColor} />
-        </linearGradient>
+            <linearGradient
+                id={gradId}
+                gradientUnits="userSpaceOnUse"
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+            >
+                <stop offset="0%" stopColor={startColor} />
+                <stop offset="100%" stopColor={endColor} />
+            </linearGradient>
         </defs>
     );
+}
+
+function getTrackDefs(object, trackColorMode, gradientDef) {
+     const gradientVals = getGradientValues(object, trackColorMode);
+     if (gradientVals === null) return null;
+     const [startValue, endValue] = gradientVals;
+     return getGradientDefs(object, trackColorMode, gradientDef, startValue, endValue);
 }
