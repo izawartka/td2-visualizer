@@ -1,6 +1,6 @@
 import Vector3 from "./vector3";
 
-export default class Quaternion {
+export default class QuaternionPrefabParser {
     x;
     y;
     z;
@@ -11,11 +11,11 @@ export default class Quaternion {
     }
 
     conjugate() {
-        return new Quaternion(-this.x, -this.y, -this.z, this.w);
+        return new QuaternionPrefabParser(-this.x, -this.y, -this.z, this.w);
     }
 
     multiply(other) {
-        return new Quaternion(
+        return new QuaternionPrefabParser(
             this.w * other.x + this.x * other.w + this.y * other.z - this.z * other.y,
             this.w * other.y - this.x * other.z + this.y * other.w + this.z * other.x,
             this.w * other.z + this.x * other.y - this.y * other.x + this.z * other.w,
@@ -24,7 +24,7 @@ export default class Quaternion {
     }
 
     static fromVec(vec) {
-        return new Quaternion(vec.x, vec.y, vec.z, 0);
+        return new QuaternionPrefabParser(vec.x, vec.y, vec.z, 0);
     }
 
     /**
@@ -38,7 +38,7 @@ export default class Quaternion {
         const cosZ = Math.cos(vec.z/2);
         const sinZ = Math.sin(vec.z/2);
 
-        return new Quaternion(
+        return new QuaternionPrefabParser(
             cosY * sinX * cosZ + sinY * cosX * sinZ,
             sinY * cosX * cosZ - cosY * sinX * sinZ,
             cosY * cosX * sinZ - sinY * sinX * cosZ,
