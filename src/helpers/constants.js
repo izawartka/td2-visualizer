@@ -159,6 +159,7 @@ const Constants = {
         },
         'slope': {
             name: 'Slope',
+            type: 'gradient',
             gradient: {
                 base: [128, 0, 128],
                 diff: [0, 25.6, 0],
@@ -181,7 +182,18 @@ const Constants = {
                 'derail': ['#f22', 'Derail track'],
                 'unknown': ['#aaa', 'Unknown speed'],
             }
-        }
+        },
+        'elevation': {
+            name: 'Elevation',
+            type: 'gradient',
+            dynamicGradient: {
+                min: [0, 190, 0],
+                max: [255, 22, 22],
+                defaultMin: 0,
+                defaultMax: 1,
+                unit: 'm',
+            },
+        },
     }
 };
 

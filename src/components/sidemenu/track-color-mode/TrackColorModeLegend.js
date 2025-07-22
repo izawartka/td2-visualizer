@@ -1,4 +1,6 @@
 import Constants from "../../../helpers/constants";
+import {useContext} from "react";
+import GradientsContext from "../../../contexts/GradientsContext";
 import MiscHelper from "../../../helpers/miscHelper";
 
 export default function TrackColorModeLegend(props) {
@@ -7,7 +9,7 @@ export default function TrackColorModeLegend(props) {
 
     return (
         <div className="track-color-mode-legend">
-            <LegendGradient colorModeDef={colorModeDef} />
+            <LegendGradient trackColorMode={trackColorMode} />
             <LegendOptions colorModeDef={colorModeDef} />
         </div>
     );
@@ -22,7 +24,7 @@ function LegendOptions(props) {
             <ul>
                 { Object.entries(colorModeDef.options).map(([key, optionDef]) => (
                     <LegendOptionsItem key={key} optionDef={optionDef} />
-                ))}                
+                ))}
             </ul>
         </div>
     );
@@ -39,12 +41,13 @@ function LegendOptionsItem(props) {
 }
 
 function LegendGradient(props) {
-    const { colorModeDef } = props;
-    const gradientDef = colorModeDef?.gradient || null;
+    const { gradientDefs } = useContext(GradientsContext);
+    const { trackColorMode } = props;
+    const gradientDef = gradientDefs[trackColorMode];
     if (!gradientDef) return null;
 
-    const from = MiscHelper.getTrackGradient(gradientDef, gradientDef.legendMin);
-    const to = MiscHelper.getTrackGradient(gradientDef, gradientDef.legendMax);
+    const from = MiscHelper.getTrackGradientColor(gradientDef, gradientDef.legendMin);
+    const to = MiscHelper.getTrackGradientColor(gradientDef, gradientDef.legendMax);
     const gradientStyle = `linear-gradient(to right, ${from}, ${to})`;
 
     const midVal = (gradientDef.legendMin + gradientDef.legendMax) / 2;
