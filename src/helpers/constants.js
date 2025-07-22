@@ -5,7 +5,8 @@ const Constants = {
         zoomMin: 0.03,
         zoomMax: 200.0,
         rotationSensitivity: 0.2,
-        forcePointerEvents: false
+        forcePointerEvents: false,
+        platformMaxTilt: 0.5
     },
     parser: {
         logSceneryAfterFinished: true,
@@ -66,7 +67,7 @@ const Constants = {
     layers: [
         {
             id: 'platforms',
-            name: 'Platforms (WIP)',
+            name: 'Platforms',
             default: true,
             cond: () => !Constants.parser.skipPlatforms,
         },

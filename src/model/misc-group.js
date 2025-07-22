@@ -23,7 +23,8 @@ export default class MiscGroup {
 
     getQuaternion() {
         if (!this.quaternion) {
-            this.quaternion = Quaternion.fromEulerAngles(this.rot.multiply(Math.PI / 180));
+            const rotRad = this.rot.multiply(Math.PI / 180);
+            this.quaternion = Quaternion.fromEulerAngles(rotRad).normalize();
         }
         
         return this.quaternion;
