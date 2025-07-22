@@ -3,18 +3,18 @@ import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 import {ElectrificationStatus} from "../../../model/electrification-status";
 import {setHoveredTrack, unsetHoveredTrack} from "../../../services/trackHoverInfoService";
-import ZoomPanContext from "../../../contexts/ZoomPanContext";
 import GradientsContext from "../../../contexts/GradientsContext";
 import MiscHelper from "../../../helpers/miscHelper";
+import {useZoomPanEmitter} from "../../../hooks/useZoomPubSub";
 
 export default function TrackRenderer(props) {
     const {object} = props;
     const {trackColorMode} = useContext(SettingsContext);
     const {gradientDefs} = useContext(GradientsContext);
-    const {alignView} = useContext(ZoomPanContext);
+    const { alignView } = useZoomPanEmitter();
 
-    const onAlign = (event) => {
-        alignView(object.rot.y, event);
+    const onAlign = () => {
+        alignView(object.rot.y);
     };
 
     return (

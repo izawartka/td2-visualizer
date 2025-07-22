@@ -3,7 +3,6 @@ import './ZoomPanWrapper.css';
 import Constants from '../../helpers/constants';
 import { useZoomPanSubscriber, viewBox$, clientRect$, camera$ } from '../../hooks/useZoomPubSub';
 import {mapRotation$} from '../../services/mapRotationService';
-import ZoomPanContext from "../../contexts/ZoomPanContext";
 import AngleHelper from "../../helpers/angleHelper";
 
 export default function ZoomPanWrapper({children}) {
@@ -91,8 +90,19 @@ export default function ZoomPanWrapper({children}) {
         scheduleCameraUpdate();
     }, [scheduleCameraUpdate]);
 
-    // Subscribe to any external "center" calls
-    useZoomPanSubscriber(centerOn);
+    const alignView = (angleDeg) => {
+        // Find such relative rotation in the range [-45, 45] degrees that aligns the track
+        // with y rotation angleDeg to the X or Y screen axis.
+        const angleDifference = -angleDeg - cameraRef.current.rotation;
+        let deltaAngle = AngleHelper.normalizeDegAngle(angleDifference, 90);
+        if (deltaAngle > 45) deltaAngle -= 90;
+
+        cameraRef.current.rotation += deltaAngle;
+        scheduleCameraUpdate();
+    };
+
+    // Subscribe to any external `center` and `alignView` calls
+    useZoomPanSubscriber(centerOn, alignView);
 
     const onWheel = (e) => {
         const { left, top } = clientRectRef.current;
@@ -149,35 +159,21 @@ export default function ZoomPanWrapper({children}) {
         isMouseDownRef.current = false;
     };
 
-    // `event` could be used in the future to perform the rotation around the click position
-    const alignView = (angleDeg, _event) => {
-        // Find such relative rotation in the range [-45, 45] degrees that aligns the track
-        // with y rotation angleDeg to the X or Y screen axis.
-        const angleDifference = -angleDeg - cameraRef.current.rotation;
-        let deltaAngle = AngleHelper.normalizeDegAngle(angleDifference, 90);
-        if (deltaAngle > 45) deltaAngle -= 90;
-
-        cameraRef.current.rotation += deltaAngle;
-        scheduleCameraUpdate();
-    };
-
     return (
-        <ZoomPanContext.Provider value={{alignView}}>
-            <div className="zoom-pan-wrapper" ref={wrapperRef}>
-                <svg
-                    ref={svgRef}
-                    viewBox={getViewBoxString()}
-                    onWheel={onWheel}
-                    onMouseDown={onMouseDown}
-                    onMouseMove={onMouseMove}
-                    onMouseUp={onMouseUp}
-                    onMouseLeave={onMouseUp}
-                >
-                    <g ref={cameraWrapperRef} transform={getCameraTransformString()}>
-                        {children}
-                    </g>
-                </svg>
-            </div>
-        </ZoomPanContext.Provider>
+        <div className="zoom-pan-wrapper" ref={wrapperRef}>
+            <svg
+                ref={svgRef}
+                viewBox={getViewBoxString()}
+                onWheel={onWheel}
+                onMouseDown={onMouseDown}
+                onMouseMove={onMouseMove}
+                onMouseUp={onMouseUp}
+                onMouseLeave={onMouseUp}
+            >
+                <g ref={cameraWrapperRef} transform={getCameraTransformString()}>
+                    {children}
+                </g>
+            </svg>
+        </div>
     );
 }
