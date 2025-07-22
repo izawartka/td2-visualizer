@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Subject, BehaviorSubject } from 'rxjs';
 
 const zoomCenter$ = new Subject();
+const viewAlign$ = new Subject();
 
 // BehaviorSubjects to store current viewBox, clientRect and camera transform
 export const viewBox$ = new BehaviorSubject(null);
@@ -32,17 +33,27 @@ export function getCurrentCamera() {
 /**
 * useZoomPanSubscriber
 *
-* Registers a callback (onCenter) that will be invoked whenever
+* Registers an `onCenter` callback that will be invoked whenever
 * someone calls `center(x, y)` via the emitter. You should pass
 * a function that takes (x, y) and recenters your viewBox accordingly.
+ *
+ * Similarly, registers an `onAlign` callback that will be invoked
+ * when someone calls `alignView(angleDeg)`.
 */
-export function useZoomPanSubscriber(onCenter) {
+export function useZoomPanSubscriber(onCenter, onAlign) {
     useEffect(() => {
         const sub = zoomCenter$.subscribe(({ x, y }) => {
             onCenter(x, y);
         });
         return () => sub.unsubscribe();
     }, [onCenter]);
+
+    useEffect(() => {
+        const sub = viewAlign$.subscribe((angleDeg) => {
+            onAlign(angleDeg);
+        });
+        return () => sub.unsubscribe();
+    }, [onAlign]);
 }
 
 /**
@@ -56,6 +67,9 @@ export function useZoomPanEmitter() {
     return {
         center: (x, y) => {
             zoomCenter$.next({ x, y });
+        },
+        alignView: (angleDeg) => {
+            viewAlign$.next(angleDeg);
         },
     };
 }
