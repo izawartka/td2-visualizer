@@ -1,7 +1,7 @@
 import Vector3 from "./vector3";
 import AngleHelper from "../helpers/angleHelper";
 
-export default class QuaternionPrefabParser {
+export default class Quaternion {
     x;
     y;
     z;
@@ -13,23 +13,23 @@ export default class QuaternionPrefabParser {
 
     rotateVector(vector) {
         const resultQuat = this
-            .multiply(QuaternionPrefabParser.fromVec(vector))
+            .multiply(Quaternion.fromVec(vector))
             .multiply(this.conjugate());
         return new Vector3(resultQuat.x, resultQuat.y, resultQuat.z);
     }
 
     conjugate() {
-        return new QuaternionPrefabParser(-this.x, -this.y, -this.z, this.w);
+        return new Quaternion(-this.x, -this.y, -this.z, this.w);
     }
 
     normalize() {
         const length = Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
-        if (length === 0) return QuaternionPrefabParser.identity();
-        return new QuaternionPrefabParser(this.x / length, this.y / length, this.z / length, this.w / length);
+        if (length === 0) return Quaternion.identity();
+        return new Quaternion(this.x / length, this.y / length, this.z / length, this.w / length);
     }
 
     multiply(other) {
-        return new QuaternionPrefabParser(
+        return new Quaternion(
             this.w * other.x + this.x * other.w + this.y * other.z - this.z * other.y,
             this.w * other.y - this.x * other.z + this.y * other.w + this.z * other.x,
             this.w * other.z + this.x * other.y - this.y * other.x + this.z * other.w,
@@ -38,7 +38,7 @@ export default class QuaternionPrefabParser {
     }
 
     multiplyScalar(scalar) {
-        return new QuaternionPrefabParser(
+        return new Quaternion(
             this.x * scalar,
             this.y * scalar,
             this.z * scalar,
@@ -60,7 +60,7 @@ export default class QuaternionPrefabParser {
     }
 
     static fromVec(vec) {
-        return new QuaternionPrefabParser(vec.x, vec.y, vec.z, 0);
+        return new Quaternion(vec.x, vec.y, vec.z, 0);
     }
 
     /**
@@ -78,7 +78,7 @@ export default class QuaternionPrefabParser {
         const cosY = Math.cos(halfY);
         const sinY = Math.sin(halfY);
 
-        return new QuaternionPrefabParser(
+        return new Quaternion(
             cosY * sinX * cosZ + sinY * cosX * sinZ,
             sinY * cosX * cosZ - cosY * sinX * sinZ,
             cosY * cosX * sinZ - sinY * sinX * cosZ,
@@ -106,6 +106,6 @@ export default class QuaternionPrefabParser {
     }
 
     static identity() {
-        return new QuaternionPrefabParser(0, 0, 0, 1);
+        return new Quaternion(0, 0, 0, 1);
     }
 }

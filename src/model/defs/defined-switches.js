@@ -1,4 +1,4 @@
-import { default as Quaternion } from "../quaternion-prefab-parser";
+import Quaternion from "../quaternion";
 import Vector3 from "../vector3";
 import {TrackConnectionEnd} from "../track-connection";
 

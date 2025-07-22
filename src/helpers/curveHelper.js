@@ -1,6 +1,6 @@
 import Vector3 from "../model/vector3";
 import AngleHelper from "./angleHelper";
-import QuaternionPrefabParser from "../model/quaternion-prefab-parser";
+import Quaternion from "../model/quaternion";
 
 function calculateCurveEnd(startPos, startAngle, radius, curveLength) {
     if (radius === 0) {
@@ -39,7 +39,7 @@ function calculateCurveEndStandard(radius, curveLength) {
 function transformStart(globalStart, globalRotationDeg, localStart, localRotationQuat) {
     const globalRotationRad = AngleHelper.rotationDegToRad(globalRotationDeg);
     const startPos = globalStart.add(localStart.rotate(globalRotationRad));
-    const rotationQuat = QuaternionPrefabParser.fromEulerAnglesRad(globalRotationRad).multiply(localRotationQuat);
+    const rotationQuat = Quaternion.fromEulerAnglesRad(globalRotationRad).multiply(localRotationQuat);
     const rotationRad = rotationQuat.toEulerAnglesRad();
     const rotationDeg = AngleHelper.rotationRadToDeg(rotationRad);
 

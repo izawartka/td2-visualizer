@@ -1,6 +1,7 @@
-import QuaternionPrefabParser from "../quaternion-prefab-parser";
+import Quaternion from "../quaternion";
 import SceneryObject from "../scenery-object";
 import Vector3 from "../vector3";
+import AngleHelper from "../../helpers/angleHelper";
 
 export default class Misc extends SceneryObject {
     prefab_name;
@@ -39,7 +40,7 @@ export default class Misc extends SceneryObject {
 
     static applyGroupTransforms(localPos, localRot, miscGroups) {
         const localRotRad = localRot.multiply(Math.PI / 180);
-        let worldQuat = QuaternionPrefabParser.fromEulerAnglesRad(localRotRad).normalize();
+        let worldQuat = Quaternion.fromEulerAnglesRad(localRotRad).normalize();
         let worldPos = localPos.clone();
 
         for (const group of miscGroups) {
@@ -48,7 +49,7 @@ export default class Misc extends SceneryObject {
             worldQuat = groupQuat.multiply(worldQuat).normalize();
         }
 
-        const worldRot = worldQuat.toEulerAngles().multiply(180 / Math.PI);
+        const worldRot = AngleHelper.rotationRadToDeg(worldQuat.toEulerAnglesRad());
         const yawData = worldQuat.getMiscYawData();
 
         return [ worldPos, worldRot, yawData ];
