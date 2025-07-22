@@ -5,7 +5,8 @@ const Constants = {
         zoomMin: 0.03,
         zoomMax: 200.0,
         rotationSensitivity: 0.2,
-        forcePointerEvents: false
+        forcePointerEvents: false,
+        platformMaxTilt: 0.5
     },
     parser: {
         logSceneryAfterFinished: true,
@@ -20,7 +21,8 @@ const Constants = {
         attachSignsMaxDistanceX: 0.3,
         attachSignsGridSize: 10,
         logAttachedSigns: false,
-        skipBaseMisc: true
+        skipBaseMisc: true,
+        skipPlatforms: false
     },
     warnings: {
         all: false, // enable all warnings
@@ -63,6 +65,12 @@ const Constants = {
         fetchListUrl: `${process.env.PUBLIC_URL}/sceneries/sceneries.json`,
     },
     layers: [
+        {
+            id: 'platforms',
+            name: 'Platforms',
+            default: true,
+            cond: () => !Constants.parser.skipPlatforms,
+        },
         {
             id: 'tracks',
             name: 'Tracks',
@@ -151,12 +159,14 @@ const Constants = {
         },
         'slope': {
             name: 'Slope',
+            type: 'gradient',
             gradient: {
                 base: [128, 0, 128],
                 diff: [0, 25.6, 0],
                 legendMin: 0,
                 legendMax: 10,
                 unit: '‰',
+                startLegendAt0: false,
             }
         },
         'max-speed': {
@@ -168,12 +178,25 @@ const Constants = {
                 legendMin: 0,
                 legendMax: 170,
                 unit: 'km/h',
+                startLegendAt0: false,
             },
             options: {
                 'derail': ['#f22', 'Derail track'],
                 'unknown': ['#aaa', 'Unknown speed'],
             }
-        }
+        },
+        'elevation': {
+            name: 'Elevation',
+            type: 'gradient',
+            dynamicGradient: {
+                min: [0, 190, 0],
+                max: [255, 22, 22],
+                defaultMin: 0,
+                defaultMax: 2,
+                unit: 'm',
+                startLegendAt0: true,
+            },
+        },
     }
 };
 

@@ -115,11 +115,11 @@ export default class SceneryParser {
                 return MainCamera.fromText(text);
             case 'MiscGroup':
                 const group = MiscGroup.fromText(text);
-                currentMiscGroups.push(group);
+                currentMiscGroups.unshift(group);
 
                 return null;
             case 'EndMiscGroup':
-                if(!currentMiscGroups.pop()) {
+                if(!currentMiscGroups.shift()) {
                     SceneryParserLog.warn('endMiscGroupWithoutStart', 'Unexpected EndMiscGroup found without a preceding MiscGroup');
                 }
 
@@ -176,12 +176,12 @@ export default class SceneryParser {
         const id = SceneryParser.nextMiscId++;
 
         if (Platform.isPlatform(prefabName)) {
+            if(Constants.parser.skipPlatforms) return null;
             return Platform.fromText(id, text, miscGroups);
         } else if(SignalBox.isSignalBox(prefabName)) {
             return SignalBox.fromText(id, text, miscGroups);
-        } else if(Constants.parser.skipBaseMisc) {
-            return null;
         } else {
+            if(Constants.parser.skipBaseMisc) return null;
             return Misc.fromText(id, text, miscGroups);
         }
     }

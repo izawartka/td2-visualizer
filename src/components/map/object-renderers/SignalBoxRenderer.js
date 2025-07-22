@@ -6,8 +6,9 @@ export default function SignalBoxRenderer(props) {
     const [x, y] = object.pos.toSVGCoords();
     const text = object.getPrintableSignalBoxName();
     
-    const rotDiff = object.def.undef ? Math.round(object.rot.y / 90) * (-90) : object.def.rot * 90;
-    const rot = object.rot.y + rotDiff;
+    const yaw = object.yawData?.yaw || object.rot.y;
+    const rotDiff = object.def.undef ? Math.round(yaw / 90) * (-90) : object.def.rot * 90;
+    const rot = yaw + rotDiff;
     
     return (
         <g className="signalbox" transform={`translate(${x}, ${y}) rotate(${rot})`}>

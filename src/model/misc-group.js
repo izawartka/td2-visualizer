@@ -1,8 +1,10 @@
 import Vector3 from "./vector3";
+import Quaternion from "./quaternion";
 
 export default class MiscGroup {
     pos;
     rot;
+    quaternion;
 
     constructor(pos, rot) {
         this.pos = pos;
@@ -17,5 +19,14 @@ export default class MiscGroup {
         );
 
         return object;
+    }
+
+    getQuaternion() {
+        if (!this.quaternion) {
+            const rotRad = this.rot.multiply(Math.PI / 180);
+            this.quaternion = Quaternion.fromEulerAngles(rotRad).normalize();
+        }
+        
+        return this.quaternion;
     }
 }

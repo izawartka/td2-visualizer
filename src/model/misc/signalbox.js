@@ -8,8 +8,8 @@ export default class SignalBox extends Misc {
     applied = false;
     def = null;
 
-    constructor(id, misc_id, prefab_name, pos, rot, name) {
-        super(id, misc_id, prefab_name, pos, rot, name);
+    constructor(id, misc_id, prefab_name, pos, rot, yawData, name) {
+        super(id, misc_id, prefab_name, pos, rot, yawData, name);
 
         this.def = SignalBox.getDef(name, prefab_name);
     }

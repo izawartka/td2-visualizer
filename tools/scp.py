@@ -5,7 +5,7 @@ import sys
 #
 #    [ TD2 SCENERY PROCESSOR ]
 #    by masuo
-#    v1.6
+#    v1.7
 #
 
 BAD_WORDS = ['Fence', 'TerrainPoint', 'Wires']
@@ -16,7 +16,7 @@ def should_exclude(line: str) -> bool:
         if line.startswith(word):
             return True
 
-    if line.startswith("Misc"):
+    if line.startswith("Misc") and not line.startswith("MiscGroup"):
         if re.match(MISC_REGEX, line):
             return True
 

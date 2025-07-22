@@ -11,8 +11,17 @@ import DerailerRenderer from './object-renderers/DerailerRenderer';
 import ElectrificationStatusPopup from './additional-layer-components/ElectrificationStatusPopup';
 import SpawnPointRenderer from './object-renderers/SpawnPointRenderer';
 import IsolationEndRenderer from './object-renderers/IsolationEndRenderer';
+import PlatformRenderer from './object-renderers/PlatformRenderer';
+import Constants from '../../helpers/constants';
 
 const ObjectRendererQueue = [
+    {
+        'name': 'platforms',
+        'category': 'misc',
+        'type': 'Platform',
+        'renderer': PlatformRenderer,
+        'cond': (layers) => layers['platforms'] && !Constants.parser.skipPlatforms
+    },
     {
         'name': 'tracks',
         'category': 'tracks',
