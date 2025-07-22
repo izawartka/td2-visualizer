@@ -8,6 +8,7 @@ export default function TrackHoverInfoPopup(props) {
         Math.abs(track['end_slope'])
     ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
+    const showAlignHint = track.r === 0;
 
     return (
         <div className="track-hover-info-popup">
@@ -23,9 +24,11 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupSwitchItems track={track} />
                 </tbody>
             </table>
-            {track.type === 'StandardTrack' && track.r === 0 && <div className="track-hover-info-popup__align">
-                Double click to align view
-            </div>}
+            {showAlignHint && (
+                <div className="track-hover-info-popup__align">
+                    Double click to align the view
+                </div>
+            )}
         </div>
     );
 }

@@ -98,7 +98,7 @@ const Constants = {
         },
         {
             id: 'spawn-points',
-            name: 'SpawnPoints',
+            name: 'Spawn points',
             default: true,
         },
         {

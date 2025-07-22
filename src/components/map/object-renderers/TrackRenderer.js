@@ -45,7 +45,7 @@ function StatelessTrackRenderer(props) {
     };
 
     const onClick = (event) => {
-        if (object.type !== 'StandardTrack' || object.r !== 0) return;
+        if (object.r !== 0) return;
         if (event.detail === 2) {
             event.preventDefault();
             onAlign(event);

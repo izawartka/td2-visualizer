@@ -1,4 +1,3 @@
-import AngleHelper from "../../helpers/angleHelper";
 import Quaternion from "../quaternion";
 import SceneryObject from "../scenery-object";
 import Vector3 from "../vector3";
