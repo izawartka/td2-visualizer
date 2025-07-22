@@ -4,17 +4,18 @@ import Constants from "../../../helpers/constants";
 import { ElectrificationStatus } from "../../../model/electrification-status";
 import { setHoveredTrack, unsetHoveredTrack } from "../../../services/trackHoverInfoService";
 import GradientsContext from "../../../contexts/GradientsContext";
+import MiscHelper from "../../../helpers/miscHelper";
 
 export default function TrackRenderer(props) {
   const { object } = props;
   const { trackColorMode } = useContext(SettingsContext);
-  const gradients = useContext(GradientsContext);
+  const { gradientDefs } = useContext(GradientsContext);
 
   return (
     <MemoizedTrackRenderer
       object={object}
       trackColorMode={trackColorMode}
-      gradients={gradients}
+      gradientDef={gradientDefs[trackColorMode] ?? null}
     />
   );
 }
@@ -22,7 +23,7 @@ export default function TrackRenderer(props) {
 const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 
 function StatelessTrackRenderer(props) {
-  const { object, trackColorMode, gradients } = props;
+  const { object, trackColorMode, gradientDef } = props;
 
   if (object.points.start.distanceSq(object.points.end) < 0.001) {
       return null;
@@ -37,8 +38,8 @@ function StatelessTrackRenderer(props) {
   };
 
   const path = getTrackPath(object);
-  const color = getTrackColor(object, trackColorMode, gradients);
-  const defs = getTrackDefs(object, trackColorMode, gradients);
+  const color = getTrackColor(object, trackColorMode, gradientDef);
+  const defs = getTrackDefs(object, trackColorMode, gradientDef);
 
   return (
     <g id={`track-${object.id}`}>
@@ -96,7 +97,7 @@ function getGradientValues(object, trackColorMode) {
     }
 }
 
-function getTrackColor(object, trackColorMode, gradients) {
+function getTrackColor(object, trackColorMode, gradientDef) {
   const modeDef = Constants.trackColorModes[trackColorMode];
 
   switch (trackColorMode) {
@@ -140,23 +141,23 @@ function getTrackColor(object, trackColorMode, gradients) {
         if (object.type === 'RouteTrack') return modeDef.options['unknown'][0];
         return modeDef.options['derail'][0];
       }
-      return gradients.getTrackGradientColor('max-speed', object.maxspeed);
+      return MiscHelper.getTrackGradientColor(gradientDef, object.maxspeed);
 
     case "elevation":
     case "slope":
       const [startValue, endValue] = getGradientValues(object, trackColorMode);
-      if (startValue === endValue) return gradients.getTrackGradientColor(trackColorMode, startValue);
+      if (startValue === endValue) return MiscHelper.getTrackGradientColor(gradientDef, startValue);
       return `url(#track-${trackColorMode}-${object.id})`;
   }
 }
 
-function getGradientDefs(object, trackColorMode, gradients, startValue, endValue) {
+function getGradientDefs(object, trackColorMode, gradientDef, startValue, endValue) {
     if (startValue === endValue) return null;
     const [x1, y1] = object.points.start.toSVGCoords();
     const [x2, y2] = object.points.end.toSVGCoords();
     const gradId = `track-${trackColorMode}-${object.id}`;
-    const startColor = gradients.getTrackGradientColor(trackColorMode, startValue);
-    const endColor = gradients.getTrackGradientColor(trackColorMode, endValue);
+    const startColor = MiscHelper.getTrackGradientColor(gradientDef, startValue);
+    const endColor = MiscHelper.getTrackGradientColor(gradientDef, endValue);
 
     return (
         <defs>
@@ -175,9 +176,9 @@ function getGradientDefs(object, trackColorMode, gradients, startValue, endValue
     );
 }
 
-function getTrackDefs(object, trackColorMode, gradients) {
-     const gradientVals = getGradientValues(object, trackColorMode, gradients);
+function getTrackDefs(object, trackColorMode, gradientDef) {
+     const gradientVals = getGradientValues(object, trackColorMode);
      if (gradientVals === null) return null;
      const [startValue, endValue] = gradientVals;
-     return getGradientDefs(object, trackColorMode, gradients, startValue, endValue);
+     return getGradientDefs(object, trackColorMode, gradientDef, startValue, endValue);
 }
