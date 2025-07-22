@@ -24,11 +24,11 @@ function rotationRadToDeg(vector) {
     );
 }
 
-function normalizeDegAngle(angle) {
+function normalizeDegAngle(angle, max = 360) {
     if (angle < 0) {
-        return angle + 360 * Math.ceil(Math.abs(angle) / 360);
-    } else if (angle >= 360) {
-        return angle - 360 * Math.floor(angle / 360);
+        return angle + max * Math.ceil(Math.abs(angle) / max);
+    } else if (angle >= max) {
+        return angle - max * Math.floor(angle / max);
     } else {
         return angle;
     }
