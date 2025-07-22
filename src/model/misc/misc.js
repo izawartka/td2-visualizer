@@ -1,4 +1,4 @@
-import Quaternion from "../quaternion";
+import QuaternionPrefabParser from "../quaternion-prefab-parser";
 import SceneryObject from "../scenery-object";
 import Vector3 from "../vector3";
 
@@ -39,7 +39,7 @@ export default class Misc extends SceneryObject {
 
     static applyGroupTransforms(localPos, localRot, miscGroups) {
         const localRotRad = localRot.multiply(Math.PI / 180);
-        let worldQuat = Quaternion.fromEulerAngles(localRotRad).normalize();
+        let worldQuat = QuaternionPrefabParser.fromEulerAnglesRad(localRotRad).normalize();
         let worldPos = localPos.clone();
 
         for (const group of miscGroups) {

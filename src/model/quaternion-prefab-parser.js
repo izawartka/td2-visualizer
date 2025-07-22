@@ -1,4 +1,5 @@
 import Vector3 from "./vector3";
+import AngleHelper from "../helpers/angleHelper";
 
 export default class QuaternionPrefabParser {
     x;
@@ -10,8 +11,21 @@ export default class QuaternionPrefabParser {
         Object.assign(this, { x, y, z, w });
     }
 
+    rotateVector(vector) {
+        const resultQuat = this
+            .multiply(QuaternionPrefabParser.fromVec(vector))
+            .multiply(this.conjugate());
+        return new Vector3(resultQuat.x, resultQuat.y, resultQuat.z);
+    }
+
     conjugate() {
         return new QuaternionPrefabParser(-this.x, -this.y, -this.z, this.w);
+    }
+
+    normalize() {
+        const length = Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
+        if (length === 0) return QuaternionPrefabParser.identity();
+        return new QuaternionPrefabParser(this.x / length, this.y / length, this.z / length, this.w / length);
     }
 
     multiply(other) {
@@ -23,6 +37,28 @@ export default class QuaternionPrefabParser {
         );
     }
 
+    multiplyScalar(scalar) {
+        return new QuaternionPrefabParser(
+            this.x * scalar,
+            this.y * scalar,
+            this.z * scalar,
+            this.w * scalar,
+        );
+    }
+
+    getMiscYawData() {
+        const forward = new Vector3(0, 0, -1);
+        const rotatedForward = this.rotateVector(forward);
+
+        const up = new Vector3(0, 1, 0);
+        const rotatedUp = this.rotateVector(up);
+
+        return {
+            yaw: AngleHelper.radToDeg(Math.atan2(rotatedForward.x, rotatedForward.z)),
+            tilt: rotatedUp.x * rotatedUp.x + rotatedUp.z * rotatedUp.z
+        }
+    }
+
     static fromVec(vec) {
         return new QuaternionPrefabParser(vec.x, vec.y, vec.z, 0);
     }
@@ -30,13 +66,17 @@ export default class QuaternionPrefabParser {
     /**
      * Convert a Unity rotation vector (extrinsic z-x-y) in radians to a quaternion.
      */
-    static fromEulerAnglesRad(vec) {
-        const cosX = Math.cos(vec.x/2);
-        const sinX = Math.sin(vec.x/2);
-        const cosY = Math.cos(vec.y/2);
-        const sinY = Math.sin(vec.y/2);
-        const cosZ = Math.cos(vec.z/2);
-        const sinZ = Math.sin(vec.z/2);
+    static fromEulerAnglesRad(vector) {
+        const halfZ = vector.z * 0.5;
+        const halfX = vector.x * 0.5;
+        const halfY = vector.y * 0.5;
+
+        const cosZ = Math.cos(halfZ);
+        const sinZ = Math.sin(halfZ);
+        const cosX = Math.cos(halfX);
+        const sinX = Math.sin(halfX);
+        const cosY = Math.cos(halfY);
+        const sinY = Math.sin(halfY);
 
         return new QuaternionPrefabParser(
             cosY * sinX * cosZ + sinY * cosX * sinZ,
@@ -63,5 +103,9 @@ export default class QuaternionPrefabParser {
             1 - 2 * (this.x * this.x + this.z * this.z)
         );
         return new Vector3(xRad, yRad, zRad);
+    }
+
+    static identity() {
+        return new QuaternionPrefabParser(0, 0, 0, 1);
     }
 }

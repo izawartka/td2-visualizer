@@ -1,5 +1,3 @@
-import QuaternionPrefabParser from "./quaternion-prefab-parser";
-
 export default class Vector3 {
     x;
     y;
@@ -61,11 +59,6 @@ export default class Vector3 {
         y = x * sinZ + y * cosZ;
 
         return new Vector3(x, y, z);
-    }
-
-    rotateByQuaternion(quat) {
-        const resultQuat = quat.multiply(QuaternionPrefabParser.fromVec(this)).multiply(quat.conjugate());
-        return new Vector3(resultQuat.x, resultQuat.y, resultQuat.z);
     }
 
     toPrecision(precision = 3) {

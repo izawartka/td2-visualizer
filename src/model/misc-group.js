@@ -1,5 +1,6 @@
 import Vector3 from "./vector3";
-import Quaternion from "./quaternion";
+import QuaternionPrefabParser from "./quaternion-prefab-parser";
+import AngleHelper from "../helpers/angleHelper";
 
 export default class MiscGroup {
     pos;
@@ -11,7 +12,7 @@ export default class MiscGroup {
         this.rot = rot;
     }
 
-    static fromText(text) {        
+    static fromText(text) {
         const values = text.split(";");
         const object = new MiscGroup(
             Vector3.fromValuesArray(values, 3), // pos
@@ -23,10 +24,10 @@ export default class MiscGroup {
 
     getQuaternion() {
         if (!this.quaternion) {
-            const rotRad = this.rot.multiply(Math.PI / 180);
-            this.quaternion = Quaternion.fromEulerAngles(rotRad).normalize();
+            const rotRad = AngleHelper.rotationDegToRad(this.rot);
+            this.quaternion = QuaternionPrefabParser.fromEulerAnglesRad(rotRad).normalize();
         }
-        
+
         return this.quaternion;
     }
 }
