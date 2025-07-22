@@ -1,78 +1,78 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
-import { ElectrificationStatus } from "../../../model/electrification-status";
-import { setHoveredTrack, unsetHoveredTrack } from "../../../services/trackHoverInfoService";
+import {ElectrificationStatus} from "../../../model/electrification-status";
+import {setHoveredTrack, unsetHoveredTrack} from "../../../services/trackHoverInfoService";
 import ZoomPanContext from "../../../contexts/ZoomPanContext";
 import GradientsContext from "../../../contexts/GradientsContext";
 import MiscHelper from "../../../helpers/miscHelper";
 
 export default function TrackRenderer(props) {
-  const { object } = props;
-  const { trackColorMode } = useContext(SettingsContext);
-  const { gradientDefs } = useContext(GradientsContext);
-  const {alignView} = useContext(ZoomPanContext);
+    const {object} = props;
+    const {trackColorMode} = useContext(SettingsContext);
+    const {gradientDefs} = useContext(GradientsContext);
+    const {alignView} = useContext(ZoomPanContext);
 
-  const onAlign = (event) => {
-    alignView(object.rot.y, event);
-  };
+    const onAlign = (event) => {
+        alignView(object.rot.y, event);
+    };
 
-  return (
-    <MemoizedTrackRenderer
-      object={object}
-      trackColorMode={trackColorMode}
-      gradientDef={gradientDefs[trackColorMode] ?? null}
-      onAlign={onAlign}
-    />
-  );
+    return (
+        <MemoizedTrackRenderer
+            object={object}
+            trackColorMode={trackColorMode}
+            gradientDef={gradientDefs[trackColorMode] ?? null}
+            onAlign={onAlign}
+        />
+    );
 }
 
 const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 
 function StatelessTrackRenderer(props) {
-  const { object, trackColorMode, gradientDef, onAlign } = props;
+    const {object, trackColorMode, gradientDef, onAlign} = props;
 
-  if (object.points.start.distanceSq(object.points.end) < 0.001) {
-      return null;
-  }
-
-  const onMouseEnter = () => {
-    setHoveredTrack(object);
-  };
-
-  const onMouseLeave = () => {
-    unsetHoveredTrack(null);
-  };
-
-  const onClick = (event) => {
-    if (object.type !== 'StandardTrack' || object.r !== 0) return;
-    if (event.detail === 2) {
-      event.preventDefault();
-      onAlign(event);
+    if (object.points.start.distanceSq(object.points.end) < 0.001) {
+        return null;
     }
-  };
 
-  const path = getTrackPath(object);
-  const color = getTrackColor(object, trackColorMode, gradientDef);
-  const defs = getTrackDefs(object, trackColorMode, gradientDef);
+    const onMouseEnter = () => {
+        setHoveredTrack(object);
+    };
 
-  return (
-    <g id={`track-${object.id}`}>
-      {defs}
-      <path
-        d={path}
-        stroke={color}
-        className="track-unscaled"
-      />
-      <path
-        d={path}
-        stroke={color}
-        className="track"
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-      onClick={onClick}/>
-    </g>
-  );
+    const onMouseLeave = () => {
+        unsetHoveredTrack(null);
+    };
+
+    const onClick = (event) => {
+        if (object.type !== 'StandardTrack' || object.r !== 0) return;
+        if (event.detail === 2) {
+            event.preventDefault();
+            onAlign(event);
+        }
+    };
+
+    const path = getTrackPath(object);
+    const color = getTrackColor(object, trackColorMode, gradientDef);
+    const defs = getTrackDefs(object, trackColorMode, gradientDef);
+
+    return (
+        <g id={`track-${object.id}`}>
+            {defs}
+            <path
+                d={path}
+                stroke={color}
+                className="track-unscaled"
+            />
+            <path
+                d={path}
+                stroke={color}
+                className="track"
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}/>
+        </g>
+    );
 }
 
 function getTrackPath(object) {
@@ -113,57 +113,57 @@ function getGradientValues(object, trackColorMode) {
 }
 
 function getTrackColor(object, trackColorMode, gradientDef) {
-  const modeDef = Constants.trackColorModes[trackColorMode];
+    const modeDef = Constants.trackColorModes[trackColorMode];
 
-  switch (trackColorMode) {
-    case "standard":
-    default:
-      if(object.prefab_name && object.prefab_name.includes('trans-mat'))
-        return modeDef.options['invisible'][0];
-
-      return modeDef.options[modeDef.optionDefault][0];
-
-    case "electrification":
-      switch(object.electrificationStatus) {
-        case ElectrificationStatus.NOT_CHECKED:
-          return modeDef.options['not-checked'][0];
-        case ElectrificationStatus.NON_ELECTRIFIED:
-          return modeDef.options['non-electrified'][0];
-        case ElectrificationStatus.ELECTRIFIED:
-          return modeDef.options['electrified'][0];
-        case ElectrificationStatus.CONFLICT:
-          return modeDef.options['conflict'][0];
+    switch (trackColorMode) {
+        case "standard":
         default:
-          return modeDef.options[modeDef.optionDefault][0];
-      }
+            if (object.prefab_name && object.prefab_name.includes('trans-mat'))
+                return modeDef.options['invisible'][0];
 
-    case "type":
-      switch (object.type) {
-        case "StandardTrack":
-          return modeDef.options['standard-track'][0];
-        case "PointTrack":
-          return modeDef.options['point-track'][0];
-        case "RouteTrack":
-          return modeDef.options['route-track'][0];
-        case "BezierTrack":
-          return modeDef.options['bezier-track'][0];
-        default:
-          return modeDef.options[modeDef.optionDefault][0];
-      }
+            return modeDef.options[modeDef.optionDefault][0];
 
-    case "max-speed":
-      if (!object.maxspeed) {
-        if (object.type === 'RouteTrack') return modeDef.options['unknown'][0];
-        return modeDef.options['derail'][0];
-      }
-      return MiscHelper.getTrackGradientColor(gradientDef, object.maxspeed);
+        case "electrification":
+            switch (object.electrificationStatus) {
+                case ElectrificationStatus.NOT_CHECKED:
+                    return modeDef.options['not-checked'][0];
+                case ElectrificationStatus.NON_ELECTRIFIED:
+                    return modeDef.options['non-electrified'][0];
+                case ElectrificationStatus.ELECTRIFIED:
+                    return modeDef.options['electrified'][0];
+                case ElectrificationStatus.CONFLICT:
+                    return modeDef.options['conflict'][0];
+                default:
+                    return modeDef.options[modeDef.optionDefault][0];
+            }
 
-    case "elevation":
-    case "slope":
-      const [startValue, endValue] = getGradientValues(object, trackColorMode);
-      if (startValue === endValue) return MiscHelper.getTrackGradientColor(gradientDef, startValue);
-      return `url(#track-${trackColorMode}-${object.id})`;
-  }
+        case "type":
+            switch (object.type) {
+                case "StandardTrack":
+                    return modeDef.options['standard-track'][0];
+                case "PointTrack":
+                    return modeDef.options['point-track'][0];
+                case "RouteTrack":
+                    return modeDef.options['route-track'][0];
+                case "BezierTrack":
+                    return modeDef.options['bezier-track'][0];
+                default:
+                    return modeDef.options[modeDef.optionDefault][0];
+            }
+
+        case "max-speed":
+            if (!object.maxspeed) {
+                if (object.type === 'RouteTrack') return modeDef.options['unknown'][0];
+                return modeDef.options['derail'][0];
+            }
+            return MiscHelper.getTrackGradientColor(gradientDef, object.maxspeed);
+
+        case "elevation":
+        case "slope":
+            const [startValue, endValue] = getGradientValues(object, trackColorMode);
+            if (startValue === endValue) return MiscHelper.getTrackGradientColor(gradientDef, startValue);
+            return `url(#track-${trackColorMode}-${object.id})`;
+    }
 }
 
 function getGradientDefs(object, trackColorMode, gradientDef, startValue, endValue) {
@@ -184,16 +184,16 @@ function getGradientDefs(object, trackColorMode, gradientDef, startValue, endVal
                 x2={x2}
                 y2={y2}
             >
-                <stop offset="0%" stopColor={startColor} />
-                <stop offset="100%" stopColor={endColor} />
+                <stop offset="0%" stopColor={startColor}/>
+                <stop offset="100%" stopColor={endColor}/>
             </linearGradient>
         </defs>
     );
 }
 
 function getTrackDefs(object, trackColorMode, gradientDef) {
-     const gradientVals = getGradientValues(object, trackColorMode);
-     if (gradientVals === null) return null;
-     const [startValue, endValue] = gradientVals;
-     return getGradientDefs(object, trackColorMode, gradientDef, startValue, endValue);
+    const gradientVals = getGradientValues(object, trackColorMode);
+    if (gradientVals === null) return null;
+    const [startValue, endValue] = gradientVals;
+    return getGradientDefs(object, trackColorMode, gradientDef, startValue, endValue);
 }
