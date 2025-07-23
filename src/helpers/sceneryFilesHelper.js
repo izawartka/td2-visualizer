@@ -30,7 +30,7 @@ export default class SceneryFilesHelper {
         return await this.fetch(url, false);
     }
 
-    static async load(name, centerFn = null) {
+    static async load(name, setCameraFn = null) {
         let file;
         try {
             file = await this.getScenery(name);
@@ -43,10 +43,10 @@ export default class SceneryFilesHelper {
             return null;
         }
 
-        return await this.loadCustom(file, centerFn);
+        return await this.loadCustom(file, setCameraFn);
     }
 
-    static async loadCustom(file, centerFn = null) {
+    static async loadCustom(file, setCameraFn = null) {
         return new Promise((resolve, reject) => {
             SceneryParserLog.clear();
             const reader = new FileReader();
@@ -56,8 +56,13 @@ export default class SceneryFilesHelper {
                 let loadingError = null;
                 try {
                     scenery = SceneryParser.fromText(e.target?.result);
-                    const mainSignalBoxPos = scenery.signalBoxes?.[0]?.pos || null;
-                    if (mainSignalBoxPos) centerFn(...mainSignalBoxPos.toSVGCoords());
+                    const mainSignalBox = scenery.signalBoxes?.[0];
+                    if(mainSignalBox) {
+                        const sbPos = mainSignalBox.pos.toSVGCoords();
+                        const sbRot = -mainSignalBox.getFinalRotation();
+                        setCameraFn(...sbPos, sbRot, Constants.map.zoomDefault);
+                    }
+                    else setCameraFn(0, 0, 0, Constants.map.zoomDefault);
                 } catch (error) {
                     scenery = null;
                     loadingError = error;

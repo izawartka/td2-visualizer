@@ -9,13 +9,13 @@ import { resetHoveredTracksStack } from '../../services/trackHoverInfoService';
 export default function SceneriesList(props) {
     const {setScenery, setIsLoading} = useContext(MainContext);
     const [ sceneriesListData, setSceneriesListData ] = useState(null);
-    const { center } = useZoomPanEmitter();
+    const { setCamera } = useZoomPanEmitter();
 
     const handleSelectChange = async (event) => {
         const name = event.target.value;
 
         setIsLoading(true);
-        const scenery = await SceneryFilesHelper.load(name, center);
+        const scenery = await SceneryFilesHelper.load(name, setCamera);
         setScenery(scenery);
         resetHoveredTracksStack();
         setIsLoading(false);

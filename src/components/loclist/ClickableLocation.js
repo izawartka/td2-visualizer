@@ -1,11 +1,11 @@
 import { useZoomPanEmitter } from '../../hooks/useZoomPubSub';
 
 export default function ClickableLocation(props) {
-    const { name, pos } = props;
-    const { center } = useZoomPanEmitter();
+    const { name, pos, rot } = props;
+    const { setCamera } = useZoomPanEmitter();
 
     const handleClick = () => {
-        center(pos[0], pos[1]);
+        setCamera(pos[0], pos[1], rot);
     };
 
     return (

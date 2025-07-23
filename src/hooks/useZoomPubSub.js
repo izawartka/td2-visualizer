@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Subject, BehaviorSubject } from 'rxjs';
 
-const zoomCenter$ = new Subject();
+const setCamera$ = new Subject();
 const viewAlign$ = new Subject();
 
 // BehaviorSubjects to store current viewBox, clientRect and camera transform
@@ -21,13 +21,13 @@ export function getCurrentCamera() {
     return camera$.getValue();
 }
 
-export function useZoomPanSubscriber(onCenter, onAlign) {
+export function useZoomPanSubscriber(setCamera, onAlign) {
     useEffect(() => {
-        const sub = zoomCenter$.subscribe(({ x, y }) => {
-            onCenter(x, y);
+        const sub = setCamera$.subscribe(({ x, y, rot, zoom }) => {
+            setCamera(x, y, rot, zoom);
         });
         return () => sub.unsubscribe();
-    }, [onCenter]);
+    }, [setCamera]);
 
     useEffect(() => {
         const sub = viewAlign$.subscribe((angleDeg) => {
@@ -39,8 +39,8 @@ export function useZoomPanSubscriber(onCenter, onAlign) {
 
 export function useZoomPanEmitter() {
     return {
-        center: (x, y) => {
-            zoomCenter$.next({ x, y });
+        setCamera: (x, y, rot = null, zoom = null) => {
+            setCamera$.next({ x, y, rot, zoom });
         },
         alignView: (angleDeg) => {
             viewAlign$.next(angleDeg);

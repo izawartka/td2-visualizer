@@ -10,9 +10,10 @@ export default function LocList(props) {
         if (!scenery?.signalBoxes) return null;
         return scenery.signalBoxes.map(signalBox => {
             const pos = signalBox.pos.toSVGCoords();
+            const rot = -signalBox.getFinalRotation();
             const name = signalBox.getPrintableSignalBoxName();
             return (
-                <ClickableLocation name={name} pos={pos} key={signalBox.id} />
+                <ClickableLocation name={name} pos={pos} rot={rot} key={signalBox.id} />
             );
         });
     }, [scenery?.signalBoxes]);

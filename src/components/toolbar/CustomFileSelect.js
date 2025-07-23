@@ -6,14 +6,14 @@ import { resetHoveredTracksStack } from "../../services/trackHoverInfoService";
 
 export default function CustomFileSelect() {
     const {setScenery, setIsLoading} = useContext(MainContext);
-    const { center } = useZoomPanEmitter();
+    const { setCamera } = useZoomPanEmitter();
 
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
         setIsLoading(true);
-        const scenery = await SceneryFilesHelper.loadCustom(file, center);
+        const scenery = await SceneryFilesHelper.loadCustom(file, setCamera);
         setScenery(scenery);
         resetHoveredTracksStack();
         setIsLoading(false);

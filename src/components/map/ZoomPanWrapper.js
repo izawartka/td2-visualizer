@@ -5,6 +5,10 @@ import { useZoomPanSubscriber, viewBox$, clientRect$, camera$ } from '../../hook
 import {mapRotation$} from '../../services/mapRotationService';
 import AngleHelper from "../../helpers/angleHelper";
 
+function boundZoom(zoom) {
+    return Math.max(Constants.map.zoomMin, Math.min(Constants.map.zoomMax, zoom));
+}
+
 export default function ZoomPanWrapper({children}) {
     const wrapperRef = useRef(null);
     const svgRef = useRef(null);
@@ -83,9 +87,11 @@ export default function ZoomPanWrapper({children}) {
         };
     }, [handleResize]);
 
-    const centerOn = useCallback((cx, cy) => {
+    const setCamera = useCallback((cx, cy, rot, zoom) => {
         cameraRef.current.x = cx;
         cameraRef.current.y = cy;
+        if (rot || rot === 0) cameraRef.current.rotation = AngleHelper.normalizeDegAngle(rot);
+        if (zoom) cameraRef.current.zoom = boundZoom(zoom);
 
         scheduleCameraUpdate();
     }, [scheduleCameraUpdate]);
@@ -101,8 +107,8 @@ export default function ZoomPanWrapper({children}) {
         scheduleCameraUpdate();
     };
 
-    // Subscribe to any external `center` and `alignView` calls
-    useZoomPanSubscriber(centerOn, alignView);
+    // Subscribe to any external `setCamera` and `alignView` calls
+    useZoomPanSubscriber(setCamera, alignView);
 
     const onWheel = (e) => {
         const { left, top } = clientRectRef.current;
@@ -110,7 +116,7 @@ export default function ZoomPanWrapper({children}) {
         const { w, h } = viewBoxRef.current;
 
         const newZoomCalc = cameraRef.current.zoom * (1.0 - (e.deltaY * Constants.map.zoomSensitivity));
-        const newZoom = Math.max(Constants.map.zoomMin, Math.min(Constants.map.zoomMax, newZoomCalc));
+        const newZoom = boundZoom(newZoomCalc);
         cameraRef.current.zoom = newZoom;
 
         // screen space cursor pos
