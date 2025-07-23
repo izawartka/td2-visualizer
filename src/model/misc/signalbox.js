@@ -25,6 +25,12 @@ export default class SignalBox extends Misc {
         scenery.addSignalBox(this);
     }
 
+    getFinalRotation() {
+        const baseRot = this.yawData.yaw || this.rot.y || 0;
+        const defRot = (this.def?.rot || 0) * 90;
+        return baseRot + defRot + 180;
+    }
+
     static isSignalBox(prefabName) { 
         return prefabName.startsWith('SignalBox');
     }
