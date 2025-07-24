@@ -11,7 +11,7 @@ export default function DistanceMeterText(props) {
     const dx = end[0] - start[0];
     const dy = end[1] - start[1];
     const len = Math.sqrt(dx * dx + dy * dy);
-    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    const angle = AngleHelper.radToDeg(Math.atan2(dy, dx));
     const rotation = AngleHelper.normalizeDegAngle(mapRotation + angle);
     const upsideDown = rotation >= 90 && rotation <= 270;
     const x = cx + len / 2;

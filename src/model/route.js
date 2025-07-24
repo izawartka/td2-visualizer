@@ -32,7 +32,7 @@ export default class Route extends SceneryObject {
         });
 
         this.offsets = this._getOffsets();
-        this.end_angle_rad = this.rot.y * Math.PI / 180;
+        this.end_angle_rad = AngleHelper.degToRad(this.rot.y);
         this.end_center = this.pos.clone();
         this.points = [this.pos.clone()];
     }

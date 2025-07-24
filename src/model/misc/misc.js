@@ -39,7 +39,7 @@ export default class Misc extends SceneryObject {
     }
 
     static applyGroupTransforms(localPos, localRot, miscGroups) {
-        const localRotRad = localRot.multiply(Math.PI / 180);
+        const localRotRad = AngleHelper.vectorDegToRad(localRot);
         let worldQuat = Quaternion.fromEulerAnglesRad(localRotRad).normalize();
         let worldPos = localPos.clone();
 
