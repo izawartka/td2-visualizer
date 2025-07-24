@@ -37,8 +37,8 @@ function InfoPopupSwitchItems(props) {
     if (!track.switch) return null;
 
     return <>
-        <InfoPopupItem value={track.createSwitchTrack.id_switch} label="Switch ID" />
-        <InfoPopupItem value={track.createSwitchTrack.bare_model} label="Switch model" />
+        <InfoPopupItem value={track.switch.id_switch} label="Switch ID" />
+        <InfoPopupItem value={track.switch.bare_model} label="Switch model" />
     </>
 }
 
