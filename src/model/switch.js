@@ -1,10 +1,11 @@
-import PointTrack from "./tracks/point-track.js";
 import SceneryObject from "./scenery-object.js";
 import SceneryParserLog from "./scenery-parser-log.js";
 import Vector3 from "./vector3.js";
-import DefinedSwitches from "./defs/defined-switches.js";
-import {SwitchTrackConnectionType} from "./switch-descriptions/switch-prefab-track";
+import {DefinedSwitches, SwitchTrackConnectionType} from "./defs/defined-switches.js";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import CurveHelper from "../helpers/curveHelper";
+import AngleHelper from "../helpers/angleHelper";
+import StandardTrack from "./tracks/standard-track";
 
 export default class Switch extends SceneryObject {
     model;
@@ -27,8 +28,10 @@ export default class Switch extends SceneryObject {
         Object.assign(this, {
             model,
             data,
-            id_switch, id_isolation,
-            maxspeed, derailspeed,
+            id_switch,
+            id_isolation,
+            maxspeed,
+            derailspeed,
             track_prefab_name
         });
 
@@ -63,7 +66,7 @@ export default class Switch extends SceneryObject {
             return;
         }
 
-        let def = DefinedSwitches[this.bare_model] || null;
+        const def = DefinedSwitches[this.bare_model] || null;
 
         if (!def) {
             SceneryParserLog.warn('switchUndefinedModel', `Switch ${this.id} has an undefined model "${this.bare_model}"`);
@@ -86,8 +89,8 @@ export default class Switch extends SceneryObject {
         this.tracks = tracks;
         this.def = def;
 
-        const rotRad = this.rot.multiply(Math.PI / 180);
-        this.isolation_id_pos = this.pos.add(def.isolation_id_offset.rotate(rotRad));
+        const rotRad = AngleHelper.vectorDegToRad(this.rot);
+        this.isolation_id_pos = this.pos.add(def.isolationLabelPos.rotate(rotRad));
         super.applyObject(scenery);
     }
 
@@ -104,25 +107,16 @@ export default class Switch extends SceneryObject {
         return ids;
     }
 
-    _createSwitchTrackFromDef(scenery, switchDef, trackDef, ids) {
-        const rotRad = this.rot.multiply(Math.PI / 180);
-        if (trackDef.dataIndex >= ids.length) {
-            SceneryParserLog.warn(
-                'switchMissingTrackId',
-                `Switch ${this.id} with model ${this.bare_model} is missing an id for the track at index ${trackDef.dataIndex}`,
-            );
-            return null;
-        }
-        const [trackId, prevId, nextId] = ids[trackDef.dataIndex];
-
+    _createTrackConnections(switchDef, trackDef, ids) {
         const connections = [];
+        const [_, prevId, nextId] = ids[trackDef.dataIndex];
         trackDef.connections.forEach((connection) => {
             if (connection.type === SwitchTrackConnectionType.INTERNAL) {
                 const otherTrackDef = switchDef.tracks[connection.internalId];
                 if (!otherTrackDef) {
                     SceneryParserLog.warn(
                         'switchMissingTrackId',
-                        `Switch prefab for model with model ${this.bare_model} of track ${this.id} does not have the internal track ${connection.internalId}`,
+                        `Switch ${this.id} with model ${this.bare_model} does not have the internal track ${connection.internalId}`,
                     );
                     return;
                 }
@@ -144,25 +138,33 @@ export default class Switch extends SceneryObject {
                 }
             }
         });
+        return connections;
+    }
 
-        const trackObj = new PointTrack(
+    _createSwitchTrackFromDef(scenery, switchDef, trackDef, ids) {
+        if (trackDef.dataIndex >= ids.length) {
+            SceneryParserLog.warn(
+                'switchMissingTrackId',
+                `Switch ${this.id} with model ${this.bare_model} is missing an id for the track at index ${trackDef.dataIndex}`,
+            );
+            return null;
+        }
+        const trackId = ids[trackDef.dataIndex][0];
+        const connections = this._createTrackConnections(switchDef, trackDef, ids);
+        const { startPos, rotationDeg } = CurveHelper.transformStart(this.pos, this.rot, trackDef.pos, trackDef.rot);
+
+        const track = StandardTrack.createSwitchTrack(
             trackId,
-            this.pos.add(trackDef.startPos.rotate(rotRad)),
-            this.pos.add(trackDef.endPos.rotate(rotRad)),
+            startPos,
+            rotationDeg,
+            trackDef.length,
             trackDef.radius,
             connections,
-            this.id_switch,
-            0, // start_slope
-            0, // end_slope
-            this.id_isolation,
-            this.track_prefab_name,
-            this.maxspeed,
-            this.derailspeed
+            trackDef.slope1,
+            trackDef.slope2,
+            this,
         );
-
-        trackObj.switch = this;
-        scenery.addObject(trackObj);
-
-        return trackObj;
+        scenery.addObject(track);
+        return track;
     }
 }

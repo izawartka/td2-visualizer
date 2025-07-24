@@ -4,8 +4,8 @@ export default function TrackHoverInfoPopup(props) {
     const { track } = props;
 
     const slopeArr = Array.from(new Set([
-        Math.abs(track['start_slope']),
-        Math.abs(track['end_slope'])
+        Math.abs(track.start_slope).toFixed(1),
+        Math.abs(track.end_slope).toFixed(1),
     ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
     const showAlignHint = track.r === 0;
@@ -20,8 +20,10 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupItem value={track['maxspeed']} label="Max. speed" options={{suffix: ' km/h'}} />
                     <InfoPopupItem value={slopeArr} label="Slope" options={slopeOptions} />
                     <InfoPopupItem value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
-                    <InfoPopupItem value={track['type']} label="Type" options={{translationConstKey: 'type'}} />
+                    <InfoPopupItem value={track['source']} label="Type" options={{translationConstKey: 'source'}} />
                     <InfoPopupSwitchItems track={track} />
+                    <InfoPopupItem value={track['shape']} label="Shape" options={{translationConstKey: 'shape'}} />
+                    <InfoPopupShapeItems track={track} />
                 </tbody>
             </table>
             {showAlignHint && (
@@ -43,6 +45,13 @@ function InfoPopupSwitchItems(props) {
     </>
 }
 
+function InfoPopupShapeItems(props) {
+    const { track } = props;
+    if (track.r === 0) return null;
+
+    return <InfoPopupItem value={Math.abs(track.r)} label="Radius" options={{suffix: ' m', precision: 0}} />
+}
+
 function processItemValue(value, options) {
     const { translationConstKey, join, subOptions, suffix } = options || {};
 
@@ -52,6 +61,10 @@ function processItemValue(value, options) {
 
     if (translationConstKey) {
         return TrackHoverInfoConsts[translationConstKey]?.[value] || value;
+    }
+
+    if (typeof value === 'number' && 'precision' in options) {
+        value = value.toFixed(options.precision);
     }
 
     if (value === undefined || value === null || value === '') {

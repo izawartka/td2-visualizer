@@ -69,8 +69,8 @@ export default function ZoomPanWrapper({children}) {
     const handleMove = (e) => {
         const cx = e.movementX / cameraRef.current.zoom;
         const cy = e.movementY / cameraRef.current.zoom;
-        const cos = Math.cos(cameraRef.current.rotation * Math.PI / 180);
-        const sin = Math.sin(cameraRef.current.rotation * Math.PI / 180);
+        const cos = Math.cos(AngleHelper.degToRad(cameraRef.current.rotation));
+        const sin = Math.sin(AngleHelper.degToRad(cameraRef.current.rotation));
 
         cameraRef.current.x -= cx * cos + cy * sin;
         cameraRef.current.y -= cy * cos - cx * sin;
@@ -136,8 +136,8 @@ export default function ZoomPanWrapper({children}) {
         const offY = (ncy - cy) / newZoom;
 
         // update camera position so the cursor stays in the same place
-        const cos = Math.cos(cameraRef.current.rotation * Math.PI / 180);
-        const sin = Math.sin(cameraRef.current.rotation * Math.PI / 180);
+        const cos = Math.cos(AngleHelper.degToRad(cameraRef.current.rotation));
+        const sin = Math.sin(AngleHelper.degToRad(cameraRef.current.rotation));
         cameraRef.current.x += offX * cos + offY * sin;
         cameraRef.current.y += offY * cos - offX * sin;
 

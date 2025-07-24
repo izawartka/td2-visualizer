@@ -1,90 +1,48 @@
 import Vector3 from "./vector3";
+import AngleHelper from "../helpers/angleHelper";
 
 export default class Quaternion {
-    w;
     x;
     y;
     z;
+    w;
 
-    constructor(w, x, y, z) {
-        this.w = w;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    constructor(x = 0, y = 0, z = 0, w = 0) {
+        Object.assign(this, { x, y, z, w });
     }
 
-    static fromEulerAngles(vector) {
-        const halfZ = vector.z * 0.5;
-        const halfX = vector.x * 0.5;
-        const halfY = vector.y * 0.5;
-
-        const sz = Math.sin(halfZ);
-        const cz = Math.cos(halfZ);
-        const sx = Math.sin(halfX);
-        const cx = Math.cos(halfX);
-        const sy = Math.sin(halfY);
-        const cy = Math.cos(halfY);
-
-        return new Quaternion(
-            sx * sy * sz + cx * cy * cz,
-            sx * cy * cz + cx * sy * sz,
-            cx * sy * cz - sx * cy * sz,
-            cx * cy * sz - sx * sy * cz
-        )
-    }
-
-    toEulerAngles() {
-        const sinr_cosp = 2 * (this.w * this.x + this.y * this.z);
-        const cosr_cosp = 1 - 2 * (this.x * this.x + this.y * this.y);
-        const roll = Math.atan2(sinr_cosp, cosr_cosp);
-
-        const sinp = 2 * (this.w * this.y - this.z * this.x);
-        let pitch;
-        if (Math.abs(sinp) >= 1) {
-            pitch = Math.sign(sinp) * Math.PI / 2; // use 90 degrees if out of range
-        } else {
-            pitch = -Math.asin(sinp);
-        }
-
-        const siny_cosp = 2 * (this.w * this.z + this.x * this.y);
-        const cosy_cosp = 1 - 2 * (this.y * this.y + this.z * this.z);
-        const yaw = Math.atan2(siny_cosp, cosy_cosp);
-
-        return new Vector3(roll, pitch, yaw);
-    }
-
-    rotateVector(v) {
-        const qv = new Quaternion(0, v.x, v.y, v.z);
-        const conjugate = this.conjugate();
-        const rotated = this.multiply(qv).multiply(conjugate);
-        return new Vector3(rotated.x, rotated.y, rotated.z);
+    rotateVector(vector) {
+        const resultQuat = this
+            .multiply(Quaternion.fromVec(vector))
+            .multiply(this.conjugate());
+        return new Vector3(resultQuat.x, resultQuat.y, resultQuat.z);
     }
 
     conjugate() {
-        return new Quaternion(this.w, -this.x, -this.y, -this.z);
+        return new Quaternion(-this.x, -this.y, -this.z, this.w);
     }
 
     normalize() {
         const length = Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
-        if (length === 0) return new Quaternion(1, 0, 0, 0); // return identity quaternion if length is zero
-        return new Quaternion(this.w / length, this.x / length, this.y / length, this.z / length);
+        if (length === 0) return Quaternion.identity();
+        return new Quaternion(this.x / length, this.y / length, this.z / length, this.w / length);
     }
 
-    multiply(q) {
+    multiply(other) {
         return new Quaternion(
-            this.w * q.w - this.x * q.x - this.y * q.y - this.z * q.z,
-            this.w * q.x + this.x * q.w + this.y * q.z - this.z * q.y,
-            this.w * q.y - this.x * q.z + this.y * q.w + this.z * q.x,
-            this.w * q.z + this.x * q.y - this.y * q.x + this.z * q.w
+            this.w * other.x + this.x * other.w + this.y * other.z - this.z * other.y,
+            this.w * other.y - this.x * other.z + this.y * other.w + this.z * other.x,
+            this.w * other.z + this.x * other.y - this.y * other.x + this.z * other.w,
+            this.w * other.w - this.x * other.x - this.y * other.y - this.z * other.z,
         );
     }
 
     multiplyScalar(scalar) {
         return new Quaternion(
-            this.w * scalar,
             this.x * scalar,
             this.y * scalar,
-            this.z * scalar
+            this.z * scalar,
+            this.w * scalar,
         );
     }
 
@@ -96,8 +54,58 @@ export default class Quaternion {
         const rotatedUp = this.rotateVector(up);
 
         return {
-            yaw: Math.atan2(rotatedForward.x, rotatedForward.z) * 180 / Math.PI,
+            yaw: AngleHelper.radToDeg(Math.atan2(rotatedForward.x, rotatedForward.z)),
             tilt: rotatedUp.x * rotatedUp.x + rotatedUp.z * rotatedUp.z
         }
     }
-};
+
+    static fromVec(vec) {
+        return new Quaternion(vec.x, vec.y, vec.z, 0);
+    }
+
+    /**
+     * Convert a Unity rotation vector (extrinsic z-x-y) in radians to a quaternion.
+     */
+    static fromEulerAnglesRad(vector) {
+        const halfZ = vector.z * 0.5;
+        const halfX = vector.x * 0.5;
+        const halfY = vector.y * 0.5;
+
+        const cosZ = Math.cos(halfZ);
+        const sinZ = Math.sin(halfZ);
+        const cosX = Math.cos(halfX);
+        const sinX = Math.sin(halfX);
+        const cosY = Math.cos(halfY);
+        const sinY = Math.sin(halfY);
+
+        return new Quaternion(
+            cosY * sinX * cosZ + sinY * cosX * sinZ,
+            sinY * cosX * cosZ - cosY * sinX * sinZ,
+            cosY * cosX * sinZ - sinY * sinX * cosZ,
+            cosY * cosX * cosZ + sinY * sinX * sinZ,
+        );
+    }
+
+    toEulerAnglesRad() {
+        const sinX = Math.min(Math.max(-1, 2 * (this.w * this.x - this.y * this.z)), 1);
+        const xRad = Math.asin(sinX);
+        const yRad = Math.atan2(
+            2 * (this.x * this.z + this.w * this.y),
+            1 - 2 * (this.x * this.x + this.y * this.y)
+        );
+
+        if (Math.abs(sinX) > 1 - 1e-6) {
+            return new Vector3(xRad, yRad, 0);
+        }
+
+        const zRad = Math.atan2(
+            2 * (this.x * this.y + this.w * this.z),
+            1 - 2 * (this.x * this.x + this.z * this.z)
+        );
+        return new Vector3(xRad, yRad, zRad);
+    }
+
+    static identity() {
+        return new Quaternion(0, 0, 0, 1);
+    }
+}

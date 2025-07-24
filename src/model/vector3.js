@@ -148,7 +148,7 @@ export default class Vector3 {
     length() {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
-    
+
     lengthSq() {
         return this.x * this.x + this.y * this.y + this.z * this.z;
     }

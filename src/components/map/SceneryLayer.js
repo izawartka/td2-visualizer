@@ -5,7 +5,7 @@ import Constants from "../../helpers/constants";
 
 export default function SceneryLayer(props) {
     const { queueItem } = props;
-    const { name, category, type, types, cond, renderer: Renderer, additionalComponents: AdditionalComponents } = queueItem;
+    const { name, category, type, types, trackSources, cond, renderer: Renderer, additionalComponents: AdditionalComponents } = queueItem;
     const { scenery } = useContext(MainContext);
     const { layers } = useContext(SettingsContext);
 
@@ -35,6 +35,7 @@ export default function SceneryLayer(props) {
             objects={objects}
             type={type}
             types={types}
+            trackSources={trackSources}
             pointerEvents={pointerEvents}
             AdditionalComponents={AdditionalComponents}
         />
@@ -44,7 +45,7 @@ export default function SceneryLayer(props) {
 const MemoizedSceneryLayer = memo(StatelessSceneryLayer);
 
 
-function StatelessSceneryLayer({ name, Renderer, objects, type, types, pointerEvents = false, AdditionalComponents = [] }) {
+function StatelessSceneryLayer({ name, Renderer, objects, type, types, trackSources, pointerEvents = false, AdditionalComponents = [] }) {
     return (
         <g
             className={`scenery-layer-${name}`}
@@ -53,6 +54,7 @@ function StatelessSceneryLayer({ name, Renderer, objects, type, types, pointerEv
             {objects.map((obj) => {
                 if (type !== undefined && type !== obj.type) return null;
                 if (types !== undefined && !types.includes(obj.type)) return null;
+                if (trackSources !== undefined && obj.category === 'tracks' && !trackSources.includes(obj.source)) return null;
                 return <Renderer key={`${name}-${obj.id}`} object={obj} />;
             })}
             { AdditionalComponents.map((Component, index) => (

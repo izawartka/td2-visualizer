@@ -2,6 +2,18 @@ import SceneryObject from "../scenery-object";
 import { ElectrificationStatus } from "../electrification-status";
 import {TrackConnectionEnd} from "../track-connection";
 
+export const TrackSource = {
+    STANDARD: Symbol("TrackSource.STANDARD"),
+    SWITCH: Symbol("TrackSource.SWITCH"),
+    ROUTE: Symbol("TrackSource.ROUTE"),
+};
+
+export const TrackShape = {
+    STRAIGHT: Symbol("TrackShape.STRAIGHT"),
+    ARC: Symbol("TrackShape.ARC"),
+    BEZIER: Symbol("TrackShape.BEZIER"),
+};
+
 export default class Track extends SceneryObject {
     len;
     r;
@@ -16,10 +28,13 @@ export default class Track extends SceneryObject {
     end_slope;
     prefab_name;
     switch = null;
+    route = null;
     electrificationStatus = ElectrificationStatus.NOT_CHECKED;
     hasNEVP = false;
+    source;
+    shape;
 
-    constructor(id, pos, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed) {
+    constructor(id, pos, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source, shape) {
         super(id, pos, rot);
         Object.assign(this, {
             len, r,
@@ -29,6 +44,8 @@ export default class Track extends SceneryObject {
             id_isolation,
             prefab_name,
             maxspeed, derailspeed,
+            source,
+            shape,
         });
     }
 
@@ -45,8 +62,12 @@ export default class Track extends SceneryObject {
         else return this.getEndAngleXZ();
     }
 
+    getPointAtDist(_dist, _fromEnd) {
+        throw new Error("getPointAtDist() must be implemented in subclass");
+    }
+
     static slopesFromText(text) {
-        return text.split(",", 2);
+        return text.split(",", 2).map((slope) => parseFloat(slope));
     }
 
     getEndPos(end) {

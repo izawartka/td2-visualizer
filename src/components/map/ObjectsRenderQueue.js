@@ -13,6 +13,7 @@ import SpawnPointRenderer from './object-renderers/SpawnPointRenderer';
 import IsolationEndRenderer from './object-renderers/IsolationEndRenderer';
 import PlatformRenderer from './object-renderers/PlatformRenderer';
 import Constants from '../../helpers/constants';
+import {TrackSource} from "../../model/tracks/track";
 
 const ObjectRendererQueue = [
     {
@@ -41,7 +42,7 @@ const ObjectRendererQueue = [
     {
         'name': 'isolations-ids',
         'category': ['tracks', 'switches'],
-        'types': ['StandardTrack', 'BezierTrack', 'Switch'],
+        'trackSources': [TrackSource.STANDARD],
         'renderer': IsolationIdRenderer,
         'cond': (layers) => layers['isolations-ids']
     },

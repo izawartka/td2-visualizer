@@ -2,15 +2,16 @@ import React, {useContext} from "react";
 import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 import {ElectrificationStatus} from "../../../model/electrification-status";
+import MiscHelper from "../../../helpers/miscHelper";
 import {setHoveredTrack, unsetHoveredTrack} from "../../../services/trackHoverInfoService";
 import GradientsContext from "../../../contexts/GradientsContext";
-import MiscHelper from "../../../helpers/miscHelper";
+import { TrackSource } from "../../../model/tracks/track";
 import {useZoomPanEmitter} from "../../../hooks/useZoomPubSub";
 
 export default function TrackRenderer(props) {
-    const {object} = props;
-    const {trackColorMode} = useContext(SettingsContext);
-    const {gradientDefs} = useContext(GradientsContext);
+    const { object } = props;
+    const { trackColorMode } = useContext(SettingsContext);
+    const { gradientDefs } = useContext(GradientsContext);
     const { alignView } = useZoomPanEmitter();
 
     const onAlign = () => {
@@ -138,15 +139,16 @@ function getTrackColor(object, trackColorMode, gradientDef) {
             }
 
         case "type":
-            switch (object.type) {
-                case "StandardTrack":
+            switch (object.source) {
+                case TrackSource.STANDARD:
+                    if (object.type === 'BezierTrack') {
+                        return modeDef.options['bezier-track'][0];
+                    }
                     return modeDef.options['standard-track'][0];
-                case "PointTrack":
+                case TrackSource.SWITCH:
                     return modeDef.options['point-track'][0];
-                case "RouteTrack":
+                case TrackSource.ROUTE:
                     return modeDef.options['route-track'][0];
-                case "BezierTrack":
-                    return modeDef.options['bezier-track'][0];
                 default:
                     return modeDef.options[modeDef.optionDefault][0];
             }

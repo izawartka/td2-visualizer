@@ -36,7 +36,6 @@ const Constants = {
         switchInvalidDataFormat: true,
         switchNoModel: true,
         switchMissingTrackId: true,
-        switchInvalidInternalConnection: true,
         signalBoxUndefinedPrefabName: true,
         invalidSceneryInfoVersion: true,
         signUndefinedPrefabName: true,
@@ -154,7 +153,7 @@ const Constants = {
             options: {
                 'standard-track': ['#00a', 'Standard track'],
                 'point-track': ['#0a0', 'Switch track'],
-                'bezier-track': ['#aa8', 'Bezier track'],
+                'bezier-track': ['#aa8', 'Bézier track'],
                 'route-track': ['#a6d', 'Route track'],
             }
         },

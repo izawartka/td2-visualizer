@@ -3,6 +3,13 @@ export const TrackConnectionEnd = {
     END: Symbol('TrackConnectionEnd.END'),
 };
 
+export function getOtherEnd(end) {
+    return {
+        [TrackConnectionEnd.START]: TrackConnectionEnd.END,
+        [TrackConnectionEnd.END]: TrackConnectionEnd.START,
+    }[end];
+}
+
 export default class TrackConnection {
     otherTrackId;
     otherTrack = null;
