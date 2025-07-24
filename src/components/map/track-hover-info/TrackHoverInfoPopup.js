@@ -1,28 +1,32 @@
+import { QuestionMarkIcon, SlopeIcon, SpeedIcon, HashIcon, LightningIcon, RadiusIcon } from "../../../icons";
 import TrackHoverInfoConsts from "./TrackHoverInfoConsts";
 
 export default function TrackHoverInfoPopup(props) {
     const { track } = props;
 
-    const slopeArr = Array.from(new Set([
+    const slopeValue = Array.from(new Set([
         Math.abs(track.start_slope).toFixed(1),
         Math.abs(track.end_slope).toFixed(1),
     ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
+    const typeValue = [
+        TrackHoverInfoConsts.source[track.source],
+        TrackHoverInfoConsts.shape[track.shape],
+    ];
     const showAlignHint = track.r === 0;
 
     return (
         <div className="track-hover-info-popup">
             <table>
                 <tbody>
-                    <InfoPopupItem value={track['id_station']} label="Track ID" />
-                    <InfoPopupItem value={track['id_isolation']} label="Isolation ID" />
-                    <InfoPopupItem value={track['derailspeed']} label="Derail speed" options={{suffix: ' km/h'}} />
-                    <InfoPopupItem value={track['maxspeed']} label="Max. speed" options={{suffix: ' km/h'}} />
-                    <InfoPopupItem value={slopeArr} label="Slope" options={slopeOptions} />
-                    <InfoPopupItem value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
-                    <InfoPopupItem value={track['source']} label="Type" options={{translationConstKey: 'source'}} />
+                    <InfoPopupItem icon={HashIcon} value={track['id_station']} label="Track ID" />
+                    <InfoPopupItem icon={HashIcon} value={track['id_isolation']} label="Isolation ID" />
+                    <InfoPopupItem icon={SpeedIcon} value={track['derailspeed']} label="Derail speed" options={{suffix: ' km/h'}} />
+                    <InfoPopupItem icon={SpeedIcon} value={track['maxspeed']} label="Max. speed" options={{suffix: ' km/h'}} />
+                    <InfoPopupItem icon={LightningIcon} value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
+                    <InfoPopupItem icon={QuestionMarkIcon} value={typeValue} label="Type" options={{join: ' / '}} />
+                    <InfoPopupItem icon={SlopeIcon} value={slopeValue} label="Slope" options={slopeOptions} />
                     <InfoPopupSwitchItems track={track} />
-                    <InfoPopupItem value={track['shape']} label="Shape" options={{translationConstKey: 'shape'}} />
                     <InfoPopupShapeItems track={track} />
                 </tbody>
             </table>
@@ -40,8 +44,8 @@ function InfoPopupSwitchItems(props) {
     if (!track.switch) return null;
 
     return <>
-        <InfoPopupItem value={track.switch.id_switch} label="Switch ID" />
-        <InfoPopupItem value={track.switch.bare_model} label="Switch model" />
+        <InfoPopupItem icon={HashIcon} value={track.switch.id_switch} label="Switch ID" />
+        <InfoPopupItem icon={QuestionMarkIcon} value={track.switch.bare_model} label="Switch model" />
     </>
 }
 
@@ -49,7 +53,7 @@ function InfoPopupShapeItems(props) {
     const { track } = props;
     if (track.r === 0) return null;
 
-    return <InfoPopupItem value={Math.abs(track.r)} label="Radius" options={{suffix: ' m', precision: 0}} />
+    return <InfoPopupItem icon={RadiusIcon} value={Math.abs(track.r)} label="Radius" options={{suffix: ' m', precision: 0}} />
 }
 
 function processItemValue(value, options) {
@@ -74,12 +78,17 @@ function processItemValue(value, options) {
     return `${value}${suffix || ''}`.trim();
 }
 
-function InfoPopupItem({ label, value, options = {} }) {
+function InfoPopupItem({ icon: Icon, label, value, options = {} }) {
     const textValue = processItemValue(value, options);
 
     return (
         <tr>
-            <th>{label}</th>
+            <th>
+                <div className="track-hover-info-popup-label">
+                    {Icon ? <Icon width={15} height={15} color="#888" strokeWidth={3} /> : null}
+                    {label}
+                </div>
+            </th>
             <td>{textValue}</td>
         </tr>
     );

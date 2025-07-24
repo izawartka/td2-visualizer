@@ -27,3 +27,9 @@
     padding: 2px;
     color: #888;
 }
+
+.track-hover-info-popup .track-hover-info-popup-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
