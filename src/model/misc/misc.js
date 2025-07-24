@@ -49,7 +49,7 @@ export default class Misc extends SceneryObject {
             worldQuat = groupQuat.multiply(worldQuat).normalize();
         }
 
-        const worldRot = AngleHelper.rotationRadToDeg(worldQuat.toEulerAnglesRad());
+        const worldRot = AngleHelper.vectorRadToDeg(worldQuat.toEulerAnglesRad());
         const yawData = worldQuat.getMiscYawData();
 
         return [ worldPos, worldRot, yawData ];

@@ -20,7 +20,7 @@ export default class StandardTrack extends Track  {
     }
 
     _transformPoint(point) {
-        const rotRad = AngleHelper.rotationDegToRad(this.rot);
+        const rotRad = AngleHelper.vectorDegToRad(this.rot);
         return point.rotate(rotRad).add(this.points.start);
     }
 

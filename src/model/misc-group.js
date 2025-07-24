@@ -24,7 +24,7 @@ export default class MiscGroup {
 
     getQuaternion() {
         if (!this.quaternion) {
-            const rotRad = AngleHelper.rotationDegToRad(this.rot);
+            const rotRad = AngleHelper.vectorDegToRad(this.rot);
             this.quaternion = Quaternion.fromEulerAnglesRad(rotRad).normalize();
         }
 

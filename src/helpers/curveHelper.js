@@ -37,11 +37,11 @@ function calculateCurveEndStandard(radius, curveLength) {
 }
 
 function transformStart(globalStart, globalRotationDeg, localStart, localRotationQuat) {
-    const globalRotationRad = AngleHelper.rotationDegToRad(globalRotationDeg);
+    const globalRotationRad = AngleHelper.vectorDegToRad(globalRotationDeg);
     const startPos = globalStart.add(localStart.rotate(globalRotationRad));
     const rotationQuat = Quaternion.fromEulerAnglesRad(globalRotationRad).multiply(localRotationQuat);
     const rotationRad = rotationQuat.toEulerAnglesRad();
-    const rotationDeg = AngleHelper.rotationRadToDeg(rotationRad);
+    const rotationDeg = AngleHelper.vectorRadToDeg(rotationRad);
 
     return {
         startPos,
