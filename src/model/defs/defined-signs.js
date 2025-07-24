@@ -169,15 +169,26 @@ const DefinedSigns = {
         "offsetY": -2.01096,
         "height": 1.4
     },
-    "w14a_oneside": { alias: "w9_oneside" },
-    "w14b_oneside": { alias: "w9b_oneside" },
-    "w14": { alias: "w9" },
-    "w15_p": {
+    "w14a_oneside": { 
+        "pattern": /^(?:w14(?:_niski)?_(?:v1|v2)(?:_.*)?|sign_w14a_oneside)$/,
+        "alias": "w9a_oneside"
+    },
+    "w14b_oneside": {
+        "pattern": /^(?:w14(?:_niski)?_(?:v3|v4)(?:_.*)?|sign_w14b_oneside)$/,
+        "alias": "w9b_oneside"
+    },
+    "w14": {
+        "pattern": /^sign_w14$/,
+        "alias": "w9"
+    },
+    "w15_r": {
+        "pattern": /^(?:w15_l(?:_.*)?|sign_w15_p)$/,
         "name": "W15 Right",
         "icon": "w15_r.svg",
         "offsetY": -1.4364,
     },
     "w15_l": {
+        "pattern": /^(?:w15_p(?:_.*)?|sign_w15_l)$/,
         "name": "W15 Left",
         "icon": "w15_l.svg",
         "offsetY": -1.4364
@@ -270,17 +281,27 @@ const DefinedSigns = {
         "textOffsetX": 1.89,
         "textOffsetY": 0.9
     },
-    "w9a_oneside": {
+    "w9_both": {
+        "pattern": /^sign_w9_v2$/,
         "name": "W9",
+        "icon": "w9_both.svg",
+        "offsetY": -3.7044,
+        "height": 2.96
+    },
+    "w9a_oneside": {
+        "pattern": /^(?:w9(?:_niski)?_(?:v1|v2)(?:_.*)?|sign_w9a_oneside)$/,
+        "name": "W9a",
         "icon": "w9a.svg",
         "offsetY": -1.4364
     },
     "w9b_oneside": {
-        "name": "W9",
+        "pattern": /^(?:w9(?:_niski)?_(?:v3|v4)(?:_.*)?|sign_w9b_oneside)$/,
+        "name": "W9b",
         "icon": "w9b.svg",
         "offsetY": -1.4364
     },
     "w9": {
+        "pattern": /^sign_w9$/,
         "name": "W9",
         "icon": "w9.svg",
         "offsetY": -2.528064,
