@@ -153,7 +153,7 @@ export default class Switch extends SceneryObject {
         const connections = this._createTrackConnections(switchDef, trackDef, ids);
         const { startPos, rotationDeg } = CurveHelper.transformStart(this.pos, this.rot, trackDef.pos, trackDef.rot);
 
-        const track = StandardTrack.switch(
+        const track = StandardTrack.createSwitchTrack(
             trackId,
             startPos,
             rotationDeg,

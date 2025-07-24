@@ -21,6 +21,7 @@ export default function TrackHoverInfoPopup(props) {
                     <InfoPopupItem value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
                     <InfoPopupItem value={track['source']} label="Type" options={{translationConstKey: 'source'}} />
                     <InfoPopupSwitchItems track={track} />
+                    <InfoPopupItem value={track['shape']} label="Shape" options={{translationConstKey: 'shape'}} />
                     <InfoPopupShapeItems track={track} />
                 </tbody>
             </table>
@@ -36,8 +37,8 @@ function InfoPopupSwitchItems(props) {
     if (!track.switch) return null;
 
     return <>
-        <InfoPopupItem value={track.switch.id_switch} label="Switch ID" />
-        <InfoPopupItem value={track.switch.bare_model} label="Switch model" />
+        <InfoPopupItem value={track.createSwitchTrack.id_switch} label="Switch ID" />
+        <InfoPopupItem value={track.createSwitchTrack.bare_model} label="Switch model" />
     </>
 }
 

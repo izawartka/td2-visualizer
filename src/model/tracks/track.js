@@ -4,9 +4,14 @@ import {TrackConnectionEnd} from "../track-connection";
 
 export const TrackSource = {
     STANDARD: Symbol("TrackSource.STANDARD"),
-    BEZIER: Symbol("TrackSource.BEZIER"),
     SWITCH: Symbol("TrackSource.SWITCH"),
     ROUTE: Symbol("TrackSource.ROUTE"),
+};
+
+export const TrackShape = {
+    STRAIGHT: Symbol("TrackShape.STRAIGHT"),
+    ARC: Symbol("TrackShape.ARC"),
+    BEZIER: Symbol("TrackShape.BEZIER"),
 };
 
 export default class Track extends SceneryObject {
@@ -27,8 +32,9 @@ export default class Track extends SceneryObject {
     electrificationStatus = ElectrificationStatus.NOT_CHECKED;
     hasNEVP = false;
     source;
+    shape;
 
-    constructor(id, pos, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source) {
+    constructor(id, pos, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source, shape) {
         super(id, pos, rot);
         Object.assign(this, {
             len, r,
@@ -39,6 +45,7 @@ export default class Track extends SceneryObject {
             prefab_name,
             maxspeed, derailspeed,
             source,
+            shape,
         });
     }
 

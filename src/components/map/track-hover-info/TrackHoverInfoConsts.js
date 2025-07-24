@@ -1,5 +1,5 @@
 import { ElectrificationStatus } from "../../../model/electrification-status";
-import {TrackSource} from "../../../model/tracks/track";
+import {TrackShape, TrackSource} from "../../../model/tracks/track";
 
 const TrackHoverInfoConsts = {
     electrification: {
@@ -11,8 +11,12 @@ const TrackHoverInfoConsts = {
     source: {
         [TrackSource.STANDARD]: 'Standard track',
         [TrackSource.SWITCH]: 'Switch track',
-        [TrackSource.BEZIER]: 'Bezier track',
         [TrackSource.ROUTE]: 'Route track',
+    },
+    shape: {
+        [TrackShape.STRAIGHT]: 'Straight',
+        [TrackShape.ARC]: 'Circle arc',
+        [TrackShape.BEZIER]: 'Bézier curve',
     }
 };
 

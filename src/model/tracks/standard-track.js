@@ -1,5 +1,5 @@
 import AngleHelper from "../../helpers/angleHelper";
-import Track, {TrackSource} from "./track";
+import Track, {TrackShape, TrackSource} from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 import {ElectrificationStatus} from "../electrification-status";
@@ -14,7 +14,8 @@ export default class StandardTrack extends Track  {
     };
 
     constructor(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source) {
-        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source);
+        const shape = r === 0 ? TrackShape.STRAIGHT : TrackShape.ARC;
+        super(id, start, rot, len, r, connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, source, shape);
         this._calcPoints();
     }
 
@@ -80,7 +81,7 @@ export default class StandardTrack extends Track  {
         super.applyObject(scenery);
     }
 
-    static route(id, start, rot, len, r, connections, electrified, route) {
+    static createRouteTrack(id, start, rot, len, r, connections, electrified, route) {
         const track = new StandardTrack(
             id, start, rot, len, r,
             connections,
@@ -98,7 +99,7 @@ export default class StandardTrack extends Track  {
         return track;
     }
 
-    static switch(id, start, rot, len, r, connections, start_slope, end_slope, object) {
+    static createSwitchTrack(id, start, rot, len, r, connections, start_slope, end_slope, object) {
         const track = new StandardTrack(
             id, start, rot, len, r,
             connections,

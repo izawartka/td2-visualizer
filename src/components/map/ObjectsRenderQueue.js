@@ -42,7 +42,7 @@ const ObjectRendererQueue = [
     {
         'name': 'isolations-ids',
         'category': ['tracks', 'switches'],
-        'trackSources': [TrackSource.STANDARD, TrackSource.BEZIER],
+        'trackSources': [TrackSource.STANDARD],
         'renderer': IsolationIdRenderer,
         'cond': (layers) => layers['isolations-ids']
     },

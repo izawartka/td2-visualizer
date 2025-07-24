@@ -68,7 +68,7 @@ export default class Route extends SceneryObject {
                 trackLength *= (trackRadius / radius);
             }
 
-            return StandardTrack.route(
+            return StandardTrack.createRouteTrack(
                 trackIds[index],
                 startPoint,
                 rotDeg,

@@ -1,4 +1,4 @@
-import Track, {TrackSource} from "./track";
+import Track, {TrackShape, TrackSource} from "./track";
 import Vector3 from "../vector3";
 import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 
@@ -20,7 +20,9 @@ export default class BezierTrack extends Track
             Vector3.zero(), // rotation
             length,
             0, // radius
-            connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed, TrackSource.BEZIER,
+            connections, id_station, start_slope, end_slope, id_isolation, prefab_name, maxspeed, derailspeed,
+            TrackSource.STANDARD,
+            TrackShape.BEZIER,
         );
 
         Object.assign(this.points, {

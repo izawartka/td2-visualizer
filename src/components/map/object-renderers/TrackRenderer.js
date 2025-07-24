@@ -141,13 +141,14 @@ function getTrackColor(object, trackColorMode, gradientDef) {
         case "type":
             switch (object.source) {
                 case TrackSource.STANDARD:
+                    if (object.type === 'BezierTrack') {
+                        return modeDef.options['bezier-track'][0];
+                    }
                     return modeDef.options['standard-track'][0];
                 case TrackSource.SWITCH:
                     return modeDef.options['point-track'][0];
                 case TrackSource.ROUTE:
                     return modeDef.options['route-track'][0];
-                case TrackSource.BEZIER:
-                    return modeDef.options['bezier-track'][0];
                 default:
                     return modeDef.options[modeDef.optionDefault][0];
             }
