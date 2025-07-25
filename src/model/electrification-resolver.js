@@ -107,7 +107,7 @@ export default class ElectrificationResolver {
             track.electrificationStatus = ElectrificationStatus.CONFLICT;
             ElectrificationResolver._passWarn(
                 'electrificationConflict',
-                `Track ${track.id} has conflicting electrification status (=>${status})`
+                `Track ${track.id} has conflicting electrification status (${skipTrackId}=>${status})`
             );
             return;
         }

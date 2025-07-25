@@ -109,6 +109,7 @@ export default class Switch extends SceneryObject {
 
     _createTrackConnections(switchDef, trackDef, ids) {
         const connections = [];
+        // eslint-disable-next-line no-unused-vars
         const [_, prevId, nextId] = ids[trackDef.dataIndex];
         trackDef.connections.forEach((connection) => {
             if (connection.type === SwitchTrackConnectionType.INTERNAL) {
