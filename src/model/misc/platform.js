@@ -14,7 +14,7 @@ export default class Platform extends Misc {
     }
 
     static isPlatform(prefabName) {
-        const regex = /^(platform|peron|wgt_peron)/i;
+        const regex = /^(platform|peron|wgt_peron)(?!_cover)/i;
         return regex.test(prefabName);
     }
 
