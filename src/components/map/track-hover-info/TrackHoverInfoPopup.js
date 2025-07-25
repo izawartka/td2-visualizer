@@ -1,3 +1,4 @@
+import Constants from "../../../helpers/constants";
 import { QuestionMarkIcon, SlopeIcon, SpeedIcon, HashIcon, LightningIcon, RadiusIcon } from "../../../icons";
 import TrackHoverInfoConsts from "./TrackHoverInfoConsts";
 
@@ -9,22 +10,20 @@ export default function TrackHoverInfoPopup(props) {
         Math.abs(track.end_slope).toFixed(1),
     ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
-    const typeValue = [
-        TrackHoverInfoConsts.source[track.source],
-        TrackHoverInfoConsts.shape[track.shape],
-    ];
     const showAlignHint = track.r === 0;
 
     return (
         <div className="track-hover-info-popup">
             <table>
                 <tbody>
-                    <InfoPopupItem icon={HashIcon} value={track['id_station']} label="Track ID" />
+                    {Constants.map.showDebugTrackIds && (
+                        <InfoPopupItem icon={HashIcon} value={track.id} label="Track ID" />
+                    )}
                     <InfoPopupItem icon={HashIcon} value={track['id_isolation']} label="Isolation ID" />
                     <InfoPopupItem icon={SpeedIcon} value={track['derailspeed']} label="Derail speed" options={{suffix: ' km/h'}} />
                     <InfoPopupItem icon={SpeedIcon} value={track['maxspeed']} label="Max. speed" options={{suffix: ' km/h'}} />
                     <InfoPopupItem icon={LightningIcon} value={track['electrificationStatus']} label="Electrification" options={{translationConstKey: 'electrification'}} />
-                    <InfoPopupItem icon={QuestionMarkIcon} value={typeValue} label="Type" options={{join: ' / '}} />
+                    <InfoPopupItem icon={QuestionMarkIcon} value={track.shape} label="Type" options={{join: ' / ', translationConstKey: 'shape'}} />
                     <InfoPopupItem icon={SlopeIcon} value={slopeValue} label="Slope" options={slopeOptions} />
                     <InfoPopupSwitchItems track={track} />
                     <InfoPopupShapeItems track={track} />

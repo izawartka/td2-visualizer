@@ -7,7 +7,8 @@ const Constants = {
         zoomDefault: 5,
         rotationSensitivity: 0.2,
         forcePointerEvents: false,
-        platformMaxTilt: 0.5
+        platformMaxTilt: 0.5,
+        showDebugTrackIds: false
     },
     parser: {
         logSceneryAfterFinished: true,
@@ -152,8 +153,8 @@ const Constants = {
             optionDefault: 'standard-track',
             options: {
                 'standard-track': ['#00a', 'Standard track'],
-                'point-track': ['#0a0', 'Switch track'],
                 'bezier-track': ['#aa8', 'Bézier track'],
+                'point-track': ['#0a0', 'Switch track'],
                 'route-track': ['#a6d', 'Route track'],
             }
         },

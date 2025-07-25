@@ -1,5 +1,5 @@
 import { ElectrificationStatus } from "../../../model/electrification-status";
-import {TrackShape, TrackSource} from "../../../model/tracks/track";
+import {TrackShape} from "../../../model/tracks/track";
 
 const TrackHoverInfoConsts = {
     electrification: {
@@ -8,14 +8,9 @@ const TrackHoverInfoConsts = {
         [ElectrificationStatus.NOT_CHECKED]: 'Unknown',
         [ElectrificationStatus.CONFLICT]: 'Error / Conflict',
     },
-    source: {
-        [TrackSource.STANDARD]: 'Standard track',
-        [TrackSource.SWITCH]: 'Switch track',
-        [TrackSource.ROUTE]: 'Route track',
-    },
     shape: {
         [TrackShape.STRAIGHT]: 'Straight',
-        [TrackShape.ARC]: 'Circle arc',
+        [TrackShape.ARC]: 'Curve',
         [TrackShape.BEZIER]: 'Bézier curve',
     }
 };
