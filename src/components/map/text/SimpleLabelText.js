@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef } from "react";
 import { mapRotation$ } from "../../../services/mapRotationService";
 
 export default function SimpleLabelText(props) {
-    const { text, x, y, wrapperStyle, textProps } = props;
+    const { text, x, y, wrapperStyle, textProps, additionalRot } = props;
     const gRef = useRef(null);
 
     const getTransformString = useCallback((rot) => (
-        `translate(${x || 0}, ${y || 0}) rotate(${rot})`
-    ), [x, y]);
+        `translate(${x || 0}, ${y || 0}) rotate(${rot + (additionalRot || 0)})`
+    ), [x, y, additionalRot]);
 
     useEffect(() => {
         const subscription = mapRotation$.subscribe(rotation => {
