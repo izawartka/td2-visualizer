@@ -5,19 +5,19 @@ import sys
 #
 #    [ TD2 SCENERY PROCESSOR ]
 #    by masuo
-#    v1.7
+#    v1.8
 #
 
 BAD_WORDS = ['Fence', 'TerrainPoint', 'Wires']
-MISC_REGEX = r'^(?:SignalBox|wgt_peron|peron|platform).*$'
+MISC_REGEX = r'^(?:MiscGroup.*|Misc;[^;]*;(?:SignalBox|wgt_peron|peron|platform).*)$'
 
 def should_exclude(line: str) -> bool:
     for word in BAD_WORDS:
         if line.startswith(word):
             return True
 
-    if line.startswith("Misc") and not line.startswith("MiscGroup"):
-        if re.match(MISC_REGEX, line):
+    if line.startswith("Misc"):
+        if not re.match(MISC_REGEX, line):
             return True
 
     return False
