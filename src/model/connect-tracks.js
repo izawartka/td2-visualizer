@@ -66,7 +66,9 @@ function _testTrackConnection(track, connection) {
 
     const ownPosition = track.getEndPos(connection.end);
     const otherPosition = connection.otherTrack.getEndPos(reverseConnection.end);
-    const distSq = ownPosition.distanceSq(otherPosition);
+    const distSq = Constants.parser.tracksConnectionTestIgnoreY ? 
+        ownPosition.distanceSqExcludeY(otherPosition) :
+        ownPosition.distanceSq(otherPosition);
     if (distSq > connectionThresholdDistanceSq) {
         SceneryParserLog.warn(
             'tracksConnectionTest',

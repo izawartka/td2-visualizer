@@ -15,6 +15,7 @@ const Constants = {
         sceneryInfoVersion: 29,
         alwaysShowLogDialog: false,
         runTracksConnectionTest: false,
+        tracksConnectionTestIgnoreY: true,
         resolveElectrification: true,
         skipElectrificationErrorsPropagation: false,
         attachSigns: true,
