@@ -18,6 +18,10 @@ export default function DistanceMeter() {
         });
     }
 
+    useEffect(() => {
+        setDistancePoints([]);
+    }, [setDistancePoints]);
+
     if(!scenery || !Array.isArray(distancePoints)) return null;
 
     return (
