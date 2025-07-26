@@ -1,12 +1,12 @@
-import { useContext } from "react";
-import MainContext from "../../../contexts/MainContext";
+import { useContext, useEffect } from "react";
+import SceneryContext from "../../../contexts/SceneryContext";
 import DistanceMeterContext from "../../../contexts/DistanceMeterContext";
 import { getSVGCoords } from "./get-svg-coords";
 import DistanceMeterView from "./DistanceMeterView";
 
-export default function DistanceMeter(props) {
+export default function DistanceMeter() {
     const { distancePoints, setDistancePoints } = useContext(DistanceMeterContext);
-    const { scenery } = useContext(MainContext);
+    const { scenery } = useContext(SceneryContext);
 
     const onClick = (event) => {
         setDistancePoints(oldDistancePoints => {

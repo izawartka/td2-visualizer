@@ -1,12 +1,12 @@
 import React, { useContext, useMemo, memo } from "react";
-import MainContext from "../../contexts/MainContext";
+import SceneryContext from "../../contexts/SceneryContext";
 import SettingsContext from "../../contexts/SettingsContext";
 import Constants from "../../helpers/constants";
 
 export default function SceneryLayer(props) {
     const { queueItem } = props;
     const { name, category, type, types, trackSources, cond, renderer: Renderer, additionalComponents: AdditionalComponents } = queueItem;
-    const { scenery } = useContext(MainContext);
+    const { scenery } = useContext(SceneryContext);
     const { layers } = useContext(SettingsContext);
 
     const isVisible = (cond ? cond(layers) : true);

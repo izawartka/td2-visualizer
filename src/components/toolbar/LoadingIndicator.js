@@ -1,8 +1,8 @@
 import { useContext } from 'react'
-import MainContext from '../../contexts/MainContext'
+import SceneryContext from '../../contexts/SceneryContext'
 
 export default function LoadingIndicator() {
-    const { isLoading } = useContext(MainContext);
+    const { isLoading } = useContext(SceneryContext);
 
     const loadingText = isLoading ? 'Loading...' : 'Ready';
     const className = 'loading-indicator ' + (isLoading ? 'loading' : 'ready'); 

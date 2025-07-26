@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import MainContext from '../../contexts/MainContext';
 import { ReactSVG } from "react-svg";
+import SideMenuContext from '../../contexts/SideMenuContext';
 
 export default function SideMenuToggle() {
-    const { setSideMenuOpen } = useContext(MainContext);
+    const { setSideMenuOpen } = useContext(SideMenuContext);
 
     const toggleSideMenu = () => {
         setSideMenuOpen((prev) => !prev);

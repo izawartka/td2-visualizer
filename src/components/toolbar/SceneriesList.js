@@ -1,37 +1,28 @@
-import { useContext, useState, useEffect } from 'react';
-import MainContext from '../../contexts/MainContext';
-import { useZoomPanEmitter } from '../../hooks/useZoomPubSub';
-import SceneryFilesHelper from '../../helpers/sceneryFilesHelper';
+import { useContext, useCallback, useState, useEffect } from 'react';
+import SceneryContext from '../../contexts/SceneryContext';
 import { setSceneriesListVersionDate } from '../../services/sceneriesListService';
 import Constants from '../../helpers/constants';
-import { resetHoveredTracksStack } from '../../services/trackHoverInfoService';
 
-export default function SceneriesList(props) {
-    const {setScenery, setIsLoading} = useContext(MainContext);
+export default function SceneriesList() {
+    const {getSceneryList, loadScenery} = useContext(SceneryContext);
     const [ sceneriesListData, setSceneriesListData ] = useState(null);
-    const { setCamera } = useZoomPanEmitter();
 
     const handleSelectChange = async (event) => {
         const name = event.target.value;
-
-        setIsLoading(true);
-        const scenery = await SceneryFilesHelper.load(name, setCamera);
-        setScenery(scenery);
-        resetHoveredTracksStack();
-        setIsLoading(false);
+        if (!name) return;
+        await loadScenery(name);
     };
 
-    const updateSceneryList = async () => {
-        const sceneries = await SceneryFilesHelper.getList();
-        setSceneriesListData(sceneries);
-        setSceneriesListVersionDate(sceneries?.info?.versionDate || null);
-    };
+    const updateSceneryList = useCallback(async () => {
+        const sceneryListData = await getSceneryList();
+        setSceneriesListData(sceneryListData);
+        setSceneriesListVersionDate(sceneryListData?.info?.versionDate || null);
+    }, [getSceneryList]);
 
     useEffect(() => {
         if(Constants.sceneryFiles.fetchDisable) return;
-        
         updateSceneryList();
-    }, []);
+    }, [updateSceneryList]);
 
     return (
         <div className='sceneries-list'>

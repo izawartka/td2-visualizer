@@ -1,10 +1,10 @@
 import { useContext, useEffect } from "react";
-import MainContext from "../../contexts/MainContext";
+import SceneryContext from "../../contexts/SceneryContext";
 import DistanceMeterContext from "../../contexts/DistanceMeterContext";
 
 export default function DistanceMeterButton(props) {
     const { distancePoints, setDistancePoints } = useContext(DistanceMeterContext);
-    const { scenery } = useContext(MainContext);
+    const { scenery } = useContext(SceneryContext);
 
     const onButtonClick = (event) => {
         setDistancePoints(oldDistancePoints => {

@@ -1,10 +1,10 @@
 import { useContext, useMemo } from 'react';
 import './LocList.css';
-import MainContext from '../../contexts/MainContext';
+import SceneryContext from '../../contexts/SceneryContext';
 import ClickableLocation from './ClickableLocation';
 
 export default function LocList(props) {
-    const { scenery } = useContext(MainContext);
+    const { scenery } = useContext(SceneryContext);
 
     const signalBoxes = useMemo(() => {
         if (!scenery?.signalBoxes) return null;

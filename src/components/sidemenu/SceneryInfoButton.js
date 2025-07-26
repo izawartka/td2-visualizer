@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import MainContext from "../../contexts/MainContext";
+import SceneryContext from "../../contexts/SceneryContext";
 import { showCustomDialog } from "../../services/dialogService";
 import SceneryInfoDialog from "../scenery-info-dialog/SceneryInfoDialog";
 
 export default function SceneryInfoButton(props) {
-    const { scenery } = useContext(MainContext);
+    const { scenery } = useContext(SceneryContext);
 
     const onButtonClick = (event) => {
         showCustomDialog(<SceneryInfoDialog scenery={scenery}/>);

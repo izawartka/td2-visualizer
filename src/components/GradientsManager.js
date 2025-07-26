@@ -1,6 +1,7 @@
 import Constants from "../helpers/constants";
-import {useMemo} from "react";
+import {useContext, useMemo} from "react";
 import GradientsContext from "../contexts/GradientsContext";
+import SceneryContext from "../contexts/SceneryContext";
 
 function getMinMax(trackColorMode, scenery) {
     if (trackColorMode === 'elevation') {
@@ -54,7 +55,8 @@ function createGradientDefs(scenery) {
 }
 
 export function GradientsManager(props) {
-    const { children, scenery } = props;
+    const { children } = props;
+    const { scenery } = useContext(SceneryContext);
 
     const gradientDefs = useMemo(() => createGradientDefs(scenery), [scenery]);
 

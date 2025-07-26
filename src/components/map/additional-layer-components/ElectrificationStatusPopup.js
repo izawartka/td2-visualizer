@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react';
-import MainContext from '../../../contexts/MainContext';
+import SceneryContext from '../../../contexts/SceneryContext';
 import SettingsContext from '../../../contexts/SettingsContext';
 import { showDialog } from '../../../services/dialogService';
 import { ElectrificationResolutionStatus } from '../../../model/electrification-status';
 
 export default function ElectrificationStatusPopup() {
-    const { scenery } = useContext(MainContext);
+    const { scenery } = useContext(SceneryContext);
     const { trackColorMode } = useContext(SettingsContext);
 
     const showElectrificationStatusPopup = () => {
