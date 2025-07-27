@@ -1,15 +1,14 @@
-import React from 'react';
 import './Toolbar.css';
 import LoadingIndicator from './LoadingIndicator';
 import CustomFileSelect from './CustomFileSelect';
 import SideMenuToggle from './SideMenuToggle';
-import SceneriesList from './SceneriesList';
+import SceneryList from './SceneryList';
 
 export default function Toolbar() {
     return (
         <div className='toolbar-cont'>
             <div className='toolbar'>
-                <SceneriesList />
+                <SceneryList />
                 or
                 <CustomFileSelect />
                 <div className='toolbar-spacer'></div>

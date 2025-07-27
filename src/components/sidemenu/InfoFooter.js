@@ -1,27 +1,20 @@
-import { useEffect, useState } from 'react';
-import { sceneriesListVersionDate$ } from "../../services/sceneriesListService";
+import { useContext } from 'react';
 import Constants from '../../helpers/constants';
+import SceneryContext from '../../contexts/SceneryContext';
 
 export default function InfoFooter() {
-    const [sceneriesVersionDate, setSceneriesVersionDate] = useState(null);
+    const { sceneryListData } = useContext(SceneryContext);
+    const sceneryListVersionDate = sceneryListData?.info?.versionDate || null;
 
-    useEffect(() => {
-        const subscription = sceneriesListVersionDate$.subscribe(date => {
-            setSceneriesVersionDate(date);
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
-
-    const sceneriesListText = sceneriesVersionDate ?
-        `included sceneries as of ${sceneriesVersionDate}` :
-        'included sceneries list not available';
+    const sceneryListText = sceneryListVersionDate ?
+        `included sceneries as of ${sceneryListVersionDate}` :
+        'included sceneries not available';
 
     return (
         <div className="info-footer">
             <span>TD2 Visualizer v{Constants.buildVersion}</span>
             <span>masuo 2025.06</span>
-            <span>{sceneriesListText}</span>
+            <span>{sceneryListText}</span>
         </div>
     );
 }

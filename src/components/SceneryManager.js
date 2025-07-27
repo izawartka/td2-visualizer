@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import SceneryContext from '../contexts/SceneryContext';
 import { useZoomPanEmitter } from '../hooks/useZoomPubSub';
 import SceneryParser from '../model/scenery-parser';
@@ -11,6 +11,7 @@ import Constants from '../helpers/constants';
 export default function SceneryManager(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [scenery, setScenery] = useState(null);
+    const [sceneryListData, setSceneryListData] = useState(null);
     const { setCamera } = useZoomPanEmitter();
 
     const myFetch = useCallback(async (url, toJson) => {
@@ -23,13 +24,14 @@ export default function SceneryManager(props) {
         return toJson ? await response.json() : await response.blob();
     }, []);
 
-    const getSceneryList = useCallback(async () => {
+    const updateSceneryList = useCallback(async () => {
         try {
             const url = Constants.sceneryFiles.fetchListUrl;
-            return await myFetch(url, true);
+            const listData = await myFetch(url, true);
+            setSceneryListData(listData || null);
         } catch(error) {
-            console.error(`Failed to fetch sceneries list`, error);
-            return null;
+            console.error(`Failed to fetch scenery list`, error);
+            setSceneryListData(null);
         }
     }, [myFetch]);
 
@@ -84,8 +86,12 @@ export default function SceneryManager(props) {
         return await loadCustomScenery(file);
     }, [myFetch, loadCustomScenery]);
 
+    useEffect(() => {
+        if(!Constants.sceneryFiles.fetchDisable) updateSceneryList();
+    }, [updateSceneryList]);
+
     return (
-        <SceneryContext.Provider value={{ isLoading, scenery, getSceneryList, loadScenery, loadCustomScenery }}>
+        <SceneryContext.Provider value={{ isLoading, scenery, sceneryListData, loadScenery, loadCustomScenery }}>
             {props.children}
         </SceneryContext.Provider>
     );
