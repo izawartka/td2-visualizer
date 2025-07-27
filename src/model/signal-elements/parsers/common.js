@@ -71,7 +71,10 @@ export default class SignalElementsParserCommon {
             units[i] = type;
         }
 
-        while (cutOff && units.length > 0 && units[units.length - 1] === SignalElementsEnums.UnitType.NONE) {
+        while (cutOff && units.length > 0) {
+            const lastUnit = units[units.length - 1];
+            if (lastUnit !== SignalElementsEnums.UnitType.NONE && lastUnit !== SignalElementsEnums.UnitType.UNKNOWN) break;
+
             units.pop();
         }
 
