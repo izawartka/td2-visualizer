@@ -46,6 +46,12 @@ export default class Signal extends TrackObject {
             name = match[0]?.trim();
         }
 
+        // remove any everything before the last '_' character (inclusive)
+        const lastUnderscoreIndex = name.lastIndexOf('_');
+        if (lastUnderscoreIndex !== -1) {
+            name = name.substring(lastUnderscoreIndex + 1).trim();
+        }
+
         return name || this.name || "Signal";
     }
 
