@@ -5,7 +5,7 @@ import {ElectrificationStatus} from "../../../model/electrification-status";
 import MiscHelper from "../../../helpers/miscHelper";
 import {setHoveredTrack, unsetHoveredTrack} from "../../../services/trackHoverInfoService";
 import GradientsContext from "../../../contexts/GradientsContext";
-import { TrackSource } from "../../../model/tracks/track";
+import { TrackShape, TrackSource } from "../../../model/tracks/track";
 import {useZoomPanEmitter} from "../../../hooks/useZoomPubSub";
 
 export default function TrackRenderer(props) {
@@ -46,8 +46,7 @@ function StatelessTrackRenderer(props) {
     };
 
     const onClick = (event) => {
-        if (object.r !== 0) return;
-        if (event.detail === 2) {
+        if (object.shape === TrackShape.STRAIGHT && event.detail === 2) {
             event.preventDefault();
             onAlign(event);
         }

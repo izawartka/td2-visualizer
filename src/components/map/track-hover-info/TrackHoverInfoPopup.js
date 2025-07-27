@@ -1,5 +1,6 @@
 import Constants from "../../../helpers/constants";
 import { QuestionMarkIcon, SlopeIcon, SpeedIcon, HashIcon, LightningIcon, RadiusIcon } from "../../../icons";
+import { TrackShape } from "../../../model/tracks/track";
 import TrackHoverInfoConsts from "./TrackHoverInfoConsts";
 
 export default function TrackHoverInfoPopup(props) {
@@ -10,7 +11,7 @@ export default function TrackHoverInfoPopup(props) {
         Math.abs(track.end_slope).toFixed(1),
     ]));
     const slopeOptions = {join: ' / ', subOptions: {suffix: ' ‰'}};
-    const showAlignHint = track.r === 0;
+    const showAlignHint = track.shape === TrackShape.STRAIGHT;
 
     return (
         <div className="track-hover-info-popup">
