@@ -80,7 +80,8 @@
 }
 
 .extended-signals-checkbox input,
-.show-track-hover-info-checkbox input {
+.show-track-hover-info-checkbox input,
+.original-signal-names-checkbox input {
     margin-right: 0.5em;
     vertical-align: middle;
 }

@@ -5,12 +5,12 @@ import SettingsContext from '../../../contexts/SettingsContext';
 
 export default function SignalRenderer(props) {
     const { object } = props;
-    const { extendedSignals } = useContext(SettingsContext);
-    
+    const { extendedSignals, originalSignalNames: showOriginalName } = useContext(SettingsContext);
+
     if (extendedSignals && object.signal_elements) {
-        return <MemoizedSignalExtendedRenderer object={object} />;
+        return <MemoizedSignalExtendedRenderer object={object} showOriginalName={showOriginalName} />;
     } else {
-        return <MemoizedSignalStandardRenderer object={object} />;
+        return <MemoizedSignalStandardRenderer object={object} showOriginalName={showOriginalName} />;
     }
 }
 

@@ -7,7 +7,7 @@ import AlwaysUpText from '../text/AlwaysUpText';
 import C from '../../../helpers/extendedSignalsConstants';
 
 export default function SignalExtendedRenderer(props) {
-    const { object } = props;
+    const { object, showOriginalName } = props;
     const [x, y] = object.pos.toSVGCoords();
 
     const baseRot = object.rot.y;
@@ -18,23 +18,24 @@ export default function SignalExtendedRenderer(props) {
     return (
         <g className="extended-signal" transform={`translate(${x}, ${y}) rotate(${rot})`}>
             <SignalIcon object={object} pointsData={pointsData} />
-            <SignalNameText object={object} rot={rot} pointsData={pointsData} />
+            <SignalNameText object={object} rot={rot} pointsData={pointsData} showOriginalName={showOriginalName} />
         </g>
     );
 }
 
 function SignalNameText(props) {
-    const {object, rot, pointsData} = props;
+    const {object, rot, pointsData, showOriginalName} = props;
 
     const isOverhead = object.signal_elements.isOverhead();
     const baseY = isOverhead ? pointsData.headOffsetY + pointsData.polePoints.end : 0;
+    const name = showOriginalName ? object.name : object.getPrintableSignalName();
 
     return (
         <AlwaysUpText
             baseRot={rot}
             additionalRot={-90}
             offsetY={baseY + C.NAME_TEXT_OFFSET}
-            text={object.getPrintableSignalName()}
+            text={name}
             reverseAnchor={true}
         />
     );

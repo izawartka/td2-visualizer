@@ -1,4 +1,5 @@
 import ExtendedSignalsCheckbox from "./ExtendedSignalsCheckbox";
+import OriginalSignalNamesCheckbox from "./OriginalSignalNamesCheckbox";
 import ShowTrackHoverInfoCheckbox from "./ShowTrackHoverInfoCheckbox";
 import TrackColorMode from "./track-color-mode/TrackColorMode";
 
@@ -9,6 +10,7 @@ export default function LayerOptionsMenu() {
             <div className="layer-options-menu-checkboxes">
                 <ShowTrackHoverInfoCheckbox />
                 <ExtendedSignalsCheckbox />
+                <OriginalSignalNamesCheckbox />
             </div>
             <TrackColorMode />
         </div>

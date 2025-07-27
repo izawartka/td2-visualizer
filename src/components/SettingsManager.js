@@ -7,6 +7,7 @@ export default function SettingsManager(props) {
     const [ trackColorMode, setTrackColorMode ] = useState(Constants.trackColorModeDefault);
     const [ showTrackHoverInfo, setShowTrackHoverInfo ] = useState(true);
     const [ extendedSignals, setExtendedSignals ] = useState(true);
+    const [ originalSignalNames, setOriginalSignalNames ] = useState(false);
     const [ settingsLoaded, setSettingsLoaded ] = useState(false);
 
     const loadLayersSettings = useCallback(() => {
@@ -29,6 +30,7 @@ export default function SettingsManager(props) {
             showTrackHoverInfo, setShowTrackHoverInfo,
             trackColorMode, setTrackColorMode,
             extendedSignals, setExtendedSignals,
+            originalSignalNames, setOriginalSignalNames
         }}>
             { props.children }
         </SettingsContext.Provider>

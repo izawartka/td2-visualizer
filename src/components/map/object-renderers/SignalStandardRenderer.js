@@ -2,8 +2,9 @@ import { ReactSVG } from "react-svg";
 import AlwaysUpText from "../text/AlwaysUpText";
 
 export default function SignalStandardRenderer(props) {
-    const { object } = props;
+    const { object, showOriginalName } = props;
     const [x, y] = object.pos.toSVGCoords();
+    const name = showOriginalName ? object.name : object.getPrintableSignalName();
 
     return (
         <g className="signal" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
@@ -22,7 +23,7 @@ export default function SignalStandardRenderer(props) {
                 baseRot={object.rot.y}
                 additionalRot={-90}
                 offsetY={-2}
-                text={object.getPrintableSignalName()}
+                text={name}
             />
         </g>
     );
