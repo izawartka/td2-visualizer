@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100mm" height="100mm" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+ <path d="m30 18c-6.5788 0-12 5.4212-12 12v40c0 6.5788 5.4212 12 12 12h40c6.5788 0 12-5.4212 12-12v-40c0-6.5788-5.4212-12-12-12zm0 8h40c2.2852 0 4 1.7148 4 4v40c0 2.2852-1.7148 4-4 4h-40c-2.2852 0-4-1.7148-4-4v-40c0-2.2852 1.7148-4 4-4z" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

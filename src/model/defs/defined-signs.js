@@ -25,6 +25,22 @@ const DefinedSigns = {
         "textOffsetY": 2.75,
         "rot": 2
     },
+    "w20": {
+        "name": "W20",
+        "icon": "w20.svg",
+        "offsetY": 3.89,
+        "attachAs": "w20"
+    },
+    "w21": {
+        "name": "W21",
+        "icon": "w21.svg",
+        "offsetY": 3.89,
+        "attachAs": "w21",
+        "text": "data",
+        "textSize": 0.22,
+        "textOffsetX": 1.89,
+        "textOffsetY": 1.89
+    },
     "w23": {
         "name": "W23",
         "icon": "w23.svg",
@@ -215,12 +231,6 @@ const DefinedSigns = {
         "icon": "w19.svg",
         "offsetY": 3.89,
         "attachAs": "w19"
-    },
-    "w20": {
-        "name": "W20",
-        "icon": "w20.svg",
-        "offsetY": 3.89,
-        "attachAs": "w20"
     },
     "w1": {
         "name": "W1",
