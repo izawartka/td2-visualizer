@@ -7,6 +7,7 @@ export default class Sign extends TrackObject {
     type = "Sign";
     data;
     def;
+    text = null;
     attached_to = null;
     attached_skip_rendering = false;
 
@@ -15,6 +16,7 @@ export default class Sign extends TrackObject {
 
         this.data = data || null;
         this.def = Sign.getDef(name, prefab_name);
+        this._assignText();
     }
 
     getPrintableSignData() {
@@ -83,5 +85,32 @@ export default class Sign extends TrackObject {
         if(alias) return DefinedSigns[alias];
 
         return DefinedSigns[key];
+    }
+    
+    _assignText() {
+        if(!this.def?.text) return;
+
+        const textSources = Array.isArray(this.def.text) ? this.def.text : [this.def.text];
+        let text = null;
+        for(const source of textSources) {
+            text = Sign.getTextFromSource(this, source);
+            if(text) break;
+        }
+        
+        this.text = text;
+    }
+
+    static getTextFromSource(object, source) {
+        switch(source) {
+        case "fun":
+            return object.def.textFun ? object.def.textFun(object) : null;
+        case "data":
+            return object.getPrintableSignData();
+        case "static":
+            return object.def.staticText ?? null;
+        default:
+            console.warn(`Unknown sign ${object.id} text source: ${source}`);
+            return null;
+        }
     }
 }

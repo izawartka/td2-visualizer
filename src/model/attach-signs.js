@@ -56,7 +56,7 @@ function attach(sign, signal) {
     if(!attachAs || !signal.signal_elements) return;
 
     sign.attached_skip_rendering = true;
-    signal.signal_elements.signs[attachAs] = true;
+    signal.signal_elements.signs[attachAs] = sign.text ? { text: sign.text } : true;
 }
 
 export function attachSigns(scenery) {
