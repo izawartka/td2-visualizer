@@ -2,8 +2,8 @@ import { ReactSVG } from 'react-svg'
 
 export default function SignRenderer(props) {
     const { object } = props;
-    if(!object.def) return null;
-    if(object.attached_skip_rendering) return null;
+    const shouldRender = object.def?.icon && !object.attached_skip_rendering;
+    if (!shouldRender) return null;
 
     const [x, y] = object.pos.toSVGCoords();
 
@@ -32,7 +32,7 @@ export default function SignRenderer(props) {
 function SignTextRenderer(props) {
     const { object } = props;
     if(!object.text) return;
-    
+
     const x = object.def.textOffsetX || 0;
     const y = object.def.textOffsetY || 0;
 
