@@ -14,6 +14,7 @@ https://td2.info.pl/narzedzie-tools/nowy-td2-visualizer!/
 - **Mouse wheel** - przybliżanie/oddalanie **/** zoom in/out
 - **Mouse drag** - przesuwanie widoku **/** move view
 - **ALT + Mouse drag** - obracanie widoku **/** rotate view
+- **Mouse double click on track** - dostosowanie obrotu widoku do toru **/** align view to track
 
 ## Online demo
 
@@ -26,6 +27,7 @@ https://maseuko.pl/soft/td2-visualizer-2/
 
 - Not all signs have their icons
 - Electrification resolution fails with some sceneries (not no be fixed)
+- Sloped switches are not rendered correctly
 
 ## Authors
 
