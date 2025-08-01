@@ -121,7 +121,7 @@ const DefinedPlatforms = {
         "alias": "peron_zm_250m_v1_new"
     },
     "peron_zm_300m_v1_new": {
-        "center": new Vector3(-4.175, -0.06, -0.0),
+        "center": new Vector3(-4.175, -0.06, 0.0),
         "size": new Vector3(5.0, 1.76, 300.0)
     },
     "peron_zm_300m_v1_normal": {
@@ -293,7 +293,7 @@ const DefinedPlatforms = {
         "alias": "peron_zm_30m_v1_new"
     },
     "peron_zm_6m_middle_v1_new": {
-        "center": new Vector3(-5.425, -0.06, -0.0),
+        "center": new Vector3(-5.425, -0.06, 0.0),
         "size": new Vector3(2.5, 1.76, 6.0)
     },
     "peron_zm_6m_middle_v1_normal": {
@@ -379,7 +379,7 @@ const DefinedPlatforms = {
         "alias": "peron_zm_6m_thin_v1_new"
     },
     "peron_zm_6m_v1_new": {
-        "center": new Vector3(-4.175, -0.06, -0.0),
+        "center": new Vector3(-4.175, -0.06, 0.0),
         "size": new Vector3(5.0, 1.76, 6.0)
     },
     "peron_zm_6m_v1_normal": {
@@ -468,15 +468,15 @@ const DefinedPlatforms = {
         "alias": "platform_gorzow_wlkp_01"
     },
     "platform_new_01": {
-        "center": new Vector3(-0.2, 0.5, -0.0),
+        "center": new Vector3(-0.2, 0.5, 0.0),
         "size": new Vector3(5.551, 1.0, 10.0)
     },
     "platform_new_02": {
-        "center": new Vector3(-0.2, 0.5, -0.0),
+        "center": new Vector3(-0.2, 0.5, 0.0),
         "size": new Vector3(5.551, 1.0, 10.0)
     },
     "platform_new_03": {
-        "center": new Vector3(-1.0, 0.5, -0.0),
+        "center": new Vector3(-1.0, 0.5, 0.0),
         "size": new Vector3(5.551, 1.0, 10.0)
     },
     "platform_new_03_snap": {
@@ -492,14 +492,14 @@ const DefinedPlatforms = {
         "size": new Vector3(4.3, 1.0, 10.0)
     },
     "platform_new_thin_01": {
-        "center": new Vector3(-1.8, 0.5, -0.0),
+        "center": new Vector3(-1.8, 0.5, 0.0),
         "size": new Vector3(3.551, 1.0, 10.0)
     },
     "platform_new_thin_02": {
         "alias": "platform_new_thin_01"
     },
     "platform_new_thin_03": {
-        "center": new Vector3(-2.0, 0.5, -0.0),
+        "center": new Vector3(-2.0, 0.5, 0.0),
         "size": new Vector3(3.551, 1.0, 10.0)
     },
     "platform_new_thin_03_snap": {
@@ -507,27 +507,27 @@ const DefinedPlatforms = {
         "size": new Vector3(3.551, 1.0, 10.0)
     },
     "platform_new_two_sides_01": {
-        "center": new Vector3(0.0, 0.5, -0.0),
+        "center": new Vector3(0.0, 0.5, 0.0),
         "size": new Vector3(7.55, 1.0, 10.0)
     },
     "platform_new_two_sides_02": {
-        "center": new Vector3(0.0, 0.5, -0.0),
+        "center": new Vector3(0.0, 0.5, 0.0),
         "size": new Vector3(7.55, 1.0, 10.0)
     },
     "platform_new_two_sides_03": {
-        "center": new Vector3(0.0, 0.5, -0.0),
+        "center": new Vector3(0.0, 0.5, 0.0),
         "size": new Vector3(7.55, 1.0, 10.0)
     },
     "platform_new_two_sides_04": {
-        "center": new Vector3(0.0, 0.5, -0.0),
+        "center": new Vector3(0.0, 0.5, 0.0),
         "size": new Vector3(8.53, 1.0, 10.0)
     },
     "platform_new_two_sides_thin_03": {
-        "center": new Vector3(0.0, 0.5, -0.0),
+        "center": new Vector3(0.0, 0.5, 0.0),
         "size": new Vector3(5.551, 1.0, 10.001)
     },
     "platform_new_wide_03": {
-        "center": new Vector3(-0.25, 0.5, -0.0),
+        "center": new Vector3(-0.25, 0.5, 0.0),
         "size": new Vector3(7.05, 1.0, 10.0)
     },
     "platform_new_wide_03_snap": {
@@ -546,7 +546,7 @@ const DefinedPlatforms = {
         "alias": "platform_new_end_right"
     },
     "platform_old_alt_stripe": {
-        "center": new Vector3(-0.0, 0.5, 0.0),
+        "center": new Vector3(0.0, 0.5, 0.0),
         "size": new Vector3(4.0, 1.0, 10.0)
     },
     "platform_old_alt_stripe_2": {
@@ -561,6 +561,10 @@ const DefinedPlatforms = {
     "platform_old_no_stripe": {
         "center": new Vector3(-0.15, 0.19, 0.0),
         "size": new Vector3(4.3, 1.0, 10.0)
+    },
+    "wgt_peron_ursus_pln": {
+        "center": new Vector3(0.0, -0.681, 0.0),
+        "size": new Vector3(20.046, 2.701, 5.899)
     }
 };
 
