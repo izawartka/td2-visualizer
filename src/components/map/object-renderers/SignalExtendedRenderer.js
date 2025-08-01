@@ -28,7 +28,7 @@ function SignalNameText(props) {
 
     const isOverhead = object.signal_elements.isOverhead();
     const baseY = isOverhead ? pointsData.headOffsetY + pointsData.polePoints.end : 0;
-    const name = showOriginalName ? object.name : object.getPrintableSignalName();
+    const name = showOriginalName ? object.name?.trim() : object.getPrintableSignalName();
 
     return (
         <AlwaysUpText

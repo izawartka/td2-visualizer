@@ -4,7 +4,7 @@ import AlwaysUpText from "../text/AlwaysUpText";
 export default function SignalStandardRenderer(props) {
     const { object, showOriginalName } = props;
     const [x, y] = object.pos.toSVGCoords();
-    const name = showOriginalName ? object.name : object.getPrintableSignalName();
+    const name = showOriginalName ? object.name?.trim() : object.getPrintableSignalName();
 
     return (
         <g className="signal" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>

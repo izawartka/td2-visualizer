@@ -10,13 +10,13 @@ export default class SpawnPoint extends TrackObject {
     type = "SpawnPoint";
     applied = false;
 
-    constructor(id, prefab_name, pos, rot, track_id, name, is_spawn, spawn_info, signal_name) {
+    constructor(id, prefab_name, pos, rot, track_id, name, is_spawn, spawn_info, spawn_point_name) {
         super(id, prefab_name, pos, rot, track_id, name);
 
         Object.assign(this, {
             is_spawn,
             spawn_info,
-            signal_name
+            spawn_point_name
         });
 
         if (this.is_spawn && !this.spawn_info) {
@@ -25,7 +25,7 @@ export default class SpawnPoint extends TrackObject {
     }
 
     getPrintableSpawnPointName() {
-        return this.spawn_point_name?.trim() || this.name?.trim() || "Spawn Point";
+        return this.name?.trim() || "Spawn Point";
     }
 
     /*
