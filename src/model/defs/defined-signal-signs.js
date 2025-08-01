@@ -9,6 +9,11 @@ const DefinedSignalSigns = {
         "icon": "w1.svg",
         "height": 1.28504,
     },
+    "w22": {
+        "regex": /^(?:wsk_)?w22(?:\D)?.*$/,
+        "name": "W22",
+        "icon": "w22.svg",
+    },
     "w2k": {
         "regex": /^w2k/,
         "name": "W2 K",

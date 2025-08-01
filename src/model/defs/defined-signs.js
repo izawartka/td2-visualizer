@@ -41,6 +41,11 @@ const DefinedSigns = {
         "textOffsetX": 1.89,
         "textOffsetY": 1.89
     },
+    "w22": {
+        "name": "W22",
+        "offsetY": 3.89,
+        "attachAs": "w22", // no icon - signal sign only
+    },
     "w23": {
         "name": "W23",
         "icon": "w23.svg",
