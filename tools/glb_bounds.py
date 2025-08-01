@@ -5,6 +5,12 @@ import logging
 from tqdm import tqdm
 import trimesh
 
+#
+#    [ GLB BOUNDS EXTRACTOR ]
+#    by masuo
+#    v1.1
+#
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract bounding boxes from GLB mesh files and output JSON summary."
@@ -18,13 +24,13 @@ def parse_args():
         help='Output JSON file path'
     )
     parser.add_argument(
-        '--decimal_places', '-d',
+        '--decimal-places', '-d',
         type=int,
         default=3,
         help='Number of decimal places for output coordinates (default: 3)'
     )
     parser.add_argument(
-        '--no_aliases', '-a',
+        '--no-aliases', '-a',
         action='store_false',
         help='Disable aliases in the output JSON (default: false)'
     )
