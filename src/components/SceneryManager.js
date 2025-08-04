@@ -7,6 +7,7 @@ import { showCustomDialog, showDialog } from '../services/dialogService';
 import { resetHoveredTracksStack } from '../services/trackHoverInfoService';
 import SceneryLoadedDialog from './scenery-loaded-dialog/SceneryLoadedDialog';
 import Constants from '../helpers/constants';
+import MiscHelper from '../helpers/miscHelper';
 
 export default function SceneryManager(props) {
     const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +55,7 @@ export default function SceneryManager(props) {
 
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.delete('scenery');
+            urlParams.delete('pos');
             window.history.replaceState({}, '', urlParams.size  ? `${window.location.pathname}?${urlParams.toString()}` : window.location.pathname);
 
             const reader = new FileReader();
@@ -127,7 +129,17 @@ export default function SceneryManager(props) {
         }
 
         await loadScenery(sceneryName);
-    }, [findSceneryInList, loadScenery]);
+
+        const posQuery = urlParams.get('pos');
+        const pos = MiscHelper.parsePosQuery(posQuery);
+        if(!posQuery) return;
+        if (!pos) {
+            console.warn(`Invalid position query "${posQuery}"`);
+            return;
+        }
+
+        setCamera(pos.x, -pos.z, 0, 0);
+    }, [findSceneryInList, loadScenery, setCamera]);
 
     useEffect(() => {
         if(Constants.sceneryFiles.fetchDisable) return;
