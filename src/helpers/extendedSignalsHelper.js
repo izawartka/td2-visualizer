@@ -89,7 +89,7 @@ export default class ExtendedSignalsHelper {
     }
 
     static _getSignsHeight(object) {
-        let y = C.HALF_STROKE_WIDTH;
+        let y = 0;
 
         for(const key in object.signal_elements.signs) {
             const sign = DefinedSignalSigns[key];

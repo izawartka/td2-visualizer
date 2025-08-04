@@ -297,7 +297,7 @@ function SignalSign(id, y) {
 function SignalSigns(object, {polePoints, headOffsetY}) {
     if(!polePoints) return null;
     const signs = [];
-    let y = headOffsetY + polePoints.signs;
+    let y = headOffsetY + polePoints.signs + C.HALF_STROKE_WIDTH;
 
     for(const [id, def] of Object.entries(DefinedSignalSigns)) {
         if(!object.signal_elements.signs.hasOwnProperty(id) || !DefinedSignalSigns[id]) continue;
