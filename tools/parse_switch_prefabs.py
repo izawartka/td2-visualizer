@@ -1,13 +1,3 @@
-#!/usr/bin/env -S uv run --script
-#
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "pyyaml",
-#     "scipy",
-# ]
-# ///
-
 import json
 import os
 import re
@@ -15,18 +5,20 @@ import sys
 import traceback
 from scipy.spatial.transform import Rotation
 from pathlib import Path
-
 import yaml
+import argparse
+
 #
 #    [ TD2 TRACK STRUCTURE PREFAB PARSER ]
 #    by dkgl
-#    v1.0
+#    v1.1
 #
 #   The assets are exported using https://github.com/AssetRipper/AssetRipper in the "Export Unity Project" mode.
 #   Pass the path to the "(...)/ExportedProject/Assets/Resources/track structures" directory as a command line argument to this script.
 #
-#   This script uses stdout for the output and stderr for log and error messages.
 #
+
+args = None
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -101,11 +93,19 @@ def try_parse_switch_component(prefab):
 
 
 def try_parse_track_shape(component):
+    global args
     if "MonoBehaviour" not in component:
         return None
     mono = component["MonoBehaviour"]
     if "slope1" not in mono:
         return None
+    
+    if not args.extended_track_shape:
+        return {
+            "radius": mono["radius"],
+            "length": mono["length"],
+        }
+
     return {
         "radius": mono["radius"],
         "length": mono["length"],
@@ -212,6 +212,7 @@ def parse_track(track, data_index):
         **track_shape,
         "pos": f"<new Vector3({", ".join([str(x) for x in track_transform["position"].tolist()])})>",
         "rot": f"<new Quaternion({", ".join([str(x) for x in track_transform["rotation"].as_quat().tolist()])})>",
+        "speedLimit": track["MonoBehaviour"]["switchSpeedLimit"],
         "connections": connections,
     })
 
@@ -296,7 +297,7 @@ def get_isolation_label_pos(prefab_name):
     return "new Vector3(0, 0, 6)"
 
 
-def format_prefab(prefab):
+def print_prefab(prefab):
     print(f"'{prefab["name"]}': {{")
     print("    tracks: {")
     for (track_id, track) in prefab["tracks"]:
@@ -324,7 +325,7 @@ def process_file(file_path):
         with open(file_path, encoding="utf8") as infile:
             prefab_name = Path(file_path).stem
             prefab = parse_prefab(infile, prefab_name)
-            format_prefab(prefab)
+            print_prefab(prefab)
     except Exception:
         eprint(f"Error processing {file_path}:", file=sys.stderr)
         traceback.print_exc(file=sys.stderr)
@@ -338,12 +339,24 @@ def process_directory(directory: str):
             process_file(full_path)
 
 
-def main():
-    if len(sys.argv) < 2:
-        eprint("Usage: python prase-prefabs.py <file_or_directory> [<file_or_directory> ...]")
-        return
+def parse_args():
+    global args
 
-    for path in sys.argv[1:]:
+    parser = argparse.ArgumentParser(description="Extract switches prefab data from TD2 Unity Prefab files")
+    parser.add_argument("input_path", nargs="+", help="File or directory paths to process")
+    parser.add_argument("--extended-track-shape", action="store_true", help="Save extended track shape information (default: False)")
+    args = parser.parse_args()
+
+
+def main():
+    global args
+    parse_args()
+
+    if not args.input_path or len(args.input_path) == 0:
+        eprint("No paths provided. Please specify at least one file or directory path.", file=sys.stderr)
+        sys.exit(1)
+
+    for path in args.input_path:
         if os.path.isdir(path):
             process_directory(path)
         elif os.path.isfile(path):
