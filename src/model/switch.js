@@ -80,7 +80,7 @@ export default class Switch extends SceneryObject {
         const trackIds = this._getTrackIds();
         if (!trackIds) return;
 
-        const tracks = Object.entries(def.tracks).map(([key, track]) => {
+        const tracks = Object.values(def.tracks).map((track) => {
             return this._createSwitchTrackFromDef(scenery, def, track, trackIds);
         });
 
@@ -155,15 +155,16 @@ export default class Switch extends SceneryObject {
         const { startPos, rotationDeg } = CurveHelper.transformStart(this.pos, this.rot, trackDef.pos, trackDef.rot);
 
         const track = StandardTrack.createSwitchTrack(
+            this,
             trackId,
             startPos,
             rotationDeg,
             trackDef.length,
             trackDef.radius,
             connections,
-            trackDef.slope1,
-            trackDef.slope2,
-            this,
+            trackDef.slope1 ?? 0,
+            trackDef.slope2 ?? 0,
+            trackDef.speedLimit ?? 999
         );
         scenery.addObject(track);
         return track;

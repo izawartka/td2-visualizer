@@ -99,20 +99,20 @@ export default class StandardTrack extends Track  {
         return track;
     }
 
-    static createSwitchTrack(id, start, rot, len, r, connections, start_slope, end_slope, object) {
+    static createSwitchTrack(switchObj, id, start, rot, len, r, connections, start_slope, end_slope, speed_limit) {
         const track = new StandardTrack(
             id, start, rot, len, r,
             connections,
-            object.id_switch,
+            switchObj.id_switch,
             start_slope,
             end_slope,
-            object.id_isolation,
-            object.prefab_name,
-            object.maxspeed,
-            object.derailspeed,
+            switchObj.id_isolation,
+            switchObj.prefab_name,
+            Math.min(switchObj.maxspeed, speed_limit),
+            Math.min(switchObj.derailspeed, speed_limit),
             TrackSource.SWITCH,
         );
-        track.switch = object;
+        track.switch = switchObj;
         return track;
     }
 }
