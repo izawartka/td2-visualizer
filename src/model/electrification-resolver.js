@@ -4,11 +4,13 @@ import {ElectrificationStatus, ElectrificationResolutionStatus} from "./electrif
 
 export default class ElectrificationResolver {
     static hasWarnings = false;
-    static propagationQueue = [];
+    static propagationQueueHead = null;
+    static propagationQueueTail = null;
 
     static resolveScenery(scenery) {
-        ElectrificationResolver.hasWarnings = false;
-        ElectrificationResolver.propagationQueue = [];
+        this.hasWarnings = false;
+        this.propagationQueueHead = null;
+        this.propagationQueueTail = null;
 
         try {
             const routeTracks = this._findTracksAdjacentToRoutes(scenery);
@@ -30,7 +32,7 @@ export default class ElectrificationResolver {
             return;
         }
 
-        if(ElectrificationResolver.hasWarnings) {
+        if(this.hasWarnings) {
             scenery.electrificationResolved = ElectrificationResolutionStatus.RESOLVED_WITH_WARNINGS;
             SceneryParserLog.warn('electrificationResolverWarnings', 'Electrification resolution completed with warnings');
             return;
@@ -41,19 +43,16 @@ export default class ElectrificationResolver {
 
     static stepModeStep() {
         if (!Constants.parser.resolveElectrificationStepMode) return;
-        if (ElectrificationResolver.propagationQueue.length === 0) return;
 
         try {
-            ElectrificationResolver._runResolutionStep();
+            return this._runResolutionStep();
         } catch (error) {
             console.error(error);
         }
-
-        return ElectrificationResolver.propagationQueue.length === 0;
     }
 
     static _passWarn(type, message) {
-        ElectrificationResolver.hasWarnings = true;
+        this.hasWarnings = true;
         SceneryParserLog.warn(type, message);
     }
 
@@ -75,7 +74,7 @@ export default class ElectrificationResolver {
             if(trackObject.type !== 'NEVP') return;
 
             if(!trackObject.track) {
-                ElectrificationResolver._passWarn(
+                this._passWarn(
                     'electrificationNevpNotApplied',
                     `NEVP object ${trackObject.name} (${trackObject.id}) at track ${trackObject.track_id} has not been applied. Electrification resolution may fail`
                 );
@@ -89,18 +88,38 @@ export default class ElectrificationResolver {
     static _runResolution() {
         if (Constants.parser.resolveElectrificationStepMode) return;
 
-        while(ElectrificationResolver.propagationQueue.length > 0) {
-            ElectrificationResolver._runResolutionStep();
-        }
+        while(this._runResolutionStep()) {}
+
+        this.propagationQueueHead = null;
     }
 
     static _runResolutionStep() {
-        const { track, skipTrackId, status } = ElectrificationResolver.propagationQueue.pop();
-        ElectrificationResolver._resolveTrack(track, skipTrackId, status);
+        const node = this.propagationQueueTail;
+        if (!node) {
+            return false;
+        }
+
+        const { track, skipTrackId, status, next } = node;
+        this.propagationQueueTail = next;
+        this._resolveTrack(track, skipTrackId, status);
+        return true;
     }
 
     static _propagate(track, skipTrackId, status) {
-        ElectrificationResolver.propagationQueue.push({ track, skipTrackId, status });
+        const newNode = {
+            track,
+            skipTrackId,
+            status,
+            next: null,
+        };
+
+        if (this.propagationQueueTail === null) {
+            this.propagationQueueTail = newNode;
+            this.propagationQueueHead = newNode;
+        } else {
+            this.propagationQueueHead.next = newNode;
+            this.propagationQueueHead = newNode;
+        }
     }
 
     static _resolveTrack(track, skipTrackId, status) {
@@ -124,7 +143,7 @@ export default class ElectrificationResolver {
             if(!fse) return;
         } else if ((tse && fsne) || (tsne && fse)) {
             track.electrificationStatus = ElectrificationStatus.CONFLICT;
-            ElectrificationResolver._passWarn(
+            this._passWarn(
                 'electrificationConflict',
                 `Track ${track.id} has conflicting electrification status (${skipTrackId}=>${status})`
             );
