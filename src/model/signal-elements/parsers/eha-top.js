@@ -18,7 +18,7 @@ export default class SignalElementsParserEhaTop {
             SignalElementsParserCommon.getHeadPosition(entries[1]),
             [],
             SignalElementsEnums.BarType.NONE,
-            []
+            {}
         );
     }
 }

@@ -17,7 +17,7 @@ export default class SignalElementsParserSkDwarf {
             SignalElementsEnums.HeadPosition.DWARF,
             SignalElementsParserCommon.getUnits(entries, 2, 2, 1),
             SignalElementsEnums.BarType.NONE,
-            []
+            {}
         );
     }
 }

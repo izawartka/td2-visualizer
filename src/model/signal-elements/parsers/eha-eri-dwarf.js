@@ -18,7 +18,7 @@ export default class SignalElementsParserEhaEriDwarf {
             SignalElementsEnums.HeadPosition.DWARF,
             SignalElementsParserCommon.getUnits(entries, 2, 3, 2),
             SignalElementsEnums.BarType.NONE,
-            []
+            {}
         );
     }
 }
