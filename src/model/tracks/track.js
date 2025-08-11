@@ -49,6 +49,14 @@ export default class Track extends SceneryObject {
         });
     }
 
+    hasNoMaterials() {
+        if(!this.prefab_name) return false;
+
+        return !this.prefab_name.split(',').some((name) => {
+            return name.trim() !== 'trans-mat';
+        });
+    }
+
     getStartAngleXZ() {
         throw new Error("getStartAngleXZ() must be implemented in subclass");
     }

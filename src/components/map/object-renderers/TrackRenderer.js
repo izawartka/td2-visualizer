@@ -118,8 +118,9 @@ function getTrackColor(object, trackColorMode, gradientDef) {
     switch (trackColorMode) {
         case "standard":
         default:
-            if (object.prefab_name && object.prefab_name.includes('trans-mat'))
+            if (object.hasNoMaterials()) {
                 return modeDef.options['invisible'][0];
+            }
 
             return modeDef.options[modeDef.optionDefault][0];
 
