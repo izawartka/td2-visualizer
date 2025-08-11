@@ -3,6 +3,7 @@ import LoadingIndicator from './LoadingIndicator';
 import CustomFileSelect from './CustomFileSelect';
 import SideMenuToggle from './SideMenuToggle';
 import SceneryList from './SceneryList';
+import ElectrificationStepMode from './ElectrificationStepMode';
 
 export default function Toolbar() {
     return (
@@ -11,6 +12,7 @@ export default function Toolbar() {
                 <SceneryList />
                 or
                 <CustomFileSelect />
+                <ElectrificationStepMode />
                 <div className='toolbar-spacer'></div>
                 <SideMenuToggle />
             </div>

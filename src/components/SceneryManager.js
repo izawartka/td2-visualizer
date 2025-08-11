@@ -8,6 +8,7 @@ import { resetHoveredTracksStack } from '../services/trackHoverInfoService';
 import SceneryLoadedDialog from './scenery-loaded-dialog/SceneryLoadedDialog';
 import Constants from '../helpers/constants';
 import MiscHelper from '../helpers/miscHelper';
+import ElectrificationResolver from '../model/electrification-resolver';
 
 export default function SceneryManager(props) {
     const [isLoading, setIsLoading] = useState(false);
@@ -141,6 +142,14 @@ export default function SceneryManager(props) {
         setCamera(pos.x, -pos.z, 0, 0);
     }, [findSceneryInList, loadScenery, setCamera]);
 
+    const electrificationStepModeStep = useCallback(() => {
+        ElectrificationResolver.stepModeStep();
+        setScenery((oldScenery) => {
+            if (!oldScenery) return null;
+            return { ...oldScenery };
+        });
+    }, [setScenery]);
+
     useEffect(() => {
         if(Constants.sceneryFiles.fetchDisable) return;
         updateSceneryList();
@@ -155,7 +164,7 @@ export default function SceneryManager(props) {
     }, [checkLoadUrlScenery, sceneryListData, urlParamsLoaded]);
 
     return (
-        <SceneryContext.Provider value={{ isLoading, scenery, sceneryListData, loadScenery, loadCustomScenery }}>
+        <SceneryContext.Provider value={{ isLoading, scenery, sceneryListData, loadScenery, loadCustomScenery, electrificationStepModeStep }}>
             {props.children}
         </SceneryContext.Provider>
     );

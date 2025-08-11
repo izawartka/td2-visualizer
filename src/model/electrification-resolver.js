@@ -39,6 +39,19 @@ export default class ElectrificationResolver {
         scenery.electrificationResolved = ElectrificationResolutionStatus.RESOLVED;
     }
 
+    static stepModeStep() {
+        if (!Constants.parser.resolveElectrificationStepMode) return;
+        if (ElectrificationResolver.propagationQueue.length === 0) return;
+
+        try {
+            ElectrificationResolver._runResolutionStep();
+        } catch (error) {
+            console.error(error);
+        }
+
+        return ElectrificationResolver.propagationQueue.length === 0;
+    }
+
     static _passWarn(type, message) {
         ElectrificationResolver.hasWarnings = true;
         SceneryParserLog.warn(type, message);
@@ -74,10 +87,16 @@ export default class ElectrificationResolver {
     }
 
     static _runResolution() {
+        if (Constants.parser.resolveElectrificationStepMode) return;
+
         while(ElectrificationResolver.propagationQueue.length > 0) {
-            const { track, skipTrackId, status } = ElectrificationResolver.propagationQueue.pop();
-            ElectrificationResolver._resolveTrack(track, skipTrackId, status);
+            ElectrificationResolver._runResolutionStep();
         }
+    }
+
+    static _runResolutionStep() {
+        const { track, skipTrackId, status } = ElectrificationResolver.propagationQueue.pop();
+        ElectrificationResolver._resolveTrack(track, skipTrackId, status);
     }
 
     static _propagate(track, skipTrackId, status) {

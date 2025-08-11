@@ -25,7 +25,8 @@ const Constants = {
         attachSignsGridSize: 10,
         logAttachedSigns: false,
         skipBaseMisc: true,
-        skipPlatforms: false
+        skipPlatforms: false,
+        resolveElectrificationStepMode: false,
     },
     warnings: {
         all: false, // enable all warnings
