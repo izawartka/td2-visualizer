@@ -15,7 +15,7 @@ export default function RouteRenderer(props) {
     const arrowOffset = - object.track_offset - 37.8;
 
     return (<>
-        <g className="route-arrow" transform={`translate(${endX}, ${endY}) rotate(${endAngle + 90}) translate(-80, ${arrowOffset})`}>
+        <g className="map-icon" transform={`translate(${endX}, ${endY}) rotate(${endAngle + 90}) translate(-80, ${arrowOffset})`}>
             <ReactSVG
                 src={`${process.env.PUBLIC_URL}/assets/route.svg`}
                 wrapper='svg'
@@ -25,7 +25,7 @@ export default function RouteRenderer(props) {
                 }}
             />
         </g>
-        <g className="route-name" transform={`translate(${startX}, ${startY}) rotate(${startAngle})`}>
+        <g transform={`translate(${startX}, ${startY}) rotate(${startAngle})`}>
             <AlwaysUpText
                 baseRot={startAngle}
                 additionalRot={-90}
@@ -33,7 +33,8 @@ export default function RouteRenderer(props) {
                 reverseAnchor={true}
                 textProps={{
                     y: offY,
-                    dominantBaseline: "bottom"
+                    dominantBaseline: "bottom",
+                    className: "route-text"
                 }}
                 text={object.route_name}
             />

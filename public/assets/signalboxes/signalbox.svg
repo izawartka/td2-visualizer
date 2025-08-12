@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="100mm" height="100mm" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
- <path d="m4 19v62h92v-62zm8 8h76v46h-76z" color="#000000" fill-rule="evenodd"/>
+ <path d="m4 19v62h92v-62zm8 8h76v46h-76z" fill-rule="evenodd"/>
  <circle cx="50" cy="58" r="6"/>
  <rect x="35" y="36" width="30" height="8" fill-rule="evenodd" stroke-width=".26458"/>
 </svg>

@@ -7,8 +7,8 @@ export default function SignalStandardRenderer(props) {
     const name = showOriginalName ? object.name?.trim() : object.getPrintableSignalName();
 
     return (
-        <g className="signal" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
-            <g className="signal-icon" transform={`translate(-1.89, -1.89)`}>
+        <g transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
+            <g className="map-icon" transform={`translate(-1.89, -1.89)`}>
                 <ReactSVG
                     src={`${process.env.PUBLIC_URL}/assets/signal.svg`}
                     wrapper='svg'

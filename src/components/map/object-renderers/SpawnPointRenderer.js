@@ -6,8 +6,8 @@ export default function SpawnPointRenderer(props) {
     const [x, y] = object.pos.toSVGCoords();
 
     return (
-        <g className="spawn-point" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
-            <g className="signal-icon" transform={`rotate(180) translate(-2.835, -2.835)`}>
+        <g transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
+            <g className="map-icon" transform={`rotate(180) translate(-2.835, -2.835)`}>
                 <ReactSVG
                     src={`${process.env.PUBLIC_URL}/assets/spawn.svg`}
                     wrapper='svg'

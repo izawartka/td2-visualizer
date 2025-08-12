@@ -45,7 +45,7 @@ function SignalIcon(props) {
     const { object, pointsData } = props;
 
     return (
-        <g className="extended-signal-icon" strokeWidth={C.STROKE_WIDTH} strokeLinecap="round" strokeLinejoin="round">
+        <g className="map-icon-stroked" strokeWidth={C.STROKE_WIDTH} strokeLinecap="round" strokeLinejoin="round">
             { SignalBase(pointsData) }
             { SignalOverheadFrame(object) }
             { SignalPole(pointsData) }
@@ -83,7 +83,7 @@ function SignalHeadUnit(key, unitType, x, y) {
     const r = C.HEAD_UNIT_RADIUS;
     const c = C.HEDA_UNIT_DIAGONAL;
 
-    const baseCircle = <circle cx={x} cy={y} r={r} className='background' />;
+    const baseCircle = <circle cx={x} cy={y} r={r} className='with-background' />;
 
     switch(unitType) {
         case SignalElementsEnums.UnitType.RED:
@@ -170,7 +170,7 @@ function SignalHeadTOP(object, {headOffsetY}) {
 }
 
 function SignalHomeMechArm(y, rot) {
-    return <g transform={`translate(0 ${y}) rotate(${rot}) translate(${C.MECH_ARM_X_OFF - 1.89}, -1.89)`}>
+    return <g transform={`translate(0 ${y}) rotate(${rot}) translate(${C.MECH_ARM_X_OFF - 1.89}, -1.89)`} className='map-icon'>
         <ReactSVG
             src={`${process.env.PUBLIC_URL}/assets/mech_signals/arm.svg`}
             wrapper='svg'
@@ -183,7 +183,7 @@ function SignalHomeMechArm(y, rot) {
 }
 
 function SignalCustomMechHead(y, fileName) {
-    return <g transform={`translate(-1.89, ${y - 1.89})`}>
+    return <g transform={`translate(-1.89, ${y - 1.89})`} className='map-icon'>
         <ReactSVG
             src={`${process.env.PUBLIC_URL}/assets/mech_signals/${fileName}`}
             wrapper='svg'
@@ -200,31 +200,23 @@ function SignalMechHead(object, {headOffsetY}) {
 
     switch(mechType) {
         case SignalElementsEnums.MechType.HOME_SINGLE:
-            return <g className="signal-head-mech">
-                { SignalHomeMechArm(headOffsetY, 0) }
-            </g>
+            return SignalHomeMechArm(headOffsetY, 0);
         case SignalElementsEnums.MechType.HOME_DOUBLE:
-            return <g className="signal-head-mech">
+            return <>
                 { SignalHomeMechArm(headOffsetY, 0) }
                 { SignalHomeMechArm(headOffsetY + C.MECH_SECOND_ARM_OFFSET, -90) }
-            </g>
+            </>;
         case SignalElementsEnums.MechType.SHUNTING:
-            return <g className="signal-head-mech">
-                { SignalCustomMechHead(headOffsetY, 'shunting_head.svg') }
-            </g>
+            return SignalCustomMechHead(headOffsetY, 'shunting_head.svg');
         case SignalElementsEnums.MechType.DISTANT_SINGLE:
-            return <g className="signal-head-mech">
-                { SignalCustomMechHead(headOffsetY, 'distant_head.svg') }
-            </g>
+            return SignalCustomMechHead(headOffsetY, 'distant_head.svg');
         case SignalElementsEnums.MechType.DISTANT_DOUBLE:
-            return <g className="signal-head-mech">
+            return <>
                 { SignalCustomMechHead(headOffsetY, 'distant_head.svg') }
                 { SignalCustomMechHead(headOffsetY + C.MECH_SECOND_ARM_OFFSET, 'distant_arm.svg') }
-            </g>
+            </>;
         case SignalElementsEnums.MechType.STOP:
-            return <g className="signal-head-mech">
-                { SignalCustomMechHead(headOffsetY, 'stop_head.svg') }
-            </g>
+            return SignalCustomMechHead(headOffsetY, 'stop_head.svg');
         default:
             return null;
     }
@@ -234,7 +226,7 @@ function SignalBar(y, isYellow, key = 0) {
     const yellowOff = isYellow ? C.BAR_HALF_H : 0;
 
     return <g key={key}>
-        <rect x={-C.BAR_HALF_W} y={y-C.BAR_HALF_H} width={C.BAR_HALF_W*2} height={C.BAR_HALF_H*2} className='background' />;
+        <rect x={-C.BAR_HALF_W} y={y-C.BAR_HALF_H} width={C.BAR_HALF_W*2} height={C.BAR_HALF_H*2} className='with-background' />;
         <line x1={-yellowOff} y1={y-C.BAR_HALF_H} x2={yellowOff} y2={y+C.BAR_HALF_H} />;
     </g>
 }
@@ -282,7 +274,7 @@ function SignalSign(id, y) {
     const def = DefinedSignalSigns[id];
     if(!def) return null;
 
-    return <g key={id} className="signal-sign" transform={`translate(-1.89, ${y - 1.89})`}>
+    return <g key={id} className="map-icon" transform={`translate(-1.89, ${y - 1.89})`}>
         <ReactSVG
             src={`${process.env.PUBLIC_URL}/assets/signal_signs/${def.icon}`}
             wrapper='svg'

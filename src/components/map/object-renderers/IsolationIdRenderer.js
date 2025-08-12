@@ -14,7 +14,7 @@ export default function IsolationIdRenderer(props) {
         x={x}
         y={y}
         textProps={{
-            className: "isolation-id"
+            className: "isolation-id-text"
         }}
     />);
 }

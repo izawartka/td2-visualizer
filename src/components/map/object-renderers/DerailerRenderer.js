@@ -11,8 +11,8 @@ export default function DerailerRenderer(props) {
     }
 
     return (
-        <g className="derailer" transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
-            <g className="derailer-icon" transform={icon_transform}>
+        <g transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
+            <g className="map-icon" transform={icon_transform}>
                 <ReactSVG
                     src={`${process.env.PUBLIC_URL}/assets/derailer.svg`}
                     wrapper='svg'
@@ -28,6 +28,7 @@ export default function DerailerRenderer(props) {
                 additionalRot={-90}
                 offsetY={-3}
                 text={object.getPrintableDerailerName()}
+                
             />
         </g>
     );

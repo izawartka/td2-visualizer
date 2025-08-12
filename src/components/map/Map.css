@@ -17,118 +17,77 @@
     vector-effect: non-scaling-stroke;
 }
 
-.map svg text {
+.map text {
     font-size: 2px;
-    text-shadow: 0 0 16px #000;
     fill: #eee;
+    stroke: none;
 }
 
-.map svg text.switch-name {
+.map .switch-name-text {
     font-size: 3px;
-    fill: #bbf;
+    text-shadow: 0 0 16px #000;
 }
 
-.map svg text.isolation-id {
+.map .route-text {
+    font-size: 72mm;
+}
+
+.map .signalbox-text {
+    font-size: 4px;
+}
+
+.map .isolation-id-text {
     fill: #ffa;
+    text-shadow: 0 0 16px #000;
 }
 
-.map svg path.isolation-end-marker {
+.map path.isolation-end-marker {
     stroke: #ffa;
     stroke-width: 0.5px;
 }
 
-.map svg g.track-object circle {
+.map g.track-object circle {
     fill: #eee;
 }
 
-.map svg g.track-object text {
+.map g.track-object text {
     fill: #eee;
     display: none;
+    text-shadow: 0 0 16px #000;
 }
 
-.map svg g.track-object:hover text {
+.map g.track-object:hover text {
     display: block;
 }
 
-.map svg g.signal-icon g {
-    stroke: #eee;
+.map g.platform rect {
+    fill: #444;
 }
 
-.map svg g.extended-signal-icon {
+.map g.map-icon-stroked path,
+.map g.map-icon-stroked circle,
+.map g.map-icon-stroked line,
+.map g.map-icon-stroked rect {
     fill: none;
     stroke: #eee;
 }
 
-.map svg g.extended-signal-icon .background {
-    fill: #111;
-}
-
-.map svg g.route-arrow {
+.map g.map-icon path,
+.map g.map-icon circle,
+.map g.map-icon line,
+.map g.map-icon rect {
     fill: #eee;
-}
-
-.map svg g.route-name text {
-    fill: #eee;
-    font-size: 72mm;
-}
-
-.map svg g.signalbox {
-    fill: #eee;
-}
-
-.map svg g.signalbox text {
-    fill: #eee;
-    font-size: 4px;
-}
-
-.map svg g.sign path {
-    fill: #eee;
-}
-
-.map svg g.sign path.background {
-    fill: #111;
-}
-
-.map svg g.signal-sign path {
-    fill: #eee;
-}
-
-.map svg g.signal-sign path.background {
-    fill: #111;
-}
-
-.map svg g.signal-head-mech path {
-    fill: #eee;
-}
-
-.map svg g.signal-head-mech path.background {
-    fill: #111;
-}
-
-.map .signal-sign-text {
     stroke: none;
 }
 
-.map svg g.nevp path {
-    fill: #eee;
-}
-
-.map svg g.nevp path.background {
+.map g.map-icon-stroked .background,
+.map g.map-icon .background {
     fill: #111;
+    stroke: none;
 }
 
-.map svg g.derailer path {
-    fill: #eee;
-}
-
-.map svg g.spawn-point path {
-    fill: #eee;
-}
-
-.map svg g.spawn-point path.background {
+.map g.map-icon-stroked .with-background,
+.map g.map-icon .with-background {
     fill: #111;
-}
-
-.map svg g.platform rect {
-    fill: #444;
+    stroke: #eee;
 }

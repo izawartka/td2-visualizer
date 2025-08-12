@@ -14,16 +14,18 @@ export default function SignRenderer(props) {
     const height = object.def.height || 1;
 
     return (
-        <g className="sign" transform={`translate(${x}, ${y}) rotate(${rot}) translate(${offX}, ${offY})`}>
-            <ReactSVG
-                src={`${process.env.PUBLIC_URL}/assets/signs/${object.def.icon}`}
-                wrapper='svg'
+        <g transform={`translate(${x}, ${y}) rotate(${rot}) translate(${offX}, ${offY})`}>
+            <g className='map-icon'>
+                <ReactSVG
+                    src={`${process.env.PUBLIC_URL}/assets/signs/${object.def.icon}`}
+                    wrapper='svg'
 
-                beforeInjection={(svg) => {
-                    svg.setAttribute('width', `${width}mm`);
-                    svg.setAttribute('height', `${height}mm`);
-                }}
-            />
+                    beforeInjection={(svg) => {
+                        svg.setAttribute('width', `${width}mm`);
+                        svg.setAttribute('height', `${height}mm`);
+                    }}
+                />
+            </g>
             <SignTextRenderer object={object} />
         </g>
     );

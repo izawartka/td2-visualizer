@@ -8,8 +8,8 @@ export default function SignalBoxRenderer(props) {
     const rot = object.getFinalRotation();
     
     return (
-        <g className="signalbox" transform={`translate(${x}, ${y})`}>
-            <g className="signalbox-icon" transform={`rotate(${rot}) translate(-4.725, -4.725)`}>
+        <g transform={`translate(${x}, ${y})`}>
+            <g className="map-icon" transform={`rotate(${rot}) translate(-4.725, -4.725)`}>
                 <ReactSVG
                     src={`${process.env.PUBLIC_URL}/assets/signalboxes/${object.def.icon}`}
                     wrapper='svg'
@@ -43,7 +43,8 @@ function SignalBoxText(props) {
             additionalPreRot={rot}
             offsetY={6}
             textProps={{
-                textAnchor: 'middle'
+                textAnchor: 'middle',
+                className: "signalbox-text",
             }}
             text={text}
         />

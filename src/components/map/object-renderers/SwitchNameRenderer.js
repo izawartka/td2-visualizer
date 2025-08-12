@@ -10,7 +10,7 @@ export default function SwitchNameRenderer(props) {
         x={x}
         y={y}
         textProps={{
-            className: "switch-name"
+            className: "switch-name-text"
         }}
     />;
 }

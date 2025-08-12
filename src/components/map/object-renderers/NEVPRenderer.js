@@ -5,7 +5,7 @@ export default function NEVPRenderer(props) {
     const [x, y] = object.pos.toSVGCoords();
 
     return (
-        <g className="nevp" transform={`translate(${x}, ${y}) rotate(${object.rot.y}) translate(-1.89, -1.89)`}>
+        <g className="map-icon" transform={`translate(${x}, ${y}) rotate(${object.rot.y}) translate(-1.89, -1.89)`}>
             <ReactSVG
                 src={`${process.env.PUBLIC_URL}/assets/nevp.svg`}
                 wrapper='svg'
