@@ -1,4 +1,8 @@
 const DefinedSigns = {
+    "slope": {
+        "name": "Slope",
+        "pattern": /^sign_slope/,
+    },
     "w31": {
         "name": "W31",
         "icon": "w31.svg",
