@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useEffect, useCallback, useContext} from "react";
 import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 import {ElectrificationStatus} from "../../../model/electrification-status";
@@ -7,6 +7,7 @@ import {setHoveredTrack, unsetHoveredTrack} from "../../../services/trackHoverIn
 import GradientsContext from "../../../contexts/GradientsContext";
 import { TrackShape, TrackSource } from "../../../model/tracks/track";
 import {useZoomPanEmitter} from "../../../hooks/useZoomPubSub";
+import { mapZoomTrackDetails$ } from "../../../services/mapZoomService";
 
 export default function TrackRenderer(props) {
     const { object } = props;
@@ -32,25 +33,47 @@ const MemoizedTrackRenderer = React.memo(StatelessTrackRenderer);
 
 function StatelessTrackRenderer(props) {
     const {object, trackColorMode, gradientDef, onAlign} = props;
+    const unscaledPathRef = React.useRef(null);
+    const scaledPathRef = React.useRef(null);
 
-    if (object.points.start.distanceSq(object.points.end) < 0.001) {
-        return null;
-    }
-
-    const onMouseEnter = () => {
+    const onMouseEnter = useCallback(() => {
         setHoveredTrack(object);
-    };
+    }, [object]);
 
-    const onMouseLeave = () => {
+    const onMouseLeave = useCallback(() => {
         unsetHoveredTrack(null);
-    };
+    }, []);
 
-    const onClick = (event) => {
+    const onClick = useCallback((event) => {
         if (object.shape === TrackShape.STRAIGHT && event.detail === 2) {
             event.preventDefault();
             onAlign(event);
         }
-    };
+    }, [object, onAlign]);
+
+    const handleDetailsUpdate = useCallback((details) => {
+        if (!unscaledPathRef.current || !scaledPathRef.current) return;
+
+        if(details) {
+            unscaledPathRef.current.style.display = 'none';
+            scaledPathRef.current.style.display = 'block';
+        } else {
+            unscaledPathRef.current.style.display = 'block';
+            scaledPathRef.current.style.display = 'none';
+        }
+    }, []);
+
+    useEffect(() => {
+        const subscription = mapZoomTrackDetails$.subscribe(details => {
+            handleDetailsUpdate(details);
+        });
+
+        return () => subscription.unsubscribe();
+    }, [handleDetailsUpdate]);
+    
+    if (object.points.start.distanceSq(object.points.end) < 0.001) {
+        return null;
+    }
 
     const path = getTrackPath(object);
     const color = getTrackColor(object, trackColorMode, gradientDef);
@@ -60,11 +83,13 @@ function StatelessTrackRenderer(props) {
         <g id={`track-${object.id}`}>
             {defs}
             <path
+                ref={unscaledPathRef}
                 d={path}
                 stroke={color}
                 className="track-unscaled"
             />
             <path
+                ref={scaledPathRef}
                 d={path}
                 stroke={color}
                 className="track"

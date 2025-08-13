@@ -2,8 +2,9 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import './ZoomPanWrapper.css';
 import Constants from '../../helpers/constants';
 import { useZoomPanSubscriber, viewBox$, clientRect$, camera$ } from '../../hooks/useZoomPubSub';
-import {mapRotation$} from '../../services/mapRotationService';
+import {setMapRotation} from '../../services/mapRotationService';
 import AngleHelper from "../../helpers/angleHelper";
+import { setMapZoom } from '../../services/mapZoomService';
 
 function boundZoom(zoom) {
     return Math.max(Constants.map.zoomMin, Math.min(Constants.map.zoomMax, zoom));
@@ -44,7 +45,8 @@ export default function ZoomPanWrapper({children}) {
             rafScheduledRef.current = false;
             cameraWrapperRef.current.setAttribute('transform', getCameraTransformString());
             camera$.next(cameraRef.current);
-            mapRotation$.next(cameraRef.current.rotation);
+            setMapRotation(cameraRef.current.rotation);
+            setMapZoom(cameraRef.current.zoom);
         });
     }, []);
 

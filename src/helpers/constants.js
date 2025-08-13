@@ -8,7 +8,8 @@ const Constants = {
         rotationSensitivity: 0.2,
         forcePointerEvents: false,
         platformMaxTilt: 0.5,
-        showDebugTrackIds: false
+        showDebugTrackIds: false,
+        mapZoomTrackDetailsThreshold: 1 / 1.44
     },
     parser: {
         logSceneryAfterFinished: true,
