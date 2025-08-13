@@ -9,7 +9,8 @@ const Constants = {
         forcePointerEvents: false,
         platformMaxTilt: 0.5,
         showDebugTrackIds: false,
-        mapZoomTrackDetailsThreshold: 1 / 1.44
+        mapZoomTrackDetailsThreshold: 1 / 1.44,
+        mapZoomObjectDetailsThreshold: 0.5
     },
     parser: {
         logSceneryAfterFinished: true,

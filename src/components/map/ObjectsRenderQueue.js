@@ -37,49 +37,56 @@ const ObjectRendererQueue = [
         'name': 'isolations-ends',
         'category': 'tracks',
         'renderer': IsolationEndRenderer,
-        'cond': (layers) => layers['isolations-ids']
+        'cond': (layers) => layers['isolations-ids'],
+        'usesObjectDetails': true
     },
     {
         'name': 'isolations-ids',
         'category': ['tracks', 'switches'],
         'trackSources': [TrackSource.STANDARD],
         'renderer': IsolationIdRenderer,
-        'cond': (layers) => layers['isolations-ids']
+        'cond': (layers) => layers['isolations-ids'],
+        'usesObjectDetails': true
     },
     {
         'name': 'switches-names',
         'category': 'switches',
         'type': 'Switch',
         'renderer': SwitchNameRenderer,
-        'cond': (layers) => layers['switches-names']
+        'cond': (layers) => layers['switches-names'],
+        'usesObjectDetails': true
     },
     {
         'name': 'derailers',
         'category': 'track-objects',
         'type': 'Derailer',
         'renderer': DerailerRenderer,
-        'cond': (layers) => layers['derailers']
+        'cond': (layers) => layers['derailers'],
+        'usesObjectDetails': true
     },
     {
         'name': 'signs',
         'category': 'track-objects',
         'type': 'Sign',
         'renderer': SignRenderer,
-        'cond': (layers) => layers['signs']
+        'cond': (layers) => layers['signs'],
+        'usesObjectDetails': true
     },
     {
         'name': 'nevps',
         'category': 'track-objects',
         'type': 'NEVP',
         'renderer': NEVPRenderer,
-        'cond': (layers) => layers['nevps']
+        'cond': (layers) => layers['nevps'],
+        'usesObjectDetails': true
     },
     {
         'name': 'signals',
         'category': 'track-objects',
         'type': 'Signal',
         'renderer': SignalRenderer,
-        'cond': (layers) => layers['signals']
+        'cond': (layers) => layers['signals'],
+        'usesObjectDetails': true
     },
     {
         'name': 'spawn-points',
@@ -87,6 +94,7 @@ const ObjectRendererQueue = [
         'type': 'SpawnPoint',
         'renderer': SpawnPointRenderer,
         'cond': (layers) => layers['spawn-points'],
+        'usesObjectDetails': true
     },
     {
         'name': 'signalboxes',
@@ -106,7 +114,8 @@ const ObjectRendererQueue = [
         'category': 'track-objects',
         'renderer': TrackObjectRenderer,
         'cond': (layers) => layers['track-objects'],
-        'pointerEvents': true
+        'pointerEvents': true,
+        'usesObjectDetails': true
     }
 ]
 

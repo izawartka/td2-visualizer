@@ -1,11 +1,22 @@
-import React, { useContext, useMemo, memo } from "react";
+import { useContext, useMemo, memo, useCallback, useRef, useEffect } from "react";
 import SceneryContext from "../../contexts/SceneryContext";
 import SettingsContext from "../../contexts/SettingsContext";
 import Constants from "../../helpers/constants";
+import { mapZoomObjectDetails$ } from "../../services/mapZoomService";
 
 export default function SceneryLayer(props) {
     const { queueItem } = props;
-    const { name, category, type, types, trackSources, cond, renderer: Renderer, additionalComponents: AdditionalComponents } = queueItem;
+    const { 
+        name, 
+        category, 
+        type, 
+        types, 
+        trackSources, 
+        cond, 
+        renderer: Renderer, 
+        additionalComponents: AdditionalComponents, 
+        usesObjectDetails 
+    } = queueItem;
     const { scenery } = useContext(SceneryContext);
     const { layers } = useContext(SettingsContext);
 
@@ -38,6 +49,7 @@ export default function SceneryLayer(props) {
             trackSources={trackSources}
             pointerEvents={pointerEvents}
             AdditionalComponents={AdditionalComponents}
+            usesObjectDetails={usesObjectDetails || false}
         />
     );
 }
@@ -45,9 +57,32 @@ export default function SceneryLayer(props) {
 const MemoizedSceneryLayer = memo(StatelessSceneryLayer);
 
 
-function StatelessSceneryLayer({ name, Renderer, objects, type, types, trackSources, pointerEvents = false, AdditionalComponents = [] }) {
+function StatelessSceneryLayer({ name, Renderer, objects, type, types, trackSources, pointerEvents = false, AdditionalComponents = [], usesObjectDetails }) {
+    const layerRef = useRef(null);
+
+    const handleDetailsUpdate = useCallback((details) => {
+        if (!layerRef.current) return;
+
+        if (details) {
+            layerRef.current.style.display = '';
+        }
+        else {
+            layerRef.current.style.display = 'none';
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!usesObjectDetails) return;
+        const subscription = mapZoomObjectDetails$.subscribe(details => {
+            handleDetailsUpdate(details);
+        });
+
+        return () => subscription.unsubscribe();
+    }, [handleDetailsUpdate, usesObjectDetails]);
+
     return (
         <g
+            ref={layerRef}
             className={`scenery-layer-${name}`}
             pointerEvents={pointerEvents ? "all" : "none"}
         >
