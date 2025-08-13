@@ -21,11 +21,11 @@
     font-size: 2px;
     fill: #eee;
     stroke: none;
+    text-shadow: 0 0 16px #000;
 }
 
 .map .switch-name-text {
     font-size: 3px;
-    text-shadow: 0 0 16px #000;
 }
 
 .map .route-text {
@@ -38,7 +38,6 @@
 
 .map .isolation-id-text {
     fill: #ffa;
-    text-shadow: 0 0 16px #000;
 }
 
 .map path.isolation-end-marker {
@@ -53,7 +52,6 @@
 .map g.track-object text {
     fill: #eee;
     display: none;
-    text-shadow: 0 0 16px #000;
 }
 
 .map g.track-object:hover text {
