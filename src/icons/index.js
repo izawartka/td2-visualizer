@@ -1,3 +1,7 @@
+/* Toolbar Icons */
+export { SideMenuIcon } from "./toolbar/side-menu";
+
+/* TrackHoverInfo Icons */
 export { HashIcon } from "./track-hover-info/hash";
 export { SpeedIcon } from "./track-hover-info/speed";
 export { LightningIcon } from "./track-hover-info/lightning";
