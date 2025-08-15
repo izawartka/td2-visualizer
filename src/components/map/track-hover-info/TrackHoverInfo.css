@@ -12,6 +12,11 @@
     padding: 1em;
 }
 
+.track-hover-info-popup svg {
+    width: 1.2em;
+    height: 1.2em;
+}
+
 .track-hover-info-popup table {
     border-spacing: 2px;
 }

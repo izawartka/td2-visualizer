@@ -1,6 +1,6 @@
-export { HashIcon } from "./hash";
-export { SpeedIcon } from "./speed";
-export { LightningIcon } from "./lightning";
-export { QuestionMarkIcon } from "./question-mark";
-export { SlopeIcon } from "./slope";
-export { RadiusIcon } from "./radius";
+export { HashIcon } from "./track-hover-info/hash";
+export { SpeedIcon } from "./track-hover-info/speed";
+export { LightningIcon } from "./track-hover-info/lightning";
+export { QuestionMarkIcon } from "./track-hover-info/question-mark";
+export { SlopeIcon } from "./track-hover-info/slope";
+export { RadiusIcon } from "./track-hover-info/radius";
