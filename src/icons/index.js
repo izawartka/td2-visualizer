@@ -1,4 +1,6 @@
 /* Toolbar Icons */
+export { DarkModeIcon } from "./toolbar/dark-mode";
+export { LightModeIcon } from "./toolbar/light-mode";
 export { SideMenuIcon } from "./toolbar/side-menu";
 
 /* TrackHoverInfo Icons */

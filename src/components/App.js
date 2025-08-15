@@ -10,23 +10,26 @@ import DistanceMeterContext from '../contexts/DistanceMeterContext';
 import {GradientsManager} from "./GradientsManager";
 import SideMenuContext from '../contexts/SideMenuContext';
 import SceneryManager from './SceneryManager';
+import ThemeManager from './ThemeManager';
 
 function App() {
     const [sideMenuOpen, setSideMenuOpen] = useState(false);
     const [distancePoints, setDistancePoints] = useState(null);
 
     return (
-        <SettingsManager>
-            <SceneryManager>
-                <GradientsManager>
-                    <DistanceMeterContext.Provider value={{distancePoints, setDistancePoints}}>
-                        <SideMenuContext.Provider value={{sideMenuOpen, setSideMenuOpen}}>
-                            <AppContent />
-                        </SideMenuContext.Provider>
-                    </DistanceMeterContext.Provider>
-                </GradientsManager>
-            </SceneryManager>
-        </SettingsManager>
+        <ThemeManager>
+            <SettingsManager>
+                <SceneryManager>
+                    <GradientsManager>
+                        <DistanceMeterContext.Provider value={{distancePoints, setDistancePoints}}>
+                            <SideMenuContext.Provider value={{sideMenuOpen, setSideMenuOpen}}>
+                                <AppContent />
+                            </SideMenuContext.Provider>
+                        </DistanceMeterContext.Provider>
+                    </GradientsManager>
+                </SceneryManager>
+            </SettingsManager>
+        </ThemeManager>
     );
 }
 

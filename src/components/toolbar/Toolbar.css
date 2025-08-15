@@ -54,10 +54,12 @@
     width: 2rem;
 }
 
+.theme-toggle g,
 .side-menu-toggle g {
     stroke: #aaa;
 }
 
+.theme-toggle:hover g,
 .side-menu-toggle:hover g {
     stroke: #fff;
 }
