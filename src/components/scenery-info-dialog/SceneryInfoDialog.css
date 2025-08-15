@@ -1,6 +1,6 @@
 .scenery-info-view td.label {
     font-weight: bold;
-    color: var(--text-disabled-color);
+    color: var(--text-color-disabled);
     vertical-align: baseline;
     padding-right: 1em;
 }

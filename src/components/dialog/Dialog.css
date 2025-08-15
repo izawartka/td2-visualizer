@@ -8,12 +8,12 @@
     width: 100vw;
     height: 100vh;
     z-index: 100;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.33);
 }
 
 .dialog {
     display: block;
-    background-color: var(--dialog-background-color);
+    background-color: var(--background-color);
     border: 2px solid var(--border-color);
     border-radius: 8px;
     margin: 0 auto;

@@ -44,7 +44,7 @@ input[type="text"].non-transparent,
 button.non-transparent,
 select.non-transparent {
     background: var(--layer-color-non-transparent);
-    border: 2px solid var(--layer-color-non-transparent);
+    border: 2px solid var(--border-color);
 }
 
 input[type="file"]::file-selector-button:hover,
