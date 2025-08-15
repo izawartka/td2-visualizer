@@ -262,7 +262,7 @@ function SignalSignText(id, text, y) {
 
     return <text
         key={`${id}-text`}
-        className="signal-sign-text"
+        className="sign-text"
         transform={`translate(${def.textOffsetX || 0}, ${y + (def.textOffsetY || 0)})`}
         style={{ fontSize: `${def.textSize || C.SIGN_DEFAULT_FONT_SIZE}mm` }}
         textAnchor="middle"

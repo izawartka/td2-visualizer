@@ -24,6 +24,10 @@
     text-shadow: 0 0 16px var(--map-shadow-color);
 }
 
+.map .sign-text {
+    text-shadow: none;
+}
+
 .map .switch-name-text {
     font-size: 3px;
 }
