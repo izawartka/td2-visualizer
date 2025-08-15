@@ -1,6 +1,6 @@
 body {
-    background-color: #141414;
-    color: #eee;
+    background-color: var(--background-color);
+    color: var(--text-color);
     font-family: monospace;
 }
 
@@ -29,10 +29,10 @@ button,
 select {
     font-size: inherit;
     font-family: inherit;
-    background: #fff2;
+    background: var(--layer-color);
     border-radius: 8px;
     border: none;
-    color: #eee;
+    color: var(--text-color);
     padding-inline: 8px;
     padding-block: 4px;
     outline: none;
@@ -43,27 +43,27 @@ input[type="file"].non-transparent::file-selector-button,
 input[type="text"].non-transparent,
 button.non-transparent,
 select.non-transparent {
-    background: #222;
-    border: 2px solid #444;
+    background: var(--layer-color-non-transparent);
+    border: 2px solid var(--layer-color-non-transparent);
 }
 
 input[type="file"]::file-selector-button:hover,
 button:hover,
 select:hover {
-    background: #fff3;
+    background: var(--layer-color-hover);
 }
 
 input[type="file"].non-transparent::file-selector-button:hover,
 button.non-transparent:hover,
 select.non-transparent:hover {
-    background: #444;
+    background: var(--layer-color-non-transparent-hover);
 }
 
 input[type="file"]:disabled::file-selector-button,
 button:disabled,
 select:disabled {
-    background: #fff1;
-    color: #666;
+    background: var(--layer-color-disabled);
+    color: var(--text-color-disabled);
     cursor: not-allowed;
 }
 
@@ -71,8 +71,8 @@ select:disabled {
 input[type="file"].non-transparent:disabled::file-selector-button,
 button.non-transparent:disabled,
 select.non-transparent:disabled {
-    background: #222;
-    color: #666;
+    background: var(--layer-color-non-transparent-disabled);
+    color: var(--text-color-disabled);
     cursor: not-allowed;
 }
 
@@ -83,17 +83,17 @@ button {
 }
 
 select > option {
-    background: #141414;
-    color: #eee;
+    background: var(--background-color);
+    color: var(--text-color);
 }
 
 input[type="text"] {
     background-color: unset;
-    border: 2px solid #fff2;
+    border: 2px solid var(--layer-color);
 }
 
 input[type="text"]:focus {
-    border: 2px solid #fff3;
+    border: 2px solid var(--layer-color-hover);
 }
 
 .invis-button {
@@ -111,17 +111,17 @@ input[type="text"]:focus {
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #141414;
+    background-color: var(--background-color);
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #fff2;
+    background-color: var(--layer-color);
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #fff3;
+    background-color: var(--layer-color-hover);
 }
 
 ::-webkit-scrollbar {

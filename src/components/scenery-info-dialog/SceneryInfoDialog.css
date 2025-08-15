@@ -1,12 +1,12 @@
 .scenery-info-view td.label {
     font-weight: bold;
-    color: #aaa;
+    color: var(--text-disabled-color);
     vertical-align: baseline;
     padding-right: 1em;
 }
 
 .scenery-info-view td.value a {
-    color: #eee;
+    color: var(--text-color);
     text-decoration: none;
 }
 

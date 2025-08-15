@@ -1,0 +1,49 @@
+:root {
+    --background-color: #141414;
+    --text-color: #eee;
+    --layer-color: #fff2;
+    --layer-color-hover: #fff3;
+    --layer-color-disabled: #fff1;
+    --layer-color-non-transparent: #222;
+    --layer-color-non-transparent-hover: #444;
+    --layer-color-non-transparent-disabled: #222;
+    --text-color-disabled: #666;
+    --border-color: #444;
+    --text-color-inverted: #141414;
+    --icon-color: #aaa;
+    --icon-color-active: #fff;
+    --map-background-color: #111;
+    --map-shadow-color: #000;
+    --map-icon-color: #eee;
+    --map-text-color: #eee;
+    --map-platform-color: #444;
+    --dialog-background-color: #222;
+    --parser-log-background-color: #0004;
+    --parser-log-warn-color: #aa4;
+    --parser-log-error-color: #f44;
+}
+
+.light-mode {
+    --background-color: #eee;
+    --text-color: #222;
+    --layer-color: #0002;
+    --layer-color-hover: #0003;
+    --layer-color-disabled: #0001;
+    --layer-color-non-transparent: #ddd;
+    --layer-color-non-transparent-hover: #eee;
+    --layer-color-non-transparent-disabled: #888;
+    --text-color-disabled: #666;
+    --border-color: #aaa;
+    --text-color-inverted: #eee;
+    --icon-color: #222;
+    --icon-color-active: #888;
+    --map-background-color: #fff;
+    --map-shadow-color: #0008;
+    --map-icon-color: #444;
+    --map-text-color: #444;
+    --map-platform-color: #ccc;
+    --dialog-background-color: #ddd;
+    --parser-log-background-color: #fff4;
+    --parser-log-warn-color: #774;
+    --parser-log-error-color: #f44;
+}

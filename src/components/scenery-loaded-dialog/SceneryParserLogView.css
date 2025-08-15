@@ -1,8 +1,8 @@
 .scenery-parser-log-view {
     padding: 1em;
     border-radius: 8px;
-    border: 2px solid #444;
-    background-color: #0004;
+    border: 2px solid var(--border-color);
+    background-color: var(--parser-log-background-color);
 }
 
 .scenery-parser-log-view ul {
@@ -14,9 +14,9 @@
 }
 
 .scenery-parser-log-view .log-entry.warn {
-    color: #aa4;
+    color: var(--parser-log-warn-color);
 }
 
 .scenery-parser-log-view .log-entry.error {
-    color: #f44;
+    color: var(--parser-log-error-color);
 }

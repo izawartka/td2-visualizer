@@ -6,8 +6,8 @@
 }
 
 .track-hover-info-popup {
-    background-color: #222;
-    border: 2px solid #444;
+    background-color: var(--layer-color-non-transparent);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 1em;
 }
@@ -24,13 +24,13 @@
 .track-hover-info-popup th {
     text-align: start;
     padding-right: 2em;
-    color: #888;
+    color: var(--text-color-disabled);
 }
 
 .track-hover-info-popup__align {
     margin-top: 1.5em;
     padding: 2px;
-    color: #888;
+    color: var(--text-color-disabled);
 }
 
 .track-hover-info-popup .track-hover-info-popup-label {

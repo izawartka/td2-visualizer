@@ -13,8 +13,8 @@
 
 .dialog {
     display: block;
-    background-color: #222;
-    border: 2px solid #444;
+    background-color: var(--dialog-background-color);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     margin: 0 auto;
     padding: 1em;
@@ -34,7 +34,7 @@
 
 .dialog-title {
     margin-bottom: 2em;
-    color: #888;
+    color: var(--text-color-disabled);
     font-weight: bold;
 }
 
