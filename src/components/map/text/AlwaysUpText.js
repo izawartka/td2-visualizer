@@ -13,7 +13,7 @@ export default function AlwaysUpText(props) {
     }, [additionalRot, additionalPreRot, offsetX, offsetY]);
 
     const getTextAnchor = useCallback((upsideDown) => {
-        return (upsideDown !== reverseAnchor) ? "end" : "start";
+        return (upsideDown !== (reverseAnchor || false)) ? "end" : "start";
     }, [reverseAnchor]);
 
     const update = useCallback((mapRotation) => {
@@ -25,7 +25,7 @@ export default function AlwaysUpText(props) {
         if (!textProps?.textAnchor) {
             textRef.current.setAttribute("text-anchor", getTextAnchor(upsideDown));
         }
-    }, [baseRot, getTransformString, getTextAnchor, textProps?.textAnchor]);
+    }, [baseRot, getTransformString, getTextAnchor, textProps]);
 
     useEffect(() => {
         const subscription = mapRotation$.subscribe(rotation => {
