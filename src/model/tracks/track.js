@@ -51,10 +51,10 @@ export default class Track extends SceneryObject {
 
     hasNoMaterials() {
         if(!this.prefab_name) return false;
+        const materials = this.prefab_name.split(',');
+        if(materials.length < 3) return false;
 
-        return !this.prefab_name.split(',').some((name) => {
-            return name.trim() !== 'trans-mat';
-        });
+        return materials[0] === 'none-slp' && materials[2] === 'trans-mat';
     }
 
     getStartAngleXZ() {
