@@ -1,7 +1,7 @@
-import AngleHelper from "../helpers/angleHelper";
-import Constants from "../helpers/constants";
+import AngleHelper from "../../helpers/angleHelper";
+import Constants from "../../helpers/constants";
 import SceneryParserLog from "./scenery-parser-log";
-import Vector3 from "./vector3";
+import Vector3 from "../vector3";
 
 function getGridSize(scenery) {
     const sceneryBounds = scenery.getBounds();

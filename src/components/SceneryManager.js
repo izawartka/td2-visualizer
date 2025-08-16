@@ -1,14 +1,14 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import SceneryContext from '../contexts/SceneryContext';
 import { useZoomPanEmitter } from '../hooks/useZoomPubSub';
-import SceneryParser from '../model/scenery-parser';
-import SceneryParserLog from '../model/scenery-parser-log';
+import SceneryParser from '../model/parsing/scenery-parser';
+import SceneryParserLog from '../model/parsing/scenery-parser-log';
 import { showCustomDialog, showDialog } from '../services/dialogService';
 import { resetHoveredTracksStack } from '../services/trackHoverInfoService';
 import SceneryLoadedDialog from './scenery-loaded-dialog/SceneryLoadedDialog';
 import Constants from '../helpers/constants';
 import MiscHelper from '../helpers/miscHelper';
-import ElectrificationResolver from '../model/electrification-resolver';
+import ElectrificationResolver from '../model/parsing/electrification-resolver';
 
 export default function SceneryManager(props) {
     const [isLoading, setIsLoading] = useState(false);

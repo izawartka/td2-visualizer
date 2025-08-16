@@ -1,6 +1,6 @@
 import SceneryObject from "./scenery-object";
 import Vector3 from "./vector3";
-import SceneryParserLog from "./scenery-parser-log";
+import SceneryParserLog from "./parsing/scenery-parser-log";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
 import CurveHelper from "../helpers/curveHelper";
 import StandardTrack from "./tracks/standard-track";

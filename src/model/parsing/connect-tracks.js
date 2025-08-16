@@ -1,7 +1,7 @@
-import TrackConnection, {TrackConnectionEnd} from "./track-connection";
+import TrackConnection, {TrackConnectionEnd} from "../track-connection";
 import SceneryParserLog from "./scenery-parser-log";
-import Constants from "../helpers/constants";
-import {TrackSource} from "./tracks/track";
+import Constants from "../../helpers/constants";
+import {TrackSource} from "../tracks/track";
 
 const connectionThresholdDistanceSq = 0.05;
 

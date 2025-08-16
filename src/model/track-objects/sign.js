@@ -1,5 +1,5 @@
 import DefinedSigns from "../defs/defined-signs";
-import SceneryParserLog from "../scenery-parser-log";
+import SceneryParserLog from "../parsing/scenery-parser-log";
 import TrackObject from "./track-object";
 import Vector3 from "../vector3";
 

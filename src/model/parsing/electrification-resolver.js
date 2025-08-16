@@ -1,6 +1,6 @@
-import Constants from "../helpers/constants";
+import Constants from "../../helpers/constants";
 import SceneryParserLog from "./scenery-parser-log";
-import {ElectrificationStatus, ElectrificationResolutionStatus} from "./electrification-status";
+import {ElectrificationStatus, ElectrificationResolutionStatus} from "../electrification-status";
 
 export default class ElectrificationResolver {
     static hasWarnings = false;

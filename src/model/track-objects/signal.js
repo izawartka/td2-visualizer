@@ -1,4 +1,4 @@
-import SceneryParserLog from "../scenery-parser-log";
+import SceneryParserLog from "../parsing/scenery-parser-log";
 import SpawnInfo from "../spawn-info";
 import TrackObject from "./track-object";
 import Vector3 from "../vector3";

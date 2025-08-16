@@ -1,5 +1,5 @@
 import DefinedSignalSigns from '../../defs/defined-signal-signs';
-import SceneryParserLog from '../../scenery-parser-log';
+import SceneryParserLog from '../../parsing/scenery-parser-log';
 import SignalElementsEnums from '../enums';
 
 export default class SignalElementsParserCommon {

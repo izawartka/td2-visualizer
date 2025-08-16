@@ -1,4 +1,4 @@
-import SceneryParserLog from "../scenery-parser-log";
+import SceneryParserLog from "../parsing/scenery-parser-log";
 import SignalElementsEnums from "./enums";
 import SignalElementsParsersList from "./parsers-list";
 

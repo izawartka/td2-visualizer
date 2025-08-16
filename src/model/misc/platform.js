@@ -1,5 +1,5 @@
 import Misc from "./misc.js";
-import SceneryParserLog from "../scenery-parser-log.js";
+import SceneryParserLog from "../parsing/scenery-parser-log.js";
 import Vector3 from "../vector3.js";
 import DefinedPlatforms from "../defs/defined-platforms.js";
 

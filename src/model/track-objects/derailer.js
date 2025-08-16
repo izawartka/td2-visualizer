@@ -1,6 +1,6 @@
 import TrackObject from './track-object';
 import Vector3 from '../vector3';
-import SceneryParserLog from "../scenery-parser-log";
+import SceneryParserLog from "../parsing/scenery-parser-log";
 
 export default class Derailer extends TrackObject {
     type = "Derailer";

@@ -1,4 +1,4 @@
-import Constants from "../helpers/constants";
+import Constants from "../../helpers/constants";
 
 export default class SceneryParserLog {
     static log = [];

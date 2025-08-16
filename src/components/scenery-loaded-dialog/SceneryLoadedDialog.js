@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle } from 'react';
-import SceneryParserLog from '../../model/scenery-parser-log';
+import SceneryParserLog from '../../model/parsing/scenery-parser-log';
 import SceneryParserLogView from '../scenery-loaded-dialog/SceneryParserLogView';
 import '../dialog/Dialog.css';
 import './SceneryLoadedDialog.css'

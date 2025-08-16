@@ -1,5 +1,5 @@
 import SceneryObject from "./scenery-object.js";
-import SceneryParserLog from "./scenery-parser-log.js";
+import SceneryParserLog from "./parsing/scenery-parser-log.js";
 import Vector3 from "./vector3.js";
 import {DefinedSwitches, SwitchTrackConnectionType} from "./defs/defined-switches.js";
 import TrackConnection, {TrackConnectionEnd} from "./track-connection";
