@@ -28,7 +28,7 @@
 }
 
 .light-mode {
-    --background-color: #eee;
+    --background-color: #f8f8f8;
     --text-color: #222;
     --layer-color: #0002;
     --half-layer-color: #0001;
@@ -43,7 +43,7 @@
     --icon-color: #222;
     --icon-color-active: #888;
     --map-background-color: #fff;
-    --map-shadow-color: #0008;
+    --map-shadow-color: #fff8;
     --map-icon-color: #111;
     --map-text-color: #111;
     --map-platform-color: #aaa;
@@ -51,7 +51,7 @@
     --map-track-color-invisible: #999;
     --map-track-color-electrified: #33b;
     --dialog-background-color: #ddd;
-    --parser-log-background-color: #fff4;
+    --parser-log-background-color: #0001;
     --parser-log-warn-color: #774;
     --parser-log-error-color: #f44;
 }
