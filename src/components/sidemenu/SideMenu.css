@@ -3,14 +3,14 @@
 }
 
 .side-menu {
-    border-left: 2px solid #444;
+    border-left: 2px solid var(--border-color);
     padding: 1em;
     position: absolute;
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: #141414;
-    z-index: 2000;
+    background-color: var(--background-color);
+    z-index: 50;
     width: max-content;
     transition: transform 0.2s ease-in-out;
     display: flex;
@@ -71,7 +71,7 @@
 }
 
 .info-footer {
-    color: #888;
+    color: var(--text-color-disabled);
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;

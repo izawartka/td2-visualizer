@@ -5,7 +5,7 @@
     align-items: center;
     gap: 10px;
     padding: 10px;
-    border-bottom: 2px solid #444;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .toolbar-spacer {
@@ -29,11 +29,11 @@
 .loading-indicator {
     height: fit-content;
     padding: 4px 8px;
-    color: #141414;
+    color: var(--text-color-inverted);
     text-align: center;
     opacity: 0;
     transition: opacity 1s ease-in-out;
-    z-index: 1000;
+    z-index: 49;
     position: relative;
 }
 
@@ -48,16 +48,19 @@
     animation: fadeOut 1s ease-in-out 2s forwards; /* Start fading out after 2 seconds */
 }
 
+.theme-toggle svg,
 .side-menu-toggle svg {
     display: block;
     height: 2rem;
     width: 2rem;
 }
 
+.theme-toggle g,
 .side-menu-toggle g {
-    stroke: #aaa;
+    stroke: var(--icon-color);
 }
 
+.theme-toggle:hover g,
 .side-menu-toggle:hover g {
-    stroke: #fff;
+    stroke: var(--icon-color-active);
 }

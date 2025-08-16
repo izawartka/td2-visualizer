@@ -4,6 +4,7 @@ import CustomFileSelect from './CustomFileSelect';
 import SideMenuToggle from './SideMenuToggle';
 import SceneryList from './SceneryList';
 import ElectrificationStepMode from './ElectrificationStepMode';
+import ThemeToggle from './ThemeToggle';
 
 export default function Toolbar() {
     return (
@@ -14,6 +15,7 @@ export default function Toolbar() {
                 <CustomFileSelect />
                 <ElectrificationStepMode />
                 <div className='toolbar-spacer'></div>
+                <ThemeToggle />
                 <SideMenuToggle />
             </div>
             <div className='loading-indicator-cont'>

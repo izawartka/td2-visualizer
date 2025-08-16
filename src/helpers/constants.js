@@ -138,16 +138,16 @@ const Constants = {
             name: 'Standard',
             optionDefault: 'default',
             options: {
-                'default': ['#aaa', 'Standard track'],
-                'invisible': ['#444', 'Invisible track'],
+                'default': ['var(--map-track-color)', 'Standard track'],
+                'invisible': ['var(--map-track-color-invisible)', 'Invisible track'],
             }
         },
         'electrification': {
             name: 'Electrification',
             optionDefault: 'conflict',
             options: {
-                'electrified': ['#aaf', 'Electrified'],
-                'non-electrified': ['#aaa', 'Non-electrified'],
+                'electrified': ['var(--map-track-color-electrified)', 'Electrified'],
+                'non-electrified': ['var(--map-track-color)', 'Non-electrified'],
                 'not-checked': ['#aa4', 'Unknown'],
                 'conflict': ['#f44', 'Error / Conflict'],
             }

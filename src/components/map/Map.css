@@ -3,7 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    background-color: #111;
+    background-color: var(--map-background-color);
 }
 
 .map svg path.track {
@@ -19,9 +19,13 @@
 
 .map text {
     font-size: 2px;
-    fill: #eee;
+    fill: var(--map-text-color);
     stroke: none;
-    text-shadow: 0 0 16px #000;
+    text-shadow: 0 0 16px var(--map-shadow-color);
+}
+
+.map .sign-text {
+    text-shadow: none;
 }
 
 .map .switch-name-text {
@@ -46,11 +50,11 @@
 }
 
 .map g.track-object circle {
-    fill: #eee;
+    fill: var(--map-icon-color);
 }
 
 .map g.track-object text {
-    fill: #eee;
+    fill: var(--map-text-color);
     display: none;
 }
 
@@ -59,7 +63,7 @@
 }
 
 .map g.platform rect {
-    fill: #444;
+    fill: var(--map-platform-color);
 }
 
 .map g.map-icon-stroked path,
@@ -67,25 +71,25 @@
 .map g.map-icon-stroked line,
 .map g.map-icon-stroked rect {
     fill: none;
-    stroke: #eee;
+    stroke: var(--map-icon-color);
 }
 
 .map g.map-icon path,
 .map g.map-icon circle,
 .map g.map-icon line,
 .map g.map-icon rect {
-    fill: #eee;
+    fill: var(--map-icon-color);
     stroke: none;
 }
 
 .map g.map-icon-stroked .background,
 .map g.map-icon .background {
-    fill: #111;
+    fill: var(--map-background-color);
     stroke: none;
 }
 
 .map g.map-icon-stroked .with-background,
 .map g.map-icon .with-background {
-    fill: #111;
-    stroke: #eee;
+    fill: var(--map-background-color);
+    stroke: var(--map-icon-color);
 }

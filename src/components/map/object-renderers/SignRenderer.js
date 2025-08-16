@@ -40,7 +40,7 @@ function SignTextRenderer(props) {
 
     return (
         <text
-            className="sign-data-text"
+            className="sign-text"
             transform={`translate(${x}, ${y})`}
             style={{ fontSize: `${object.def.textSize}mm` }}
             textAnchor="middle"
