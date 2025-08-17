@@ -77,11 +77,13 @@ function checkNodeVisible(svgNode, trimClientRect) {
 
 function removeNonVisibleObjects(svg) {
     const sceneryRoot = svg.querySelector('g.scenery-root');
-    if (!sceneryRoot) return;
+    if (!sceneryRoot) {
+        throw new Error("Scenery root not found");
+    }
 
     const trimClientRect = svg.getBoundingClientRect();
 
-    for (const layer of sceneryRoot.children) {
+    for (const layer of sceneryRoot.children || []) {
         const objectsToDelete = Array.from(layer.children).filter(child => {
             return !checkNodeVisible(child, trimClientRect);
         });
@@ -90,6 +92,8 @@ function removeNonVisibleObjects(svg) {
             layer.removeChild(node);
         }
     }
+
+    return true;
 }
 
 function serializeAndDownload(svgNode, filename) {
@@ -125,10 +129,16 @@ function addMetadata(svg) {
 
 function exportSvg(filename) {
     const mapElement = document.getElementsByClassName('map')[0];
-    if (!mapElement) return false;
+    if (!mapElement) {
+        console.error("Map element not found");
+        return false;
+    }
 
     const svgOrig = mapElement.querySelector('svg');
-    if (!svgOrig) return false;
+    if (!svgOrig) {
+        console.error("SVG root element not found");
+        return false;
+    }
 
     const exportContainer = document.createElement('div');
     exportContainer.classList.add('export-container', 'light-mode');
@@ -137,14 +147,16 @@ function exportSvg(filename) {
     mapElement.appendChild(exportContainer);
     exportContainer.appendChild(svg);
 
-    addMetadata(svg);
-    processExportNode(svg);
-    removeNonVisibleObjects(svg);
-
-    serializeAndDownload(svg, filename);
+    try {
+        addMetadata(svg);
+        processExportNode(svg);
+        removeNonVisibleObjects(svg);
+        serializeAndDownload(svg, filename);
+    } catch (error) {
+        console.error(error);
+    }
 
     mapElement.removeChild(exportContainer);
-    return true;
 }
 
 const ExportHelper = {
