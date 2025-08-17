@@ -53,6 +53,44 @@ function processExportNode(svgNode, currentGroupStyles = {}) {
     }
 }
 
+function checkNodeVisible(svgNode, trimClientRect) {
+    if(!svgNode) return false;
+
+    if (svgNode.children?.length > 0) {
+        const visibleNodes = Array.from(svgNode.children).filter(child => {
+            return checkNodeVisible(child, trimClientRect);
+        });
+
+        return visibleNodes.length > 0;
+    }
+
+    const clientRect = svgNode.getBoundingClientRect();
+    if (clientRect.x + clientRect.width < trimClientRect.x) return false;
+    if (clientRect.x > trimClientRect.x + trimClientRect.width) return false;
+    if (clientRect.y + clientRect.height < trimClientRect.y) return false;
+    if (clientRect.y > trimClientRect.y + trimClientRect.height) return false;
+    if (clientRect.width === 0 || clientRect.height === 0) return false;
+
+    return true;
+}
+
+function removeNonVisibleObjects(svg) {
+    const sceneryRoot = svg.querySelector('g.scenery-root');
+    if (!sceneryRoot) return;
+
+    const trimClientRect = svg.getBoundingClientRect();
+
+    for (const layer of sceneryRoot.children) {
+        const objectsToDelete = Array.from(layer.children).filter(child => {
+            return !checkNodeVisible(child, trimClientRect);
+        });
+
+        for (const node of objectsToDelete) {
+            layer.removeChild(node);
+        }
+    }
+}
+
 function serializeAndDownload(svgNode, filename) {
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svgNode);
@@ -74,17 +112,21 @@ function exportSvg(filename) {
     const svgOrig = mapElement.querySelector('svg');
     if (!svgOrig) return false;
 
+    const exportContainer = document.createElement('div');
+    exportContainer.classList.add('export-container', 'light-mode');
+
     const svg = svgOrig.cloneNode(true);
-    mapElement.appendChild(svg);
+    mapElement.appendChild(exportContainer);
+    exportContainer.appendChild(svg);
 
     svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svg.setAttribute('version', '1.1');
-    svg.classList.add('light-mode');
     processExportNode(svg);
+    removeNonVisibleObjects(svg);
 
     serializeAndDownload(svg, filename);
 
-    mapElement.removeChild(svg);
+    mapElement.removeChild(exportContainer);
     return true;
 }
 

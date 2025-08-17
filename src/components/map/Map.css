@@ -6,6 +6,12 @@
     background-color: var(--map-background-color);
 }
 
+.export-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 .map svg path.track {
     stroke-width: 1.44px;
     fill: transparent;
