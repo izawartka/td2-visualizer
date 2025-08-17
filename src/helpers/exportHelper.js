@@ -1,3 +1,5 @@
+import Constants from "./constants";
+
 const applyStyles = ['fill', 'stroke', 'stroke-width', 'font-size', 'font-family', 'text-anchor', 'dominant-baseline'];
 
 function processExportNode(svgNode, currentGroupStyles = {}) {
@@ -105,6 +107,23 @@ function serializeAndDownload(svgNode, filename) {
     URL.revokeObjectURL(url);
 }
 
+function addMetadata(svg) {
+    const metadata = document.createElementNS('http://www.w3.org/2000/svg', 'metadata');
+    const rdf = document.createElementNS('http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'rdf:RDF');
+    const description = document.createElementNS('http://purl.org/dc/elements/1.1/', 'dc:description');
+    description.textContent = `Exported using TD2 Visualizer v${Constants.buildVersion}`;
+    const source = document.createElementNS('http://purl.org/dc/elements/1.1/', 'dc:source');
+    source.textContent = Constants.originalPublicBuildUrl;
+
+    rdf.appendChild(description);
+    rdf.appendChild(source);
+    metadata.appendChild(rdf);
+    svg.appendChild(metadata);
+
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('version', '1.1');
+}
+
 function exportSvg(filename) {
     const mapElement = document.getElementsByClassName('map')[0];
     if (!mapElement) return false;
@@ -119,8 +138,7 @@ function exportSvg(filename) {
     mapElement.appendChild(exportContainer);
     exportContainer.appendChild(svg);
 
-    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svg.setAttribute('version', '1.1');
+    addMetadata(svg);
     processExportNode(svg);
     removeNonVisibleObjects(svg);
 

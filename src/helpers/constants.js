@@ -1,5 +1,6 @@
 const Constants = {
     buildVersion: '1.6.2',
+    originalPublicBuildUrl: 'https://maseuko.pl/soft/td2-visualizer-2/', // do NOT change
     map: {
         zoomSensitivity: 0.002,
         zoomMin: 0.03,
