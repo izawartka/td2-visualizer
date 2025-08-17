@@ -67,11 +67,10 @@ function checkNodeVisible(svgNode, trimClientRect) {
     }
 
     const clientRect = svgNode.getBoundingClientRect();
-    if (clientRect.x + clientRect.width < trimClientRect.x) return false;
-    if (clientRect.x > trimClientRect.x + trimClientRect.width) return false;
-    if (clientRect.y + clientRect.height < trimClientRect.y) return false;
-    if (clientRect.y > trimClientRect.y + trimClientRect.height) return false;
-    if (clientRect.width === 0 || clientRect.height === 0) return false;
+    if (clientRect.left + clientRect.width < trimClientRect.left) return false;
+    if (clientRect.left > trimClientRect.left + trimClientRect.width) return false;
+    if (clientRect.top + clientRect.height < trimClientRect.top) return false;
+    if (clientRect.top > trimClientRect.top + trimClientRect.height) return false;
 
     return true;
 }
