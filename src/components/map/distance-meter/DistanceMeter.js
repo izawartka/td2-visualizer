@@ -33,6 +33,7 @@ export default function DistanceMeter() {
                 width={scenery.bounds.maxX - scenery.bounds.minX}
                 height={scenery.bounds.maxZ - scenery.bounds.minZ}
                 onClick={onClick}
+                no-export="true"
             />
             <DistanceMeterView distancePoints={distancePoints} setDistancePoints={setDistancePoints} />
         </g>
