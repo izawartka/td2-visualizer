@@ -85,6 +85,7 @@ function StatelessSceneryLayer({ name, Renderer, objects, type, types, trackSour
             ref={layerRef}
             className={`scenery-layer-${name}`}
             pointerEvents={pointerEvents ? "all" : "none"}
+            export-force-visible="true"
         >
             {objects.map((obj) => {
                 if (type !== undefined && type !== obj.type) return null;

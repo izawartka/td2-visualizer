@@ -56,9 +56,9 @@ function StatelessTrackRenderer(props) {
 
         if(details) {
             unscaledPathRef.current.style.display = 'none';
-            scaledPathRef.current.style.display = 'block';
+            scaledPathRef.current.style.display = '';
         } else {
-            unscaledPathRef.current.style.display = 'block';
+            unscaledPathRef.current.style.display = '';
             scaledPathRef.current.style.display = 'none';
         }
     }, []);
@@ -87,6 +87,7 @@ function StatelessTrackRenderer(props) {
                 d={path}
                 stroke={color}
                 className="track-unscaled"
+                no-export="true"
             />
             <path
                 ref={scaledPathRef}
@@ -95,7 +96,9 @@ function StatelessTrackRenderer(props) {
                 className="track"
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                onClick={onClick}/>
+                onClick={onClick}
+                export-force-visible="true"
+            />
         </g>
     );
 }

@@ -9,6 +9,10 @@ export default class Scenery
     trackElevationBounds = { minY: Infinity, maxY: -Infinity };
     electrificationResolved = ElectrificationResolutionStatus.NOT_RESOLVED;
 
+    getName() {
+        return this.objects.special?.SceneryInfo?.name || null;
+    }
+
     getBounds () {
         return { ...this.bounds };
     }

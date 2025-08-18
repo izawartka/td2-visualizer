@@ -6,6 +6,7 @@ import DistanceMeterButton from './DistanceMeterButton';
 import InfoFooter from './InfoFooter';
 import LayerOptionsMenu from './LayerOptionsMenu';
 import SideMenuContext from '../../contexts/SideMenuContext';
+import ExportViewButton from './ExportViewButton';
 
 export default function SideMenu() {
     const { sideMenuOpen } = useContext(SideMenuContext);
@@ -17,6 +18,7 @@ export default function SideMenu() {
             <div className={sideMenuClass}>
                 <SceneryInfoButton />
                 <DistanceMeterButton />
+                <ExportViewButton />
                 <LayersMenu />
                 <LayerOptionsMenu />
                 <InfoFooter />

@@ -30,6 +30,11 @@ const Constants = {
         skipPlatforms: false,
         resolveElectrificationStepMode: false,
     },
+    svgExport: {
+        hidePanelDuration: 500,
+        borderDuration: 100,
+        originalPublicBuildUrl: 'https://maseuko.pl/soft/td2-visualizer-2/', // do NOT change
+    },
     warnings: {
         all: false, // enable all warnings
         trackObjectCannotBeApplied: false,
