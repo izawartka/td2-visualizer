@@ -116,7 +116,7 @@ function addMetadata(svg) {
     const description = document.createElementNS('http://purl.org/dc/elements/1.1/', 'dc:description');
     description.textContent = `Exported using TD2 Visualizer v${Constants.buildVersion}`;
     const source = document.createElementNS('http://purl.org/dc/elements/1.1/', 'dc:source');
-    source.textContent = Constants.originalPublicBuildUrl;
+    source.textContent = Constants.svgExport.originalPublicBuildUrl;
 
     rdf.appendChild(description);
     rdf.appendChild(source);

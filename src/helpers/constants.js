@@ -1,6 +1,5 @@
 const Constants = {
     buildVersion: '1.6.2',
-    originalPublicBuildUrl: 'https://maseuko.pl/soft/td2-visualizer-2/', // do NOT change
     map: {
         zoomSensitivity: 0.002,
         zoomMin: 0.03,
@@ -30,6 +29,11 @@ const Constants = {
         skipBaseMisc: true,
         skipPlatforms: false,
         resolveElectrificationStepMode: false,
+    },
+    svgExport: {
+        hidePanelDuration: 500,
+        borderDuration: 100,
+        originalPublicBuildUrl: 'https://maseuko.pl/soft/td2-visualizer-2/', // do NOT change
     },
     warnings: {
         all: false, // enable all warnings
