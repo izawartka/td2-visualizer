@@ -15,6 +15,7 @@ export default function SceneryInfoView({ scenery }) {
                     <SceneryInfoViewItem label="Description" value={sceneryInfo.description} />
                     <SceneryInfoViewItem label="Link" value={sceneryInfo.link} isLink={true} />
                     <SceneryInfoViewItem label="Main signalbox" value={sceneryInfo.main_signalbox} />
+                    <SceneryInfoViewItem label="UUID" value={sceneryInfo.uuid} />
                 </tbody>
             </table>
         </div>

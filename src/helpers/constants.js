@@ -14,7 +14,8 @@ const Constants = {
     },
     parser: {
         logSceneryAfterFinished: true,
-        sceneryInfoVersion: 29,
+        sceneryInfoVersionMin: 29,
+        sceneryInfoVersionMax: 30,
         alwaysShowLogDialog: false,
         runTracksConnectionTest: false,
         tracksConnectionTestIgnoreY: true,

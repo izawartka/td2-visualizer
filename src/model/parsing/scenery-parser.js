@@ -83,8 +83,8 @@ export default class SceneryParser {
         }
 
         const version = parseInt(infoHeader.split("v")[1]);
-        if(version !== Constants.parser.sceneryInfoVersion) {
-            SceneryParserLog.warn('invalidSceneryInfoVersion', `Invalid scenery info version: ${version}. Expected: ${Constants.parser.sceneryInfoVersion}`);
+        if(version < Constants.parser.sceneryInfoVersionMin || version > Constants.parser.sceneryInfoVersionMax) {
+            SceneryParserLog.warn('invalidSceneryInfoVersion', `Invalid scenery info version: ${version}. Expected: ${Constants.parser.sceneryInfoVersionMin}-${Constants.parser.sceneryInfoVersionMax}`);
         }
 
         return SceneryInfo.fromText(text);

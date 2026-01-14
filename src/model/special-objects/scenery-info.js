@@ -7,9 +7,10 @@ export default class SceneryInfo extends SpecialObject {
     link;
     author;
     main_signalbox;
+    uuid;
     type = "SceneryInfo";
 
-    constructor(name, version, description, link, author, main_signalbox) {
+    constructor(name, version, description, link, author, main_signalbox, uuid) {
         super();
         Object.assign(this, {
             name,
@@ -17,7 +18,8 @@ export default class SceneryInfo extends SpecialObject {
             description,
             link,
             author,
-            main_signalbox
+            main_signalbox,
+            uuid
         });
     }
 
@@ -29,7 +31,8 @@ export default class SceneryInfo extends SpecialObject {
             values[3], // description
             values[4], // link
             values[5], // author
-            values[6]  // main_signalbox
+            values[6], // main_signalbox
+            values[7]  // uuid
         );
 
         return sceneryInfo;
