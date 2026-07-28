@@ -58,6 +58,14 @@ export default class Scenery
         });
     }
 
+    getMainSignalBox() {
+        if(this.signalBoxes.length === 0) return null;
+
+        const mainSignalBoxName = this.objects.special?.SceneryInfo?.['main_signalbox'];
+        const foundMainSignalBox = this.signalBoxes.find(sb => sb.name === mainSignalBoxName);
+        return foundMainSignalBox || this.signalBoxes[0];
+    }
+
     _applyCategory(category) {
         if(!this.objects[category]) return;
 

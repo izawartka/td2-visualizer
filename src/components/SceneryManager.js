@@ -38,6 +38,16 @@ export default function SceneryManager(props) {
         }
     }, [myFetch]);
 
+    const updateViewAfterSceneryLoaded = useCallback((scenery) => {
+        const mainSignalBox = scenery.getMainSignalBox();
+        if(mainSignalBox) {
+            const sbPos = mainSignalBox.pos.toSVGCoords();
+            const sbRot = -mainSignalBox.getFinalRotation();
+            setCamera(...sbPos, sbRot, Constants.map.zoomDefault);
+        }
+        else setCamera(0, 0, 0, Constants.map.zoomDefault);
+    }, [setCamera]);
+
     const loadCustomScenery = useCallback((file) => {
         return new Promise((resolve, reject) => {
             let alreadyLoading;
@@ -66,13 +76,7 @@ export default function SceneryManager(props) {
                 let loadingError = null;
                 try {
                     scenery = SceneryParser.fromText(e.target?.result);
-                    const mainSignalBox = scenery.signalBoxes?.[0];
-                    if(mainSignalBox) {
-                        const sbPos = mainSignalBox.pos.toSVGCoords();
-                        const sbRot = -mainSignalBox.getFinalRotation();
-                        setCamera(...sbPos, sbRot, Constants.map.zoomDefault);
-                    }
-                    else setCamera(0, 0, 0, Constants.map.zoomDefault);
+                    updateViewAfterSceneryLoaded(scenery);
                 } catch (error) {
                     scenery = null;
                     loadingError = error;
@@ -85,7 +89,7 @@ export default function SceneryManager(props) {
                 resolve(scenery);
             }
         });
-    }, [setCamera]);
+    }, [updateViewAfterSceneryLoaded]);
 
     const loadScenery = useCallback(async (sceneryName) => {
         let file;
