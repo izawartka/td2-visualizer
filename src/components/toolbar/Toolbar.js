@@ -5,11 +5,14 @@ import SideMenuToggle from './SideMenuToggle';
 import SceneryList from './SceneryList';
 import ElectrificationStepMode from './ElectrificationStepMode';
 import ThemeToggle from './ThemeToggle';
+import { useEmbeddedContext } from '../../contexts/EmbeddedContext';
 
 export default function Toolbar() {
+    const { isEmbedded } = useEmbeddedContext();
+
     return (
         <div className='toolbar-cont'>
-            <div className='toolbar'>
+            {!isEmbedded && <div className='toolbar'>
                 <SceneryList />
                 or
                 <CustomFileSelect />
@@ -18,6 +21,7 @@ export default function Toolbar() {
                 <ThemeToggle />
                 <SideMenuToggle />
             </div>
+            }
             <div className='loading-indicator-cont'>
                 <LoadingIndicator />
             </div>

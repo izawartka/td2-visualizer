@@ -10,7 +10,7 @@ import {GradientsManager} from "./GradientsManager";
 import SideMenuContext from '../contexts/SideMenuContext';
 import SceneryManager from './SceneryManager';
 import ThemeManager from './ThemeManager';
-import {EmbeddedContextProvider} from '../contexts/EmbeddedContext';
+import {EmbeddedContextProvider, useEmbeddedContext} from '../contexts/EmbeddedContext';
 import './Themes.css';
 import './App.css';
 
@@ -38,6 +38,8 @@ function App() {
 }
 
 function AppContent() {
+    const { isEmbedded } = useEmbeddedContext();
+
     return (
         <div className="App">
             <Toolbar />
@@ -45,7 +47,7 @@ function AppContent() {
                 <Map />
                 <SideMenu />
             </div>
-            <LocList />
+            { !isEmbedded && <LocList /> }
             <DialogManager />
         </div>
     );

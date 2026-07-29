@@ -5,6 +5,7 @@ const Constants = {
         zoomMin: 0.03,
         zoomMax: 200.0,
         zoomDefault: 5,
+        zoomDefaultEmbeded: 2.5,
         rotationSensitivity: 0.2,
         forcePointerEvents: false,
         platformMaxTilt: 0.5,

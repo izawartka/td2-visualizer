@@ -9,6 +9,7 @@ import SceneryLoadedDialog from './scenery-loaded-dialog/SceneryLoadedDialog';
 import Constants from '../helpers/constants';
 import MiscHelper from '../helpers/miscHelper';
 import ElectrificationResolver from '../model/parsing/electrification-resolver';
+import { useEmbeddedContext } from '../contexts/EmbeddedContext';
 
 export default function SceneryManager(props) {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,7 @@ export default function SceneryManager(props) {
     const [sceneryListData, setSceneryListData] = useState(null);
     const urlParamsLoaded = useRef(false);
     const { setCamera } = useZoomPanEmitter();
+    const { isEmbedded } = useEmbeddedContext();
 
     const myFetch = useCallback(async (url, toJson) => {
         const response = await fetch(url);
@@ -39,14 +41,15 @@ export default function SceneryManager(props) {
     }, [myFetch]);
 
     const updateViewAfterSceneryLoaded = useCallback((scenery) => {
+        const targetZoom = isEmbedded ? Constants.map.zoomDefaultEmbedded : Constants.map.zoomDefault;
         const mainSignalBox = scenery.getMainSignalBox();
         if(mainSignalBox) {
             const sbPos = mainSignalBox.pos.toSVGCoords();
             const sbRot = -mainSignalBox.getFinalRotation();
-            setCamera(...sbPos, sbRot, Constants.map.zoomDefault);
+            setCamera(...sbPos, sbRot, targetZoom);
         }
-        else setCamera(0, 0, 0, Constants.map.zoomDefault);
-    }, [setCamera]);
+        else setCamera(0, 0, 0, targetZoom);
+    }, [setCamera, isEmbedded]);
 
     const loadCustomScenery = useCallback((file) => {
         return new Promise((resolve, reject) => {
@@ -64,10 +67,12 @@ export default function SceneryManager(props) {
             setScenery(null);
             SceneryParserLog.clear();
 
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.delete('scenery');
-            urlParams.delete('pos');
-            window.history.replaceState({}, '', urlParams.size  ? `${window.location.pathname}?${urlParams.toString()}` : window.location.pathname);
+            if (!isEmbedded) {
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.delete('scenery');
+                urlParams.delete('pos');
+                window.history.replaceState({}, '', urlParams.size  ? `${window.location.pathname}?${urlParams.toString()}` : window.location.pathname);
+            }
 
             const reader = new FileReader();
             reader.readAsText(file);
@@ -83,13 +88,17 @@ export default function SceneryManager(props) {
                     console.error(error);
                 } 
 
-                showCustomDialog(<SceneryLoadedDialog loadingError={loadingError} />);
+                if (isEmbedded && loadingError) {
+                    showDialog('Failed to load scenery');
+                } else if (!isEmbedded) {
+                    showCustomDialog(<SceneryLoadedDialog loadingError={loadingError} />);
+                }
                 setScenery(scenery);
                 setIsLoading(false);
                 resolve(scenery);
             }
         });
-    }, [updateViewAfterSceneryLoaded]);
+    }, [updateViewAfterSceneryLoaded, isEmbedded]);
 
     const loadScenery = useCallback(async (sceneryName) => {
         let file;
@@ -130,6 +139,7 @@ export default function SceneryManager(props) {
         const sceneryName = findSceneryInList(sceneryQuery);
         if (!sceneryName) {
             console.warn(`Scenery "${sceneryQuery}" not found in the list.`);
+            showDialog(`Scenery "${sceneryQuery}" not found in the list.`);
             return;
         }
 
@@ -140,6 +150,7 @@ export default function SceneryManager(props) {
         if(!posQuery) return;
         if (!pos) {
             console.warn(`Invalid position query "${posQuery}"`);
+            showDialog("Invalid position query in URL.");
             return;
         }
 
