@@ -75,6 +75,9 @@ const DefinedSignalBoxes = {
     "SignalBoxOlawa": {
         rot: 2
     },
+    "SignalBoxBytom": {
+        rot: 2
+    },
     "SignalBoxPawlowice_e": {},
     "SignalBoxPrzyworyOpolskie": {},
     "SignalBoxSiechnice_m": {},
