@@ -2,10 +2,12 @@ import './Toolbar.css';
 import LoadingIndicator from './LoadingIndicator';
 import CustomFileSelect from './CustomFileSelect';
 import SideMenuToggle from './SideMenuToggle';
+import BackMaseuko from '../back-maseuko/BackMaseuko';
 import SceneryList from './SceneryList';
 import ElectrificationStepMode from './ElectrificationStepMode';
 import ThemeToggle from './ThemeToggle';
 import { useEmbeddedContext } from '../../contexts/EmbeddedContext';
+import Constants from '../../helpers/constants';
 
 export default function Toolbar() {
     const { isEmbedded } = useEmbeddedContext();
@@ -13,6 +15,7 @@ export default function Toolbar() {
     return (
         <div className='toolbar-cont'>
             {!isEmbedded && <div className='toolbar'>
+                { Constants.showBackMaseuko && <BackMaseuko /> }
                 <SceneryList />
                 or
                 <CustomFileSelect />
