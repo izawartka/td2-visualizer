@@ -1,13 +1,15 @@
 import React, { useRef } from 'react';
 import './Dialog.css';
-import Dialog from './Dialog';
 import { useDialogs } from '../../hooks/useDialogs';
 import { removeDialog } from '../../services/dialogService';
+import { getDialogComponent } from './utils/getDialogComponent';
+import { useEmbeddedContext } from '../../contexts/EmbeddedContext';
 
 function DialogManager() {
   const dialogs = useDialogs();
   const currentDialogRef = useRef(null);
   const currentDialog = dialogs[dialogs.length - 1];
+  const { isEmbedded } = useEmbeddedContext();
 
   const onClose = () => {
     removeDialog();
@@ -20,14 +22,11 @@ function DialogManager() {
 
   if (!currentDialog) return null;
 
-  const { customComponent, message, buttons } = currentDialog;
-  const DialogContent = customComponent ?
-    React.cloneElement(customComponent, { onClose, ref: currentDialogRef }) :
-    <Dialog message={message} buttons={buttons} onClose={onClose} ref={currentDialogRef} />;
+  const DialogComponent = getDialogComponent(currentDialog, onClose, currentDialogRef, isEmbedded);
 
   return (
     <div className="dialog-background" onClick={onBgClick}>
-      {DialogContent}
+      {DialogComponent}
     </div>
   );
 }
