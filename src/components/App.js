@@ -10,6 +10,7 @@ import {GradientsManager} from "./GradientsManager";
 import SideMenuContext from '../contexts/SideMenuContext';
 import SceneryManager from './SceneryManager';
 import ThemeManager from './ThemeManager';
+import {EmbeddedContextProvider} from '../contexts/EmbeddedContext';
 import './Themes.css';
 import './App.css';
 
@@ -18,19 +19,21 @@ function App() {
     const [distancePoints, setDistancePoints] = useState(null);
 
     return (
-        <ThemeManager>
-            <SettingsManager>
-                <SceneryManager>
-                    <GradientsManager>
-                        <DistanceMeterContext.Provider value={{distancePoints, setDistancePoints}}>
-                            <SideMenuContext.Provider value={{sideMenuOpen, setSideMenuOpen}}>
-                                <AppContent />
-                            </SideMenuContext.Provider>
-                        </DistanceMeterContext.Provider>
-                    </GradientsManager>
-                </SceneryManager>
-            </SettingsManager>
-        </ThemeManager>
+        <EmbeddedContextProvider>
+            <ThemeManager>
+                <SettingsManager>
+                    <SceneryManager>
+                        <GradientsManager>
+                            <DistanceMeterContext.Provider value={{distancePoints, setDistancePoints}}>
+                                <SideMenuContext.Provider value={{sideMenuOpen, setSideMenuOpen}}>
+                                    <AppContent />
+                                </SideMenuContext.Provider>
+                            </DistanceMeterContext.Provider>
+                        </GradientsManager>
+                    </SceneryManager>
+                </SettingsManager>
+            </ThemeManager>
+        </EmbeddedContextProvider>
     );
 }
 
