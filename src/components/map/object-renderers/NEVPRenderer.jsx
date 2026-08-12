@@ -7,7 +7,7 @@ export default function NEVPRenderer(props) {
     return (
         <g className="map-icon" transform={`translate(${x}, ${y}) rotate(${object.rot.y}) translate(-1.89, -1.89)`}>
             <ReactSVG
-                src={`${import.meta.env.PUBLIC_URL}/assets/nevp.svg`}
+                src={`${import.meta.env.BASE_URL}assets/nevp.svg`}
                 wrapper='svg'
 
                 beforeInjection={(svg) => {

@@ -10,7 +10,7 @@ export default function SignalStandardRenderer(props) {
         <g transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
             <g className="map-icon-stroked" transform={`translate(-1.89, -1.89)`}>
                 <ReactSVG
-                    src={`${import.meta.env.PUBLIC_URL}/assets/signal.svg`}
+                    src={`${import.meta.env.BASE_URL}assets/signal.svg`}
                     wrapper='svg'
 
                     beforeInjection={(svg) => {

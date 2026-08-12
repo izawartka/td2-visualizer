@@ -172,7 +172,7 @@ function SignalHeadTOP(object, {headOffsetY}) {
 function SignalHomeMechArm(y, rot) {
     return <g transform={`translate(0 ${y}) rotate(${rot}) translate(${C.MECH_ARM_X_OFF - 1.89}, -1.89)`} className='map-icon'>
         <ReactSVG
-            src={`${import.meta.env.PUBLIC_URL}/assets/mech_signals/arm.svg`}
+            src={`${import.meta.env.BASE_URL}assets/mech_signals/arm.svg`}
             wrapper='svg'
             beforeInjection={(svg) => {
                 svg.setAttribute('width', '1mm');
@@ -185,7 +185,7 @@ function SignalHomeMechArm(y, rot) {
 function SignalCustomMechHead(y, fileName) {
     return <g transform={`translate(-1.89, ${y - 1.89})`} className='map-icon'>
         <ReactSVG
-            src={`${import.meta.env.PUBLIC_URL}/assets/mech_signals/${fileName}`}
+            src={`${import.meta.env.BASE_URL}assets/mech_signals/${fileName}`}
             wrapper='svg'
             beforeInjection={(svg) => {
                 svg.setAttribute('width', '1mm');
@@ -276,7 +276,7 @@ function SignalSign(id, y) {
 
     return <g key={id} className="map-icon" transform={`translate(-1.89, ${y - 1.89})`}>
         <ReactSVG
-            src={`${import.meta.env.PUBLIC_URL}/assets/signal_signs/${def.icon}`}
+            src={`${import.meta.env.BASE_URL}assets/signal_signs/${def.icon}`}
             wrapper='svg'
             beforeInjection={(svg) => {
                 svg.setAttribute('width', '1mm');
