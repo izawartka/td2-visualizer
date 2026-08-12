@@ -1,6 +1,7 @@
 :root {
     --background-color: #141414;
     --text-color: #eee;
+    --text-color-secondary: #777;
     --half-layer-color: #fff1;
     --layer-color: #fff2;
     --layer-color-hover: #fff3;
@@ -30,6 +31,7 @@
 .light-mode {
     --background-color: #f8f8f8;
     --text-color: #222;
+    --text-color-secondary: #444;
     --layer-color: #0002;
     --half-layer-color: #0001;
     --layer-color-hover: #0003;

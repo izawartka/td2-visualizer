@@ -1,15 +1,15 @@
 .back-maseuko {
     display: block;
     margin-right: 8px;
-    color: #777;
+    color: var(--text-color-secondary);
     text-decoration: none;
 }
 
 .back-maseuko:hover {
-    color: #eee;
+    color: var(--text-color);
 }
 
 .back-maseuko:hover .back-maseuko-text {
-    color: #eee;
+    color: var(--text-color);
     text-decoration: underline;
 }
