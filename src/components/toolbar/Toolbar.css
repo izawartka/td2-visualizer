@@ -3,13 +3,22 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    gap: 10px;
+    gap: 32px;
     padding: 10px;
     border-bottom: 2px solid var(--border-color);
 }
 
-.toolbar-spacer {
+.toolbar-group {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.toolbar-right {
     flex: 1;
+    justify-content: flex-end;
 }
 
 .toolbar-cont {

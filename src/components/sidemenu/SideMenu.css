@@ -1,21 +1,33 @@
 .side-menu-wrapper {
     position: relative;
+    width: 0;
 }
 
 .side-menu {
     border-left: 2px solid var(--border-color);
     padding: 1em;
     position: absolute;
-    right: 0;
     top: 0;
+    right: 0;
     bottom: 0;
     background-color: var(--background-color);
     z-index: 50;
     width: max-content;
-    transition: transform 0.2s ease-in-out;
+    visibility: visible;
+    transition:
+        transform 0.3s ease,
+        visibility 0s linear 0s;
     display: flex;
     flex-direction: column;
     gap: 1em;
+}
+
+.side-menu.closed {
+    transform: translateX(100%);
+    visibility: hidden;
+    transition:
+        transform 0.3s ease,
+        visibility 0s linear 0.3s;
 }
 
 .layer-options-menu {
@@ -29,17 +41,8 @@
     flex-direction: column;
 }
 
-.side-menu .hidden {
-    visibility: hidden;
-    height: 0;
-}
-
 .side-menu h3 {
     margin: 0;
-}
-
-.side-menu.closed {
-    transform: translateX(100%);
 }
 
 .layers-menu ul {

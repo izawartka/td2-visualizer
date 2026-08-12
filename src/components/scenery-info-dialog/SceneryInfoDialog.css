@@ -1,8 +1,13 @@
+.scenery-info-view table {
+    border-spacing: 0 4px;
+}
+
 .scenery-info-view td.label {
     font-weight: bold;
     color: var(--text-color-disabled);
     vertical-align: baseline;
     padding-right: 1em;
+    width: 6rem;
 }
 
 .scenery-info-view td.value a {

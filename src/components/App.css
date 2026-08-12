@@ -1,13 +1,5 @@
-body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: monospace;
-}
-
 .App {
     display: flex;
-    width: 100vw;
-    height: 100vh;
     flex-direction: column;
     flex-wrap: wrap;
 }
@@ -35,8 +27,8 @@ select {
     color: var(--text-color);
     padding-inline: 8px;
     padding-block: 4px;
-    outline: none;
     cursor: pointer;
+    user-select: none;
 }
 
 input[type="file"].non-transparent::file-selector-button,

@@ -15,14 +15,17 @@ export default function Toolbar() {
     return (
         <div className='toolbar-cont'>
             {!isEmbedded && <div className='toolbar'>
-                { Constants.showBackMaseuko && <BackMaseuko /> }
-                <SceneryList />
-                or
-                <CustomFileSelect />
-                <ElectrificationStepMode />
-                <div className='toolbar-spacer'></div>
-                <ThemeToggle />
-                <SideMenuToggle />
+                <div className='toolbar-group toolbar-left'>
+                    { Constants.showBackMaseuko && <BackMaseuko /> }
+                    <SceneryList />
+                    or
+                    <CustomFileSelect />
+                    <ElectrificationStepMode />
+                </div>
+                <div className='toolbar-group toolbar-right'>
+                    <ThemeToggle />
+                    <SideMenuToggle />
+                </div>
             </div>
             }
             <div className='loading-indicator-cont'>

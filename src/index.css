@@ -1,8 +1,17 @@
 body {
     padding: 0;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 12px;
+    font-family: monospace;
+}
+
+html,
+body,
+.App,
+#root {
     overflow: hidden;
-    background-color: #111;
-    color: #eee;
+    width: 100svw;
+    height: 100svh;
 }
