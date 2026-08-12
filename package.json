@@ -1,18 +1,18 @@
 {
   "name": "visualizer2",
   "version": "1.7.2",
+  "homepage": "/soft/td2-visualizer-2/",
   "private": true,
   "dependencies": {
-    "-": "^0.0.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-scripts": "^5.0.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-svg": "^16.3.0",
     "rxjs": "^7.8.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
+    "dev": "vite --mode dev",
+    "build": "vite build --mode prod",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
@@ -31,7 +31,9 @@
       "last 1 safari version"
     ]
   },
-  "overrides": {
-    "nth-check": "$nth-check"
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.5",
+    "vite": "^8.2.1",
+    "vite-plugin-svgr": "^5.2.0"
   }
 }

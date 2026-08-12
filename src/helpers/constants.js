@@ -74,8 +74,8 @@ const Constants = {
     },
     sceneryFiles: {
         fetchDisable: true,
-        fetchBaseUrl: `${process.env.PUBLIC_URL}/sceneries/`,
-        fetchListUrl: `${process.env.PUBLIC_URL}/sceneries/sceneries.json`,
+        fetchBaseUrl: `${import.meta.env.BASE_URL}sceneries/`,
+        fetchListUrl: `${import.meta.env.BASE_URL}sceneries/sceneries.json`,
     },
     layers: [
         {

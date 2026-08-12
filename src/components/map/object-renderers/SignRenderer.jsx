@@ -17,7 +17,7 @@ export default function SignRenderer(props) {
         <g transform={`translate(${x}, ${y}) rotate(${rot}) translate(${offX}, ${offY})`}>
             <g className='map-icon'>
                 <ReactSVG
-                    src={`${process.env.PUBLIC_URL}/assets/signs/${object.def.icon}`}
+                    src={`${import.meta.env.PUBLIC_URL}/assets/signs/${object.def.icon}`}
                     wrapper='svg'
 
                     beforeInjection={(svg) => {

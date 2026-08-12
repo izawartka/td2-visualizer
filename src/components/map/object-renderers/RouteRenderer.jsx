@@ -17,7 +17,7 @@ export default function RouteRenderer(props) {
     return (<>
         <g className="map-icon" transform={`translate(${endX}, ${endY}) rotate(${endAngle + 90}) translate(-80, ${arrowOffset})`}>
             <ReactSVG
-                src={`${process.env.PUBLIC_URL}/assets/route.svg`}
+                src={`${import.meta.env.PUBLIC_URL}/assets/route.svg`}
                 wrapper='svg'
                 beforeInjection={(svg) => {
                     svg.setAttribute('width', '20mm');

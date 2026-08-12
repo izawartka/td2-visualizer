@@ -14,7 +14,7 @@ export default function DerailerRenderer(props) {
         <g transform={`translate(${x}, ${y}) rotate(${object.rot.y})`}>
             <g className="map-icon" transform={icon_transform}>
                 <ReactSVG
-                    src={`${process.env.PUBLIC_URL}/assets/derailer.svg`}
+                    src={`${import.meta.env.PUBLIC_URL}/assets/derailer.svg`}
                     wrapper='svg'
 
                     beforeInjection={(svg) => {
