@@ -166,7 +166,7 @@ export default function SceneryManager(props) {
     }, [setScenery]);
 
     useEffect(() => {
-        if(Constants.sceneryFiles.fetchDisable) return;
+        if(!Constants.sceneryFiles.enableBuiltIn) return;
         updateSceneryList();
     }, [updateSceneryList]);
 

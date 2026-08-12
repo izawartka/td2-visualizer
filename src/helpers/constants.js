@@ -1,6 +1,8 @@
+import { readEnvBool, readEnvString} from './envHelper';
+
 const Constants = {
-    buildVersion: '1.7.2',
-    showBackMaseuko: false,
+    buildVersion: readEnvString('VITE_APP_VERSION') ?? 'unknown',
+    showBackMaseuko: readEnvBool('VITE_DO_SHOW_BACK_MASEUKO') ?? false,
     map: {
         zoomSensitivity: 0.002,
         zoomMin: 0.03,
@@ -15,7 +17,7 @@ const Constants = {
         mapZoomObjectDetailsThreshold: 0.5
     },
     parser: {
-        logSceneryAfterFinished: true,
+        logSceneryAfterFinished: readEnvBool('VITE_DO_LOG_SCENERY') ?? false,
         sceneryInfoVersionMin: 29,
         sceneryInfoVersionMax: 30,
         alwaysShowLogDialog: false,
@@ -73,7 +75,7 @@ const Constants = {
         invalidSceneryInfo: true
     },
     sceneryFiles: {
-        fetchDisable: true,
+        enableBuiltIn: readEnvBool('VITE_DO_ENABLE_BUILTIN_SCENERIES') ?? false,
         fetchBaseUrl: `${import.meta.env.BASE_URL}sceneries/`,
         fetchListUrl: `${import.meta.env.BASE_URL}sceneries/sceneries.json`,
     },
