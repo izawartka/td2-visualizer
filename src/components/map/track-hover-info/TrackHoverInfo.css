@@ -12,16 +12,16 @@
     padding: 1em;
 }
 
-.track-hover-info-popup svg {
+.track-hover-info-popup-table svg {
     width: 1.2em;
     height: 1.2em;
 }
 
-.track-hover-info-popup table {
+.track-hover-info-popup-table {
     border-spacing: 2px;
 }
 
-.track-hover-info-popup th {
+.track-hover-info-popup-table th {
     text-align: start;
     padding-right: 2em;
     color: var(--text-color-disabled);
@@ -33,7 +33,7 @@
     color: var(--text-color-disabled);
 }
 
-.track-hover-info-popup .track-hover-info-popup-label {
+.track-hover-info-popup-table .track-hover-info-popup-label {
     display: flex;
     align-items: center;
     gap: 0.5em;

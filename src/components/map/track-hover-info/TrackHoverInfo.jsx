@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback, useRef, useContext } from "react";
-import { hoveredTrack$ } from "../../../services/trackHoverInfoService";
+import { useState, useEffect, useCallback, useRef, useContext, useMemo } from "react";
+import { hoveredTrack$, touchClickedTrack$ } from "../../../services/trackHoverInfoService";
 import TrackHoverInfoPopup from "./TrackHoverInfoPopup";
 import SettingsContext from "../../../contexts/SettingsContext";
+import { showDialog } from "../../../services/dialogService";
 import './TrackHoverInfo.css';
+import TrackHoverInfoPopupTable from "./TrackHoverInfoTable";
 
 export default function TrackHoverInfo() {
     const { showTrackHoverInfo } = useContext(SettingsContext);
@@ -18,6 +20,7 @@ function InnerTrackHoverInfo() {
     const [ hoveredTrack, setHoveredTrack ] = useState(null);
     const mousePos = useRef({ x: 0, y: 0 });
     const divRef = useRef(null);
+    const isMobile = useMemo(() => window.matchMedia('(pointer: coarse)').matches, []);
 
     const handleMouseMove = useCallback((event) => {
         mousePos.current.x = event.clientX;
@@ -26,19 +29,34 @@ function InnerTrackHoverInfo() {
         if (!divRef.current) return;
         divRef.current.style.left = `${mousePos.current.x}px`;
         divRef.current.style.top = `${mousePos.current.y}px`;
-    }, [mousePos, divRef]);
+    }, []);
 
     useEffect(() => {
-        const subscription = hoveredTrack$.subscribe(date => {
-            setHoveredTrack(date);
+        const hoveredTrackSub = hoveredTrack$.subscribe(track => {
+            if (isMobile) return;
+            setHoveredTrack(track);
         });
 
-        document.addEventListener('mousemove', handleMouseMove);
+        const touchClickedTrackSub = touchClickedTrack$.subscribe(track => {
+            if (!isMobile || !track) return;
+
+            showDialog(
+                <TrackHoverInfoPopupTable track={track} />,
+                [{ text: 'Close', onClick: () => {}, autoFocus: true, bgClick: true }]
+            );
+        });
+
+        if (!isMobile) {
+            document.addEventListener('mousemove', handleMouseMove);
+        }
 
         return () => {
-            subscription.unsubscribe();
-            document.removeEventListener('mousemove', handleMouseMove);
-        }
+            hoveredTrackSub.unsubscribe();
+            touchClickedTrackSub.unsubscribe();
+            if (!isMobile) {
+                document.removeEventListener('mousemove', handleMouseMove);
+            }
+        };
     }, [handleMouseMove]);
 
     if (!hoveredTrack) return null;
