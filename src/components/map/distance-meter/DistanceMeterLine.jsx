@@ -13,7 +13,7 @@ export default function DistanceMeterLine(props) {
         });
     }
 
-    const onMouseDown = (event) => {
+    const onPointerDown = (event) => {
         event.stopPropagation();
         event.preventDefault();
         const pos = getSVGCoords(event);
@@ -33,7 +33,7 @@ export default function DistanceMeterLine(props) {
                 y2={end[1]}
                 stroke="transparent"
                 strokeWidth={3}
-                onMouseDown={onMouseDown}
+                onPointerDown={onPointerDown}
             />
             <line
                 x1={start[0]}

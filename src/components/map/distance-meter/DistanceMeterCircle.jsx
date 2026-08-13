@@ -1,11 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import { getSVGCoords } from './get-svg-coords';
 
 export default function DistanceMeterCircle(props) {
     const { point, index, setDistancePoints } = props;
-    const isDragged = useRef(false);
+    const isDraggingRef = useRef(false);
 
-    const updatePointPosition = (event) => {
+    const updatePointPosition = useCallback((event) => {
         const pos = getSVGCoords(event);
         if (!pos) return;
 
@@ -15,57 +15,75 @@ export default function DistanceMeterCircle(props) {
             newPoints[index] = pos;
             return newPoints;
         });
-    }
+    }, [setDistancePoints, index]);
 
-    const removePoint = () => {
+    const removePoint = useCallback(() => {
         setDistancePoints(oldPoints => {
             if (!Array.isArray(oldPoints)) return oldPoints;
             const newPoints = [...oldPoints];
             newPoints.splice(index, 1);
             return newPoints;
         });
-    }
+    }, [setDistancePoints, index]);
 
-    const onMouseDown = (event) => {
+    const onPointerDown = useCallback((event) => {
         event.stopPropagation();
         event.preventDefault();
 
-        if (isDragged.current) return;
-        isDragged.current = true;
+        event.currentTarget.setPointerCapture(event.pointerId);
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp, { once: true });
-    }
+        isDraggingRef.current = true;
+    }, []);
 
-    const onMouseUp = (event) => {
+    const onPointerUp = useCallback((event) => {
         event.stopPropagation();
         event.preventDefault();
 
-        if (!isDragged.current) return;
-        isDragged.current = false;
+        if (!isDraggingRef.current) return;
 
-        document.removeEventListener('mousemove', onMouseMove);
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+
+        isDraggingRef.current = false;
         updatePointPosition(event);
-    }
+    }, [updatePointPosition]);
 
-    const onMouseMove = (event) => {
-        if (!isDragged.current) return;
+    const onPointerMove = useCallback((event) => {
+        if (!isDraggingRef.current) return;
 
         event.stopPropagation();
         event.preventDefault();
         updatePointPosition(event);
-    }
+    }, [updatePointPosition]);
 
-    const onContextMenu = (event) => {
+    const onPointerCancel = useCallback((event) => {
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+
+        isDraggingRef.current = false;
+    }, []);
+
+    const onContextMenu = useCallback((event) => {
         event.stopPropagation();
         event.preventDefault();
+
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+
+        isDraggingRef.current = false;
         removePoint();
-    }
+    }, [removePoint]);
 
     return (
-        <g 
+        <g
             className="distance-meter-circle"
-            onMouseDown={onMouseDown}
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            onPointerMove={onPointerMove}
+            onPointerCancel={onPointerCancel}
             onContextMenu={onContextMenu}
         >
             <circle

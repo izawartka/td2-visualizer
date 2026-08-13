@@ -2,6 +2,11 @@ import { BehaviorSubject } from 'rxjs';
 
 const hoveredTracksStack = [];
 export const hoveredTrack$ = new BehaviorSubject(null);
+export const touchClickedTrack$ = new BehaviorSubject(null);
+
+export function setTouchClickedTrack(track) {
+  touchClickedTrack$.next(track);
+}
 
 export function setHoveredTrack(track) {
   hoveredTracksStack.push(track);
@@ -16,4 +21,5 @@ export function unsetHoveredTrack(track) {
 export function resetHoveredTracksStack() {
   hoveredTracksStack.length = 0;
   hoveredTrack$.next(null);
+  touchClickedTrack$.next(null);
 }

@@ -9,7 +9,7 @@ export default function TrackHoverInfoPopup({track}) {
             <TrackHoverInfoPopupTable track={track} />
             {showAlignHint && (
                 <div className="track-hover-info-popup__align">
-                    Double click to align the view
+                    Right click to align the view
                 </div>
             )}
         </div>

@@ -14,7 +14,8 @@ const Constants = {
         platformMaxTilt: 0.5,
         showDebugTrackIds: false,
         mapZoomTrackDetailsThreshold: 1 / 1.44,
-        mapZoomObjectDetailsThreshold: 0.5
+        mapZoomObjectDetailsThreshold: 0.5,
+        distanceMeterMaxMovePx: 10
     },
     parser: {
         logSceneryAfterFinished: readEnvBool('VITE_DO_LOG_SCENERY') ?? false,

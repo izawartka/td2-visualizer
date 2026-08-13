@@ -3,7 +3,7 @@ import SettingsContext from "../../../contexts/SettingsContext";
 import Constants from "../../../helpers/constants";
 import {ElectrificationStatus} from "../../../model/electrification-status";
 import MiscHelper from "../../../helpers/miscHelper";
-import {setHoveredTrack, unsetHoveredTrack} from "../../../services/trackHoverInfoService";
+import {setHoveredTrack, setTouchClickedTrack, unsetHoveredTrack} from "../../../services/trackHoverInfoService";
 import GradientsContext from "../../../contexts/GradientsContext";
 import { TrackShape, TrackSource } from "../../../model/tracks/track";
 import {useZoomPanEmitter} from "../../../hooks/useZoomPubSub";
@@ -36,16 +36,20 @@ function StatelessTrackRenderer(props) {
     const unscaledPathRef = React.useRef(null);
     const scaledPathRef = React.useRef(null);
 
+    const onClick = useCallback(() => {
+        setTouchClickedTrack(object);
+    }, [object]);
+
     const onMouseEnter = useCallback(() => {
         setHoveredTrack(object);
     }, [object]);
 
     const onMouseLeave = useCallback(() => {
-        unsetHoveredTrack(null);
-    }, []);
+        unsetHoveredTrack(object);
+    }, [object]);
 
-    const onClick = useCallback((event) => {
-        if (object.shape === TrackShape.STRAIGHT && event.detail === 2) {
+    const onContextMenu = useCallback((event) => {
+        if (object.shape === TrackShape.STRAIGHT) {
             event.preventDefault();
             onAlign(event);
         }
@@ -96,6 +100,7 @@ function StatelessTrackRenderer(props) {
                 className="track"
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
+                onContextMenu={onContextMenu}
                 onClick={onClick}
                 export-force-visible="true"
             />

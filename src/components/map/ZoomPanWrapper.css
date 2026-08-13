@@ -1,6 +1,8 @@
 .zoom-pan-wrapper {
     flex: 1;
     position: relative;
+    touch-action: none;
+    user-select: none;
 }
 
 .zoom-pan-wrapper svg {

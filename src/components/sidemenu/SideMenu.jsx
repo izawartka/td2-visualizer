@@ -15,14 +15,14 @@ export default function SideMenu() {
 
     return (
         <div className='side-menu-wrapper'>
-            <div className={sideMenuClass}>
+            <aside className={sideMenuClass} inert={!sideMenuOpen}>
                 <SceneryInfoButton />
                 <DistanceMeterButton />
                 <ExportViewButton />
                 <LayersMenu />
                 <LayerOptionsMenu />
                 <InfoFooter />
-            </div>
+            </aside>
         </div>
     );
 }

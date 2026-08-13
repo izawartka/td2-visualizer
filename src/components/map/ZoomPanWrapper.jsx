@@ -10,6 +10,13 @@ function boundZoom(zoom) {
     return Math.max(Constants.map.zoomMin, Math.min(Constants.map.zoomMax, zoom));
 }
 
+const getDistance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+const getAngle = (a, b) => Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+const getMidpoint = (a, b) => ({
+    x: (a.x + b.x) / 2,
+    y: (a.y + b.y) / 2
+});
+
 export default function ZoomPanWrapper({children}) {
     const wrapperRef = useRef(null);
     const svgRef = useRef(null);
@@ -18,7 +25,9 @@ export default function ZoomPanWrapper({children}) {
     const cameraRef = useRef({ x: 0, y: 0, zoom: 1, rotation: 0 });
     const clientRectRef = useRef(null);
     const rafScheduledRef = useRef(false);
-    const isMouseDownRef = useRef(false);
+    const pointersRef = useRef(new Map());
+    const lastPointerRef = useRef(null);
+    const twoFingerStartRef = useRef(null);
 
     const getViewBoxString = () => {
         const { x, y, w, h } = viewBoxRef.current;
@@ -59,28 +68,157 @@ export default function ZoomPanWrapper({children}) {
         clientRectRef.current = rect;
     }, [updateViewBox]);
 
-    const handleRotation = (e) => {
-        const deltaAngle = e.movementX * Constants.map.rotationSensitivity;
-        if(deltaAngle === 0) return;
+    const applyScreenPan = useCallback((dxScreen, dyScreen) => {
+        const { zoom, rotation } = cameraRef.current;
+        const dx = dxScreen / zoom;
+        const dy = dyScreen / zoom;
+        const rad = AngleHelper.degToRad(rotation);
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
 
-        cameraRef.current.rotation = cameraRef.current.rotation + deltaAngle
+        cameraRef.current.x -= dx * cos + dy * sin;
+        cameraRef.current.y -= dy * cos - dx * sin;
+
+        scheduleCameraUpdate();
+    }, [scheduleCameraUpdate]);
+
+    const getScreenPoint = (clientX, clientY) => {
+        const rect = clientRectRef.current;
+        return {
+            x: clientX - rect.left - rect.width / 2,
+            y: clientY - rect.top - rect.height / 2
+        };
+    };
+
+    const screenPointToWorld = (point, camera) => {
+        const rad = AngleHelper.degToRad(camera.rotation);
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        const sx = point.x / camera.zoom;
+        const sy = point.y / camera.zoom;
+
+        return {
+            x: camera.x + sx * cos + sy * sin,
+            y: camera.y - sx * sin + sy * cos
+        };
+    };
+
+    const startTwoFingerGesture = (pointers) => {
+        const [first, second] = pointers;
+        const distance = getDistance(first, second);
+        const angle = getAngle(first, second);
+        const midpoint = getMidpoint(first, second);
+        const screenPoint = getScreenPoint(midpoint.x, midpoint.y);
+        const worldPoint = screenPointToWorld(screenPoint, cameraRef.current);
+
+        twoFingerStartRef.current = {
+            distance,
+            angle,
+            zoom: cameraRef.current.zoom,
+            rotation: cameraRef.current.rotation,
+            worldPoint
+        };
+    };
+
+    const updateTwoFingerGesture = (pointers) => {
+        const start = twoFingerStartRef.current;
+        if (!start) return;
+
+        const [first, second] = pointers;
+        const distance = getDistance(first, second);
+        const angle = getAngle(first, second);
+        const midpoint = getMidpoint(first, second);
+
+        const newZoom = boundZoom(start.zoom * (distance / start.distance));
+        const deltaAngle = AngleHelper.normalizeAngleDelta(angle - start.angle);
+        const newRotation = AngleHelper.normalizeDegAngle(start.rotation + deltaAngle);
+
+        const screenPoint = getScreenPoint(midpoint.x, midpoint.y);
+        const rad = AngleHelper.degToRad(newRotation);
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        const sx = screenPoint.x / newZoom;
+        const sy = screenPoint.y / newZoom;
+
+        cameraRef.current.zoom = newZoom;
+        cameraRef.current.rotation = newRotation;
+        cameraRef.current.x = start.worldPoint.x - (sx * cos + sy * sin);
+        cameraRef.current.y = start.worldPoint.y - (-sx * sin + sy * cos);
 
         scheduleCameraUpdate();
     };
 
-    const handleMove = (e) => {
-        const cx = e.movementX / cameraRef.current.zoom;
-        const cy = e.movementY / cameraRef.current.zoom;
-        const cos = Math.cos(AngleHelper.degToRad(cameraRef.current.rotation));
-        const sin = Math.sin(AngleHelper.degToRad(cameraRef.current.rotation));
+    const onPointerDown = (e) => {
+        pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-        cameraRef.current.x -= cx * cos + cy * sin;
-        cameraRef.current.y -= cy * cos - cx * sin;
-
-        scheduleCameraUpdate();
+        if (pointersRef.current.size === 1) {
+            lastPointerRef.current = { x: e.clientX, y: e.clientY };
+            twoFingerStartRef.current = null;
+        } else if (pointersRef.current.size === 2) {
+            startTwoFingerGesture(Array.from(pointersRef.current.values()));
+            lastPointerRef.current = null;
+        }
     };
 
-    // update viewbox when the window resizes
+    const onPointerMove = (e) => {
+        if (!pointersRef.current.has(e.pointerId)) return;
+
+        pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (pointersRef.current.size === 1) {
+            const last = lastPointerRef.current;
+            if (!last) return;
+
+            const dx = e.clientX - last.x;
+            const dy = e.clientY - last.y;
+            lastPointerRef.current = { x: e.clientX, y: e.clientY };
+
+            if (e.pointerType === 'mouse' && e.altKey) {
+                const deltaAngle = dx * Constants.map.rotationSensitivity;
+                if (deltaAngle !== 0) {
+                    cameraRef.current.rotation += deltaAngle;
+                    scheduleCameraUpdate();
+                }
+            } else {
+                applyScreenPan(dx, dy);
+            }
+            return;
+        }
+
+        if (pointersRef.current.size >= 2) {
+            const firstTwo = Array.from(pointersRef.current.values()).slice(0, 2);
+            if (!twoFingerStartRef.current) {
+                startTwoFingerGesture(firstTwo);
+            } else {
+                updateTwoFingerGesture(firstTwo);
+            }
+        }
+    };
+
+    const onPointerUp = (e) => {
+        pointersRef.current.delete(e.pointerId);
+
+        if (pointersRef.current.size === 0) {
+            lastPointerRef.current = null;
+            twoFingerStartRef.current = null;
+            return;
+        }
+
+        if (pointersRef.current.size === 1) {
+            const remaining = Array.from(pointersRef.current.values())[0];
+            lastPointerRef.current = { x: remaining.x, y: remaining.y };
+            twoFingerStartRef.current = null;
+            return;
+        }
+
+        if (pointersRef.current.size >= 2) {
+            startTwoFingerGesture(Array.from(pointersRef.current.values()).slice(0, 2));
+            lastPointerRef.current = null;
+        }
+    };
+
+    const onPointerCancel = onPointerUp;
+
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         handleResize(); // Initial call to set the viewBox
@@ -113,6 +251,8 @@ export default function ZoomPanWrapper({children}) {
     useZoomPanSubscriber(setCamera, alignView);
 
     const onWheel = (e) => {
+        if (!clientRectRef.current) return;
+
         const { left, top } = clientRectRef.current;
         const { x, y, zoom } = cameraRef.current;
         const { w, h } = viewBoxRef.current;
@@ -146,37 +286,16 @@ export default function ZoomPanWrapper({children}) {
         scheduleCameraUpdate();
     };
 
-    const onMouseDown = (e) => {
-        e.preventDefault();
-        isMouseDownRef.current = true;
-    };
-
-    const onMouseMove = (e) => {
-        if (!isMouseDownRef.current) return;
-        e.preventDefault();
-
-        if(e.altKey) {
-            handleRotation(e);
-        } else {
-            handleMove(e);
-        }
-    };
-
-    const onMouseUp = (e) => {
-        e.preventDefault();
-        isMouseDownRef.current = false;
-    };
-
     return (
         <div className="zoom-pan-wrapper" ref={wrapperRef}>
             <svg
                 ref={svgRef}
                 viewBox={getViewBoxString()}
                 onWheel={onWheel}
-                onMouseDown={onMouseDown}
-                onMouseMove={onMouseMove}
-                onMouseUp={onMouseUp}
-                onMouseLeave={onMouseUp}
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerCancel={onPointerCancel}
             >
                 <g ref={cameraWrapperRef} transform={getCameraTransformString()}>
                     {children}

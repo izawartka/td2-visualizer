@@ -42,13 +42,20 @@ function normalizeDegVector(vector) {
     )
 }
 
+function normalizeAngleDelta(delta) {
+    if (delta > 180) delta -= 360;
+    if (delta < -180) delta += 360;
+    return delta;
+}
+
 const AngleHelper = {
     degToRad,
     radToDeg,
     vectorDegToRad,
     vectorRadToDeg,
     normalizeDegAngle,
-    normalizeDegVector
+    normalizeDegVector,
+    normalizeAngleDelta
 }
 
 export default AngleHelper;
