@@ -220,9 +220,15 @@ export default function ZoomPanWrapper({children}) {
     const onPointerCancel = onPointerUp;
 
     useEffect(() => {
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerCancel);
         window.addEventListener('resize', handleResize);
         handleResize(); // Initial call to set the viewBox
         return () => {
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerCancel);
             window.removeEventListener('resize', handleResize);
         };
     }, [handleResize]);
@@ -293,9 +299,6 @@ export default function ZoomPanWrapper({children}) {
                 viewBox={getViewBoxString()}
                 onWheel={onWheel}
                 onPointerDown={onPointerDown}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerCancel}
             >
                 <g ref={cameraWrapperRef} transform={getCameraTransformString()}>
                     {children}
