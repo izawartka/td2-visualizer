@@ -17,6 +17,12 @@
     height: 1.2em;
 }
 
+.track-hover-info-popup-table svg path,
+.track-hover-info-popup-table svg g {
+    stroke: var(--text-color-disabled);
+    fill: var(--text-color-disabled);
+}
+
 .track-hover-info-popup-table {
     border-spacing: 2px;
 }

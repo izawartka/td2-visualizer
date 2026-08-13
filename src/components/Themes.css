@@ -31,7 +31,7 @@
 .light-mode {
     --background-color: #f8f8f8;
     --text-color: #222;
-    --text-color-secondary: #444;
+    --text-color-secondary: #333;
     --layer-color: #0002;
     --half-layer-color: #0001;
     --layer-color-hover: #0003;
@@ -39,7 +39,7 @@
     --layer-color-non-transparent: #ddd;
     --layer-color-non-transparent-hover: #ccc;
     --layer-color-non-transparent-disabled: #888;
-    --text-color-disabled: #666;
+    --text-color-disabled: #444;
     --border-color: #888;
     --text-color-inverted: #eee;
     --icon-color: #222;

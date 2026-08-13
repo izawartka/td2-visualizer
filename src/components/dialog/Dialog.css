@@ -20,7 +20,7 @@
     padding: 1em;
     position: relative;
     min-width: 15em;
-    max-width: 80%;
+    max-width: min(40em, 80%);
 }
 
 .dialog.wide {
