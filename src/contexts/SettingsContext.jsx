@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import SettingsContext from "../contexts/SettingsContext";
+import { createContext, useState, useCallback, useEffect } from 'react';
 import Constants from "../helpers/constants";
 
-export default function SettingsManager(props) {
+const SettingsContext = createContext();
+export default SettingsContext;
+
+export const SettingsContextProvider = ({children}) => {
     const [ layers, setLayers ] = useState([]);
     const [ trackColorMode, setTrackColorMode ] = useState(Constants.trackColorModeDefault);
     const [ showTrackHoverInfo, setShowTrackHoverInfo ] = useState(true);
@@ -32,7 +34,7 @@ export default function SettingsManager(props) {
             extendedSignals, setExtendedSignals,
             originalSignalNames, setOriginalSignalNames
         }}>
-            { props.children }
+            { children }
         </SettingsContext.Provider>
     );
 }

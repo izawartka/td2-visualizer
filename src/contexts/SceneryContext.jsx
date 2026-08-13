@@ -1,17 +1,19 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-import SceneryContext from '../contexts/SceneryContext';
+import { createContext, useState, useCallback, useEffect, useRef } from 'react';
 import { useZoomPanEmitter } from '../hooks/useZoomPubSub';
 import SceneryParser from '../model/parsing/scenery-parser';
 import SceneryParserLog from '../model/parsing/scenery-parser-log';
 import { showCustomDialog, showDialog } from '../services/dialogService';
 import { resetHoveredTracksStack } from '../services/trackHoverInfoService';
-import SceneryLoadedDialog from './scenery-loaded-dialog/SceneryLoadedDialog';
+import SceneryLoadedDialog from '../components/scenery-loaded-dialog/SceneryLoadedDialog';
 import Constants from '../helpers/constants';
 import MiscHelper from '../helpers/miscHelper';
 import ElectrificationResolver from '../model/parsing/electrification-resolver';
-import { useEmbeddedContext } from '../contexts/EmbeddedContext';
+import { useEmbeddedContext } from './EmbeddedContext';
 
-export default function SceneryManager(props) {
+const SceneryContext = createContext();
+export default SceneryContext;
+
+export const SceneryContextProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [scenery, setScenery] = useState(null);
     const [sceneryListData, setSceneryListData] = useState(null);
@@ -180,7 +182,7 @@ export default function SceneryManager(props) {
 
     return (
         <SceneryContext.Provider value={{ isLoading, scenery, sceneryListData, loadScenery, loadCustomScenery, electrificationStepModeStep }}>
-            {props.children}
+            {children}
         </SceneryContext.Provider>
     );
 }

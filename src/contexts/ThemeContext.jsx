@@ -1,7 +1,9 @@
-import { useState } from "react";
-import ThemeContext from "../contexts/ThemeContext";
+import { createContext, useState } from 'react';
 
-export default function ThemeManager(props) {
+const ThemeContext = createContext();
+export default ThemeContext;
+
+export const ThemeContextProvider = ({children}) => {
     const [ lightMode, setLightMode ] = useState(false);
 
     if(lightMode === true) {
@@ -14,7 +16,7 @@ export default function ThemeManager(props) {
         <ThemeContext.Provider value={{
             lightMode, setLightMode
         }}>
-            { props.children }
+            { children }
         </ThemeContext.Provider>
     );
 }

@@ -1,38 +1,34 @@
-import { useState } from 'react';
+import { EmbeddedContextProvider, useEmbeddedContext } from '../contexts/EmbeddedContext';
+import { ThemeContextProvider} from '../contexts/ThemeContext';
+import { SettingsContextProvider } from '../contexts/SettingsContext';
+import { SceneryContextProvider } from '../contexts/SceneryContext';
+import { GradientsContextProvider } from '../contexts/GradientsContext';
+import { DistanceMeterContextProvider } from '../contexts/DistanceMeterContext';
+import { SideMenuContextProvider } from '../contexts/SideMenuContext';
 import Map from './map/Map';
 import Toolbar from './toolbar/Toolbar';
 import SideMenu from './sidemenu/SideMenu';
-import SettingsManager from './SettingsManager';
 import LocList from './loclist/LocList';
 import DialogManager from './dialog/DialogManager';
-import DistanceMeterContext from '../contexts/DistanceMeterContext';
-import {GradientsManager} from "./GradientsManager";
-import SideMenuContext from '../contexts/SideMenuContext';
-import SceneryManager from './SceneryManager';
-import ThemeManager from './ThemeManager';
-import {EmbeddedContextProvider, useEmbeddedContext} from '../contexts/EmbeddedContext';
 import './Themes.css';
 import './App.css';
 
 function App() {
-    const [sideMenuOpen, setSideMenuOpen] = useState(false);
-    const [distancePoints, setDistancePoints] = useState(null);
-
     return (
         <EmbeddedContextProvider>
-            <ThemeManager>
-                <SettingsManager>
-                    <SceneryManager>
-                        <GradientsManager>
-                            <DistanceMeterContext.Provider value={{distancePoints, setDistancePoints}}>
-                                <SideMenuContext.Provider value={{sideMenuOpen, setSideMenuOpen}}>
+            <ThemeContextProvider>
+                <SettingsContextProvider>
+                    <SceneryContextProvider>
+                        <GradientsContextProvider>
+                            <DistanceMeterContextProvider>
+                                <SideMenuContextProvider>
                                     <AppContent />
-                                </SideMenuContext.Provider>
-                            </DistanceMeterContext.Provider>
-                        </GradientsManager>
-                    </SceneryManager>
-                </SettingsManager>
-            </ThemeManager>
+                                </SideMenuContextProvider>
+                            </DistanceMeterContextProvider>
+                        </GradientsContextProvider>
+                    </SceneryContextProvider>
+                </SettingsContextProvider>
+            </ThemeContextProvider>
         </EmbeddedContextProvider>
     );
 }
