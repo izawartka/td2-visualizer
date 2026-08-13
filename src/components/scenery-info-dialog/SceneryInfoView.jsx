@@ -11,6 +11,7 @@ export default function SceneryInfoView({ scenery }) {
                 <tbody>
                     <SceneryInfoViewItem label="Name" value={sceneryInfo.name} />
                     <SceneryInfoViewItem label="Version" value={sceneryInfo.version} />
+                    <SceneryInfoViewItem label="Format version" value={sceneryInfo.infoVersion} />
                     <SceneryInfoViewItem label="Author" value={sceneryInfo.author} />
                     <SceneryInfoViewItem label="Description" value={sceneryInfo.description} />
                     <SceneryInfoViewItem label="Link" value={sceneryInfo.link} isLink={true} />

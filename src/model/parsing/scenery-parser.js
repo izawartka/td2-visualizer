@@ -77,16 +77,6 @@ export default class SceneryParser {
     }
 
     static _parseSceneryInfo(text) {
-        const infoHeader = text.split(";", 2)[0];
-        if(!infoHeader.startsWith("scv")) {
-            SceneryParserLog.error('invalidSceneryInfo', `Invalid scenery info header: ${infoHeader}`);
-        }
-
-        const version = parseInt(infoHeader.split("v")[1]);
-        if(version < Constants.parser.sceneryInfoVersionMin || version > Constants.parser.sceneryInfoVersionMax) {
-            SceneryParserLog.warn('invalidSceneryInfoVersion', `Invalid scenery info version: ${version}. Expected: ${Constants.parser.sceneryInfoVersionMin}-${Constants.parser.sceneryInfoVersionMax}`);
-        }
-
         return SceneryInfo.fromText(text);
     }
 
