@@ -50,10 +50,29 @@ function transformStart(globalStart, globalRotationDeg, localStart, localRotatio
     };
 }
 
+function calculateSlopesFromQuaternion(rotationQuat, radius, length) {
+    const startTangent = new Vector3(0, 0, 1);
+    const endTangent = radius === 0
+        ? startTangent
+        : Vector3.fromAngleY(-length / radius);
+
+    const worldStart = rotationQuat.rotateVector(startTangent);
+    const worldEnd = rotationQuat.rotateVector(endTangent);
+
+    const startHorizontal = Math.hypot(worldStart.x, worldStart.z);
+    const endHorizontal = Math.hypot(worldEnd.x, worldEnd.z);
+
+    return {
+        startSlope: startHorizontal === 0 ? 0 : (worldStart.y / startHorizontal) * 1000,
+        endSlope: endHorizontal === 0 ? 0 : (worldEnd.y / endHorizontal) * 1000,
+    };
+}
+
 const CurveHelper = {
     calculateCurveEnd,
     calculateCurveEndStandard,
     transformStart,
+    calculateSlopesFromQuaternion
 };
 
 export default CurveHelper;

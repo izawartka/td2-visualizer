@@ -25,10 +25,16 @@ export default class StandardTrack extends Track  {
     }
 
     getPointAtDist(dist, fromEnd = TrackConnectionEnd.START) {
-        if (fromEnd === TrackConnectionEnd.END) return this.getPointAtDist(this.len - dist, TrackConnectionEnd.START)
+        if (fromEnd === TrackConnectionEnd.END) {
+            return this.getPointAtDist(this.len - dist, TrackConnectionEnd.START);
+        }
+
         const curveEnd = CurveHelper.calculateCurveEndStandard(this.r, dist).endPos;
-        // TODO: Verify slope logic
-        curveEnd.y += (this.start_slope + this.end_slope) / 2000 * dist;
+
+        if (this.source === TrackSource.STANDARD) {
+            curveEnd.y += (this.start_slope + this.end_slope) / 2000 * dist;
+        }
+
         return this._transformPoint(curveEnd);
     }
 
