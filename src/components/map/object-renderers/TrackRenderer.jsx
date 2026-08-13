@@ -186,7 +186,7 @@ function getTrackColor(object, trackColorMode, gradientDef) {
                     return modeDef.options[modeDef.optionDefault][0];
             }
 
-        case "max-speed":
+        case "maxspeed":
             if (!object.maxspeed) {
                 if (object.type === 'RouteTrack') return modeDef.options['unknown'][0];
                 return modeDef.options['derail'][0];

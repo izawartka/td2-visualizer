@@ -5,28 +5,29 @@ import SceneryContext from "./SceneryContext";
 const GradientsContext = createContext();
 export default GradientsContext;
 
-function getMinMax(trackColorMode, scenery) {
-    if (trackColorMode === 'elevation') {
-        if (!scenery) return null;
-        if (scenery.trackElevationBounds.minY > scenery.trackElevationBounds.maxY) return null;
+function getMinMax(trackColorMode, scenery, gradient) {
+    const sceneryGradientBounds = scenery?.dynamicGradientBounds?.[trackColorMode];
+    if (!sceneryGradientBounds) return null;
 
-        const min = scenery.trackElevationBounds.minY;
-        // Make sure diff > 0 even on flat sceneries
-        let diff = Math.max(scenery.trackElevationBounds.maxY - scenery.trackElevationBounds.minY, 1);
-        // Ensure `diff` is even so that the min, max and middle legend values are integers
-        diff = Math.ceil(diff / 2)*2;
-        const max = min + diff;
+    if (sceneryGradientBounds.min > sceneryGradientBounds.max) return null;
 
-        return [min, max];
-    }
-    return null;
+    const min = Math.max(sceneryGradientBounds.min, gradient.limitMin ?? -Infinity);
+    const initialMax = Math.min(sceneryGradientBounds.max, gradient.limitMax ?? Infinity);
+    let diff = Math.max(initialMax - min, 1);
+
+    // Ensure `diff` is even so that the min, max and middle legend values are integers
+    diff = Math.ceil(diff / 2)*2;
+    const max = min + diff;
+
+    return [min, max];
 }
 
 function createGradientSettings(trackColorMode, scenery, def) {
     if ('gradient' in def) return def.gradient;
     if ('dynamicGradient' in def) {
         const gradient = def.dynamicGradient;
-        const [minValue, maxValue] = getMinMax(trackColorMode, scenery) ?? [gradient.defaultMin, gradient.defaultMax];
+        const [minValue, maxValue] = getMinMax(trackColorMode, scenery, gradient) 
+            ?? [gradient.defaultMin, gradient.defaultMax];
 
         const diff = gradient.min.map((min, i) => {
             const max = gradient.max[i];

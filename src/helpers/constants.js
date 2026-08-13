@@ -176,29 +176,30 @@ const Constants = {
         'slope': {
             name: 'Slope',
             type: 'gradient',
-            gradient: {
-                base: [128, 0, 128],
-                diff: [0, 25.6, 0],
-                legendMin: 0,
-                legendMax: 10,
+            dynamicGradient: {
+                min: [128, 0, 128],
+                max: [128, 255, 128],
+                defaultMin: 0,
+                defaultMax: 10,
+                limitMax: 40,
                 unit: '‰',
                 startLegendAt0: false,
             }
         },
-        'max-speed': {
+        'maxspeed': {
             name: 'Max speed',
             type: 'gradient',
-            gradient: {
-                base: [128, 0, 128],
-                diff: [0, 1.5, 0],
-                legendMin: 0,
-                legendMax: 170,
+            dynamicGradient: {
+                min: [128, 0, 0],
+                max: [128, 255, 128],
+                defaultMin: 0,
+                defaultMax: 170,
                 unit: 'km/h',
                 startLegendAt0: false,
             },
             options: {
                 'derail': ['#f22', 'Derail track'],
-                'unknown': ['#aaa', 'Unknown speed'],
+                'unknown': ['#f88', 'Unknown speed'],
             }
         },
         'elevation': {

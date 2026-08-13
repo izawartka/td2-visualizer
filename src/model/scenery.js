@@ -1,4 +1,5 @@
 import { ElectrificationResolutionStatus } from './electrification-status.js';
+import DynamicGradientBoundsItem from './dynamic-gradient-bounds-item.js';
 
 export default class Scenery
 {
@@ -6,7 +7,11 @@ export default class Scenery
     signalBoxes = [];
     spawnPoints = [];
     bounds = { minX: Infinity, minZ: Infinity, maxX: -Infinity, maxZ: -Infinity };
-    trackElevationBounds = { minY: Infinity, maxY: -Infinity };
+    dynamicGradientBounds = {
+        elevation: new DynamicGradientBoundsItem(),
+        slope: new DynamicGradientBoundsItem(true),
+        maxspeed: new DynamicGradientBoundsItem(true)
+    };
     electrificationResolved = ElectrificationResolutionStatus.NOT_RESOLVED;
 
     getName() {
@@ -38,7 +43,7 @@ export default class Scenery
             this._updateBounds(object.getRenderBounds());
         }
         if (object.category === 'tracks') {
-            this._updateTrackElevationBounds(object);
+            this._updateDynamicGradientBounds(object);
         }
     }
 
@@ -92,10 +97,13 @@ export default class Scenery
         });
     }
 
-    _updateTrackElevationBounds(object) {
-        [object.points.start, object.points.end].forEach(point => {
-            if (point.y < this.trackElevationBounds.minY) this.trackElevationBounds.minY = point.y;
-            if (point.y > this.trackElevationBounds.maxY) this.trackElevationBounds.maxY = point.y;
+    _updateDynamicGradientBounds(trackObject) {
+        [trackObject.points.start, trackObject.points.end].forEach(point => {
+            this.dynamicGradientBounds.elevation.update(point.y);
         })
+
+        this.dynamicGradientBounds.maxspeed.update(trackObject.maxspeed);
+        this.dynamicGradientBounds.slope.update(trackObject.start_slope);
+        this.dynamicGradientBounds.slope.update(trackObject.end_slope);
     }
 }
