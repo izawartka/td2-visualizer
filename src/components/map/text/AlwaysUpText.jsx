@@ -2,10 +2,20 @@ import { useCallback, useEffect, useRef } from "react";
 import AngleHelper from "../../../helpers/angleHelper";
 import { mapRotation$ } from "../../../services/mapRotationService";
 
-export default function AlwaysUpText(props) {
-    const { baseRot, additionalRot, additionalPreRot, text, reverseAnchor, offsetX, offsetY, textProps } = props;
+export default function AlwaysUpText({ 
+    baseRot, 
+    additionalRot, 
+    additionalPreRot, 
+    text, 
+    reverseAnchor, 
+    offsetX, 
+    offsetY, 
+    textProps, 
+    textRef 
+}) {
     const gRef = useRef(null);
-    const textRef = useRef(null);
+    const ownTextRef = useRef(null);
+    if(!textRef) textRef = ownTextRef;
     
     const getTransformString = useCallback((upsideDown) => {
         const upsideDownRot = upsideDown ? 180 : 0;

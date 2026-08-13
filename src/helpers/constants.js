@@ -15,7 +15,9 @@ const Constants = {
         showDebugTrackIds: false,
         mapZoomTrackDetailsThreshold: 1 / 1.44,
         mapZoomObjectDetailsThreshold: 0.5,
-        distanceMeterMaxMovePx: 10
+        distanceMeterMaxMovePx: 10,
+        routeTextMinZoom: 1.5,
+        routeTextMaxZoom: 3
     },
     parser: {
         logSceneryAfterFinished: readEnvBool('VITE_DO_LOG_SCENERY') ?? false,

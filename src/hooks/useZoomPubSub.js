@@ -37,6 +37,15 @@ export function useZoomPanSubscriber(setCamera, onAlign) {
     }, [onAlign]);
 }
 
+export function useCameraSubscriber(onCameraUpdate) {
+    useEffect(() => {
+        const sub = camera$.subscribe((camera) => {
+            onCameraUpdate(camera);
+        });
+        return () => sub.unsubscribe();
+    }, [onCameraUpdate]);
+}
+
 export function useZoomPanEmitter() {
     return {
         setCamera: (x, y, rot = null, zoom = null) => {
