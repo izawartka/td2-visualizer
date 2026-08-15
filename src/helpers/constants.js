@@ -22,7 +22,7 @@ const Constants = {
     parser: {
         logSceneryAfterFinished: readEnvBool('VITE_DO_LOG_SCENERY') ?? false,
         sceneryInfoVersionMin: 29,
-        sceneryInfoVersionMax: 30,
+        sceneryInfoVersionMax: 31,
         alwaysShowLogDialog: false,
         runTracksConnectionTest: false,
         tracksConnectionTestIgnoreY: true,

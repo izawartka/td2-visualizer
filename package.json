@@ -1,6 +1,6 @@
 {
   "name": "visualizer2",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "homepage": "/soft/td2-visualizer-2/",
   "private": true,
   "dependencies": {
@@ -14,26 +14,8 @@
     "build": "vite build --mode prod",
     "preview": "vite preview"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.5",
-    "vite": "^8.2.1",
-    "vite-plugin-svgr": "^5.2.0"
+    "vite": "^8.2.1"
   }
 }
